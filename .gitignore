@@ -22,3 +22,4 @@ docs/parity-captures/
 
 # Impeccable critique snapshots: internal design audits, never publish
 .impeccable/
+.worktrees/
