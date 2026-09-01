@@ -60,7 +60,17 @@ it("creates an invoice from a won deal's current products, snapshotting them", a
 
     const result = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     expect(result.ok).toBe(true);
@@ -80,7 +90,17 @@ it("creates an invoice from an open (not-yet-won) deal too", async () => {
 
     const result = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     expect(result.ok).toBe(true);
@@ -94,7 +114,17 @@ it("rejects invoicing a deal with no products", async () => {
 
     const result = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     expect(result.ok).toBe(false);
@@ -121,7 +151,17 @@ it("keeps the invoice line items unchanged after the deal's own products are edi
 
     const created = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     if (created.ok === false) throw new Error("setup failed");
@@ -140,6 +180,235 @@ it("keeps the invoice line items unchanged after the deal's own products are edi
   });
 });
 
+it("computes subtotal/tax/total for a tax-exclusive invoice", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id, "won");
+    await seedProductOnDeal(db, dealId, "100.00", "2"); // base 200.00
+
+    const result = await createInvoiceFromDeal(
+      db,
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+        lineTaxRates: ["10"],
+      },
+      sig(),
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok === true) {
+      expect(result.value.invoice.subtotal).toBe("200.00");
+      expect(result.value.invoice.taxTotal).toBe("20.00");
+      expect(result.value.invoice.total).toBe("220.00");
+      expect(result.value.lines[0]?.taxRatePercent).toBe("10.00");
+    }
+  });
+});
+
+it("computes subtotal/tax/total for a tax-inclusive invoice", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id, "won");
+    await seedProductOnDeal(db, dealId, "110.00", "1"); // base 110.00, 10% inclusive
+
+    const result = await createInvoiceFromDeal(
+      db,
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "inclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+        lineTaxRates: ["10"],
+      },
+      sig(),
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok === true) {
+      expect(result.value.invoice.total).toBe("110.00");
+      expect(result.value.invoice.taxTotal).toBe("10.00");
+      expect(result.value.invoice.subtotal).toBe("100.00");
+    }
+  });
+});
+
+it("defaults to no tax when taxMode is 'none', ignoring any tax rate", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id, "won");
+    await seedProductOnDeal(db, dealId, "50.00", "1");
+
+    const result = await createInvoiceFromDeal(
+      db,
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "none",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+        lineTaxRates: ["10"],
+      },
+      sig(),
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok === true) {
+      expect(result.value.invoice.taxTotal).toBe("0.00");
+      expect(result.value.invoice.subtotal).toBe("50.00");
+      expect(result.value.invoice.total).toBe("50.00");
+    }
+  });
+});
+
+it("defaults missing lineTaxRates entries to 0, so existing minimal callers keep working", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id, "won");
+    await seedProductOnDeal(db, dealId, "10.00", "1");
+
+    const result = await createInvoiceFromDeal(
+      db,
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
+      sig(),
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok === true) {
+      expect(result.value.invoice.taxMode).toBe("exclusive");
+      expect(result.value.invoice.taxTotal).toBe("0.00");
+      expect(result.value.lines[0]?.taxRatePercent).toBe("0.00");
+    }
+  });
+});
+
+async function seedOrg(db: Db, ownerId: string, name: string): Promise<string> {
+  const row = (
+    await db.execute(sql`
+      INSERT INTO organizations (name, owner_id, visibility_level)
+      VALUES (${name}, ${ownerId}, 'all')
+      RETURNING id
+    `)
+  ).rows[0] as { id: string } | undefined;
+  if (row === undefined) throw new Error("seedOrg: insert returned no rows");
+  return row.id;
+}
+
+it("snapshots the bill-to name at creation time, unaffected by a later org rename", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const orgId = await seedOrg(db, user.id, "Original Org Name");
+    const { pipeline, stages } = await seedPipelineWithStages(db, ["Open"]);
+    const stage = stages[0];
+    if (stage === undefined) throw new Error("no stage");
+    const dealRow = (
+      await db.execute(sql`
+        INSERT INTO deals (title, pipeline_id, stage_id, owner_id, visibility_level, status, org_id)
+        VALUES ('Test Deal', ${pipeline.id}, ${stage.id}, ${user.id}, 'all', 'won', ${orgId})
+        RETURNING id
+      `)
+    ).rows[0] as { id: string } | undefined;
+    if (dealRow === undefined) throw new Error("no deal");
+    await seedProductOnDeal(db, dealRow.id, "10.00", "1");
+
+    const created = await createInvoiceFromDeal(
+      db,
+      {
+        dealId: dealRow.id,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
+      sig(),
+    );
+    expect(created.ok).toBe(true);
+    if (!created.ok) return;
+    expect(created.value.invoice.billToName).toBe("Original Org Name");
+
+    await db.execute(sql`UPDATE organizations SET name = 'Renamed Org' WHERE id = ${orgId}`);
+
+    const reread = await getInvoice(db, created.value.invoice.id, sig());
+    expect(reread.ok).toBe(true);
+    if (reread.ok) {
+      expect(reread.value.invoice.billToName).toBe("Original Org Name");
+    }
+  });
+});
+
+it("recomputes tax when a line item's tax rate is updated", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id, "won");
+    await seedProductOnDeal(db, dealId, "100.00", "1");
+    const created = await createInvoiceFromDeal(
+      db,
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+        lineTaxRates: ["0"],
+      },
+      sig(),
+    );
+    if (!created.ok) throw new Error("setup failed");
+    const line = created.value.lines[0];
+    if (line === undefined) throw new Error("no line");
+
+    const updated = await updateInvoiceLineItem(
+      db,
+      {
+        id: line.id,
+        quantity: line.quantity,
+        unitPrice: line.unitPrice,
+        discountPercent: line.discountPercent,
+        taxRatePercent: "20",
+      },
+      sig(),
+    );
+    expect(updated.ok).toBe(true);
+
+    const reread = await getInvoice(db, created.value.invoice.id, sig());
+    expect(reread.ok).toBe(true);
+    if (reread.ok) {
+      expect(reread.value.invoice.taxTotal).toBe("20.00");
+      expect(reread.value.invoice.total).toBe("120.00");
+    }
+  });
+});
+
 it("lists invoices for a deal, newest first", async () => {
   await withTestDb(async (db) => {
     const user = await seedUser(db);
@@ -148,12 +417,32 @@ it("lists invoices for a deal, newest first", async () => {
 
     await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-01", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-01",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-15", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-15",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
 
@@ -169,7 +458,17 @@ it("transitions an invoice from issued to paid", async () => {
     await seedProductOnDeal(db, dealId, "10.00", "1");
     const created = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     if (created.ok === false) throw new Error("setup failed");
@@ -191,7 +490,17 @@ it("rejects a status change on an already-canceled invoice", async () => {
     await seedProductOnDeal(db, dealId, "10.00", "1");
     const created = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     if (created.ok === false) throw new Error("setup failed");
@@ -214,7 +523,17 @@ it("deletes an invoice and its line items", async () => {
     await seedProductOnDeal(db, dealId, "10.00", "1");
     const created = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     if (created.ok === false) throw new Error("setup failed");
@@ -245,7 +564,17 @@ it("adds a line item to an issued invoice and recomputes the total", async () =>
     await seedProductOnDeal(db, dealId, "100.00", "1");
     const created = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     if (created.ok === false) throw new Error("setup failed");
@@ -265,6 +594,7 @@ it("adds a line item to an issued invoice and recomputes the total", async () =>
         productId: product.value.id,
         quantity: "1",
         discountPercent: "0",
+        taxRatePercent: "0",
       },
       sig(),
     );
@@ -284,7 +614,17 @@ it("updates and removes a line item on an issued invoice, recomputing the total 
     await seedProductOnDeal(db, dealId, "100.00", "1");
     const created = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     if (created.ok === false) throw new Error("setup failed");
@@ -293,7 +633,7 @@ it("updates and removes a line item on an issued invoice, recomputing the total 
 
     const updated = await updateInvoiceLineItem(
       db,
-      { id: lineId, quantity: "3", unitPrice: "100.00", discountPercent: "0" },
+      { id: lineId, quantity: "3", unitPrice: "100.00", discountPercent: "0", taxRatePercent: "0" },
       sig(),
     );
     expect(updated.ok).toBe(true);
@@ -317,7 +657,17 @@ it("rejects a line-item change on a paid invoice", async () => {
     await seedProductOnDeal(db, dealId, "100.00", "1");
     const created = await createInvoiceFromDeal(
       db,
-      { dealId, issueDate: "2026-08-31", dueDate: null, notes: null },
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+      },
       sig(),
     );
     if (created.ok === false) throw new Error("setup failed");
@@ -337,6 +687,7 @@ it("rejects a line-item change on a paid invoice", async () => {
         productId: product.value.id,
         quantity: "1",
         discountPercent: "0",
+        taxRatePercent: "0",
       },
       sig(),
     );
