@@ -12,6 +12,8 @@ import { STRINGS } from "@/constants/strings";
 import type { PersonMatchCandidate } from "@/features/contacts/personOptionsRepo";
 import { useDealActionError } from "@/features/deal-workspace/DealActionErrorProvider";
 import { updateDealAction } from "@/features/deals/updateAction";
+import { InvoicesPanel } from "@/features/invoices/InvoicesPanel";
+import { DealProductsPanel } from "@/features/products/DealProductsPanel";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { DealSummaryActionList } from "./DealSummaryActionList";
@@ -169,6 +171,18 @@ export function DealSidebar({
         />
       </CollapsibleSection>
     ) : null,
+
+    products: (
+      <CollapsibleSection key="products" title={sections.products} showFilter={false}>
+        <DealProductsPanel dealId={deal.id} />
+      </CollapsibleSection>
+    ),
+
+    invoices: (
+      <CollapsibleSection key="invoices" title={sections.invoices} showFilter={false}>
+        <InvoicesPanel dealId={deal.id} />
+      </CollapsibleSection>
+    ),
 
     source: (
       <CollapsibleSection

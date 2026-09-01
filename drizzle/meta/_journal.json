@@ -505,6 +505,41 @@
       "when": 1787666965838,
       "tag": "0071_enrichment_person_name_parts",
       "breakpoints": true
+    },
+    {
+      "idx": 72,
+      "version": "7",
+      "when": 1788191886298,
+      "tag": "0072_loud_star_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 73,
+      "version": "7",
+      "when": 1788203173643,
+      "tag": "0073_nasty_dorian_gray",
+      "breakpoints": true
+    },
+    {
+      "idx": 74,
+      "version": "7",
+      "when": 1788215420362,
+      "tag": "0074_burly_rockslide",
+      "breakpoints": true
+    },
+    {
+      "idx": 75,
+      "version": "7",
+      "when": 1788226523220,
+      "tag": "0075_wild_speed",
+      "breakpoints": true
+    },
+    {
+      "idx": 76,
+      "version": "7",
+      "when": 1788227848757,
+      "tag": "0076_small_gabe_jones",
+      "breakpoints": true
     }
   ]
 }

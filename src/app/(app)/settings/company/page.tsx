@@ -18,7 +18,14 @@ export default async function CompanyGeneralPage(): Promise<ReactNode> {
   }
 
   const [row] = await db
-    .select({ companyName: settings.companyName, baseCurrency: settings.baseCurrency })
+    .select({
+      companyName: settings.companyName,
+      baseCurrency: settings.baseCurrency,
+      invoiceHeaderText: settings.invoiceHeaderText,
+      invoiceFooterText: settings.invoiceFooterText,
+      invoiceHeaderImageUrl: settings.invoiceHeaderImageUrl,
+      invoiceFooterImageUrl: settings.invoiceFooterImageUrl,
+    })
     .from(settings)
     .where(eq(settings.id, true));
 
@@ -26,6 +33,10 @@ export default async function CompanyGeneralPage(): Promise<ReactNode> {
     <CompanyGeneralClient
       companyName={row?.companyName ?? ""}
       baseCurrency={row?.baseCurrency ?? "USD"}
+      invoiceHeaderText={row?.invoiceHeaderText ?? ""}
+      invoiceFooterText={row?.invoiceFooterText ?? ""}
+      invoiceHeaderImageUrl={row?.invoiceHeaderImageUrl ?? null}
+      invoiceFooterImageUrl={row?.invoiceFooterImageUrl ?? null}
     />
   );
 }

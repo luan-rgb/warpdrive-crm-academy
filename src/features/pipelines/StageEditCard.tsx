@@ -26,6 +26,7 @@ export function StageEditCard({
 }: StageEditCardProps): React.ReactNode {
   const rottingEnabled = row.rottingDays !== null;
   const nameId = useId();
+  const probabilityId = useId();
   return (
     <div className="flex w-64 shrink-0 flex-col gap-3 rounded-lg border bg-card p-3">
       <div className="flex items-center justify-between">
@@ -72,6 +73,25 @@ export function StageEditCard({
             className="mt-2"
           />
         )}
+      </div>
+
+      <div className="text-sm">
+        <label htmlFor={probabilityId} className="mb-1 block font-medium">
+          Win probability (%)
+        </label>
+        <Input
+          id={probabilityId}
+          aria-label={`Stage ${index + 1} win probability`}
+          type="number"
+          min={0}
+          max={100}
+          placeholder="Not set"
+          value={row.probability ?? ""}
+          onChange={(e) => {
+            const v = e.target.value;
+            onChange({ probability: v === "" ? null : Math.min(100, Math.max(0, Number(v))) });
+          }}
+        />
       </div>
     </div>
   );

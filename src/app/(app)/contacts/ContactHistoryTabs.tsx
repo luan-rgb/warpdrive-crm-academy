@@ -13,7 +13,9 @@ import { FileAttachments } from "@/features/files/FileAttachments";
 // (All/Activities/Notes/Email/Files/Changelog), but Files renders the contact's own
 // attachments instead of the deal-scoped ones. The deal-workspace originals are reused
 // read-only (HistoryFeed) rather than modified, since they hard-code a dealId.
-const TAB_LABELS: Record<HistoryTab, string> = {
+// Partial, not the full Record: this contact-scoped tab bar never renders "products"
+// (contacts have no line items), so TABS below simply omits it.
+const TAB_LABELS: Partial<Record<HistoryTab, string>> = {
   all: "All",
   activities: "Activities",
   notes: "Notes",
@@ -66,7 +68,7 @@ export function ContactHistoryTabs({
       <TabsList className="flex-wrap gap-1">
         {TABS.map((t) => (
           <TabsTrigger key={t} value={t} className={PILL_TAB}>
-            {historyTabLabel(TAB_LABELS[t], counts[t])}
+            {historyTabLabel(TAB_LABELS[t] ?? t, counts[t])}
           </TabsTrigger>
         ))}
       </TabsList>

@@ -9,12 +9,14 @@ export const stageCreateInput = z.object({
   pipelineId: z.string().uuid(),
   name: z.string().min(1).max(255),
   rottingDays: z.number().int().positive().nullable().default(null),
+  probability: z.number().int().min(0).max(100).nullable().default(null),
 });
 
 export const stageUpdateInput = z.object({
   stageId: z.string().uuid(),
   name: z.string().min(1).max(255).optional(),
   rottingDays: z.number().int().positive().nullable().optional(),
+  probability: z.number().int().min(0).max(100).nullable().optional(),
 });
 
 export const stageReorderInput = z.object({

@@ -13,6 +13,10 @@ export type SettingsActionResult = { ok: true } | { ok: false; error: { id: stri
 
 const generalSchema = z.object({ companyName: z.string().trim().max(200) });
 const trackingSchema = z.object({ enabled: z.boolean() });
+const invoiceBrandingSchema = z.object({
+  headerText: z.string().trim().max(2000).nullable(),
+  footerText: z.string().trim().max(2000).nullable(),
+});
 
 async function gate(
   csrfToken: string | null,
@@ -41,6 +45,35 @@ export async function updateCompanyGeneralAction(
       targetId: null,
       action: "company.settings.updated",
       after: { companyName: row.companyName },
+    },
+    SIG(),
+  );
+  return { ok: true };
+}
+
+export async function updateInvoiceBrandingAction(
+  input: z.input<typeof invoiceBrandingSchema>,
+  csrfToken: string | null = null,
+): Promise<SettingsActionResult> {
+  const g = await gate(csrfToken);
+  if (!g.ok) return g;
+  const parsed = invoiceBrandingSchema.parse(input);
+  const row = await updateSettings(
+    db,
+    {
+      invoiceHeaderText: parsed.headerText === null ? null : parsed.headerText || null,
+      invoiceFooterText: parsed.footerText === null ? null : parsed.footerText || null,
+    },
+    SIG(),
+  );
+  await recordAudit(
+    db,
+    {
+      actorId: g.actorId,
+      targetType: "settings",
+      targetId: null,
+      action: "company.settings.updated",
+      after: { invoiceHeaderText: row.invoiceHeaderText, invoiceFooterText: row.invoiceFooterText },
     },
     SIG(),
   );

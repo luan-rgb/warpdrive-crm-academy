@@ -42,10 +42,14 @@ it("reorders, hides a section, and saves the sidebar section preferences", async
   await user.click(screen.getByRole("checkbox", { name: "Show Source" }));
   await user.click(screen.getByRole("button", { name: "Save" }));
 
+  // Default order is summary, products, invoices, source, ...: moving Source up swaps it with
+  // the item directly above it (invoices), not with summary or products.
   const expected = [
-    { id: "source", visible: false },
     { id: "summary", visible: true },
-    ...DEFAULT_DEAL_SIDEBAR_SECTIONS.slice(2),
+    { id: "products", visible: true },
+    { id: "source", visible: false },
+    { id: "invoices", visible: true },
+    ...DEFAULT_DEAL_SIDEBAR_SECTIONS.slice(4),
   ];
   await waitFor(() =>
     expect(setSidebarSectionsAction).toHaveBeenCalledWith({ sections: expected }, "csrf"),

@@ -25,6 +25,10 @@ const dashboardData = {
     { month: "2026-01", count: 2, value: "80.00" },
     { month: "2026-02", count: 0, value: "0.00" },
   ],
+  forecast: [
+    { month: "2026-01", count: 1, value: "50.00", weightedValue: "25.00" },
+    { month: "2026-02", count: 0, value: "0.00", weightedValue: "0.00" },
+  ],
   funnel: [
     {
       stageId: "s1",

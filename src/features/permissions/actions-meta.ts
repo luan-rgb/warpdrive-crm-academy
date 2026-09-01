@@ -29,6 +29,8 @@ const GLOBAL_ACTIONS = [
   "pipeline.manage",
   "metadata.manage",
   "goals.manage",
+  "product.manage",
+  "invoice.manage",
   "permissions.manage",
 ] as const;
 

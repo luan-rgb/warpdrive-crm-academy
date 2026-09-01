@@ -31,6 +31,11 @@ vi.mock("@/lib/trpc-client", () => ({
     labels: { listByTarget: { useQuery: () => ({ data: [] }) } },
     deal: { participants: { useQuery: () => ({ data: [] }) } },
     contacts: { listPeopleForOrg: { useQuery: () => ({ data: [] }) } },
+    products: {
+      byDeal: { useQuery: () => ({ data: [] }) },
+      list: { useQuery: () => ({ data: [] }) },
+    },
+    invoices: { listForDeal: { useQuery: () => ({ data: [] }) } },
   },
 }));
 

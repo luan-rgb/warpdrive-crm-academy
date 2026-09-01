@@ -41,6 +41,11 @@ vi.mock("@/lib/trpc-client", () => ({
     enrichment: { status: { useQuery: () => ({ data: { ready: false, providers: [] } }) } },
     deal: { participants: { useQuery: () => ({ data: [] }) } },
     contacts: { listPeopleForOrg: { useQuery: () => ({ data: [] }) } },
+    products: {
+      byDeal: { useQuery: () => ({ data: [] }) },
+      list: { useQuery: () => ({ data: [] }) },
+    },
+    invoices: { listForDeal: { useQuery: () => ({ data: [] }) } },
     // The sidebar's LabelRow reads the label catalog (added by the label-catalog merge).
     labels: { listByTarget: { useQuery: () => ({ data: [] }) } },
   },

@@ -16,7 +16,7 @@ import type { DraftSummary } from "@/features/email/draftRepo";
 import { trpc } from "@/lib/trpc-client";
 import { WorkspaceTabs } from "./tabs";
 
-type Tab = "all" | "activities" | "notes" | "email" | "files" | "changelog";
+type Tab = "all" | "activities" | "notes" | "email" | "files" | "products" | "changelog";
 
 interface DealWorkspaceClientProps {
   workspace: DealWorkspace;

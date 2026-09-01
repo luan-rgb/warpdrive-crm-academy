@@ -2,6 +2,8 @@ import { DEAL_SIDEBAR_STRINGS } from "./dealSidebarStrings";
 
 export const DEAL_SIDEBAR_SECTION_IDS = [
   "summary",
+  "products",
+  "invoices",
   "source",
   "person",
   "participants",
@@ -13,6 +15,8 @@ export type DealSidebarSectionId = (typeof DEAL_SIDEBAR_SECTION_IDS)[number];
 
 export const DEAL_SIDEBAR_SECTIONS = [
   { id: "summary", name: DEAL_SIDEBAR_STRINGS.sections.summary },
+  { id: "products", name: DEAL_SIDEBAR_STRINGS.sections.products },
+  { id: "invoices", name: DEAL_SIDEBAR_STRINGS.sections.invoices },
   { id: "source", name: DEAL_SIDEBAR_STRINGS.sections.source },
   { id: "person", name: DEAL_SIDEBAR_STRINGS.sections.person },
   { id: "participants", name: DEAL_SIDEBAR_STRINGS.sections.participants },

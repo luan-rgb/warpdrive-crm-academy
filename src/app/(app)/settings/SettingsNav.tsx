@@ -6,6 +6,7 @@ import {
   type LucideIcon,
   Mail,
   MailCheck,
+  Package,
   Plug,
   ShieldCheck,
   Sparkles,
@@ -53,6 +54,7 @@ const COMPANY: NavSection = {
     { href: "/settings/users", label: STRINGS.settings.users, icon: Users },
     { href: "/settings/teams", label: STRINGS.settings.teams, icon: UsersRound },
     { href: "/settings/goals", label: SETTINGS_STRINGS.goals, icon: Target },
+    { href: "/settings/products", label: SETTINGS_STRINGS.products, icon: Package },
     {
       href: "/settings/permission-sets",
       label: STRINGS.settings.permissionSets,

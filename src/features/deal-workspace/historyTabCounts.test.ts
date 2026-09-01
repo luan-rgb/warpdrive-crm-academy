@@ -30,6 +30,7 @@ describe("countHistoryTabs", () => {
         email: [item("email", "e1")],
         changelog: [item("event", "c1")],
         files: [],
+        products: [],
       },
       3,
     );
@@ -45,7 +46,7 @@ describe("countHistoryTabs", () => {
 
   it("leaves the Files count unknown while its own read is still pending", () => {
     const counts = countHistoryTabs(
-      { all: [], activities: [], notes: [], email: [], changelog: [], files: [] },
+      { all: [], activities: [], notes: [], email: [], changelog: [], files: [], products: [] },
       undefined,
     );
     expect(counts.files).toBeUndefined();

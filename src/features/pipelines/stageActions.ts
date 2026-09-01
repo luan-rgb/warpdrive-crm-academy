@@ -34,6 +34,7 @@ export async function updateStage(
   const patch: Partial<typeof stages.$inferInsert> = { updatedAt: new Date() };
   if (input.name !== undefined) patch.name = input.name;
   if (input.rottingDays !== undefined) patch.rottingDays = input.rottingDays;
+  if (input.probability !== undefined) patch.probability = input.probability;
   const rows = await db.update(stages).set(patch).where(eq(stages.id, input.stageId)).returning();
   const row = rows[0];
   if (row === undefined) {
