@@ -180,7 +180,7 @@ export function DealSidebar({
 
     invoices: (
       <CollapsibleSection key="invoices" title={sections.invoices} showFilter={false}>
-        <InvoicesPanel dealId={deal.id} />
+        <InvoicesPanel dealId={deal.id} org={org} person={person} baseCurrency={baseCurrency} />
       </CollapsibleSection>
     ),
 

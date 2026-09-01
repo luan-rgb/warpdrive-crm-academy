@@ -1,6 +1,7 @@
-// InvoicesPanel: invoices issued for one deal, shown in the deal Summary sidebar. "Generate
-// invoice" snapshots the deal's current products (features/products/DealProductsPanel is the
-// source of truth for what gets billed); each row links to the printable invoice page.
+// InvoicesPanel: invoices issued for one deal, shown in the deal Summary sidebar. "Create
+// invoice" opens CreateInvoiceDialog, prefilled from the deal's org/person and current products
+// (features/products/DealProductsPanel is the source of truth for what gets billed); each row
+// links to the printable invoice page.
 
 "use client";
 
@@ -8,13 +9,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Button } from "@/components/ui/Button";
+import type { Organization, Person } from "@/db/schema";
 import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
-import { createInvoiceAction, deleteInvoiceAction, updateInvoiceStatusAction } from "./actions";
+import { deleteInvoiceAction, updateInvoiceStatusAction } from "./actions";
+import { CreateInvoiceDialog } from "./CreateInvoiceDialog";
 import { InvoiceEditDialog } from "./InvoiceEditDialog";
 
-function money(v: string): string {
-  return new Intl.NumberFormat(undefined, {
+function money(v: string, currency: string): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Number(v));
@@ -30,43 +35,29 @@ const STATUS_LABEL: Record<string, string> = {
   canceled: "Canceled",
 };
 
-export function InvoicesPanel({ dealId }: { dealId: string }): React.ReactNode {
+export function InvoicesPanel({
+  dealId,
+  org,
+  person,
+  baseCurrency,
+}: {
+  dealId: string;
+  org: Organization | null;
+  person: Person | null;
+  baseCurrency: string;
+}): React.ReactNode {
   const router = useRouter();
   const utils = trpc.useUtils();
   const invoicesQuery = trpc.invoices.listForDeal.useQuery({ dealId });
   const invoices = invoicesQuery.data ?? [];
   const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
 
   function refresh(): void {
     void utils.invoices.listForDeal.invalidate({ dealId });
     router.refresh();
-  }
-
-  async function generate(): Promise<void> {
-    setError(null);
-    setPending(true);
-    const r = await createInvoiceAction(
-      {
-        dealId,
-        issueDate: new Date().toISOString().slice(0, 10),
-        dueDate: null,
-        notes: null,
-      },
-      readCsrfToken(),
-    );
-    setPending(false);
-    if (!r.ok) {
-      setError(
-        r.error.id === "E_INVOICE_004"
-          ? "This deal has no products to invoice yet."
-          : "Could not create the invoice.",
-      );
-      return;
-    }
-    refresh();
   }
 
   async function markPaid(id: string): Promise<void> {
@@ -112,7 +103,7 @@ export function InvoicesPanel({ dealId }: { dealId: string }): React.ReactNode {
               >
                 {invoiceNumber(inv.sequenceNumber)}
               </a>
-              <span className="tabular-nums">{money(inv.total)}</span>
+              <span className="tabular-nums">{money(inv.total, baseCurrency)}</span>
               <span className="text-muted-foreground">
                 {STATUS_LABEL[inv.status] ?? inv.status}
               </span>
@@ -138,9 +129,7 @@ export function InvoicesPanel({ dealId }: { dealId: string }): React.ReactNode {
           ))}
         </ul>
       )}
-      <Button onClick={() => void generate()} disabled={pending}>
-        Generate invoice
-      </Button>
+      <Button onClick={() => setCreating(true)}>Generate invoice</Button>
       <ConfirmDialog
         open={pendingDelete !== null}
         onOpenChange={(open) => {
@@ -160,8 +149,18 @@ export function InvoicesPanel({ dealId }: { dealId: string }): React.ReactNode {
             if (!open) setEditing(null);
           }}
           onChanged={refresh}
+          baseCurrency={baseCurrency}
         />
       )}
+      <CreateInvoiceDialog
+        dealId={dealId}
+        org={org}
+        person={person}
+        baseCurrency={baseCurrency}
+        open={creating}
+        onOpenChange={setCreating}
+        onCreated={refresh}
+      />
     </div>
   );
 }
