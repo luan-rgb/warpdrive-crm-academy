@@ -5,6 +5,7 @@ import { withTestDb } from "@/db/testing";
 import { seedPipelineWithStages, seedUser } from "@/db/testing/factories";
 import { addDealProduct } from "@/features/products/dealProductsRepo";
 import { createProduct } from "@/features/products/productsRepo";
+import { createInvoiceInputSchema } from "./invoiceSchema";
 import {
   addInvoiceLineItem,
   createInvoiceFromDeal,
@@ -50,6 +51,22 @@ async function seedProductOnDeal(db: Db, dealId: string, price: string, quantity
     sig(),
   );
 }
+
+it("rejects createInvoiceInput with a non-numeric lineTaxRates entry", () => {
+  const result = createInvoiceInputSchema.safeParse({
+    dealId: "00000000-0000-0000-0000-000000000000",
+    issueDate: "2026-08-31",
+    dueDate: null,
+    notes: null,
+    taxMode: "exclusive",
+    billToName: null,
+    billToAddress: null,
+    billToEmail: null,
+    billToTaxId: null,
+    lineTaxRates: ["abc"],
+  });
+  expect(result.success).toBe(false);
+});
 
 it("creates an invoice from a won deal's current products, snapshotting them", async () => {
   await withTestDb(async (db) => {
@@ -358,6 +375,90 @@ it("snapshots the bill-to name at creation time, unaffected by a later org renam
     expect(reread.ok).toBe(true);
     if (reread.ok) {
       expect(reread.value.invoice.billToName).toBe("Original Org Name");
+    }
+  });
+});
+
+it("applies each line's own tax rate positionally on a multi-rate invoice", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id, "won");
+    await seedProductOnDeal(db, dealId, "100.00", "1"); // base 100.00, 10% -> tax 10.00
+    await seedProductOnDeal(db, dealId, "200.00", "1"); // base 200.00, 25% -> tax 50.00
+
+    const result = await createInvoiceFromDeal(
+      db,
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "exclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+        lineTaxRates: ["10", "25"],
+      },
+      sig(),
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok === true) {
+      expect(result.value.lines).toHaveLength(2);
+      expect(result.value.lines[0]?.taxRatePercent).toBe("10.00");
+      expect(result.value.lines[1]?.taxRatePercent).toBe("25.00");
+      expect(result.value.invoice.subtotal).toBe("300.00");
+      expect(result.value.invoice.taxTotal).toBe("60.00");
+      expect(result.value.invoice.total).toBe("360.00");
+    }
+  });
+});
+
+it("recomputes tax in inclusive mode when a line item's tax rate is updated", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id, "won");
+    await seedProductOnDeal(db, dealId, "110.00", "1"); // base 110.00, inclusive @ 0% initially
+    const created = await createInvoiceFromDeal(
+      db,
+      {
+        dealId,
+        issueDate: "2026-08-31",
+        dueDate: null,
+        notes: null,
+        taxMode: "inclusive",
+        billToName: null,
+        billToAddress: null,
+        billToEmail: null,
+        billToTaxId: null,
+        lineTaxRates: ["0"],
+      },
+      sig(),
+    );
+    if (!created.ok) throw new Error("setup failed");
+    const line = created.value.lines[0];
+    if (line === undefined) throw new Error("no line");
+
+    // Update to 10% inclusive: tax backed out of the 110.00 base -> 10.00 tax, 100.00 subtotal.
+    const updated = await updateInvoiceLineItem(
+      db,
+      {
+        id: line.id,
+        quantity: line.quantity,
+        unitPrice: line.unitPrice,
+        discountPercent: line.discountPercent,
+        taxRatePercent: "10",
+      },
+      sig(),
+    );
+    expect(updated.ok).toBe(true);
+
+    const reread = await getInvoice(db, created.value.invoice.id, sig());
+    expect(reread.ok).toBe(true);
+    if (reread.ok) {
+      expect(reread.value.invoice.subtotal).toBe("100.00");
+      expect(reread.value.invoice.taxTotal).toBe("10.00");
+      expect(reread.value.invoice.total).toBe("110.00");
     }
   });
 });

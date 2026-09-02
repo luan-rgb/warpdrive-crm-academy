@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { INVOICE_STATUS, INVOICE_TAX_MODE } from "@/db/schema/invoices";
 
+const percent = z
+  .string()
+  .regex(/^\d+(\.\d{1,2})?$/)
+  .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "must be between 0 and 100" });
+
 export const createInvoiceInputSchema = z.object({
   dealId: z.string().uuid(),
   issueDate: z.string().date(),
@@ -14,7 +19,7 @@ export const createInvoiceInputSchema = z.object({
   // Positional: index i is the tax rate for the i-th line item createInvoiceFromDeal snapshots
   // from the deal (deal_products ordered by position, same order the create dialog fetched them
   // in). Missing/short arrays default the remaining lines to "0".
-  lineTaxRates: z.array(z.string()).optional(),
+  lineTaxRates: z.array(percent).optional(),
 });
 export type CreateInvoiceInput = z.infer<typeof createInvoiceInputSchema>;
 
@@ -30,11 +35,6 @@ const money = z
   .string()
   .regex(/^\d+(\.\d{1,2})?$/)
   .refine((v) => Number(v) >= 0, { message: "must not be negative" });
-
-const percent = z
-  .string()
-  .regex(/^\d+(\.\d{1,2})?$/)
-  .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "must be between 0 and 100" });
 
 export const addInvoiceLineItemInputSchema = z.object({
   invoiceId: z.string().uuid(),
