@@ -17,15 +17,24 @@ import {
   updateInvoiceLineItemAction,
 } from "./actions";
 
-function money(v: string | number): string {
-  return new Intl.NumberFormat(undefined, {
+function money(v: string | number, currency: string): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Number(v));
 }
 
-function lineTotal(quantity: string, unitPrice: string, discountPercent: string): number {
+function lineBase(quantity: string, unitPrice: string, discountPercent: string): number {
   return Number(quantity) * Number(unitPrice) * (1 - Number(discountPercent) / 100);
+}
+
+function lineTax(base: number, taxRatePercent: string, taxMode: string): number {
+  if (taxMode === "none") return 0;
+  const rate = Number(taxRatePercent) / 100;
+  if (taxMode === "inclusive") return base - base / (1 + rate);
+  return base * rate;
 }
 
 export function InvoiceEditDialog({
@@ -33,16 +42,20 @@ export function InvoiceEditDialog({
   open,
   onOpenChange,
   onChanged,
+  baseCurrency,
 }: {
   invoiceId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onChanged: () => void;
+  baseCurrency: string;
 }): React.ReactNode {
   const invoiceQuery = trpc.invoices.get.useQuery({ id: invoiceId }, { enabled: open });
   const catalogQuery = trpc.products.list.useQuery({ includeArchived: false });
+  const invoice = invoiceQuery.data?.invoice;
   const lines = invoiceQuery.data?.lines ?? [];
   const catalog = catalogQuery.data ?? [];
+  const taxMode = invoice?.taxMode ?? "exclusive";
 
   const [selectedProductId, setSelectedProductId] = useState("");
   const [quantity, setQuantity] = useState("1");
@@ -57,7 +70,13 @@ export function InvoiceEditDialog({
     setError(null);
     if (selectedProductId === "") return;
     const r = await addInvoiceLineItemAction(
-      { invoiceId, productId: selectedProductId, quantity, discountPercent: "0" },
+      {
+        invoiceId,
+        productId: selectedProductId,
+        quantity,
+        discountPercent: "0",
+        taxRatePercent: "0",
+      },
       readCsrfToken(),
     );
     if (!r.ok) {
@@ -71,7 +90,7 @@ export function InvoiceEditDialog({
 
   async function updateLine(
     id: string,
-    next: { quantity: string; unitPrice: string; discountPercent: string },
+    next: { quantity: string; unitPrice: string; discountPercent: string; taxRatePercent: string },
   ): Promise<void> {
     const r = await updateInvoiceLineItemAction({ id, ...next }, readCsrfToken());
     if (!r.ok) {
@@ -90,10 +109,15 @@ export function InvoiceEditDialog({
     refresh();
   }
 
-  const total = lines.reduce(
-    (sum, l) => sum + lineTotal(l.quantity, l.unitPrice, l.discountPercent),
-    0,
-  );
+  let subtotal = 0;
+  let taxTotal = 0;
+  for (const l of lines) {
+    const base = lineBase(l.quantity, l.unitPrice, l.discountPercent);
+    const tax = lineTax(base, l.taxRatePercent, taxMode);
+    subtotal += taxMode === "inclusive" ? base - tax : base;
+    taxTotal += tax;
+  }
+  const total = subtotal + taxTotal;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -118,6 +142,7 @@ export function InvoiceEditDialog({
                 <th className="px-2 py-2">Qty</th>
                 <th className="px-2 py-2">Unit price</th>
                 <th className="px-2 py-2">Discount %</th>
+                {taxMode !== "none" && <th className="px-2 py-2">Tax %</th>}
                 <th className="px-2 py-2">Total</th>
                 <th className="px-2 py-2" />
               </tr>
@@ -135,6 +160,7 @@ export function InvoiceEditDialog({
                           quantity: e.target.value,
                           unitPrice: l.unitPrice,
                           discountPercent: l.discountPercent,
+                          taxRatePercent: l.taxRatePercent,
                         })
                       }
                     />
@@ -148,6 +174,7 @@ export function InvoiceEditDialog({
                           quantity: l.quantity,
                           unitPrice: e.target.value,
                           discountPercent: l.discountPercent,
+                          taxRatePercent: l.taxRatePercent,
                         })
                       }
                     />
@@ -161,12 +188,29 @@ export function InvoiceEditDialog({
                           quantity: l.quantity,
                           unitPrice: l.unitPrice,
                           discountPercent: e.target.value,
+                          taxRatePercent: l.taxRatePercent,
                         })
                       }
                     />
                   </td>
+                  {taxMode !== "none" && (
+                    <td className="px-2 py-2 w-24">
+                      <Input
+                        aria-label="Tax percent"
+                        value={l.taxRatePercent}
+                        onChange={(e) =>
+                          void updateLine(l.id, {
+                            quantity: l.quantity,
+                            unitPrice: l.unitPrice,
+                            discountPercent: l.discountPercent,
+                            taxRatePercent: e.target.value,
+                          })
+                        }
+                      />
+                    </td>
+                  )}
                   <td className="px-2 py-2 tabular-nums">
-                    {money(lineTotal(l.quantity, l.unitPrice, l.discountPercent))}
+                    {money(lineBase(l.quantity, l.unitPrice, l.discountPercent), baseCurrency)}
                   </td>
                   <td className="px-2 py-2 text-right">
                     <Button variant="ghost" onClick={() => void removeLine(l.id)}>
@@ -177,11 +221,27 @@ export function InvoiceEditDialog({
               ))}
             </tbody>
             <tfoot>
+              <tr className="border-t">
+                <td className="px-2 py-2" colSpan={taxMode !== "none" ? 5 : 4}>
+                  Subtotal
+                </td>
+                <td className="px-2 py-2 tabular-nums">{money(subtotal, baseCurrency)}</td>
+                <td />
+              </tr>
+              {taxMode !== "none" && (
+                <tr>
+                  <td className="px-2 py-2" colSpan={5}>
+                    Tax
+                  </td>
+                  <td className="px-2 py-2 tabular-nums">{money(taxTotal, baseCurrency)}</td>
+                  <td />
+                </tr>
+              )}
               <tr className="border-t font-semibold">
-                <td className="px-2 py-2" colSpan={4}>
+                <td className="px-2 py-2" colSpan={taxMode !== "none" ? 5 : 4}>
                   Total
                 </td>
-                <td className="px-2 py-2 tabular-nums">{money(total)}</td>
+                <td className="px-2 py-2 tabular-nums">{money(total, baseCurrency)}</td>
                 <td />
               </tr>
             </tfoot>
@@ -196,7 +256,10 @@ export function InvoiceEditDialog({
               onChange={setSelectedProductId}
               options={[
                 { value: "", label: "Select a product" },
-                ...catalog.map((p) => ({ value: p.id, label: `${p.name} (${money(p.price)})` })),
+                ...catalog.map((p) => ({
+                  value: p.id,
+                  label: `${p.name} (${money(p.price, baseCurrency)})`,
+                })),
               ]}
             />
           </div>
