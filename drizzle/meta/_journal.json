@@ -554,6 +554,13 @@
       "when": 1788278803908,
       "tag": "0078_invoice_legacy_backfill",
       "breakpoints": true
+    },
+    {
+      "idx": 79,
+      "version": "7",
+      "when": 1788375504925,
+      "tag": "0079_living_gamma_corps",
+      "breakpoints": true
     }
   ]
 }
