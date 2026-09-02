@@ -180,6 +180,12 @@ export const ERROR_IDS = {
   ENRICH_MAPPINGS_CHANGED: "E_ENRICH_012", // field mapping was repointed while the review was open
   ENRICH_KEY_UNREADABLE: "E_ENRICH_013", // stored API key could not be decrypted; admin must re-enter it
   ENRICH_NOT_ENTITLED: "E_ENRICH_014", // provider plans do not include the endpoint this lookup needs
+  // AUTOMATION
+  AUTOMATION_INPUT_INVALID: "E_AUTOMATION_001", // create/update rule payload failed the Zod boundary
+  AUTOMATION_NOT_FOUND: "E_AUTOMATION_002", // rule id does not exist
+  AUTOMATION_RULE_HAS_NO_ACTIONS: "E_AUTOMATION_003", // attempted to save a rule with zero actions
+  AUTOMATION_EMAIL_ACCOUNT_MISSING: "E_AUTOMATION_004", // deal owner has no connected Gmail account
+  AUTOMATION_EMAIL_RECIPIENT_MISSING: "E_AUTOMATION_005", // deal has no linked person / person has no primary email
 
   // UI
   UI_CHART_CONTEXT_MISSING: "E_UI_001", // a chart part rendered outside its ChartContainer

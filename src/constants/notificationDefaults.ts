@@ -15,6 +15,7 @@ export const DEFAULT_EMAIL_BY_TYPE: Record<NotificationType, boolean> = {
   email_open: false,
   email_click: false,
   deal_email_received: false,
+  automation: false,
 };
 
 export const DEFAULT_IN_APP = true;

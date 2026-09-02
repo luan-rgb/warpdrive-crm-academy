@@ -13,6 +13,7 @@ export const GLOBAL_FLAGS = [
   "goals.manage",
   "product.manage",
   "invoice.manage",
+  "automation.manage",
   "permissions.manage",
   // Team-manager visibility: the set holder can SEE records owned by members of any team they
   // manage (teams.managerId), across entities. Inert unless the holder actually manages a team.
@@ -64,6 +65,7 @@ export const PERMISSION_FLAGS = {
   PIPELINE_MANAGE: "pipeline.manage",
   PRODUCT_MANAGE: "product.manage",
   INVOICE_MANAGE: "invoice.manage",
+  AUTOMATION_MANAGE: "automation.manage",
 } as const satisfies Record<string, PermissionFlagKey>;
 
 // Granting any of these to a set requires the actor to be an admin (permissions spec 5.2).

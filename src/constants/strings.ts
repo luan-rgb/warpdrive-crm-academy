@@ -111,6 +111,7 @@ export const STRINGS = {
       comment_reply: "New reply to a comment",
       deal_email_received: "New email",
       deal_email_received_fallback: "on a deal",
+      automation: "Automation executed",
       fallback: "Notification",
     },
     preferences: {
@@ -130,6 +131,7 @@ export const STRINGS = {
         deal_lost: "Deal lost",
         comment_reply: "Comment replies",
         deal_email_received: "New email on my deals",
+        automation: "Automation executed",
       },
     },
   },

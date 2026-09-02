@@ -17,6 +17,7 @@ const FALLBACK: Record<NotificationType, string> = {
   comment_reply: "/",
   // Opens the deal, not the inbox thread: the point of this one is the deal's timeline.
   deal_email_received: "/",
+  automation: "/",
 };
 
 // Email notifications point at a thread, which the row carries in its payload rather than as an
