@@ -125,6 +125,30 @@ it("shows a running subtotal/tax/total that updates when a line's tax rate chang
   });
 });
 
+it("sends an explicit empty string, not null, when the user clears a prefilled bill-to field", async () => {
+  render(
+    <CreateInvoiceDialog
+      dealId="deal-1"
+      org={org}
+      person={person}
+      baseCurrency="USD"
+      open
+      onOpenChange={() => {}}
+      onCreated={() => {}}
+    />,
+  );
+  const nameInput = screen.getByLabelText("Customer name");
+  expect(nameInput).toHaveValue("Acme Inc");
+  fireEvent.change(nameInput, { target: { value: "" } });
+
+  screen.getByRole("button", { name: "Create invoice" }).click();
+  await waitFor(() => expect(createInvoiceAction).toHaveBeenCalled());
+  const [input] = createInvoiceAction.mock.calls[0]! as unknown as [Record<string, unknown>];
+  // Deliberately cleared by the user: must NOT be null, which the repo treats as "not supplied"
+  // and falls back to the org's name, silently discarding the user's edit.
+  expect(input.billToName).toBe("");
+});
+
 it("submits the bill-to fields, tax mode, and per-line tax rates on create", async () => {
   const onCreated = vi.fn();
   render(

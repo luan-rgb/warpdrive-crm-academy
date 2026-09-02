@@ -103,10 +103,13 @@ export function CreateInvoiceDialog({
         dueDate,
         notes: notes.trim() === "" ? null : notes,
         taxMode,
-        billToName: billToName.trim() === "" ? null : billToName,
-        billToAddress: billToAddress.trim() === "" ? null : billToAddress,
-        billToEmail: billToEmail.trim() === "" ? null : billToEmail,
-        billToTaxId: billToTaxId.trim() === "" ? null : billToTaxId,
+        // "" (not null) when the user deliberately clears a prefilled field: the repo's
+        // `input.billToName ?? org?.name ?? ...` fallback only triggers on null/undefined
+        // ("not supplied"), so an explicit "" here is what actually clears it server-side.
+        billToName,
+        billToAddress,
+        billToEmail,
+        billToTaxId,
         lineTaxRates: dealLines.map((l) => taxRateFor(l.id)),
       },
       readCsrfToken(),
