@@ -2276,6 +2276,7 @@ export function AutomationsClient({ rules: initialRules }: { rules: AutomationRu
     const r = await deleteAutomationRuleAction({ id }, readCsrfToken());
     if (r.ok) {
       setRules((prev) => prev.filter((rr) => rr.id !== id));
+      refresh();
       return;
     }
     setError("Could not delete the automation.");
@@ -2311,10 +2312,11 @@ export function AutomationsClient({ rules: initialRules }: { rules: AutomationRu
 }
 ```
 
-(`refresh` is defined but only needed if a later interaction requires a full server-data
-reload beyond the optimistic `setRules` updates already handling toggle/delete; keep it for
-Task 8's wizard to call after a successful save/navigate-back. If your linter flags it as
-unused after this task alone, that's expected — Task 8 uses it.)
+(`refresh()` is called from `confirmDelete` above, on top of the optimistic `setRules` update,
+so the server-rendered list (`page.tsx`'s `listAutomationRules` call) stays in sync too — not
+dead code, and not something Task 8 needs to reach into: Task 8's wizard is a separate routed
+page that calls `router.refresh()` directly itself after a save, matching the same pattern
+independently rather than sharing this component's local function.)
 
 - [ ] **Step 5: Add the settings nav entry**
 
