@@ -4,16 +4,16 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { db } from "@/db/client";
 import { deals } from "@/db/schema/deals";
-import { organizations } from "@/db/schema/organizations";
-import { persons } from "@/db/schema/persons";
 import { settings } from "@/db/schema/system";
 import { getInvoice } from "@/features/invoices/invoicesRepo";
 import { PrintButton } from "./PrintButton";
 
 export const metadata: Metadata = { title: "Invoice" };
 
-function money(v: string): string {
-  return new Intl.NumberFormat(undefined, {
+function money(v: string, currency: string): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Number(v));
@@ -39,16 +39,7 @@ export default async function InvoicePrintPage({
 
   const [deal] = await db.select().from(deals).where(eq(deals.id, invoice.dealId));
   const [companySettings] = await db.select().from(settings).where(eq(settings.id, true));
-  const org =
-    deal?.orgId != null
-      ? (await db.select().from(organizations).where(eq(organizations.id, deal.orgId)))[0]
-      : undefined;
-  const person =
-    deal?.personId != null
-      ? (await db.select().from(persons).where(eq(persons.id, deal.personId)))[0]
-      : undefined;
-
-  const billedTo = org?.name ?? person?.name ?? "—";
+  const currency = companySettings?.baseCurrency ?? "USD";
 
   return (
     <div className="space-y-8">
@@ -83,7 +74,16 @@ export default async function InvoicePrintPage({
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div>
           <p className="text-muted-foreground">Billed to</p>
-          <p className="font-medium">{billedTo}</p>
+          <p className="font-medium">{invoice.billToName ?? "—"}</p>
+          {invoice.billToAddress != null && (
+            <p className="text-muted-foreground">{invoice.billToAddress}</p>
+          )}
+          {invoice.billToEmail != null && (
+            <p className="text-muted-foreground">{invoice.billToEmail}</p>
+          )}
+          {invoice.billToTaxId != null && (
+            <p className="text-muted-foreground">Tax ID: {invoice.billToTaxId}</p>
+          )}
           {deal !== undefined && <p className="text-muted-foreground">{deal.title}</p>}
         </div>
         <div className="text-right">
@@ -111,6 +111,7 @@ export default async function InvoicePrintPage({
             <th className="py-2 text-right">Qty</th>
             <th className="py-2 text-right">Unit price</th>
             <th className="py-2 text-right">Discount</th>
+            {invoice.taxMode !== "none" && <th className="py-2 text-right">Tax</th>}
             <th className="py-2 text-right">Total</th>
           </tr>
         </thead>
@@ -119,23 +120,38 @@ export default async function InvoicePrintPage({
             <tr key={line.id} className="border-b">
               <td className="py-2">{line.name}</td>
               <td className="py-2 text-right tabular-nums">{line.quantity}</td>
-              <td className="py-2 text-right tabular-nums">{money(line.unitPrice)}</td>
+              <td className="py-2 text-right tabular-nums">{money(line.unitPrice, currency)}</td>
               <td className="py-2 text-right tabular-nums">{line.discountPercent}%</td>
+              {invoice.taxMode !== "none" && (
+                <td className="py-2 text-right tabular-nums">{line.taxRatePercent}%</td>
+              )}
               <td className="py-2 text-right tabular-nums">
-                {money(lineTotal(line.quantity, line.unitPrice, line.discountPercent).toFixed(2))}
+                {money(
+                  lineTotal(line.quantity, line.unitPrice, line.discountPercent).toFixed(2),
+                  currency,
+                )}
               </td>
             </tr>
           ))}
         </tbody>
-        <tfoot>
-          <tr className="font-semibold">
-            <td className="py-2" colSpan={4}>
-              Total
-            </td>
-            <td className="py-2 text-right tabular-nums">{money(invoice.total)}</td>
-          </tr>
-        </tfoot>
       </table>
+
+      <div className="flex flex-col items-end gap-1 text-sm">
+        <p>
+          <span className="text-muted-foreground">Subtotal: </span>
+          {money(invoice.subtotal, currency)}
+        </p>
+        {invoice.taxMode !== "none" && (
+          <p>
+            <span className="text-muted-foreground">Tax: </span>
+            {money(invoice.taxTotal, currency)}
+          </p>
+        )}
+        <p className="text-base font-semibold">
+          <span className="text-muted-foreground font-normal">Total: </span>
+          {money(invoice.total, currency)}
+        </p>
+      </div>
 
       {invoice.notes !== null && invoice.notes !== "" && (
         <div className="text-sm">
