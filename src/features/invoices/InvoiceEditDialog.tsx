@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import type { InvoiceTaxMode } from "@/db/schema/invoices";
 import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import {
@@ -30,7 +31,7 @@ function lineBase(quantity: string, unitPrice: string, discountPercent: string):
   return Number(quantity) * Number(unitPrice) * (1 - Number(discountPercent) / 100);
 }
 
-function lineTax(base: number, taxRatePercent: string, taxMode: string): number {
+function lineTax(base: number, taxRatePercent: string, taxMode: InvoiceTaxMode): number {
   if (taxMode === "none") return 0;
   const rate = Number(taxRatePercent) / 100;
   if (taxMode === "inclusive") return base - base / (1 + rate);

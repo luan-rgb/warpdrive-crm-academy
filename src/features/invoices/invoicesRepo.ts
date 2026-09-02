@@ -138,6 +138,7 @@ export async function createInvoiceFromDeal(
     deal.personId != null
       ? (await db.select().from(persons).where(eq(persons.id, deal.personId)))[0]
       : undefined;
+  signal.throwIfAborted();
 
   const billToName = input.billToName ?? org?.name ?? person?.name ?? null;
   const billToAddress = input.billToAddress ?? formatAddress(org?.address ?? null);

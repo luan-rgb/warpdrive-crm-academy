@@ -152,15 +152,17 @@ export function InvoicesPanel({
           baseCurrency={baseCurrency}
         />
       )}
-      <CreateInvoiceDialog
-        dealId={dealId}
-        org={org}
-        person={person}
-        baseCurrency={baseCurrency}
-        open={creating}
-        onOpenChange={setCreating}
-        onCreated={refresh}
-      />
+      {creating && (
+        <CreateInvoiceDialog
+          dealId={dealId}
+          org={org}
+          person={person}
+          baseCurrency={baseCurrency}
+          open={creating}
+          onOpenChange={setCreating}
+          onCreated={refresh}
+        />
+      )}
     </div>
   );
 }
