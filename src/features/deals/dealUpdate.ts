@@ -4,6 +4,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { BOARD_EVENT, dealChannel } from "@/constants/boardChannels";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import { deals } from "@/db/schema/deals";
+import { evaluateAutomations } from "@/features/automations/evaluate";
 import { syncEntityLabelNames } from "@/features/labels/labelsRepo.entities";
 import type { PermSetUser } from "@/features/permissions/effective";
 import { assertReferenceVisible } from "@/features/permissions/referenceCheck";
@@ -182,7 +183,11 @@ export async function updateDeal(
     // the Unit E additions: custom-field edits and person/org relink). Written on `tx` so a
     // failed mutation writes no changelog; a no-op edit logs nothing. `status` is excluded
     // (the won/lost flow owns it) to avoid double-logging.
-    await logDealUpdateChanges(tx, { input, before, after: row, actorId: session.id }, signal);
+    const changes = await logDealUpdateChanges(
+      tx,
+      { input, before, after: row, actorId: session.id },
+      signal,
+    );
 
     // Keep the catalog links in step with the array this update wrote.
     if (input.labels !== undefined) {
@@ -199,6 +204,13 @@ export async function updateDeal(
       },
       signal,
     );
+
+    if (input.status !== undefined && before.status !== row.status) {
+      await evaluateAutomations(tx, "deal_status_changed", before, row, signal);
+    }
+    if (changes.length > 0) {
+      await evaluateAutomations(tx, "deal_field_changed", before, row, signal, changes);
+    }
 
     return ok(row);
   });

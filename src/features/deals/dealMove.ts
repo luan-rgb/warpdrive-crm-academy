@@ -5,6 +5,7 @@ import { BOARD_EVENT, dealMovedChannel } from "@/constants/boardChannels";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import { deals } from "@/db/schema/deals";
 import { stages } from "@/db/schema/stages";
+import { evaluateAutomations } from "@/features/automations/evaluate";
 import { recordChange } from "@/features/collaboration/changeLog";
 import type { PermSetUser } from "@/features/permissions/effective";
 import type { DbOrTx } from "@/server/realtime/channelVersions";
@@ -114,6 +115,10 @@ export async function moveDeal(
       },
       signal,
     );
+
+    if (row.stageId !== deal.stageId) {
+      await evaluateAutomations(tx, "deal_stage_changed", deal, row, signal);
+    }
 
     return ok(row);
   });

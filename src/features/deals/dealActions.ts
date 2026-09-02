@@ -9,6 +9,7 @@ import { deals } from "@/db/schema/deals";
 import { pipelines } from "@/db/schema/pipelines";
 import { stages } from "@/db/schema/stages";
 import { settings } from "@/db/schema/system";
+import { evaluateAutomations } from "@/features/automations/evaluate";
 import { syncEntityLabelNames } from "@/features/labels/labelsRepo.entities";
 import {
   type EntityCreateSession,
@@ -224,6 +225,8 @@ export async function createDeal(
       },
       signal,
     );
+
+    await evaluateAutomations(tx, "deal_created", null, row, signal);
 
     return ok(row);
   });
