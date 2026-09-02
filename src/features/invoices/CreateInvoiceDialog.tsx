@@ -59,16 +59,14 @@ export function CreateInvoiceDialog({
   onCreated: () => void;
 }): React.ReactNode {
   const dealProductsQuery = trpc.products.byDeal.useQuery({ dealId });
-  const dealLines = dealProductsQuery.data ?? [];
+  const dealLines = useMemo(() => dealProductsQuery.data ?? [], [dealProductsQuery.data]);
 
   const [billToName, setBillToName] = useState(org?.name ?? person?.name ?? "");
   const [billToAddress, setBillToAddress] = useState(formatAddress(org?.address ?? null));
   const [billToEmail, setBillToEmail] = useState(person?.primaryEmail ?? "");
   const [billToTaxId, setBillToTaxId] = useState("");
   const [taxMode, setTaxMode] = useState<InvoiceTaxMode>("exclusive");
-  const [issueDate, setIssueDate] = useState<string | null>(
-    new Date().toISOString().slice(0, 10),
-  );
+  const [issueDate, setIssueDate] = useState<string | null>(new Date().toISOString().slice(0, 10));
   const [dueDate, setDueDate] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
   const [taxRates, setTaxRates] = useState<Record<string, string>>({});
@@ -84,8 +82,9 @@ export function CreateInvoiceDialog({
     let tax = 0;
     for (const line of dealLines) {
       const b = lineBase(line.quantity, line.unitPrice) * (1 - Number(line.discountPercent) / 100);
-      const rate = Number(taxRateFor(line.id)) / 100;
-      const lineTax = taxMode === "none" ? 0 : taxMode === "inclusive" ? b - b / (1 + rate) : b * rate;
+      const rate = Number(taxRates[line.id] ?? "0") / 100;
+      const lineTax =
+        taxMode === "none" ? 0 : taxMode === "inclusive" ? b - b / (1 + rate) : b * rate;
       base += b;
       tax += lineTax;
     }
@@ -175,7 +174,11 @@ export function CreateInvoiceDialog({
               className="flex flex-col gap-1.5"
             >
               {(["exclusive", "inclusive", "none"] as const).map((mode) => (
-                <label key={mode} className="flex items-center gap-2 text-sm">
+                <label
+                  key={mode}
+                  htmlFor={`tax-mode-${mode}`}
+                  className="flex items-center gap-2 text-sm"
+                >
                   <RadioGroupItem value={mode} id={`tax-mode-${mode}`} />
                   {TAX_MODE_LABEL[mode]}
                 </label>
@@ -223,7 +226,8 @@ export function CreateInvoiceDialog({
                 )}
                 <td className="py-2 text-right tabular-nums">
                   {money(
-                    lineBase(line.quantity, line.unitPrice) * (1 - Number(line.discountPercent) / 100),
+                    lineBase(line.quantity, line.unitPrice) *
+                      (1 - Number(line.discountPercent) / 100),
                     baseCurrency,
                   )}
                 </td>
