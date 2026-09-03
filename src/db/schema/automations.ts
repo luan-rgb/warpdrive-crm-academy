@@ -11,8 +11,8 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { deals } from "./deals";
-import { pipelines } from "./pipelines";
 import { users } from "./identity";
+import { pipelines } from "./pipelines";
 
 export const AUTOMATION_TRIGGERS = [
   "deal_created",

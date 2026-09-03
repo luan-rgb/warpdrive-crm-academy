@@ -140,7 +140,10 @@ it("does not match deal_stage_changed on an intra-column no-op (same stage)", as
     const { pipeline, stages } = await seedPipelineWithStages(db, ["Open"]);
     const stage = stages[0];
     if (stage === undefined) throw new Error("no stage");
-    await seedRule(db, user.id, { trigger: "deal_stage_changed", triggerConfig: { toStageId: null } });
+    await seedRule(db, user.id, {
+      trigger: "deal_stage_changed",
+      triggerConfig: { toStageId: null },
+    });
     const deal = await seedDeal(db, user.id, pipeline.id, stage.id);
 
     const matched = await matchAutomationRules(

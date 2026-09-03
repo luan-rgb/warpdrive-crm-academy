@@ -75,6 +75,10 @@ export function renderNotificationEmail(
       subject = "Someone replied to your comment in Warpdrive";
       line = `${recipientName}, somebody replied to your comment.`;
       break;
+    case "automation":
+      subject = "Automation executed";
+      line = `${recipientName}, an automation rule ran on a deal.`;
+      break;
     case "deal_email_received": {
       const emailSubject = typeof row.payload.subject === "string" ? row.payload.subject : null;
       subject =

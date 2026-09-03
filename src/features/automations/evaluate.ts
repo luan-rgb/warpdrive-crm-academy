@@ -1,9 +1,13 @@
 import { and, eq, isNull, or } from "drizzle-orm";
 import { PGBOSS_QUEUE_AUTOMATION_EXECUTE } from "@/constants/jobNames";
+import {
+  type AutomationRule,
+  type AutomationTrigger,
+  automationRules,
+} from "@/db/schema/automations";
 import type { Deal } from "@/db/schema/deals";
-import { type AutomationRule, type AutomationTrigger, automationRules } from "@/db/schema/automations";
-import type { DbOrTx } from "@/server/realtime/channelVersions";
 import { requireBoss } from "@/jobs/requireBoss";
+import type { DbOrTx } from "@/server/realtime/channelVersions";
 
 // One changed field, in the same shape logDealUpdateChanges already computes (field key
 // matches src/constants/changeLogFields.ts, e.g. "title" or "custom_field:<key>").
@@ -57,7 +61,10 @@ export async function matchAutomationRules(
       and(
         eq(automationRules.trigger, trigger),
         eq(automationRules.isActive, true),
-        or(isNull(automationRules.pipelineId), eq(automationRules.pipelineId, dealAfter.pipelineId)),
+        or(
+          isNull(automationRules.pipelineId),
+          eq(automationRules.pipelineId, dealAfter.pipelineId),
+        ),
       ),
     );
   signal.throwIfAborted();
@@ -90,7 +97,14 @@ export async function evaluateAutomations(
   signal: AbortSignal,
   fieldChanges: DealFieldChange[] = [],
 ): Promise<void> {
-  const matched = await matchAutomationRules(db, trigger, dealBefore, dealAfter, signal, fieldChanges);
+  const matched = await matchAutomationRules(
+    db,
+    trigger,
+    dealBefore,
+    dealAfter,
+    signal,
+    fieldChanges,
+  );
   if (matched.length === 0) return;
 
   const boss = requireBoss();

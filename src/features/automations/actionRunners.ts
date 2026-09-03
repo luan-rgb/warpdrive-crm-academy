@@ -84,7 +84,7 @@ async function runCreateActivity(
       subject: config.subject as string,
       dealId: deal.id,
       assigneeId: deal.ownerId,
-    } as never,
+    },
     signal,
   );
   if (!result.ok) return failed(result.error.id, result.error.message);
@@ -101,7 +101,10 @@ async function runSendNotification(
   if (ctx === null) {
     return failed(ERROR_IDS.DEAL_NOT_FOUND, "deal no longer exists");
   }
-  const message = renderTemplate(String(config.messageTemplate ?? ""), ctx);
+  const message = renderTemplate(
+    typeof config.messageTemplate === "string" ? config.messageTemplate : "",
+    ctx,
+  );
   const result = await createNotification(
     db,
     {
@@ -161,8 +164,14 @@ async function runSendEmail(
     account,
     {
       to: [person.primaryEmail],
-      subject: renderTemplate(String(config.subjectTemplate ?? ""), ctx),
-      bodyHtml: renderTemplate(String(config.bodyTemplate ?? ""), ctx),
+      subject: renderTemplate(
+        typeof config.subjectTemplate === "string" ? config.subjectTemplate : "",
+        ctx,
+      ),
+      bodyHtml: renderTemplate(
+        typeof config.bodyTemplate === "string" ? config.bodyTemplate : "",
+        ctx,
+      ),
     },
     signal,
   );
@@ -177,7 +186,7 @@ async function runUpdateField(
   signal: AbortSignal,
 ): Promise<ActionOutcome> {
   signal.throwIfAborted();
-  const fieldKey = String(config.fieldKey ?? "");
+  const fieldKey = typeof config.fieldKey === "string" ? config.fieldKey : "";
   const value = config.value;
   // Phase 1 supports the same scalar deal columns deal_field_changed can trigger on. Custom
   // fields ("custom_field:<key>") are out of scope for this action until a real use case

@@ -67,7 +67,7 @@ export function AutomationWizard({
     initialRule?.rule.trigger ?? "deal_created",
   );
   const [triggerConfig, setTriggerConfig] = useState<Record<string, unknown>>(
-    (initialRule?.rule.triggerConfig as Record<string, unknown>) ?? {},
+    (initialRule?.rule.triggerConfig ?? {}) as Record<string, unknown>,
   );
   const [isActive, setIsActive] = useState(initialRule?.rule.isActive ?? true);
   const [actions, setActions] = useState<DraftAction[]>(
@@ -163,7 +163,7 @@ export function AutomationWizard({
         {trigger === "deal_status_changed" && (
           <Select
             ariaLabel="Status"
-            value={(triggerConfig.toStatus as string) ?? ""}
+            value={(triggerConfig.toStatus ?? "") as string}
             onChange={(v) => setTriggerConfig({ toStatus: v })}
             options={[
               { value: "won", label: "Won" },
@@ -175,7 +175,7 @@ export function AutomationWizard({
           <Input
             aria-label="Field key"
             placeholder="e.g. title"
-            value={(triggerConfig.fieldKey as string) ?? ""}
+            value={(triggerConfig.fieldKey ?? "") as string}
             onChange={(e) => setTriggerConfig({ fieldKey: e.target.value })}
           />
         )}
@@ -208,14 +208,14 @@ export function AutomationWizard({
               <>
                 <Select
                   ariaLabel="Activity type"
-                  value={(action.config.activityTypeId as string) ?? ""}
+                  value={(action.config.activityTypeId ?? "") as string}
                   onChange={(v) => updateActionConfig(i, { ...action.config, activityTypeId: v })}
                   options={activityTypes.map((t) => ({ value: t.id, label: t.name }))}
                 />
                 <Input
                   aria-label="Subject"
                   placeholder="Subject"
-                  value={(action.config.subject as string) ?? ""}
+                  value={(action.config.subject ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, subject: e.target.value })
                   }
@@ -226,7 +226,7 @@ export function AutomationWizard({
               <Textarea
                 aria-label="Notification message"
                 placeholder="Message (use {{deal.title}}, {{deal.value}}, {{deal.owner}})"
-                value={(action.config.messageTemplate as string) ?? ""}
+                value={(action.config.messageTemplate ?? "") as string}
                 onChange={(e) =>
                   updateActionConfig(i, { ...action.config, messageTemplate: e.target.value })
                 }
@@ -237,7 +237,7 @@ export function AutomationWizard({
                 <Input
                   aria-label="Email subject"
                   placeholder="Subject"
-                  value={(action.config.subjectTemplate as string) ?? ""}
+                  value={(action.config.subjectTemplate ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, subjectTemplate: e.target.value })
                   }
@@ -245,7 +245,7 @@ export function AutomationWizard({
                 <Textarea
                   aria-label="Email body"
                   placeholder="Body"
-                  value={(action.config.bodyTemplate as string) ?? ""}
+                  value={(action.config.bodyTemplate ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, bodyTemplate: e.target.value })
                   }
@@ -257,7 +257,7 @@ export function AutomationWizard({
                 <Input
                   aria-label="Field key"
                   placeholder="title"
-                  value={(action.config.fieldKey as string) ?? ""}
+                  value={(action.config.fieldKey ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, fieldKey: e.target.value })
                   }
@@ -265,7 +265,7 @@ export function AutomationWizard({
                 <Input
                   aria-label="New value"
                   placeholder="Value"
-                  value={(action.config.value as string) ?? ""}
+                  value={(action.config.value ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, value: e.target.value })
                   }
