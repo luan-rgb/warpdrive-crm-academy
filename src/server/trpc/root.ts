@@ -1,4 +1,5 @@
 import { activitiesRouter } from "@/features/activities/router";
+import { automationsRouter } from "@/features/automations/router";
 import { collaborationRouter } from "@/features/collaboration/router";
 import { contactsRouter } from "@/features/contacts/router";
 import { customFieldsRouter } from "@/features/custom-fields/router";
@@ -33,6 +34,7 @@ export const appRouter = router({
   customFields: customFieldsRouter,
   collaboration: collaborationRouter,
   activities: activitiesRouter,
+  automations: automationsRouter,
   import: importRouter,
   invoices: invoicesRouter,
   labels: labelsRouter,

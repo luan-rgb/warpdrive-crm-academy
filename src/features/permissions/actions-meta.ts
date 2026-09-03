@@ -32,6 +32,7 @@ const GLOBAL_ACTIONS = [
   "product.manage",
   "invoice.manage",
   "permissions.manage",
+  "automation.manage",
 ] as const;
 
 export type OwnershipAction = (typeof OWNERSHIP_ACTIONS)[number];
