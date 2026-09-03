@@ -32,10 +32,14 @@ import { AutomationWizard } from "./AutomationWizard";
 it("submits a rule with the selected trigger, one action, and a name", async () => {
   render(<AutomationWizard initialRule={null} />);
 
+  const { default: userEvent } = await import("@testing-library/user-event");
+  const user = userEvent.setup();
+
   screen.getByLabelText("Automation name").focus();
-  await import("@testing-library/user-event").then(({ default: userEvent }) =>
-    userEvent.setup().type(screen.getByLabelText("Automation name"), "My Rule"),
-  );
+  await user.type(screen.getByLabelText("Automation name"), "My Rule");
+
+  // Save stays disabled with zero actions (finding 5), so add one before saving.
+  await user.click(screen.getByRole("button", { name: "+ Send notification" }));
 
   screen.getByRole("button", { name: "Save" }).click();
 

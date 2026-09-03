@@ -9,7 +9,7 @@ import { deals } from "@/db/schema/deals";
 import { pipelines } from "@/db/schema/pipelines";
 import { stages } from "@/db/schema/stages";
 import { settings } from "@/db/schema/system";
-import { evaluateAutomations } from "@/features/automations/evaluate";
+import { enqueueAutomationRuns, matchAutomationRules } from "@/features/automations/evaluate";
 import { syncEntityLabelNames } from "@/features/labels/labelsRepo.entities";
 import {
   type EntityCreateSession,
@@ -133,8 +133,11 @@ export async function createDeal(
   }
   signal.throwIfAborted();
 
-  // Run insert + event publish atomically.
-  return db.transaction(async (tx) => {
+  // Run insert + event publish atomically. Automation rules are matched inside the transaction
+  // (a pure read) but jobs are enqueued only after it commits (see evaluateAutomations.ts):
+  // enqueueing inside the transaction let a worker pick up the job before the deal existed on a
+  // fresh connection, or fire it anyway if the transaction rolled back later.
+  const txResult = await db.transaction(async (tx) => {
     // Check person/org references (Phase 2 stub always returns ok; Phase 3 does real lookup).
     if (input.personId !== null) {
       const ref = await assertReferenceVisible(
@@ -226,8 +229,17 @@ export async function createDeal(
       signal,
     );
 
-    await evaluateAutomations(tx, "deal_created", null, row, signal);
+    const automationMatches = await matchAutomationRules(tx, "deal_created", null, row, signal);
 
-    return ok(row);
+    return ok({ row, automationMatches });
   });
+  if (!txResult.ok) return txResult;
+
+  await enqueueAutomationRuns(
+    txResult.value.automationMatches,
+    txResult.value.row.id,
+    "deal_created",
+    signal,
+  );
+  return ok(txResult.value.row);
 }

@@ -80,15 +80,49 @@ export async function matchAutomationRules(
   );
 }
 
-// Enqueues one automation.execute job per matched rule. Called inline from
-// createDeal/moveDeal/updateDeal, mirroring how those functions already call
-// recordChange/publishBoardEvent — there is no generic event bus in this codebase, so this
-// follows the established pattern rather than introducing one.
+// Enqueues one automation.execute job per already-matched rule. Deliberately takes no `db`/`tx`:
+// boss.send() writes through pg-boss's own connection pool, independent of any Drizzle
+// transaction, so calling it from inside db.transaction(...) let a worker pick up and run the
+// job before the outer mutation committed (or after it rolled back). Callers must only invoke
+// this AFTER the transaction that produced `matched` has resolved successfully (see
+// createDeal/moveDeal/updateDeal, which call matchAutomationRules on `tx` but this on the
+// outside).
 //
-// Deliberately untested on its own (see this task's Interfaces note): requireBoss() returns
-// null in the test environment, so a direct test here would only ever exercise the no-op path.
-// matchAutomationRules (above) carries the real test coverage; handleAutomationExecuteJob
+// retryLimit: 0 because actions are non-idempotent side effects (real email, real activity
+// creation). pg-boss's default retry redelivers on a mid-loop handler failure (e.g. the job's
+// own AbortSignal timing out mid-sendGmail) and would re-run every already-completed action in
+// the same rule, duplicating those side effects. No idempotency key exists for individual
+// actions yet, so "run once, log the failure" is the safe default over "maybe run twice".
+//
+// Deliberately untested against a real queue (see this task's Interfaces note): requireBoss()
+// returns null in the test environment, so a direct test here would only ever exercise the
+// no-op path. matchAutomationRules (above) carries the real test coverage; handleAutomationExecuteJob
 // (Task 5) covers the consumer side.
+export async function enqueueAutomationRuns(
+  matched: AutomationRule[],
+  dealId: string,
+  trigger: AutomationTrigger,
+  signal: AbortSignal,
+): Promise<void> {
+  signal.throwIfAborted();
+  if (matched.length === 0) return;
+
+  const boss = requireBoss();
+  if (boss === null) return;
+  for (const rule of matched) {
+    await boss.send(
+      PGBOSS_QUEUE_AUTOMATION_EXECUTE,
+      { ruleId: rule.id, dealId, trigger },
+      { retryLimit: 0 },
+    );
+  }
+}
+
+// Thin match-then-enqueue wrapper kept for callers outside a deal-mutation transaction (e.g. a
+// future one-shot script or a test exercising the full path in one call). The three deal
+// mutation call sites (createDeal/moveDeal/updateDeal) do NOT use this: they call
+// matchAutomationRules on `tx` and enqueueAutomationRuns after the transaction commits, per the
+// split described above.
 export async function evaluateAutomations(
   db: DbOrTx,
   trigger: AutomationTrigger,
@@ -105,15 +139,5 @@ export async function evaluateAutomations(
     signal,
     fieldChanges,
   );
-  if (matched.length === 0) return;
-
-  const boss = requireBoss();
-  if (boss === null) return;
-  for (const rule of matched) {
-    await boss.send(PGBOSS_QUEUE_AUTOMATION_EXECUTE, {
-      ruleId: rule.id,
-      dealId: dealAfter.id,
-      trigger,
-    });
-  }
+  await enqueueAutomationRuns(matched, dealAfter.id, trigger, signal);
 }

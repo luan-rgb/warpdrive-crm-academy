@@ -12,7 +12,7 @@ import { createAutomationRule } from "./rulesRepo";
 
 const sig = () => new AbortController().signal;
 
-function makeActor(id: string): HydratedActor {
+function makeActor(id: string, flags: PermissionFlagKey[] = ["automation.manage"]): HydratedActor {
   return {
     id,
     type: "regular",
@@ -20,16 +20,20 @@ function makeActor(id: string): HydratedActor {
     name: "Test User",
     email: "test@example.com",
     avatarUrl: null,
-    flags: new Set<PermissionFlagKey>(),
+    flags: new Set<PermissionFlagKey>(flags),
     groupIds: new Set<string>(),
   };
 }
 
-function makeCaller(db: Db, userId: string): ReturnType<typeof createCaller> {
+function makeCaller(
+  db: Db,
+  userId: string,
+  flags: PermissionFlagKey[] = ["automation.manage"],
+): ReturnType<typeof createCaller> {
   return createCaller({
     db,
     session: { userId, sessionId: "test-session" },
-    actor: makeActor(userId),
+    actor: makeActor(userId, flags),
   });
 }
 
@@ -47,6 +51,53 @@ async function seedDeal(db: Db, ownerId: string): Promise<string> {
   if (row === undefined) throw new Error("no deal");
   return row.id;
 }
+
+describe("automation.manage gate", () => {
+  it("rejects list for an actor without automation.manage", async () => {
+    await withTestDb(async (db) => {
+      const user = await seedUser(db);
+      await expect(makeCaller(db, user.id, []).automations.list()).rejects.toMatchObject({
+        code: "FORBIDDEN",
+      });
+    });
+  });
+
+  it("rejects get for an actor without automation.manage", async () => {
+    await withTestDb(async (db) => {
+      const user = await seedUser(db);
+      const created = await createAutomationRule(
+        db,
+        user.id,
+        {
+          name: "Gated rule",
+          description: null,
+          pipelineId: null,
+          trigger: "deal_created",
+          triggerConfig: {},
+          actions: [{ actionType: "send_notification", config: {} }],
+          isActive: true,
+        },
+        sig(),
+      );
+      if (!created.ok) throw new Error("setup failed");
+
+      await expect(
+        makeCaller(db, user.id, []).automations.get({ id: created.value.id }),
+      ).rejects.toMatchObject({ code: "FORBIDDEN" });
+    });
+  });
+
+  it("rejects listRunsForRule for an actor without automation.manage", async () => {
+    await withTestDb(async (db) => {
+      const user = await seedUser(db);
+      await expect(
+        makeCaller(db, user.id, []).automations.listRunsForRule({
+          ruleId: "00000000-0000-0000-0000-000000000000",
+        }),
+      ).rejects.toMatchObject({ code: "FORBIDDEN" });
+    });
+  });
+});
 
 describe("automations.list", () => {
   it("returns created rules newest first", async () => {

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { BOARD_EVENT, dealChannel } from "@/constants/boardChannels";
 import { ERROR_IDS } from "@/constants/errorIds";
 import type { Db } from "@/db/client";
@@ -133,8 +133,8 @@ async function runSendEmail(
   const [account] = await db
     .select()
     .from(emailAccounts)
-    .where(eq(emailAccounts.userId, deal.ownerId));
-  if (account === undefined || account.status !== "connected") {
+    .where(and(eq(emailAccounts.userId, deal.ownerId), eq(emailAccounts.status, "connected")));
+  if (account === undefined) {
     return failed(
       ERROR_IDS.AUTOMATION_EMAIL_ACCOUNT_MISSING,
       "deal owner has no connected Gmail account",
@@ -179,6 +179,13 @@ async function runSendEmail(
   return ok({ messageId: result.value.gmailMessageId });
 }
 
+// Phase 1 supports the same scalar deal columns deal_field_changed can trigger on. Custom
+// fields ("custom_field:<key>") are out of scope for this action until a real use case
+// justifies the extra jsonb-merge path (documented in the spec's Non-goals).
+// Exported so schemas.ts can reject an unsupported fieldKey at save time instead of letting it
+// fail silently here at execution time (single source of truth, no duplicated literal).
+export const AUTOMATION_UPDATE_FIELD_ALLOWED: Record<string, string> = { title: "title" };
+
 async function runUpdateField(
   db: Db,
   deal: DealRef,
@@ -188,11 +195,7 @@ async function runUpdateField(
   signal.throwIfAborted();
   const fieldKey = typeof config.fieldKey === "string" ? config.fieldKey : "";
   const value = config.value;
-  // Phase 1 supports the same scalar deal columns deal_field_changed can trigger on. Custom
-  // fields ("custom_field:<key>") are out of scope for this action until a real use case
-  // justifies the extra jsonb-merge path (documented in the spec's Non-goals).
-  const ALLOWED: Record<string, string> = { title: "title" };
-  const column = ALLOWED[fieldKey];
+  const column = AUTOMATION_UPDATE_FIELD_ALLOWED[fieldKey];
   if (column === undefined) {
     return failed(ERROR_IDS.AUTOMATION_INPUT_INVALID, `unsupported update_field key: ${fieldKey}`);
   }

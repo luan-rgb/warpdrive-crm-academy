@@ -67,6 +67,54 @@ it("writes a success run when every action succeeds", async () => {
   });
 });
 
+// Recursion guard (design spec Testing section): an update_field action targeting the SAME
+// field a deal_field_changed rule watches must not cause that rule to fire again. runUpdateField
+// deliberately never calls matchAutomationRules/evaluateAutomations/enqueueAutomationRuns (see
+// its doc comment in actionRunners.ts): it writes the column, records the change, and publishes
+// the board event directly instead of going through updateDeal(), which is the only path that
+// evaluates deal_field_changed rules. If that guard ever regressed, this job execution's own
+// update_field action would enqueue (and, since requireBoss() is null in tests, silently no-op
+// enqueueing) a second automation_runs row for the same deal; asserting exactly one row proves
+// no recursive run happened.
+it("update_field targeting the field its own trigger watches does not re-fire the rule", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id);
+    const rule = await createAutomationRule(
+      db,
+      user.id,
+      {
+        name: "Self-updating title rule",
+        description: null,
+        pipelineId: null,
+        trigger: "deal_field_changed",
+        triggerConfig: { fieldKey: "title" },
+        actions: [
+          { actionType: "update_field", config: { fieldKey: "title", value: "Automated" } },
+        ],
+        isActive: true,
+      },
+      sig(),
+    );
+    if (!rule.ok) throw new Error("setup failed");
+
+    await handleAutomationExecuteJob(
+      db,
+      { data: { ruleId: rule.value.id, dealId, trigger: "deal_field_changed" } },
+      sig(),
+    );
+
+    const runs = (await db.execute(sql`SELECT id FROM automation_runs WHERE deal_id = ${dealId}`))
+      .rows;
+    expect(runs).toHaveLength(1);
+
+    const dealRow = (await db.execute(sql`SELECT title FROM deals WHERE id = ${dealId}`)).rows[0] as
+      | { title: string }
+      | undefined;
+    expect(dealRow?.title).toBe("Automated");
+  });
+});
+
 it("writes a partial run when one action fails and later actions still run", async () => {
   await withTestDb(async (db) => {
     const user = await seedUser(db);

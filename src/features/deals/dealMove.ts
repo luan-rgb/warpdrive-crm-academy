@@ -5,7 +5,7 @@ import { BOARD_EVENT, dealMovedChannel } from "@/constants/boardChannels";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import { deals } from "@/db/schema/deals";
 import { stages } from "@/db/schema/stages";
-import { evaluateAutomations } from "@/features/automations/evaluate";
+import { enqueueAutomationRuns, matchAutomationRules } from "@/features/automations/evaluate";
 import { recordChange } from "@/features/collaboration/changeLog";
 import type { PermSetUser } from "@/features/permissions/effective";
 import type { DbOrTx } from "@/server/realtime/channelVersions";
@@ -50,7 +50,9 @@ export async function moveDeal(
   // the CAS precondition is stable across the JS/Postgres precision boundary.
   const expectedIso = input.expectedUpdatedAt;
 
-  return db.transaction(async (tx) => {
+  // Automation rules are matched inside the transaction (a pure read) but jobs are enqueued only
+  // after it commits, see evaluate.ts's enqueueAutomationRuns doc comment for why.
+  const txResult = await db.transaction(async (tx) => {
     // Atomic CAS: single UPDATE WHERE id=:d AND date_trunc('milliseconds', updated_at)=:expected.
     // 0 rows means a concurrent write won; we write nothing (no read-modify-write race).
     const updated = await tx
@@ -116,10 +118,20 @@ export async function moveDeal(
       signal,
     );
 
-    if (row.stageId !== deal.stageId) {
-      await evaluateAutomations(tx, "deal_stage_changed", deal, row, signal);
-    }
+    const automationMatches =
+      row.stageId !== deal.stageId
+        ? await matchAutomationRules(tx, "deal_stage_changed", deal, row, signal)
+        : [];
 
-    return ok(row);
+    return ok({ row, automationMatches });
   });
+  if (!txResult.ok) return txResult;
+
+  await enqueueAutomationRuns(
+    txResult.value.automationMatches,
+    txResult.value.row.id,
+    "deal_stage_changed",
+    signal,
+  );
+  return ok(txResult.value.row);
 }

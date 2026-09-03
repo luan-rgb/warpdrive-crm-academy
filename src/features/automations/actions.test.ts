@@ -104,6 +104,70 @@ describe("createAutomationRuleAction", () => {
     expect(createAutomationRule).toHaveBeenCalledTimes(1);
   });
 
+  test("rejects an update_field action with an unsupported fieldKey without calling the repo", async () => {
+    setSameOrigin();
+    const r = await createAutomationRuleAction(
+      {
+        ...validRule,
+        actions: [
+          { actionType: "update_field" as const, config: { fieldKey: "status", value: "won" } },
+        ],
+      },
+      VALID_TOKEN,
+    );
+    expect(r.ok).toBe(false);
+    expect(createAutomationRule).not.toHaveBeenCalled();
+  });
+
+  test("accepts an update_field action with a supported fieldKey", async () => {
+    setSameOrigin();
+    const r = await createAutomationRuleAction(
+      {
+        ...validRule,
+        actions: [
+          { actionType: "update_field" as const, config: { fieldKey: "title", value: "New" } },
+        ],
+      },
+      VALID_TOKEN,
+    );
+    expect(r.ok).toBe(true);
+    expect(createAutomationRule).toHaveBeenCalledTimes(1);
+  });
+
+  test("rejects a deal_field_changed trigger with an empty triggerConfig.fieldKey", async () => {
+    setSameOrigin();
+    const r = await createAutomationRuleAction(
+      { ...validRule, trigger: "deal_field_changed" as const, triggerConfig: { fieldKey: "" } },
+      VALID_TOKEN,
+    );
+    expect(r.ok).toBe(false);
+    expect(createAutomationRule).not.toHaveBeenCalled();
+  });
+
+  test("rejects a deal_field_changed trigger with a missing triggerConfig.fieldKey", async () => {
+    setSameOrigin();
+    const r = await createAutomationRuleAction(
+      { ...validRule, trigger: "deal_field_changed" as const, triggerConfig: {} },
+      VALID_TOKEN,
+    );
+    expect(r.ok).toBe(false);
+    expect(createAutomationRule).not.toHaveBeenCalled();
+  });
+
+  test("accepts a deal_field_changed trigger with a non-empty triggerConfig.fieldKey", async () => {
+    setSameOrigin();
+    const r = await createAutomationRuleAction(
+      {
+        ...validRule,
+        trigger: "deal_field_changed" as const,
+        triggerConfig: { fieldKey: "title" },
+      },
+      VALID_TOKEN,
+    );
+    expect(r.ok).toBe(true);
+    expect(createAutomationRule).toHaveBeenCalledTimes(1);
+  });
+
   test("rejects when the actor lacks automation.manage", async () => {
     setSameOrigin();
     canAllows = false;

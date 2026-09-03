@@ -4,7 +4,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { BOARD_EVENT, dealChannel } from "@/constants/boardChannels";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import { deals } from "@/db/schema/deals";
-import { evaluateAutomations } from "@/features/automations/evaluate";
+import { enqueueAutomationRuns, matchAutomationRules } from "@/features/automations/evaluate";
 import { syncEntityLabelNames } from "@/features/labels/labelsRepo.entities";
 import type { PermSetUser } from "@/features/permissions/effective";
 import { assertReferenceVisible } from "@/features/permissions/referenceCheck";
@@ -146,7 +146,9 @@ export async function updateDeal(
     };
   }
 
-  return db.transaction(async (tx) => {
+  // Automation rules are matched inside the transaction (a pure read) but jobs are enqueued only
+  // after it commits, see evaluate.ts's enqueueAutomationRuns doc comment for why.
+  const txResult = await db.transaction(async (tx) => {
     // Relink target visibility (person/org): reject before the write so a hidden contact is
     // neither linked nor probeable. Runs on tx so the check and the write share a snapshot.
     const targetsVisible = await assertContactTargetsVisible(tx, session, input, signal);
@@ -205,13 +207,21 @@ export async function updateDeal(
       signal,
     );
 
-    if (input.status !== undefined && before.status !== row.status) {
-      await evaluateAutomations(tx, "deal_status_changed", before, row, signal);
-    }
-    if (changes.length > 0) {
-      await evaluateAutomations(tx, "deal_field_changed", before, row, signal, changes);
-    }
+    const statusMatches =
+      input.status !== undefined && before.status !== row.status
+        ? await matchAutomationRules(tx, "deal_status_changed", before, row, signal)
+        : [];
+    const fieldMatches =
+      changes.length > 0
+        ? await matchAutomationRules(tx, "deal_field_changed", before, row, signal, changes)
+        : [];
 
-    return ok(row);
+    return ok({ row, statusMatches, fieldMatches });
   });
+  if (!txResult.ok) return txResult;
+
+  const { row, statusMatches, fieldMatches } = txResult.value;
+  await enqueueAutomationRuns(statusMatches, row.id, "deal_status_changed", signal);
+  await enqueueAutomationRuns(fieldMatches, row.id, "deal_field_changed", signal);
+  return ok(row);
 }

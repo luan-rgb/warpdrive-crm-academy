@@ -302,7 +302,10 @@ export function AutomationWizard({
         <Switch checked={isActive} onCheckedChange={setIsActive} label="Active" />
       </div>
 
-      <Button onClick={() => void save()} disabled={pending || name.trim() === ""}>
+      <Button
+        onClick={() => void save()}
+        disabled={pending || name.trim() === "" || actions.length === 0}
+      >
         Save
       </Button>
     </div>
