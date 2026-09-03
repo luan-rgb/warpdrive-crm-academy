@@ -16,6 +16,7 @@ import {
   User,
   Users,
   UsersRound,
+  Zap,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type React from "react";
@@ -55,6 +56,7 @@ const COMPANY: NavSection = {
     { href: "/settings/teams", label: STRINGS.settings.teams, icon: UsersRound },
     { href: "/settings/goals", label: SETTINGS_STRINGS.goals, icon: Target },
     { href: "/settings/products", label: SETTINGS_STRINGS.products, icon: Package },
+    { href: "/settings/automations", label: SETTINGS_STRINGS.automations, icon: Zap },
     {
       href: "/settings/permission-sets",
       label: STRINGS.settings.permissionSets,

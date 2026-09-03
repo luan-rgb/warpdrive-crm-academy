@@ -36,6 +36,9 @@ export const SETTINGS_STRINGS = {
   goalSaveFailed: "Could not save the goal.",
   products: "Products",
   productsDescription: "Maintain the catalog of products and services used to price deals.",
+  automations: "Automations",
+  automationsDescription:
+    "Automatically create activities, send notifications and emails, or update fields when a deal changes.",
   productNew: "New product",
   productName: "Name",
   productSku: "SKU",
