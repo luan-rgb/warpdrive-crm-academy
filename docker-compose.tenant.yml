@@ -1,0 +1,83 @@
+# Per-student stack: app + ws + worker + migrate, sharing the tenants-net Postgres/MinIO from
+# docker-compose.shared.yml. Brought up once per student by scripts/provision-tenant.sh as its
+# own Compose project (docker compose -p aluno-<slug>), so container names never collide between
+# students. Each service is built (not a shared prebuilt image) because NEXT_PUBLIC_WS_URL is
+# inlined into the Next.js client bundle at build time and differs per student's subdomain.
+# See docs/deploy-multi-tenant.md.
+x-app-build: &app-build
+  context: .
+  args:
+    NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:?set NEXT_PUBLIC_WS_URL for this tenant}
+    APP_VERSION: ${APP_VERSION:-}
+
+x-tenant-env: &tenant-env
+  NODE_ENV: production
+  GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:?set GOOGLE_OAUTH_CLIENT_ID}
+  GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:?set GOOGLE_OAUTH_CLIENT_SECRET}
+  GOOGLE_WORKSPACE_DOMAIN: ${GOOGLE_WORKSPACE_DOMAIN:?set GOOGLE_WORKSPACE_DOMAIN}
+  BASE_URL: ${BASE_URL:?set BASE_URL}
+  DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL}
+  WS_TICKET_SECRET: ${WS_TICKET_SECRET:?set WS_TICKET_SECRET}
+  WS_PUBLIC_URL: ${WS_PUBLIC_URL:?set WS_PUBLIC_URL}
+  MINIO_ENDPOINT: ${MINIO_ENDPOINT:?set MINIO_ENDPOINT}
+  MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:?set MINIO_ACCESS_KEY}
+  MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?set MINIO_SECRET_KEY}
+  MINIO_BUCKET: ${MINIO_BUCKET:?set MINIO_BUCKET}
+  TOKEN_ENCRYPTION_KEY: ${TOKEN_ENCRYPTION_KEY:?set TOKEN_ENCRYPTION_KEY}
+  OAUTH_SIGNING_KEY: ${OAUTH_SIGNING_KEY:?set OAUTH_SIGNING_KEY}
+  SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:?set SEED_ADMIN_EMAIL}
+  ALLOW_FIRST_LOGIN_ADMIN: "false"
+
+networks:
+  default:
+    name: tenants-net
+    external: true
+
+services:
+  migrate:
+    build: *app-build
+    command: ["node", "dist/migrate.mjs"]
+    environment: *tenant-env
+
+  app:
+    build: *app-build
+    restart: unless-stopped
+    command: ["node_modules/.bin/next", "start"]
+    environment: *tenant-env
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:3000/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  ws:
+    build: *app-build
+    restart: unless-stopped
+    command: ["node", "dist/ws.mjs"]
+    environment: *tenant-env
+    healthcheck:
+      test:
+        - "CMD"
+        - "node"
+        - "-e"
+        - "require('node:net').connect(8080,'127.0.0.1').on('connect',()=>process.exit(0)).on('error',()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    build: *app-build
+    restart: unless-stopped
+    command: ["node", "dist/worker.mjs"]
+    environment: *tenant-env
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
