@@ -9,8 +9,8 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-A="isotest-a"
-B="isotest-b"
+A="isotest-a-$$"
+B="isotest-b-$$"
 
 cleanup() {
   scripts/deprovision-tenant.sh "$A" --yes-delete-data >/dev/null 2>&1 || true
@@ -29,14 +29,27 @@ DB_ROLE_A="$(echo "$DB_URL_A" | sed -E 's#postgres://([^:]+):.*#\1#')"
 DB_PASSWORD_A="$(echo "$DB_URL_A" | sed -E 's#postgres://[^:]+:([^@]+)@.*#\1#')"
 DB_NAME_B="aluno_${B//-/_}"
 
+echo "== positive control: ${A}'s own credentials must actually work =="
+docker run --rm --network tenants-net -e PGPASSWORD="$DB_PASSWORD_A" postgres:16-alpine \
+  psql -h shared-postgres -U "$DB_ROLE_A" -d "aluno_${A//-/_}" -c '\q' >/dev/null 2>&1 \
+  || { echo "FAIL: control connection to ${A}'s own database failed; check is not meaningful"; exit 1; }
+
 echo "== checking Postgres isolation: $A must not be able to connect to ${B}'s database =="
-if docker run --rm --network tenants-net -e PGPASSWORD="$DB_PASSWORD_A" postgres:16-alpine \
-  psql -h shared-postgres -U "$DB_ROLE_A" -d "$DB_NAME_B" -c '\q' >/dev/null 2>&1; then
-  echo "FAIL: ${A}'s role could connect to ${B}'s database"
-  FAIL=1
-else
+# Assert the specific Postgres denial message, not just a nonzero exit code: a wrong
+# password, wrong host, or network hiccup also makes psql exit nonzero, which would
+# read as a false PASS if we only checked the exit status (as the MinIO check below
+# already does correctly via `grep -qi "access denied"`).
+PG_OUT="$(docker run --rm --network tenants-net -e PGPASSWORD="$DB_PASSWORD_A" postgres:16-alpine \
+  psql -h shared-postgres -U "$DB_ROLE_A" -d "$DB_NAME_B" -c '\q' 2>&1 || true)"
+if echo "$PG_OUT" | grep -qi "permission denied for database"; then
   echo "PASS: ${A}'s role was denied connecting to ${B}'s database"
+else
+  echo "FAIL: ${A}'s role was not denied by permission (got: $PG_OUT)"
+  FAIL=1
 fi
+# Only A->B is tested here, not B->A: both directions are provisioned by the same
+# provision-tenant.sh code path (same REVOKE/GRANT logic per tenant), so testing one
+# direction is sufficient to catch a regression in that shared logic.
 
 MINIO_KEY_A="aluno-${A}"
 MINIO_SECRET_A="$(grep '^MINIO_SECRET_KEY=' "envs/aluno-${A}.env" | cut -d= -f2)"
