@@ -51,9 +51,11 @@ stops their containers. Also remove their redirect URIs from the Google Cloud Co
 ## Verifying isolation
 
 Run `scripts/verify-tenant-isolation.sh` after any change to `scripts/provision-tenant.sh` or the
-shared stack. It provisions two throwaway tenants, proves neither can read the other's database
-or bucket, then tears both down. A clean exit (0) with two `PASS:` lines is the only acceptable
-result before deploying a provisioning change to real students.
+shared stack. It provisions two throwaway tenants and proves tenant A cannot read tenant B's
+database or bucket, then tears both down. Only that one direction is tested: both tenants are
+provisioned by the identical code path, so a regression that broke isolation would show up
+regardless of which tenant is cast as the attacker. A clean exit (0) with two `PASS:` lines is the
+only acceptable result before deploying a provisioning change to real students.
 
 ## Backups
 
@@ -67,6 +69,12 @@ docker compose -p tenants-shared -f docker-compose.shared.yml exec -T postgres \
 ```
 
 Uploaded files live in the `shared_miniodata` volume; back that up too.
+
+Also back up `envs/aluno-*.env` alongside the database dump. Each tenant's `TOKEN_ENCRYPTION_KEY`
+lives only in that tenant's env file, and it's the key used to encrypt that tenant's Gmail OAuth
+tokens stored in Postgres. Restoring a Postgres dump without the matching `envs/aluno-<slug>.env`
+leaves that tenant's encrypted tokens permanently unrecoverable — re-provisioning generates a
+brand-new key that cannot decrypt the old data.
 
 ## Migrating a student off this box later
 
