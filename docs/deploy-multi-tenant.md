@@ -61,8 +61,9 @@ All student databases live in the one `shared_pgdata` volume (one shared Postgre
 one dump covers everyone:
 
 ```sh
+set -a; source envs/shared.env; set +a
 docker compose -p tenants-shared -f docker-compose.shared.yml exec -T postgres \
-  pg_dumpall -U tenant_admin | gzip > backup-$(date +%F).sql.gz
+  pg_dumpall -U "$SHARED_POSTGRES_ADMIN_USER" | gzip > backup-$(date +%F).sql.gz
 ```
 
 Uploaded files live in the `shared_miniodata` volume; back that up too.
