@@ -42,6 +42,10 @@ vi.mock("@/lib/trpc-client", () => ({
       message: { get: { useQuery: () => ({ data: undefined, isLoading: false }) } },
     },
     files: { listForEntity: { useQuery: () => ({ data: [{ id: "f1" }, { id: "f2" }] }) } },
+    products: {
+      byDeal: { useQuery: () => ({ data: [] }) },
+      list: { useQuery: () => ({ data: [] }) },
+    },
     collaboration: {
       listNotes: {
         useQuery: () => ({

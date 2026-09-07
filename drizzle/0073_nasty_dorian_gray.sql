@@ -1,0 +1,2 @@
+ALTER TABLE "stages" ADD COLUMN "probability" integer;--> statement-breakpoint
+ALTER TABLE "stages" ADD CONSTRAINT "stages_probability_range_ck" CHECK (probability IS NULL OR (probability >= 0 AND probability <= 100));

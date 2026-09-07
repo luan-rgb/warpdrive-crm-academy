@@ -9,6 +9,8 @@ import { invalidateBaseCurrencyCache } from "./readBaseCurrency";
 export interface SettingsPatch {
   companyName?: string | null;
   emailTrackingDefaultEnabled?: boolean;
+  invoiceHeaderText?: string | null;
+  invoiceFooterText?: string | null;
 }
 
 export async function updateSettings(
@@ -22,6 +24,8 @@ export async function updateSettings(
   if (patch.emailTrackingDefaultEnabled !== undefined) {
     set.emailTrackingDefaultEnabled = patch.emailTrackingDefaultEnabled;
   }
+  if ("invoiceHeaderText" in patch) set.invoiceHeaderText = patch.invoiceHeaderText ?? null;
+  if ("invoiceFooterText" in patch) set.invoiceFooterText = patch.invoiceFooterText ?? null;
 
   const [row] = await db
     .insert(settings)

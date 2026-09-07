@@ -94,7 +94,7 @@ export async function logDealUpdateChanges(
   tx: DbOrTx,
   args: { input: DealUpdateInput; before: DealRow; after: DealRow; actorId: string },
   signal: AbortSignal,
-): Promise<void> {
+): Promise<{ field: string; oldValue: unknown; newValue: unknown }[]> {
   const changes: { field: string; oldValue: unknown; newValue: unknown }[] = [];
 
   // Labels: order-insensitive array compare (reorder of the same set is a no-op).
@@ -128,4 +128,6 @@ export async function logDealUpdateChanges(
       signal,
     );
   }
+
+  return changes;
 }

@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { diffStages, type StageDiffInput } from "./stageDiff";
 
 const original: StageDiffInput["originalById"] = {
-  s1: { name: "Qualified", rottingDays: 7 },
-  s2: { name: "Proposal", rottingDays: null },
+  s1: { name: "Qualified", rottingDays: 7, probability: 20 },
+  s2: { name: "Proposal", rottingDays: null, probability: null },
 };
 
 describe("diffStages", () => {
@@ -11,8 +11,8 @@ describe("diffStages", () => {
     const ops = diffStages({
       originalById: original,
       rows: [
-        { id: "s1", name: "Qualified", rottingDays: 7 },
-        { id: "s2", name: "Proposal", rottingDays: null },
+        { id: "s1", name: "Qualified", rottingDays: 7, probability: 20 },
+        { id: "s2", name: "Proposal", rottingDays: null, probability: null },
       ],
       deletedIds: [],
     });
@@ -25,12 +25,14 @@ describe("diffStages", () => {
     const ops = diffStages({
       originalById: original,
       rows: [
-        { id: "s1", name: "Qualified (renamed)", rottingDays: 7 },
-        { id: "s2", name: "Proposal", rottingDays: null },
+        { id: "s1", name: "Qualified (renamed)", rottingDays: 7, probability: 20 },
+        { id: "s2", name: "Proposal", rottingDays: null, probability: null },
       ],
       deletedIds: [],
     });
-    expect(ops.updates).toEqual([{ stageId: "s1", name: "Qualified (renamed)", rottingDays: 7 }]);
+    expect(ops.updates).toEqual([
+      { stageId: "s1", name: "Qualified (renamed)", rottingDays: 7, probability: 20 },
+    ]);
     expect(ops.creates).toEqual([]);
   });
 
@@ -38,32 +40,48 @@ describe("diffStages", () => {
     const ops = diffStages({
       originalById: original,
       rows: [
-        { id: "s1", name: "Qualified", rottingDays: null },
-        { id: "s2", name: "Proposal", rottingDays: null },
+        { id: "s1", name: "Qualified", rottingDays: null, probability: 20 },
+        { id: "s2", name: "Proposal", rottingDays: null, probability: null },
       ],
       deletedIds: [],
     });
-    expect(ops.updates).toEqual([{ stageId: "s1", name: "Qualified", rottingDays: null }]);
+    expect(ops.updates).toEqual([
+      { stageId: "s1", name: "Qualified", rottingDays: null, probability: 20 },
+    ]);
+  });
+
+  it("detects a probability change even when name and rotting stay the same", () => {
+    const ops = diffStages({
+      originalById: original,
+      rows: [
+        { id: "s1", name: "Qualified", rottingDays: 7, probability: 35 },
+        { id: "s2", name: "Proposal", rottingDays: null, probability: null },
+      ],
+      deletedIds: [],
+    });
+    expect(ops.updates).toEqual([
+      { stageId: "s1", name: "Qualified", rottingDays: 7, probability: 35 },
+    ]);
   });
 
   it("emits a create for a new (id-less) row", () => {
     const ops = diffStages({
       originalById: original,
       rows: [
-        { id: "s1", name: "Qualified", rottingDays: 7 },
-        { id: "s2", name: "Proposal", rottingDays: null },
-        { id: null, name: "Negotiation", rottingDays: 14 },
+        { id: "s1", name: "Qualified", rottingDays: 7, probability: 20 },
+        { id: "s2", name: "Proposal", rottingDays: null, probability: null },
+        { id: null, name: "Negotiation", rottingDays: 14, probability: 50 },
       ],
       deletedIds: [],
     });
-    expect(ops.creates).toEqual([{ name: "Negotiation", rottingDays: 14 }]);
+    expect(ops.creates).toEqual([{ name: "Negotiation", rottingDays: 14, probability: 50 }]);
     expect(ops.updates).toEqual([]);
   });
 
   it("passes through deleted ids", () => {
     const ops = diffStages({
       originalById: original,
-      rows: [{ id: "s1", name: "Qualified", rottingDays: 7 }],
+      rows: [{ id: "s1", name: "Qualified", rottingDays: 7, probability: 20 }],
       deletedIds: ["s2"],
     });
     expect(ops.deletes).toEqual(["s2"]);
@@ -75,7 +93,7 @@ describe("diffStages", () => {
   it("collapses duplicate deleted ids to a single delete", () => {
     const ops = diffStages({
       originalById: original,
-      rows: [{ id: "s1", name: "Qualified", rottingDays: 7 }],
+      rows: [{ id: "s1", name: "Qualified", rottingDays: 7, probability: 20 }],
       deletedIds: ["s2", "s2"],
     });
     expect(ops.deletes).toEqual(["s2"]);

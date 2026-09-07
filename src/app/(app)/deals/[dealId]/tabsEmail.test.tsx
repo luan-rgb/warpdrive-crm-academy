@@ -7,6 +7,10 @@ const listQuery = vi.fn();
 vi.mock("@/lib/trpc-client", () => ({
   trpc: {
     files: { listForEntity: { useQuery: () => ({ data: [] }) } },
+    products: {
+      byDeal: { useQuery: () => ({ data: [] }) },
+      list: { useQuery: () => ({ data: [] }) },
+    },
     collaboration: {
       listNotes: { useQuery: () => ({ data: [] }) },
       listChangeLog: { useQuery: () => ({ data: [] }) },

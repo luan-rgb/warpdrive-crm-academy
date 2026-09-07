@@ -30,6 +30,11 @@ vi.mock("@/lib/trpc-client", () => ({
     enrichment: { status: { useQuery: () => ({ data: { ready: false, providers: [] } }) } },
     deal: { participants: { useQuery: () => ({ data: [] }) } },
     contacts: { listPeopleForOrg: { useQuery: () => ({ data: [] }) } },
+    products: {
+      byDeal: { useQuery: () => ({ data: [] }) },
+      list: { useQuery: () => ({ data: [] }) },
+    },
+    invoices: { listForDeal: { useQuery: () => ({ data: [] }) } },
     labels: { listByTarget: { useQuery: () => ({ data: [] }) } },
   },
 }));

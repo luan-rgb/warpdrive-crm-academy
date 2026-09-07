@@ -1,4 +1,5 @@
 import { activitiesRouter } from "@/features/activities/router";
+import { automationsRouter } from "@/features/automations/router";
 import { collaborationRouter } from "@/features/collaboration/router";
 import { contactsRouter } from "@/features/contacts/router";
 import { customFieldsRouter } from "@/features/custom-fields/router";
@@ -9,11 +10,13 @@ import { enrichmentRouter } from "@/features/enrichment/router";
 import { filesRouter } from "@/features/files/router";
 import { goalsRouter } from "@/features/goals/router";
 import { importRouter } from "@/features/import/router";
+import { invoicesRouter } from "@/features/invoices/router";
 import { labelsRouter } from "@/features/labels/router";
 import { leadRouter } from "@/features/leads/leadRouter";
 import { notificationsRouter } from "@/features/notifications/router";
 import { oauthRouter } from "@/features/oauth/router";
 import { pipelineRouter } from "@/features/pipelines/pipelineRouter";
+import { productsRouter } from "@/features/products/router";
 import { versionRouter } from "@/features/release/router";
 import { savedFiltersRouter } from "@/features/saved-filters/router";
 import { searchRouter } from "@/features/search/router";
@@ -31,7 +34,9 @@ export const appRouter = router({
   customFields: customFieldsRouter,
   collaboration: collaborationRouter,
   activities: activitiesRouter,
+  automations: automationsRouter,
   import: importRouter,
+  invoices: invoicesRouter,
   labels: labelsRouter,
   mailLabels: mailLabelsRouter,
   lead: leadRouter,
@@ -41,6 +46,7 @@ export const appRouter = router({
   goals: goalsRouter,
   notifications: notificationsRouter,
   oauth: oauthRouter,
+  products: productsRouter,
   savedFilters: savedFiltersRouter,
   search: searchRouter,
   stats: statsRouter,

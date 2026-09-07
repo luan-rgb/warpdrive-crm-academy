@@ -149,6 +149,22 @@ export const ERROR_IDS = {
   // GOAL
   GOAL_INVALID: "E_GOAL_001", // goal payload failed the Zod boundary (bad subject/action/metric mix)
   GOAL_NOT_FOUND: "E_GOAL_002", // goal id does not exist or is already deleted
+  // PRODUCT
+  PRODUCT_INPUT_INVALID: "E_PRODUCT_001", // create/update product payload failed the Zod boundary
+  PRODUCT_NOT_FOUND: "E_PRODUCT_002", // product id does not exist
+  PRODUCT_SKU_EXISTS: "E_PRODUCT_003", // a non-archived product already uses this sku
+  DEAL_PRODUCT_INPUT_INVALID: "E_PRODUCT_004", // add/update deal line item payload failed the Zod boundary
+  DEAL_PRODUCT_NOT_FOUND: "E_PRODUCT_005", // deal_products row does not exist (or belongs to a different deal)
+  // INVOICE
+  INVOICE_INPUT_INVALID: "E_INVOICE_001", // create/update invoice payload failed the Zod boundary
+  INVOICE_NOT_FOUND: "E_INVOICE_002", // invoice id does not exist
+  INVOICE_DEAL_NOT_WON: "E_INVOICE_003", // retired: invoicing is no longer restricted to won deals
+  INVOICE_NO_LINE_ITEMS: "E_INVOICE_004", // the deal has no products to snapshot onto the invoice
+  INVOICE_ALREADY_CANCELED: "E_INVOICE_005", // status change attempted on a canceled invoice
+  INVOICE_DELETE_NOT_FOUND: "E_INVOICE_006", // delete targeted an invoice id that does not exist
+  INVOICE_NOT_EDITABLE: "E_INVOICE_007", // line-item change attempted on a paid/canceled invoice
+  INVOICE_LINE_NOT_FOUND: "E_INVOICE_008", // invoice_line_items row does not exist
+  INVOICE_IMAGE_INVALID: "E_INVOICE_009", // header/footer image upload failed the type/size/sniff gate
   // ENRICH
   ENRICH_NO_PROVIDER: "E_ENRICH_001", // no enrichment provider is both enabled and credentialled
   ENRICH_PROVIDER_AUTH: "E_ENRICH_002", // provider rejected the API key (401/403)
@@ -164,6 +180,12 @@ export const ERROR_IDS = {
   ENRICH_MAPPINGS_CHANGED: "E_ENRICH_012", // field mapping was repointed while the review was open
   ENRICH_KEY_UNREADABLE: "E_ENRICH_013", // stored API key could not be decrypted; admin must re-enter it
   ENRICH_NOT_ENTITLED: "E_ENRICH_014", // provider plans do not include the endpoint this lookup needs
+  // AUTOMATION
+  AUTOMATION_INPUT_INVALID: "E_AUTOMATION_001", // create/update rule payload failed the Zod boundary
+  AUTOMATION_NOT_FOUND: "E_AUTOMATION_002", // rule id does not exist
+  AUTOMATION_RULE_HAS_NO_ACTIONS: "E_AUTOMATION_003", // attempted to save a rule with zero actions
+  AUTOMATION_EMAIL_ACCOUNT_MISSING: "E_AUTOMATION_004", // deal owner has no connected Gmail account
+  AUTOMATION_EMAIL_RECIPIENT_MISSING: "E_AUTOMATION_005", // deal has no linked person / person has no primary email
 
   // UI
   UI_CHART_CONTEXT_MISSING: "E_UI_001", // a chart part rendered outside its ChartContainer

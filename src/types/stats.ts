@@ -73,6 +73,17 @@ export interface WonTrendPoint {
   value: string;
 }
 
+// One month of open-deal forecast, keyed by expected_close_date. Every month in the requested
+// range gets a point, so a month with nothing expected carries a zero rather than a gap.
+// value is the raw sum of deal values; weightedValue applies each deal's stage probability
+// (a deal whose stage has no probability set contributes 0 to weightedValue, not a guess).
+export interface ForecastPoint {
+  month: string;
+  count: number;
+  value: string;
+  weightedValue: string;
+}
+
 export interface StageSum {
   stageId: string;
   name: string;

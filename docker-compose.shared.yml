@@ -1,0 +1,60 @@
+# One-time shared services for multi-tenant hosting: a single Postgres instance holding one
+# database per student, a single MinIO instance holding one bucket per student, and the single
+# public Caddy listener that fronts every student's subdomain plus the shared s3 subdomain.
+# Bring up once per box, before provisioning any tenant. See docs/deploy-multi-tenant.md.
+networks:
+  tenants-net:
+    name: tenants-net
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: shared-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${SHARED_POSTGRES_ADMIN_USER:?set SHARED_POSTGRES_ADMIN_USER}
+      POSTGRES_PASSWORD: ${SHARED_POSTGRES_ADMIN_PASSWORD:?set SHARED_POSTGRES_ADMIN_PASSWORD}
+      POSTGRES_DB: postgres
+    volumes: [shared_pgdata:/var/lib/postgresql/data]
+    networks: [tenants-net]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${SHARED_POSTGRES_ADMIN_USER:?set SHARED_POSTGRES_ADMIN_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio
+    container_name: shared-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${SHARED_MINIO_ROOT_USER:?set SHARED_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${SHARED_MINIO_ROOT_PASSWORD:?set SHARED_MINIO_ROOT_PASSWORD}
+    volumes: [shared_miniodata:/data]
+    networks: [tenants-net]
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: shared-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      BASE_DOMAIN: ${BASE_DOMAIN:?set BASE_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL}
+    volumes:
+      - ./Caddyfile.tenants:/etc/caddy/Caddyfile
+      - shared_caddydata:/data
+      - shared_caddyconfig:/config
+    networks: [tenants-net]
+    depends_on:
+      minio:
+        condition: service_started
+
+volumes:
+  shared_pgdata:
+  shared_miniodata:
+  shared_caddydata:
+  shared_caddyconfig:

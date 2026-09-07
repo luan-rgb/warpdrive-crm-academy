@@ -1,10 +1,12 @@
 import type { HistoryTab } from "./HistoryTypeTabs";
 import type { HistoryItem } from "./historyTimeline";
 
-// Files aren't timeline items, so their count comes from the Files read rather than the bucket.
+// Files and Products aren't timeline items, so their counts come from their own reads rather
+// than the bucket.
 export function countHistoryTabs(
   items: Record<HistoryTab, HistoryItem[]>,
   fileCount: number | undefined,
+  productCount?: number | undefined,
 ): Partial<Record<HistoryTab, number>> {
   return {
     all: items.all.length,
@@ -13,6 +15,7 @@ export function countHistoryTabs(
     email: items.email.length,
     changelog: items.changelog.length,
     files: fileCount,
+    products: productCount,
   };
 }
 

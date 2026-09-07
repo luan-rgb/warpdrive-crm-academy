@@ -31,6 +31,7 @@ export default async function EditPipelinePage({
           id: s.id,
           name: s.name,
           rottingDays: s.rottingDays,
+          probability: s.probability,
         }))}
       />
     </main>

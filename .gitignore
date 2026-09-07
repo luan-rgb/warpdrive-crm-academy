@@ -5,6 +5,9 @@ dist
 .env.*
 !.env.example
 !.env.example.test.ts
+envs/*.env
+!envs/*.env.example
+!envs/*.env.template
 *.tsbuildinfo
 .harness/ledger.jsonl
 drizzle/meta/_journal.json.bak
@@ -22,3 +25,4 @@ docs/parity-captures/
 
 # Impeccable critique snapshots: internal design audits, never publish
 .impeccable/
+.worktrees/

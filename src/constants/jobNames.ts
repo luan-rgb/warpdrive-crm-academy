@@ -32,3 +32,8 @@ export const PGBOSS_QUEUE_IMPORT_VALIDATE = "import.validate";
 export const PGBOSS_QUEUE_IMPORT_COMMIT = "import.commit";
 export const PGBOSS_QUEUE_IMPORT_UNDO = "import.undo";
 export const IMPORT_JOB_TIMEOUT_MS = 5 * 60 * 1000;
+
+// Automation rule execution: one job per (rule, deal) match, enqueued by evaluateAutomations,
+// consumed by the automation.execute worker (Task 4). No singletonKey: the same rule legitimately
+// fires more than once for the same deal over its lifetime (e.g. re-entering a stage).
+export const PGBOSS_QUEUE_AUTOMATION_EXECUTE = "automation.execute";

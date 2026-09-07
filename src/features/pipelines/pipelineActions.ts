@@ -133,6 +133,7 @@ export async function createStage(
       name: input.name,
       order: existing.length,
       rottingDays: input.rottingDays,
+      probability: input.probability,
     })
     .returning();
   const row = rows[0];

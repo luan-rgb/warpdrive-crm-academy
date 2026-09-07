@@ -8,6 +8,7 @@ import { Tip } from "@/components/ui/tooltip";
 import { STRINGS } from "@/constants/strings";
 import { trpc } from "@/lib/trpc-client";
 import { ActivityTypesWidget, LostReasonsWidget } from "./Breakdowns";
+import { ForecastWidget } from "./ForecastWidget";
 import { GoalsWidget } from "./GoalsWidget";
 import { Scoreboard } from "./Scoreboard";
 import { WonTrendWidget } from "./TrendWidget";
@@ -102,6 +103,7 @@ export function Dashboard({
         {/* Full width above the grid: a time series is the one panel a reader scans left to
             right, and half a column squeezes twelve months into an unreadable tick run. */}
         <WonTrendWidget data={result.wonTrend} currency={currency} />
+        <ForecastWidget data={result.forecast} currency={currency} />
         <div className="grid gap-4 md:grid-cols-2">
           <DealPerformanceWidget data={result.dealPerformance} currency={currency} />
           <FunnelWidget data={result.funnel} ownerScope={result.effectiveOwnerScope} />

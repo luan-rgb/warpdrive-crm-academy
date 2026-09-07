@@ -27,6 +27,7 @@ const LABEL: Record<NotificationType, (p: Record<string, unknown>) => string> = 
   comment_reply: () => L.comment_reply,
   deal_email_received: (p) =>
     `${L.deal_email_received}: ${toStr(p.subject) || L.deal_email_received_fallback}`,
+  automation: () => L.automation,
 };
 
 export function NotificationItem({

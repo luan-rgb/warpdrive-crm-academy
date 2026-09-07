@@ -111,6 +111,7 @@ export const STRINGS = {
       comment_reply: "New reply to a comment",
       deal_email_received: "New email",
       deal_email_received_fallback: "on a deal",
+      automation: "Automation executed",
       fallback: "Notification",
     },
     preferences: {
@@ -130,6 +131,7 @@ export const STRINGS = {
         deal_lost: "Deal lost",
         comment_reply: "Comment replies",
         deal_email_received: "New email on my deals",
+        automation: "Automation executed",
       },
     },
   },
@@ -191,6 +193,14 @@ export const STRINGS = {
     trendMonth: "Month",
     trendCount: "Deals won",
     trendValue: "Value won",
+    widgetForecast: "FORECAST BY EXPECTED CLOSE MONTH",
+    emptyForecast:
+      "No open deal in this range has an expected close date, so there is no forecast to draw.",
+    forecastTableCaption: "Open deals by expected close month",
+    forecastMonth: "Month",
+    forecastCount: "Open deals",
+    forecastValue: "Total value",
+    forecastWeightedValue: "Weighted (by stage probability)",
     // The funnel is a cohort measure and the board is a live snapshot, so the two disagree by
     // design. The widget has to say which cohort it counted or the gap reads as a bug.
     funnelBasisMe: "Counts only deals you own that were created in this range.",

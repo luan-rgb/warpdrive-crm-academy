@@ -8,6 +8,7 @@ import { activitiesByType } from "@/features/stats/activitiesByType";
 import { activitiesPerformance } from "@/features/stats/activitiesPerformance";
 import { aggregateStageConversion, aggregateStageSums } from "@/features/stats/aggregateStages";
 import { dealPerformance } from "@/features/stats/dealPerformance";
+import { forecast } from "@/features/stats/forecast";
 import { lostReasonBreakdown } from "@/features/stats/lostReasons";
 import { ownerScope } from "@/features/stats/ownerScope";
 import { stageConversion } from "@/features/stats/stageConversion";
@@ -49,30 +50,33 @@ export const statsRouter = router({
     const stagePipelineIds =
       requested !== null ? [requested] : await visiblePipelineIds(ctx.db, ctx.actor, signal);
 
-    const [dp, ap, wds, abt, lrb, trend, perPipelineFunnel, perPipelineSums] = await Promise.all([
-      dealPerformance(ctx.db, ctx.actor, filters, signal),
-      activitiesPerformance(ctx.db, ctx.actor, filters, signal),
-      wonDealStats(ctx.db, ctx.actor, filters, signal),
-      activitiesByType(ctx.db, ctx.actor, filters, signal),
-      lostReasonBreakdown(ctx.db, ctx.actor, filters, signal),
-      wonTrend(ctx.db, ctx.actor, filters, signal),
-      Promise.all(
-        stagePipelineIds.map((pipelineId) =>
-          stageConversion(ctx.db, ctx.actor, { ...filters, pipelineId }, signal),
+    const [dp, ap, wds, abt, lrb, trend, fc, perPipelineFunnel, perPipelineSums] =
+      await Promise.all([
+        dealPerformance(ctx.db, ctx.actor, filters, signal),
+        activitiesPerformance(ctx.db, ctx.actor, filters, signal),
+        wonDealStats(ctx.db, ctx.actor, filters, signal),
+        activitiesByType(ctx.db, ctx.actor, filters, signal),
+        lostReasonBreakdown(ctx.db, ctx.actor, filters, signal),
+        wonTrend(ctx.db, ctx.actor, filters, signal),
+        forecast(ctx.db, ctx.actor, filters, signal),
+        Promise.all(
+          stagePipelineIds.map((pipelineId) =>
+            stageConversion(ctx.db, ctx.actor, { ...filters, pipelineId }, signal),
+          ),
         ),
-      ),
-      Promise.all(
-        stagePipelineIds.map((pipelineId) =>
-          stageSums(ctx.db, ctx.actor, pipelineId, effectiveOwnerScope, signal),
+        Promise.all(
+          stagePipelineIds.map((pipelineId) =>
+            stageSums(ctx.db, ctx.actor, pipelineId, effectiveOwnerScope, signal),
+          ),
         ),
-      ),
-    ]);
+      ]);
 
     return {
       dealPerformance: dp,
       winRate: winRate(dp.won, dp.lost),
       wonDealStats: wds,
       wonTrend: trend,
+      forecast: fc,
       funnel: aggregateStageConversion(perPipelineFunnel),
       activities: ap,
       activitiesByType: abt,

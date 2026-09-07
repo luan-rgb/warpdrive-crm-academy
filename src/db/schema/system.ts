@@ -49,6 +49,15 @@ export const settings = pgTable(
       .$type<{ deal: string; person: string; organization: string }>()
       .default(sql`'{"deal":"group","person":"all","organization":"all"}'::jsonb`),
     emailTrackingDefaultEnabled: boolean("email_tracking_default_enabled").notNull().default(false),
+    // Free-form multi-line text rendered as-is (line breaks preserved) at the top/bottom of every
+    // printed invoice: company address/tax id/contact, and payment terms/thank-you message.
+    // No structured address/logo fields: one instance's invoicing needs vary too much to model.
+    invoiceHeaderText: text("invoice_header_text"),
+    invoiceFooterText: text("invoice_footer_text"),
+    // Serve URLs for an uploaded header/footer image (a logo, a signature/stamp), same pattern
+    // as users.avatar_url: a stable route with a ?v= cache-buster, null until one is uploaded.
+    invoiceHeaderImageUrl: text("invoice_header_image_url"),
+    invoiceFooterImageUrl: text("invoice_footer_image_url"),
     bootstrappedAt: timestamp("bootstrapped_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true })

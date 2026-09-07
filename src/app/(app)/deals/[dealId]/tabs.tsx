@@ -56,6 +56,7 @@ export function bucketByType(history: HistoryItem[]): Record<Tab, HistoryItem[]>
     // Drafts sit under Email with the sent messages: same conversation, one still unsent.
     email: history.filter((i) => i.kind === "email" || i.kind === "emailDraft"),
     files: [],
+    products: [],
   };
 }
 
@@ -131,7 +132,12 @@ export function WorkspaceTabs({
   // activities.length / notes.length would overstate the tab lists below.
   const fileCount = trpc.files.listForEntity.useQuery({ entityType: "deal", entityId: deal.id })
     .data?.length;
-  const counts: Partial<Record<Tab, number>> = countHistoryTabs(historyByType, fileCount);
+  const productCount = trpc.products.byDeal.useQuery({ dealId: deal.id }).data?.length;
+  const counts: Partial<Record<Tab, number>> = countHistoryTabs(
+    historyByType,
+    fileCount,
+    productCount,
+  );
 
   return (
     <div className="space-y-6">

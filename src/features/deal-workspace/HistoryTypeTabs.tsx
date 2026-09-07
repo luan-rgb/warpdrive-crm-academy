@@ -6,8 +6,16 @@ import type { HistoryItem } from "@/features/deal-workspace/historyTimeline";
 import type { DraftSummary } from "@/features/email/draftRepo";
 import type { EmailCardScope } from "@/features/email/EmailTimelineCard";
 import { FileAttachments } from "@/features/files/FileAttachments";
+import { DealProductsPanel } from "@/features/products/DealProductsPanel";
 
-export type HistoryTab = "all" | "activities" | "notes" | "email" | "files" | "changelog";
+export type HistoryTab =
+  | "all"
+  | "activities"
+  | "notes"
+  | "email"
+  | "files"
+  | "products"
+  | "changelog";
 
 const TAB_LABELS: Record<HistoryTab, string> = {
   all: "All",
@@ -15,6 +23,7 @@ const TAB_LABELS: Record<HistoryTab, string> = {
   notes: "Notes",
   email: "Email",
   files: "Files",
+  products: "Products",
   changelog: "Changelog",
 };
 
@@ -26,7 +35,15 @@ const EMPTY_LABELS: Partial<Record<HistoryTab, string>> = {
   email: "No emails linked to this deal yet.",
 };
 
-const TABS: HistoryTab[] = ["all", "activities", "notes", "email", "files", "changelog"];
+const TABS: HistoryTab[] = [
+  "all",
+  "activities",
+  "notes",
+  "email",
+  "files",
+  "products",
+  "changelog",
+];
 
 interface HistoryTypeTabsProps {
   tab: HistoryTab;
@@ -84,7 +101,8 @@ export function HistoryTypeTabs({
         {/* History is a view of what is attached, not a compose surface: read-only so the
             deal page shows one uploader (the compose bar's Files tab), not two. */}
         {tab === "files" && <FileAttachments entityType="deal" entityId={dealId} readOnly />}
-        {tab !== "files" && (
+        {tab === "products" && <DealProductsPanel dealId={dealId} />}
+        {tab !== "files" && tab !== "products" && (
           <HistoryFeed
             items={items[tab]}
             emptyLabel={

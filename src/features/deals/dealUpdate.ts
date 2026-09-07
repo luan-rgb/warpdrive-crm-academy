@@ -4,6 +4,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { BOARD_EVENT, dealChannel } from "@/constants/boardChannels";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import { deals } from "@/db/schema/deals";
+import { enqueueAutomationRuns, matchAutomationRules } from "@/features/automations/evaluate";
 import { syncEntityLabelNames } from "@/features/labels/labelsRepo.entities";
 import type { PermSetUser } from "@/features/permissions/effective";
 import { assertReferenceVisible } from "@/features/permissions/referenceCheck";
@@ -145,7 +146,9 @@ export async function updateDeal(
     };
   }
 
-  return db.transaction(async (tx) => {
+  // Automation rules are matched inside the transaction (a pure read) but jobs are enqueued only
+  // after it commits, see evaluate.ts's enqueueAutomationRuns doc comment for why.
+  const txResult = await db.transaction(async (tx) => {
     // Relink target visibility (person/org): reject before the write so a hidden contact is
     // neither linked nor probeable. Runs on tx so the check and the write share a snapshot.
     const targetsVisible = await assertContactTargetsVisible(tx, session, input, signal);
@@ -182,7 +185,11 @@ export async function updateDeal(
     // the Unit E additions: custom-field edits and person/org relink). Written on `tx` so a
     // failed mutation writes no changelog; a no-op edit logs nothing. `status` is excluded
     // (the won/lost flow owns it) to avoid double-logging.
-    await logDealUpdateChanges(tx, { input, before, after: row, actorId: session.id }, signal);
+    const changes = await logDealUpdateChanges(
+      tx,
+      { input, before, after: row, actorId: session.id },
+      signal,
+    );
 
     // Keep the catalog links in step with the array this update wrote.
     if (input.labels !== undefined) {
@@ -200,6 +207,21 @@ export async function updateDeal(
       signal,
     );
 
-    return ok(row);
+    const statusMatches =
+      input.status !== undefined && before.status !== row.status
+        ? await matchAutomationRules(tx, "deal_status_changed", before, row, signal)
+        : [];
+    const fieldMatches =
+      changes.length > 0
+        ? await matchAutomationRules(tx, "deal_field_changed", before, row, signal, changes)
+        : [];
+
+    return ok({ row, statusMatches, fieldMatches });
   });
+  if (!txResult.ok) return txResult;
+
+  const { row, statusMatches, fieldMatches } = txResult.value;
+  await enqueueAutomationRuns(statusMatches, row.id, "deal_status_changed", signal);
+  await enqueueAutomationRuns(fieldMatches, row.id, "deal_field_changed", signal);
+  return ok(row);
 }

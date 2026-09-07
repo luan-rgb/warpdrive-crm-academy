@@ -7,10 +7,14 @@ export interface StageRow {
   id: string | null;
   name: string;
   rottingDays: number | null;
+  probability: number | null;
 }
 
 export interface StageDiffInput {
-  originalById: Record<string, { name: string; rottingDays: number | null }>;
+  originalById: Record<
+    string,
+    { name: string; rottingDays: number | null; probability: number | null }
+  >;
   rows: StageRow[];
   deletedIds: string[];
 }
@@ -18,6 +22,7 @@ export interface StageDiffInput {
 export interface StageCreateOp {
   name: string;
   rottingDays: number | null;
+  probability: number | null;
 }
 export interface StageUpdateOp extends StageCreateOp {
   stageId: string;
@@ -30,10 +35,10 @@ export interface StageOps {
 }
 
 function changed(
-  a: { name: string; rottingDays: number | null },
-  b: { name: string; rottingDays: number | null },
+  a: { name: string; rottingDays: number | null; probability: number | null },
+  b: { name: string; rottingDays: number | null; probability: number | null },
 ): boolean {
-  return a.name !== b.name || a.rottingDays !== b.rottingDays;
+  return a.name !== b.name || a.rottingDays !== b.rottingDays || a.probability !== b.probability;
 }
 
 export function diffStages(input: StageDiffInput): StageOps {
@@ -42,7 +47,7 @@ export function diffStages(input: StageDiffInput): StageOps {
 
   for (const row of input.rows) {
     if (row.id === null) {
-      creates.push({ name: row.name, rottingDays: row.rottingDays });
+      creates.push({ name: row.name, rottingDays: row.rottingDays, probability: row.probability });
       continue;
     }
     const orig = input.originalById[row.id];
@@ -52,6 +57,7 @@ export function diffStages(input: StageDiffInput): StageOps {
         stageId: row.id,
         name: row.name,
         rottingDays: row.rottingDays,
+        probability: row.probability,
       });
     }
   }

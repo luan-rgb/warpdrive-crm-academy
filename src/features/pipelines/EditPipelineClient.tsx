@@ -17,6 +17,7 @@ interface InitialStage {
   id: string;
   name: string;
   rottingDays: number | null;
+  probability: number | null;
 }
 
 interface EditPipelineClientProps {
@@ -44,7 +45,10 @@ export function EditPipelineClient({
   const nameId = useId();
   const originalName = pipelineName;
   const originalById = Object.fromEntries(
-    stages.map((s) => [s.id, { name: s.name, rottingDays: s.rottingDays }]),
+    stages.map((s) => [
+      s.id,
+      { name: s.name, rottingDays: s.rottingDays, probability: s.probability },
+    ]),
   );
 
   const [name, setName] = useState(pipelineName);
@@ -53,6 +57,7 @@ export function EditPipelineClient({
       id: s.id,
       name: s.name,
       rottingDays: s.rottingDays,
+      probability: s.probability,
     })),
   );
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
@@ -73,7 +78,10 @@ export function EditPipelineClient({
   }
 
   function addRow(): void {
-    setRows((prev) => [...prev, { id: null, name: "New stage", rottingDays: null }]);
+    setRows((prev) => [
+      ...prev,
+      { id: null, name: "New stage", rottingDays: null, probability: null },
+    ]);
   }
 
   async function save(): Promise<void> {
