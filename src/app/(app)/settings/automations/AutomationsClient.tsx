@@ -60,6 +60,7 @@ export function AutomationsClient({
         onToggle={(id, v) => void toggle(id, v)}
         onEdit={(id) => router.push(`/settings/automations/${id}`)}
         onDelete={(id) => setPendingDelete(id)}
+        onViewRuns={(id) => router.push(`/settings/automations/${id}/runs`)}
       />
       <Button onClick={() => router.push("/settings/automations/new")}>+ Automation</Button>
       <ConfirmDialog

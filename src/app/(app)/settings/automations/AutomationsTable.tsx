@@ -16,11 +16,13 @@ export function AutomationsTable({
   onToggle,
   onEdit,
   onDelete,
+  onViewRuns,
 }: {
   rules: AutomationRule[];
   onToggle: (id: string, isActive: boolean) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onViewRuns: (id: string) => void;
 }): React.ReactNode {
   if (rules.length === 0) {
     return <p className="text-sm text-muted-foreground">No automations yet.</p>;
@@ -48,6 +50,9 @@ export function AutomationsTable({
               />
             </td>
             <td className="py-2 text-right">
+              <Button variant="ghost" onClick={() => onViewRuns(rule.id)}>
+                View runs
+              </Button>
               <Button variant="ghost" onClick={() => onEdit(rule.id)}>
                 Edit
               </Button>

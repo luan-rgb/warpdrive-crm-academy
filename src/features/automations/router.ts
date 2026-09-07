@@ -35,13 +35,9 @@ export const automationsRouter = router({
 
   listRunsForRule: automationProcedure
     .input(z.object({ ruleId: z.string().uuid() }))
-    .query(({ ctx, input }) =>
-      listRunsForRule(ctx.db, input.ruleId, AbortSignal.timeout(10_000)),
-    ),
+    .query(({ ctx, input }) => listRunsForRule(ctx.db, input.ruleId, AbortSignal.timeout(10_000))),
 
   listActionsForRun: automationProcedure
     .input(z.object({ runId: z.string().uuid() }))
-    .query(({ ctx, input }) =>
-      listActionsForRun(ctx.db, input.runId, AbortSignal.timeout(10_000)),
-    ),
+    .query(({ ctx, input }) => listActionsForRun(ctx.db, input.runId, AbortSignal.timeout(10_000))),
 });

@@ -361,8 +361,6 @@ it("listActionsForRun returns actions ordered by position, and [] for a run with
     expect(actions.map((a) => a.status)).toEqual(["error", "success"]);
     expect(actions.map((a) => a.position)).toEqual([0, 1]);
 
-    expect(await listActionsForRun(db, "00000000-0000-0000-0000-000000000000", sig())).toEqual(
-      [],
-    );
+    expect(await listActionsForRun(db, "00000000-0000-0000-0000-000000000000", sig())).toEqual([]);
   });
 });

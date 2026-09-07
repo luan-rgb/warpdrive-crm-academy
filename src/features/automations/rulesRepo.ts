@@ -7,9 +7,9 @@ import {
   type AutomationRun,
   type AutomationRunAction,
   automationRuleActions,
-  automationRuns,
-  automationRunActions,
   automationRules,
+  automationRunActions,
+  automationRuns,
 } from "@/db/schema/automations";
 import { err, ok, type Result } from "@/types/result";
 import type { CreateAutomationRuleInput, UpdateAutomationRuleInput } from "./schemas";

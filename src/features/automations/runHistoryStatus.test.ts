@@ -1,8 +1,5 @@
 import { describe, expect, test } from "vitest";
-import {
-  AUTOMATION_RUN_ACTION_STATUS,
-  AUTOMATION_RUN_STATUS,
-} from "@/db/schema/automations";
+import { AUTOMATION_RUN_ACTION_STATUS, AUTOMATION_RUN_STATUS } from "@/db/schema/automations";
 import { runActionStatusPresentation, runStatusPresentation } from "./runHistoryStatus";
 
 describe("runStatusPresentation", () => {
