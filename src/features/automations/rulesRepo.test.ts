@@ -3,11 +3,14 @@ import { expect, it } from "vitest";
 import type { Db } from "@/db/client";
 import { withTestDb } from "@/db/testing";
 import { seedPipelineWithStages, seedUser } from "@/db/testing/factories";
+import { handleAutomationExecuteJob } from "./job";
 import {
   createAutomationRule,
   deleteAutomationRule,
   getAutomationRule,
+  listActionsForRun,
   listAutomationRules,
+  listRunsForRule,
   setAutomationRuleActive,
   updateAutomationRule,
 } from "./rulesRepo";
@@ -239,5 +242,127 @@ it("returns AUTOMATION_NOT_FOUND for a missing rule id", async () => {
     const result = await getAutomationRule(db, "00000000-0000-0000-0000-000000000000", sig());
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.id).toBe("E_AUTOMATION_002");
+  });
+});
+
+it("listRunsForRule returns only that rule's runs, newest first, and [] for a rule with none", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id);
+
+    const ruleA = await createAutomationRule(
+      db,
+      user.id,
+      {
+        name: "Rule A",
+        description: null,
+        pipelineId: null,
+        trigger: "deal_created",
+        triggerConfig: {},
+        actions: [{ actionType: "send_notification", config: { messageTemplate: "hi" } }],
+        isActive: true,
+      },
+      sig(),
+    );
+    const ruleB = await createAutomationRule(
+      db,
+      user.id,
+      {
+        name: "Rule B",
+        description: null,
+        pipelineId: null,
+        trigger: "deal_created",
+        triggerConfig: {},
+        actions: [{ actionType: "send_notification", config: { messageTemplate: "hi" } }],
+        isActive: true,
+      },
+      sig(),
+    );
+    if (!ruleA.ok || !ruleB.ok) throw new Error("setup failed");
+
+    // Two runs for A, one for B.
+    await handleAutomationExecuteJob(
+      db,
+      { data: { ruleId: ruleA.value.id, dealId, trigger: "deal_created" } },
+      sig(),
+    );
+    await handleAutomationExecuteJob(
+      db,
+      { data: { ruleId: ruleA.value.id, dealId, trigger: "deal_created" } },
+      sig(),
+    );
+    await handleAutomationExecuteJob(
+      db,
+      { data: { ruleId: ruleB.value.id, dealId, trigger: "deal_created" } },
+      sig(),
+    );
+
+    const runsForA = await listRunsForRule(db, ruleA.value.id, sig());
+    expect(runsForA).toHaveLength(2);
+    expect(runsForA[0]?.startedAt.getTime()).toBeGreaterThanOrEqual(
+      runsForA[1]?.startedAt.getTime() ?? 0,
+    );
+    expect(runsForA.every((r) => r.ruleId === ruleA.value.id)).toBe(true);
+
+    const runsForFreshRule = await createAutomationRule(
+      db,
+      user.id,
+      {
+        name: "Never Run",
+        description: null,
+        pipelineId: null,
+        trigger: "deal_created",
+        triggerConfig: {},
+        actions: [{ actionType: "send_notification", config: { messageTemplate: "hi" } }],
+        isActive: true,
+      },
+      sig(),
+    );
+    if (!runsForFreshRule.ok) throw new Error("setup failed");
+    expect(await listRunsForRule(db, runsForFreshRule.value.id, sig())).toEqual([]);
+  });
+});
+
+it("listActionsForRun returns actions ordered by position, and [] for a run with none", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const dealId = await seedDeal(db, user.id);
+
+    const rule = await createAutomationRule(
+      db,
+      user.id,
+      {
+        name: "Mixed Rule",
+        description: null,
+        pipelineId: null,
+        trigger: "deal_created",
+        triggerConfig: {},
+        actions: [
+          { actionType: "send_email", config: { subjectTemplate: "Hi", bodyTemplate: "Hi" } },
+          { actionType: "send_notification", config: { messageTemplate: "hi" } },
+        ],
+        isActive: true,
+      },
+      sig(),
+    );
+    if (!rule.ok) throw new Error("setup failed");
+
+    await handleAutomationExecuteJob(
+      db,
+      { data: { ruleId: rule.value.id, dealId, trigger: "deal_created" } },
+      sig(),
+    );
+
+    const [run] = await listRunsForRule(db, rule.value.id, sig());
+    if (run === undefined) throw new Error("expected a run to exist");
+
+    const actions = await listActionsForRun(db, run.id, sig());
+    expect(actions.map((a) => a.actionType)).toEqual(["send_email", "send_notification"]);
+    expect(actions.map((a) => a.status)).toEqual(["error", "success"]);
+    expect(actions.map((a) => a.position)).toEqual([0, 1]);
+
+    expect(await listActionsForRun(db, "00000000-0000-0000-0000-000000000000", sig())).toEqual(
+      [],
+    );
   });
 });

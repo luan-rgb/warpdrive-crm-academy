@@ -1,10 +1,14 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import type { Db } from "@/db/client";
 import {
   type AutomationRule,
   type AutomationRuleAction,
+  type AutomationRun,
+  type AutomationRunAction,
   automationRuleActions,
+  automationRuns,
+  automationRunActions,
   automationRules,
 } from "@/db/schema/automations";
 import { err, ok, type Result } from "@/types/result";
@@ -149,4 +153,33 @@ export async function deleteAutomationRule(
     return err(new AppError(ERROR_IDS.AUTOMATION_NOT_FOUND, "automation rule not found", { id }));
   }
   return ok(true);
+}
+
+// Capped at 100: history is a diagnostic view, not an export/audit trail, and this matches the
+// retention boundary the execution-history feature's spec accepts as-is.
+export async function listRunsForRule(
+  db: Db,
+  ruleId: string,
+  signal: AbortSignal,
+): Promise<AutomationRun[]> {
+  signal.throwIfAborted();
+  return db
+    .select()
+    .from(automationRuns)
+    .where(eq(automationRuns.ruleId, ruleId))
+    .orderBy(desc(automationRuns.startedAt))
+    .limit(100);
+}
+
+export async function listActionsForRun(
+  db: Db,
+  runId: string,
+  signal: AbortSignal,
+): Promise<AutomationRunAction[]> {
+  signal.throwIfAborted();
+  return db
+    .select()
+    .from(automationRunActions)
+    .where(eq(automationRunActions.runId, runId))
+    .orderBy(asc(automationRunActions.position));
 }

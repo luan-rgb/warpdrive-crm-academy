@@ -97,6 +97,17 @@ describe("automation.manage gate", () => {
       ).rejects.toMatchObject({ code: "FORBIDDEN" });
     });
   });
+
+  it("rejects listActionsForRun for an actor without automation.manage", async () => {
+    await withTestDb(async (db) => {
+      const user = await seedUser(db);
+      await expect(
+        makeCaller(db, user.id, []).automations.listActionsForRun({
+          runId: "00000000-0000-0000-0000-000000000000",
+        }),
+      ).rejects.toMatchObject({ code: "FORBIDDEN" });
+    });
+  });
 });
 
 describe("automations.list", () => {
@@ -194,6 +205,60 @@ describe("automations.listRunsForRule", () => {
       });
       expect(runs).toHaveLength(1);
       expect(runs[0]?.status).toBe("success");
+    });
+  });
+});
+
+describe("automations.listActionsForRun", () => {
+  it("returns actions for the run, ordered by position", async () => {
+    await withTestDb(async (db) => {
+      const user = await seedUser(db);
+      const dealId = await seedDeal(db, user.id);
+      const created = await createAutomationRule(
+        db,
+        user.id,
+        {
+          name: "Actions Rule",
+          description: null,
+          pipelineId: null,
+          trigger: "deal_created",
+          triggerConfig: {},
+          actions: [{ actionType: "send_notification", config: {} }],
+          isActive: true,
+        },
+        sig(),
+      );
+      if (!created.ok) throw new Error("setup failed");
+
+      const runRow = (
+        await db.execute(sql`
+          INSERT INTO automation_runs (rule_id, rule_name, deal_id, trigger, status)
+          VALUES (${created.value.id}, 'Actions Rule', ${dealId}, 'deal_created', 'success')
+          RETURNING id
+        `)
+      ).rows[0] as { id: string } | undefined;
+      if (runRow === undefined) throw new Error("no run row");
+
+      await db.execute(sql`
+        INSERT INTO automation_run_actions (run_id, position, action_type, status)
+        VALUES (${runRow.id}, 0, 'send_notification', 'success')
+      `);
+
+      const actions = await makeCaller(db, user.id).automations.listActionsForRun({
+        runId: runRow.id,
+      });
+      expect(actions).toHaveLength(1);
+      expect(actions[0]?.actionType).toBe("send_notification");
+    });
+  });
+
+  it("returns [] for a run with no actions", async () => {
+    await withTestDb(async (db) => {
+      const user = await seedUser(db);
+      const actions = await makeCaller(db, user.id).automations.listActionsForRun({
+        runId: "00000000-0000-0000-0000-000000000000",
+      });
+      expect(actions).toEqual([]);
     });
   });
 });

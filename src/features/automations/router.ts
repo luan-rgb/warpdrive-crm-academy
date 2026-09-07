@@ -1,11 +1,14 @@
 import { TRPCError } from "@trpc/server";
-import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { ERROR_IDS } from "@/constants/errorIds";
-import { automationRuns } from "@/db/schema/automations";
 import { can } from "@/features/permissions/can";
 import { protectedProcedure, router } from "@/server/trpc/trpc";
-import { getAutomationRule, listAutomationRules } from "./rulesRepo";
+import {
+  getAutomationRule,
+  listActionsForRun,
+  listAutomationRules,
+  listRunsForRule,
+} from "./rulesRepo";
 
 // Rule configs carry email subject/body templates and notification message templates, more
 // sensitive than typical read data, so every read here requires automation.manage, matching
@@ -33,11 +36,12 @@ export const automationsRouter = router({
   listRunsForRule: automationProcedure
     .input(z.object({ ruleId: z.string().uuid() }))
     .query(({ ctx, input }) =>
-      ctx.db
-        .select()
-        .from(automationRuns)
-        .where(eq(automationRuns.ruleId, input.ruleId))
-        .orderBy(desc(automationRuns.startedAt))
-        .limit(100),
+      listRunsForRule(ctx.db, input.ruleId, AbortSignal.timeout(10_000)),
+    ),
+
+  listActionsForRun: automationProcedure
+    .input(z.object({ runId: z.string().uuid() }))
+    .query(({ ctx, input }) =>
+      listActionsForRun(ctx.db, input.runId, AbortSignal.timeout(10_000)),
     ),
 });
