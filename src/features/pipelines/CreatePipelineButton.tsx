@@ -22,8 +22,8 @@ import { createPipelineAction } from "./pipelineEditActions";
 type OnCreated = "board" | "edit";
 
 const ERROR_MESSAGE: Record<string, string> = {
-  E_PERM_001: "You do not have permission to create pipelines.",
-  E_AUTH_CSRF: "Your session expired. Reload the page and try again.",
+  E_PERM_001: "Você não tem permissão para criar pipelines.",
+  E_AUTH_CSRF: "Sua sessão expirou. Recarregue a página e tente novamente.",
 };
 
 interface CreatePipelineButtonProps {

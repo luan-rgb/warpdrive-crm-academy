@@ -30,10 +30,10 @@ interface EditPipelineClientProps {
 // so the user still sees a signal (and we can grep for it).
 const ERROR_MESSAGE: Record<string, string> = {
   E_STAGE_002:
-    "A stage still holds deals, including won or lost ones. Move every deal (open and closed) out of this stage before deleting it.",
-  E_STAGE_003: "A pipeline must keep at least one stage.",
-  E_PERM_001: "You do not have permission to edit pipelines.",
-  E_AUTH_CSRF: "Your session expired. Reload the page and try again.",
+    "Esta etapa ainda tem negócios, incluindo ganhos ou perdidos. Mova todos os negócios (abertos e fechados) para fora desta etapa antes de excluí-la.",
+  E_STAGE_003: "Um pipeline precisa manter pelo menos uma etapa.",
+  E_PERM_001: "Você não tem permissão para editar pipelines.",
+  E_AUTH_CSRF: "Sua sessão expirou. Recarregue a página e tente novamente.",
 };
 
 export function EditPipelineClient({
@@ -80,7 +80,7 @@ export function EditPipelineClient({
   function addRow(): void {
     setRows((prev) => [
       ...prev,
-      { id: null, name: "New stage", rottingDays: null, probability: null },
+      { id: null, name: "Nova etapa", rottingDays: null, probability: null },
     ]);
   }
 
@@ -121,11 +121,11 @@ export function EditPipelineClient({
       <div className="mb-4 flex items-center gap-3">
         <div className="flex-1 text-sm">
           <label htmlFor={nameId} className="mb-1 block font-medium">
-            Pipeline name
+            Nome do pipeline
           </label>
           <Input
             id={nameId}
-            aria-label="Pipeline name"
+            aria-label="Nome do pipeline"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="max-w-md"
@@ -137,7 +137,7 @@ export function EditPipelineClient({
             onClick={() => router.push(`/pipeline/${pipelineId}`)}
             className="rounded-md border px-3 py-1.5 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             type="button"
@@ -145,7 +145,7 @@ export function EditPipelineClient({
             disabled={saving}
             className="rounded-md bg-action px-3 py-1.5 text-sm font-medium text-action-foreground transition-transform hover:bg-action/90 active:scale-[0.96] disabled:opacity-60"
           >
-            {saving ? "Saving..." : "Save changes"}
+            {saving ? "Salvando..." : "Salvar alterações"}
           </button>
         </div>
       </div>
@@ -176,7 +176,7 @@ export function EditPipelineClient({
           onClick={addRow}
           className="flex w-64 shrink-0 items-center justify-center rounded-lg border border-dashed text-sm font-medium text-muted-foreground transition-transform hover:bg-accent hover:text-foreground active:scale-[0.96]"
         >
-          + Add stage
+          + Adicionar etapa
         </button>
       </div>
     </div>

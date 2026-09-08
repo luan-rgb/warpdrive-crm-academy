@@ -30,10 +30,10 @@ export function StageEditCard({
   return (
     <div className="flex w-64 shrink-0 flex-col gap-3 rounded-lg border bg-card p-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-muted-foreground">Stage {index + 1}</span>
+        <span className="text-xs font-medium text-muted-foreground">Etapa {index + 1}</span>
         <button
           type="button"
-          aria-label={`Delete stage ${index + 1}`}
+          aria-label={`Excluir etapa ${index + 1}`}
           disabled={!canDelete}
           onClick={onDelete}
           className="grid size-10 -m-2 place-items-center rounded text-muted-foreground transition-transform hover:bg-accent hover:text-red-600 active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-40"
@@ -44,11 +44,11 @@ export function StageEditCard({
 
       <div className="text-sm">
         <label htmlFor={nameId} className="mb-1 block font-medium">
-          Stage name
+          Nome da etapa
         </label>
         <Input
           id={nameId}
-          aria-label={`Stage ${index + 1} name`}
+          aria-label={`Nome da etapa ${index + 1}`}
           value={row.name}
           onChange={(e) => onChange({ name: e.target.value })}
         />
@@ -57,15 +57,15 @@ export function StageEditCard({
       <div className="text-sm">
         <div className="flex items-center gap-2">
           <Checkbox
-            label={`Stage ${index + 1} rotting enabled`}
+            label={`Ativar estagnação da etapa ${index + 1}`}
             checked={rottingEnabled}
             onCheckedChange={(v) => onChange({ rottingDays: v ? DEFAULT_ROTTING_DAYS : null })}
           />
-          <span className="font-medium">Rotting in (days)</span>
+          <span className="font-medium">Estagnar em (dias)</span>
         </div>
         {rottingEnabled && (
           <Input
-            aria-label={`Stage ${index + 1} rotting days`}
+            aria-label={`Dias de estagnação da etapa ${index + 1}`}
             type="number"
             min={1}
             value={row.rottingDays ?? DEFAULT_ROTTING_DAYS}
@@ -77,15 +77,15 @@ export function StageEditCard({
 
       <div className="text-sm">
         <label htmlFor={probabilityId} className="mb-1 block font-medium">
-          Win probability (%)
+          Probabilidade de ganho (%)
         </label>
         <Input
           id={probabilityId}
-          aria-label={`Stage ${index + 1} win probability`}
+          aria-label={`Probabilidade de ganho da etapa ${index + 1}`}
           type="number"
           min={0}
           max={100}
-          placeholder="Not set"
+          placeholder="Não definido"
           value={row.probability ?? ""}
           onChange={(e) => {
             const v = e.target.value;

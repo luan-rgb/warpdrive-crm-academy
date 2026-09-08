@@ -44,7 +44,7 @@ export default async function PipelineBoardPage({
   const { id } = await params;
   const ctx = await createContext();
   if (ctx.actor === null) {
-    return <main>Unauthorized</main>;
+    return <main>Não autorizado</main>;
   }
   const actor = ctx.actor;
 
@@ -71,7 +71,7 @@ export default async function PipelineBoardPage({
 
   const loaded = await load();
   if (loaded.kind !== "ok") {
-    return <main>Unauthorized</main>;
+    return <main>Não autorizado</main>;
   }
   const { pipelines } = loaded;
 
@@ -89,7 +89,7 @@ export default async function PipelineBoardPage({
   // counts/totals and the drag CAS precondition are derived client-side from the live cards,
   // so no separate stageSums fetch is needed here.
   return (
-    <main aria-label={`Board ${pipeline.name}`} className="h-full">
+    <main aria-label={`Quadro ${pipeline.name}`} className="h-full">
       <Board
         pipelineId={id}
         serverNow={new Date()}

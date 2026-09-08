@@ -13,17 +13,17 @@ export default async function EditPipelinePage({
   const { id } = await params;
   const ctx = await createContext();
   if (ctx.actor === null) {
-    return <main>Unauthorized</main>;
+    return <main>Não autorizado</main>;
   }
   const caller = createCaller(ctx);
   const pipeline = await caller.pipeline.byId(id);
   if (pipeline === null) {
-    return <main>Pipeline not found</main>;
+    return <main>Pipeline não encontrado</main>;
   }
 
   return (
-    <main aria-label={`Edit pipeline ${pipeline.name}`} className="h-full">
-      <h1 className="mb-4 text-display font-[450] leading-tight tracking-tight">Edit pipeline</h1>
+    <main aria-label={`Editar pipeline ${pipeline.name}`} className="h-full">
+      <h1 className="mb-4 text-display font-[450] leading-tight tracking-tight">Editar pipeline</h1>
       <EditPipelineClient
         pipelineId={pipeline.id}
         pipelineName={pipeline.name}

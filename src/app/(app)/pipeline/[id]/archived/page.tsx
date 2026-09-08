@@ -40,10 +40,10 @@ export default async function PipelineArchivedPage({
   const { id } = await params;
   const loaded = await load();
   if (loaded.kind === "unauth") {
-    return <main>Unauthorized</main>;
+    return <main>Não autorizado</main>;
   }
   const { ctx, pipelines } = loaded;
-  if (ctx.actor === null) return <main>Unauthorized</main>;
+  if (ctx.actor === null) return <main>Não autorizado</main>;
 
   // A nonexistent (or hidden) pipeline 404s like the entity detail routes, not a 200 soft-404.
   const pipeline = resolveVisiblePipeline(pipelines, id);
@@ -65,7 +65,7 @@ export default async function PipelineArchivedPage({
   }));
 
   return (
-    <main aria-label={`Archived deals ${pipeline.name}`} className="h-full">
+    <main aria-label={`Negócios arquivados ${pipeline.name}`} className="h-full">
       <DealListClient
         variant="archived"
         initial={{
