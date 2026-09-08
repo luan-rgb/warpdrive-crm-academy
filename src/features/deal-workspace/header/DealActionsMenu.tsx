@@ -85,18 +85,18 @@ export function DealActionsMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger aria-label="Deal actions" disabled={pending} className={ICON_BUTTON}>
+      <DropdownMenuTrigger aria-label="Ações do negócio" disabled={pending} className={ICON_BUTTON}>
         <EllipsisVertical aria-hidden="true" className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
-        <DropdownMenuItem onSelect={() => void copyLink()}>Copy link</DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => void duplicate()}>Duplicate</DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => setFlow("convert")}>Convert to a lead</DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => setFlow("merge")}>Merge</DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => void archive()}>Archive</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void copyLink()}>Copiar link</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void duplicate()}>Duplicar</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setFlow("convert")}>Converter em lead</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setFlow("merge")}>Mesclar</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void archive()}>Arquivar</DropdownMenuItem>
         {canDelete && (
           <DropdownMenuItem onSelect={() => setFlow("delete")} className="text-destructive">
-            Delete deal
+            Excluir negócio
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
@@ -129,9 +129,10 @@ export function DealActionsMenu({
         onOpenChange={(o) => {
           if (!o) setFlow(null);
         }}
-        title="Delete this deal?"
-        description="This cannot be undone. The deal and its activity are removed for everyone."
-        confirmLabel="Delete"
+        title="Excluir este negócio?"
+        description="Isso não pode ser desfeito. O negócio e suas atividades são removidos para todos."
+        confirmLabel="Excluir"
+        cancelLabel="Cancelar"
         destructive
         pending={pending}
         onConfirm={() => void remove()}

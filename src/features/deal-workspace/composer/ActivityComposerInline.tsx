@@ -20,7 +20,7 @@ import { VideoCallField } from "./VideoCallField";
 
 const ICON = "h-4 w-4";
 
-const NO_PRIORITY_LABEL = "No priority";
+const NO_PRIORITY_LABEL = "Sem prioridade";
 
 interface Props extends ActivityComposerProps {
   // Collapses the composer back to its one-line prompt (Cancel button). Optional so scopes that
@@ -78,13 +78,13 @@ export function ActivityComposerInline(props: Props): React.ReactNode {
       <Input
         ref={subjectRef}
         data-compose-primary="activity"
-        aria-label="Subject"
+        aria-label="Assunto"
         value={subjectValue}
         onChange={(e) => {
           setSubject(e.target.value);
           setSubjectEdited(true);
         }}
-        placeholder="Subject"
+        placeholder="Assunto"
         className="w-full rounded-md border px-3 py-2 text-display font-medium outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
       />
       <TypeIconRail types={types} value={effectiveTypeId} onChange={setTypeId} />
@@ -110,7 +110,7 @@ export function ActivityComposerInline(props: Props): React.ReactNode {
       <ComposerFieldRow icon={<CalendarClock className={ICON} />}>
         <div className="w-48">
           <Select
-            ariaLabel="Priority"
+            ariaLabel="Prioridade"
             value={priority}
             onChange={setPriority}
             placeholder={NO_PRIORITY_LABEL}
@@ -136,19 +136,19 @@ export function ActivityComposerInline(props: Props): React.ReactNode {
       </ComposerFieldRow>
 
       <ComposerFieldRow icon={<MapPin className={ICON} />}>
-        <ComposerDisclosureField label="Location" hasValue={location !== ""}>
+        <ComposerDisclosureField label="Local" hasValue={location !== ""}>
           <input
-            aria-label="Location"
+            aria-label="Local"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="Add location"
+            placeholder="Adicionar local"
             className={FIELD}
           />
         </ComposerDisclosureField>
       </ComposerFieldRow>
 
       <ComposerFieldRow icon={<Video className={ICON} />}>
-        <ComposerDisclosureField label="Video call" hasValue={videoCallUrl !== ""}>
+        <ComposerDisclosureField label="Videochamada" hasValue={videoCallUrl !== ""}>
           <VideoCallField value={videoCallUrl} onChange={setVideoCallUrl} />
         </ComposerDisclosureField>
       </ComposerFieldRow>
