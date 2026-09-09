@@ -59,7 +59,7 @@ export function RelatedOrgsPanel({
     );
     setPending(false);
     if (!r.ok) {
-      setError("Couldn't add that relation. Try again.");
+      setError("Não foi possível adicionar essa relação. Tente novamente.");
       return;
     }
     setTargetOrgId("");
@@ -74,7 +74,7 @@ export function RelatedOrgsPanel({
       readCsrfToken(),
     );
     if (!r.ok) {
-      setError("Couldn't remove that relation. Try again.");
+      setError("Não foi possível remover essa relação. Tente novamente.");
       return;
     }
     onChanged();
@@ -83,7 +83,7 @@ export function RelatedOrgsPanel({
   return (
     <div className="space-y-2">
       {related.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No related organizations yet.</p>
+        <p className="text-sm text-muted-foreground">Ainda não há organizações relacionadas.</p>
       ) : (
         <ul className="space-y-1.5">
           {related.map((r) => (
@@ -96,11 +96,11 @@ export function RelatedOrgsPanel({
               </span>
               <button
                 type="button"
-                aria-label={`Remove ${r.name}`}
+                aria-label={`Remover ${r.name}`}
                 onClick={() => void remove(r.orgId)}
                 className={ROW_ACTION_BUTTON}
               >
-                Remove
+                Remover
               </button>
             </li>
           ))}
@@ -110,18 +110,18 @@ export function RelatedOrgsPanel({
       <div className="flex items-center gap-1.5 pt-1">
         <div className="min-w-0 flex-1">
           <Combobox
-            ariaLabel="Related organization"
+            ariaLabel="Organização relacionada"
             value={targetOrgId}
             onChange={setTargetOrgId}
             options={pickerOptions}
-            placeholder="Choose org"
+            placeholder="Escolher organização"
           />
         </div>
         <Input
-          aria-label="Relation type"
+          aria-label="Tipo de relação"
           value={relationType}
           onChange={(e) => setRelationType(e.target.value)}
-          placeholder="e.g. partner"
+          placeholder="ex.: parceiro"
           className="w-28 shrink-0 px-2"
         />
         <button
@@ -130,7 +130,7 @@ export function RelatedOrgsPanel({
           onClick={() => void add()}
           className={`${ROW_ACTION_BUTTON} shrink-0`}
         >
-          Add
+          Adicionar
         </button>
       </div>
       {error !== null && <p className="text-xs text-red-600">{error}</p>}

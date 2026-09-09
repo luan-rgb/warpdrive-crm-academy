@@ -157,13 +157,13 @@ describe("OrgDetailClient", () => {
     const mainTabList = screen.getAllByRole("tablist").find((tabList) => {
       const tabs = within(tabList);
       return (
-        tabs.queryByRole("tab", { name: "Activity" }) !== null &&
-        tabs.queryByRole("tab", { name: "Email" }) !== null
+        tabs.queryByRole("tab", { name: "Atividade" }) !== null &&
+        tabs.queryByRole("tab", { name: "E-mail" }) !== null
       );
     });
     if (mainTabList === undefined) throw new Error("main organization tab list not found");
     const mainTabs = within(mainTabList);
-    expect(mainTabs.getByRole("tab", { name: "Activity" })).toHaveAttribute(
+    expect(mainTabs.getByRole("tab", { name: "Atividade" })).toHaveAttribute(
       "aria-selected",
       "true",
     );

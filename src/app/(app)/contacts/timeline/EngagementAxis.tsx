@@ -1,21 +1,21 @@
 import type React from "react";
 
 const MONTH_NAMES = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+  "jan",
+  "fev",
+  "mar",
+  "abr",
+  "mai",
+  "jun",
+  "jul",
+  "ago",
+  "set",
+  "out",
+  "nov",
+  "dez",
 ];
 
-// "2026-05" -> "May 2026". Falls back to the raw key if it is ever malformed.
+// "2026-05" -> "mai 2026". Falls back to the raw key if it is ever malformed.
 export function monthLabel(key: string): string {
   const [y, m] = key.split("-");
   const idx = Number(m) - 1;
@@ -33,7 +33,7 @@ export function EngagementAxis({ months }: { months: string[] }): React.ReactNod
           scope="col"
           className="sticky left-0 z-20 border-b border-r bg-muted px-3 py-2 text-left text-xs font-semibold text-muted-foreground"
         >
-          Contact
+          Contato
         </th>
         {months.map((key, i) => (
           <th
@@ -43,7 +43,7 @@ export function EngagementAxis({ months }: { months: string[] }): React.ReactNod
           >
             {/* The period always ends at the current month, so the rightmost tick is "now": PD
                 labels it "Today" rather than repeating the month name. */}
-            {i === months.length - 1 ? "Today" : monthLabel(key)}
+            {i === months.length - 1 ? "Hoje" : monthLabel(key)}
           </th>
         ))}
       </tr>

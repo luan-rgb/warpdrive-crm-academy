@@ -14,9 +14,9 @@ import { OrgSidebar } from "./OrgSidebar";
 type Tab = "activity" | "email" | "files";
 
 const TAB_LABELS: Record<Tab, string> = {
-  activity: "Activity",
-  email: "Email",
-  files: "Files",
+  activity: "Atividade",
+  email: "E-mail",
+  files: "Arquivos",
 };
 
 const TABS: readonly Tab[] = ["activity", "email", "files"];

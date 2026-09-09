@@ -14,16 +14,16 @@ describe("EngagementAxis", () => {
       </table>,
     );
     // Past months keep their name; the last column reads Today, not the month name.
-    expect(screen.getByText("May 2026")).toBeInTheDocument();
-    expect(screen.getByText("Jun 2026")).toBeInTheDocument();
-    expect(screen.getByText("Today")).toBeInTheDocument();
-    expect(screen.queryByText("Jul 2026")).not.toBeInTheDocument();
-    expect(screen.getByText("Contact")).toHaveClass("sticky", "left-0");
+    expect(screen.getByText("mai 2026")).toBeInTheDocument();
+    expect(screen.getByText("jun 2026")).toBeInTheDocument();
+    expect(screen.getByText("Hoje")).toBeInTheDocument();
+    expect(screen.queryByText("jul 2026")).not.toBeInTheDocument();
+    expect(screen.getByText("Contato")).toHaveClass("sticky", "left-0");
   });
 });
 
 describe("monthLabel", () => {
   it("formats a YYYY-MM key as 'Mon YYYY'", () => {
-    expect(monthLabel("2026-04")).toBe("Apr 2026");
+    expect(monthLabel("2026-04")).toBe("abr 2026");
   });
 });

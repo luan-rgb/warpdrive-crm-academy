@@ -54,14 +54,14 @@ describe("RelatedOrgsPanel", () => {
     render(
       <RelatedOrgsPanel orgId="o1" related={[]} orgOptions={orgOptions} onChanged={vi.fn()} />,
     );
-    expect(screen.getByText(/no related organizations yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/ainda não há organizações relacionadas/i)).toBeInTheDocument();
   });
 
   it("excludes the current org and already-related orgs from the picker", () => {
     render(
       <RelatedOrgsPanel orgId="o1" related={related} orgOptions={orgOptions} onChanged={vi.fn()} />,
     );
-    fireEvent.click(screen.getByLabelText("Related organization"));
+    fireEvent.click(screen.getByLabelText("Organização relacionada"));
     expect(screen.queryByText("Acme")).not.toBeInTheDocument();
     expect(screen.queryByRole("option", { name: "Beta Co" })).not.toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Gamma" })).toBeInTheDocument();
@@ -77,10 +77,10 @@ describe("RelatedOrgsPanel", () => {
         onChanged={onChanged}
       />,
     );
-    fireEvent.click(screen.getByLabelText("Related organization"));
+    fireEvent.click(screen.getByLabelText("Organização relacionada"));
     fireEvent.click(screen.getByRole("option", { name: "Gamma" }));
-    fireEvent.change(screen.getByLabelText("Relation type"), { target: { value: "subsidiary" } });
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    fireEvent.change(screen.getByLabelText("Tipo de relação"), { target: { value: "subsidiary" } });
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar" }));
 
     await vi.waitFor(() => expect(addOrgRelationAction).toHaveBeenCalled());
     expect(addOrgRelationAction).toHaveBeenCalledWith(
@@ -94,7 +94,7 @@ describe("RelatedOrgsPanel", () => {
     render(
       <RelatedOrgsPanel orgId="o1" related={related} orgOptions={orgOptions} onChanged={vi.fn()} />,
     );
-    expect(screen.getByRole("button", { name: "Add" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Adicionar" })).toBeDisabled();
   });
 
   it("removes a related org via its Remove button", async () => {
@@ -107,7 +107,7 @@ describe("RelatedOrgsPanel", () => {
         onChanged={onChanged}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Remove Beta Co" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remover Beta Co" }));
 
     await vi.waitFor(() => expect(removeOrgRelationAction).toHaveBeenCalled());
     expect(removeOrgRelationAction).toHaveBeenCalledWith(
@@ -122,12 +122,12 @@ describe("RelatedOrgsPanel", () => {
     render(
       <RelatedOrgsPanel orgId="o1" related={related} orgOptions={orgOptions} onChanged={vi.fn()} />,
     );
-    fireEvent.click(screen.getByLabelText("Related organization"));
+    fireEvent.click(screen.getByLabelText("Organização relacionada"));
     fireEvent.click(screen.getByRole("option", { name: "Gamma" }));
-    fireEvent.change(screen.getByLabelText("Relation type"), { target: { value: "subsidiary" } });
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    fireEvent.change(screen.getByLabelText("Tipo de relação"), { target: { value: "subsidiary" } });
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar" }));
 
-    expect(await screen.findByText(/couldn.t add/i)).toBeInTheDocument();
+    expect(await screen.findByText(/não foi possível adicionar/i)).toBeInTheDocument();
   });
 
   it("draws the relation type and empty line from theme tokens", () => {
@@ -141,6 +141,8 @@ describe("RelatedOrgsPanel", () => {
     render(
       <RelatedOrgsPanel orgId="o1" related={[]} orgOptions={orgOptions} onChanged={vi.fn()} />,
     );
-    expect(screen.getByText(/no related organizations yet/i)).toHaveClass("text-muted-foreground");
+    expect(screen.getByText(/ainda não há organizações relacionadas/i)).toHaveClass(
+      "text-muted-foreground",
+    );
   });
 });

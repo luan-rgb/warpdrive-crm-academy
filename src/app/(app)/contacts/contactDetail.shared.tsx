@@ -130,15 +130,15 @@ export function ContactTimelinePanel({
       )}
       <PinnedNotesSection items={pinned} onNoteChanged={onNoteChanged} />
       <section aria-label="focus">
-        <SectionHeading>Focus</SectionHeading>
+        <SectionHeading>Foco</SectionHeading>
         <HistoryFeed
           items={focus}
-          emptyLabel="Nothing needs your attention"
+          emptyLabel="Nada precisa da sua atenção"
           onActivityChanged={onActivityChanged}
         />
       </section>
       <section aria-label="history">
-        <SectionHeading>History</SectionHeading>
+        <SectionHeading>Histórico</SectionHeading>
         <ContactHistoryTabs
           entityType={entityType}
           entityId={entityId}

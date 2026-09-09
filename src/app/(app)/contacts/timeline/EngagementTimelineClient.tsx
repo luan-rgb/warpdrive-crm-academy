@@ -15,7 +15,7 @@ const DEFAULT_FILTER: EngagementFilter = {
   typeKey: null,
 };
 
-const LOAD_ERROR = "Couldn't load the engagement timeline. Please try again.";
+const LOAD_ERROR = "Não foi possível carregar a linha do tempo de engajamento. Tente novamente.";
 
 // Per-contact engagement timeline (CO-4): the Pipedrive-style "how recently have I engaged each
 // contact" grid. Owns the filter state and re-queries contacts.engagementTimeline server-side on
@@ -53,7 +53,7 @@ export function EngagementTimelineClient(): React.ReactNode {
         <p className="text-sm text-muted-foreground">{STRINGS.contacts.timelineEmpty}</p>
       ) : (
         <section
-          aria-label="Engagement timeline grid"
+          aria-label="Grade da linha do tempo de engajamento"
           // A focused overflow region can be scrolled with the keyboard. This is the intentional
           // exception to the general rule against putting static containers in the tab order.
           // biome-ignore lint/a11y/noNoninteractiveTabindex: keyboard-scrollable data grid viewport

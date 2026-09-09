@@ -115,7 +115,7 @@ describe("EngagementTimelineClient", () => {
 
   it("contains wide month tracks in a local horizontal scroll viewport", () => {
     render(<EngagementTimelineClient />);
-    const viewport = screen.getByRole("region", { name: "Engagement timeline grid" });
+    const viewport = screen.getByRole("region", { name: "Grade da linha do tempo de engajamento" });
     expect(viewport).toHaveClass("max-w-full", "overflow-x-auto", "overscroll-x-contain");
     expect(viewport.firstElementChild).toHaveClass("w-full", "table-fixed");
     expect(viewport.firstElementChild?.tagName).toBe("TABLE");
@@ -123,7 +123,7 @@ describe("EngagementTimelineClient", () => {
 
   it("re-scopes the query to organizations when the entity toggle is clicked", async () => {
     render(<EngagementTimelineClient />);
-    fireEvent.click(screen.getByRole("button", { name: "Organizations" }));
+    fireEvent.click(screen.getByRole("button", { name: "Organizações" }));
     await waitFor(() => {
       const last = engagementQuery.mock.calls.at(-1)?.[0] as { entity: string };
       expect(last.entity).toBe("organization");

@@ -157,8 +157,8 @@ describe("PersonDetailClient", () => {
     );
     expect(dealsSection.getByLabelText("Deal status: Won")).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "Negócios" })).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Focus" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "History" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Foco" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Histórico" })).toBeInTheDocument();
     // Merge is now inside the header Options overflow (CO-3), not a standalone button.
     const user = userEvent.setup();
     await user.click(screen.getByRole("button", { name: /ações do contato/i }));

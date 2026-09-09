@@ -15,8 +15,8 @@ import { PersonSidebar } from "./PersonSidebar";
 type Tab = "activity" | "files";
 
 const TAB_LABELS: Record<Tab, string> = {
-  activity: "Activity",
-  files: "Files",
+  activity: "Atividade",
+  files: "Arquivos",
 };
 
 const TABS: readonly Tab[] = ["activity", "files"];

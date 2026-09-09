@@ -99,9 +99,9 @@ describe("ContactTimelinePanel", () => {
     // History, all visible at once.
     render(<ContactTimelinePanel entityType="person" entityId="pe1" />);
 
-    expect(screen.getByRole("heading", { name: "Focus" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "History" })).toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "Focus" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Foco" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Histórico" })).toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Foco" })).not.toBeInTheDocument();
 
     // Every item is visible simultaneously (no clicking).
     expect(screen.getByText("Open follow-up")).toBeInTheDocument();
@@ -161,7 +161,7 @@ describe("ContactTimelinePanel", () => {
     render(<ContactTimelinePanel entityType="organization" entityId="o1" />);
     // Both sections render at once: History shows the note, Focus shows its empty label.
     expect(screen.getByText("Called Jane")).toBeInTheDocument();
-    expect(screen.getByText("Nothing needs your attention")).toBeInTheDocument();
+    expect(screen.getByText("Nada precisa da sua atenção")).toBeInTheDocument();
   });
 
   it.each([

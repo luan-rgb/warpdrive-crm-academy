@@ -21,14 +21,14 @@ export interface EngagementTypeOption {
 
 // Period options mirror Pipedrive's "N months back" selector.
 const PERIOD_OPTIONS = [
-  { value: "3", label: "3 months back" },
-  { value: "6", label: "6 months back" },
-  { value: "12", label: "12 months back" },
+  { value: "3", label: "Últimos 3 meses" },
+  { value: "6", label: "Últimos 6 meses" },
+  { value: "12", label: "Últimos 12 meses" },
 ];
 
 const ENTITY_TABS: { value: ContactEntity; label: string }[] = [
-  { value: "person", label: "People" },
-  { value: "organization", label: "Organizations" },
+  { value: "person", label: "Pessoas" },
+  { value: "organization", label: "Organizações" },
 ];
 
 interface EngagementFiltersProps {
@@ -73,13 +73,13 @@ export function EngagementFilters({
           ))}
         </div>
         <Select
-          ariaLabel="Period"
+          ariaLabel="Período"
           value={String(filter.monthsBack)}
           onChange={(v) => patch({ monthsBack: Number(v) })}
           options={PERIOD_OPTIONS}
         />
         <Combobox
-          ariaLabel="Owner"
+          ariaLabel="Responsável"
           value={filter.ownerId ?? ""}
           onChange={(v) => patch({ ownerId: v === "" ? null : v })}
           options={[ALL_OWNERS_OPTION, ...owners]}
@@ -89,7 +89,7 @@ export function EngagementFilters({
         <ActivityTypeTab
           active={filter.typeKey}
           value={null}
-          label="All"
+          label="Todas"
           onSelect={(v) => patch({ typeKey: v })}
         />
         {types.map((t) => (
