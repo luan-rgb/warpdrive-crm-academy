@@ -64,8 +64,8 @@ describe("AddLeadModal", () => {
   it("renders the two-column layout without pipeline/stage fields", () => {
     render(<AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />);
     expect(screen.getByRole("dialog", { name: "Add lead" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Contact person")).toBeInTheDocument();
-    expect(screen.getByLabelText("Lead title")).toBeInTheDocument();
+    expect(screen.getByLabelText("Pessoa de contato")).toBeInTheDocument();
+    expect(screen.getByLabelText("Título do lead")).toBeInTheDocument();
     expect(screen.getByLabelText("Phone 1")).toBeInTheDocument();
     // Leads have no pipeline / stage.
     expect(screen.queryByLabelText("Pipeline")).toBeNull();
@@ -75,7 +75,7 @@ describe("AddLeadModal", () => {
   it("submits a parsed lead via createLeadAction", async () => {
     const onCreated = vi.fn();
     render(<AddLeadModal onClose={vi.fn()} onCreated={onCreated} />);
-    fireEvent.change(screen.getByLabelText("Lead title"), { target: { value: "New lead" } });
+    fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "New lead" } });
     expect(screen.getByText(`8/${TITLE_MAX_LEN}`)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     await waitFor(() =>
@@ -102,7 +102,7 @@ describe("AddLeadModal", () => {
       archivedAt: null,
     });
     render(<AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Contact person"), {
+    fireEvent.change(screen.getByLabelText("Pessoa de contato"), {
       target: { value: "New Contact" },
     });
     fireEvent.change(screen.getByLabelText("Role"), { target: { value: "Buyer" } });
@@ -119,8 +119,8 @@ describe("AddLeadModal", () => {
   it("picks the expected close date via the DatePicker and submits it as YYYY-MM-DD", async () => {
     const onCreated = vi.fn();
     render(<AddLeadModal onClose={vi.fn()} onCreated={onCreated} />);
-    fireEvent.change(screen.getByLabelText("Lead title"), { target: { value: "New lead" } });
-    fireEvent.click(screen.getByLabelText("Expected close date"));
+    fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "New lead" } });
+    fireEvent.click(screen.getByLabelText("Data prevista de fechamento"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -142,10 +142,10 @@ describe("AddLeadModal", () => {
 
   it("does not create an inline org/person when the lead is invalid (no orphans)", async () => {
     render(<AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Brand New Org" } });
-    fireEvent.blur(screen.getByLabelText("Organization"));
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Brand New Org" } });
+    fireEvent.blur(screen.getByLabelText("Organização"));
     // The org autofills the title; clear it so the lead is invalid (blank title) again.
-    fireEvent.change(screen.getByLabelText("Lead title"), { target: { value: "" } });
+    fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "" } });
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(/title/i);
     expect(createOrgAction).not.toHaveBeenCalled();
@@ -161,16 +161,16 @@ describe("AddLeadModal", () => {
         <AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />
       </InterfacePrefsProvider>,
     );
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Acme Corp" } });
-    fireEvent.blur(screen.getByLabelText("Organization"));
-    expect(screen.getByLabelText<HTMLInputElement>("Lead title").value).toBe("Acme Corp lead");
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Acme Corp" } });
+    fireEvent.blur(screen.getByLabelText("Organização"));
+    expect(screen.getByLabelText<HTMLInputElement>("Título do lead").value).toBe("Acme Corp lead");
   });
 
   it("prefills just the name when the auto-prefix preference is off (default)", () => {
     render(<AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Acme Corp" } });
-    fireEvent.blur(screen.getByLabelText("Organization"));
-    expect(screen.getByLabelText<HTMLInputElement>("Lead title").value).toBe("Acme Corp");
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Acme Corp" } });
+    fireEvent.blur(screen.getByLabelText("Organização"));
+    expect(screen.getByLabelText<HTMLInputElement>("Título do lead").value).toBe("Acme Corp");
   });
 
   it("navigates to the new lead after create when the open-details leadDeal flag is on", async () => {
@@ -184,7 +184,7 @@ describe("AddLeadModal", () => {
         <AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />
       </InterfacePrefsProvider>,
     );
-    fireEvent.change(screen.getByLabelText("Lead title"), { target: { value: "Big lead" } });
+    fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "Big lead" } });
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/leads/l1"));
   });

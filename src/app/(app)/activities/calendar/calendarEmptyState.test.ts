@@ -24,10 +24,10 @@ describe("calendarEmptyState", () => {
   it("names the window the user is actually looking at", () => {
     expect(
       calendarEmptyState({ view: "week", hasFilter: false, hasUnfilteredActivities: false }).title,
-    ).toContain("week");
+    ).toContain("semana");
     expect(
       calendarEmptyState({ view: "month", hasFilter: false, hasUnfilteredActivities: false }).title,
-    ).toContain("month");
+    ).toContain("mês");
   });
 
   it("gives every state a title, a sentence and an action", () => {

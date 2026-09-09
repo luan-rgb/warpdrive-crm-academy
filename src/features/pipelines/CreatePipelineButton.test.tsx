@@ -29,9 +29,9 @@ describe("CreatePipelineButton", () => {
     fireEvent.click(screen.getByRole("button", { name: "Create pipeline" }));
     // The dialog's submit button (last "create pipeline" button = the footer one) is disabled
     // while the name is empty, and enables once a name is entered.
-    const dialogSubmit = screen.getAllByRole("button", { name: /create pipeline/i }).at(-1)!;
+    const dialogSubmit = screen.getAllByRole("button", { name: /criar pipeline/i }).at(-1)!;
     expect(dialogSubmit).toBeDisabled();
-    fireEvent.change(screen.getByLabelText("Pipeline name"), { target: { value: "Sales" } });
+    fireEvent.change(screen.getByLabelText("Nome do pipeline"), { target: { value: "Sales" } });
     expect(dialogSubmit).not.toBeDisabled();
   });
 
@@ -39,8 +39,8 @@ describe("CreatePipelineButton", () => {
     createPipelineAction.mockResolvedValue({ ok: true, value: { id: "p1", name: "Sales" } });
     render(<CreatePipelineButton label="Create pipeline" onCreated="board" />);
     fireEvent.click(screen.getByRole("button", { name: "Create pipeline" }));
-    fireEvent.change(screen.getByLabelText("Pipeline name"), { target: { value: "  Sales  " } });
-    fireEvent.click(screen.getAllByRole("button", { name: /create pipeline/i }).at(-1)!);
+    fireEvent.change(screen.getByLabelText("Nome do pipeline"), { target: { value: "  Sales  " } });
+    fireEvent.click(screen.getAllByRole("button", { name: /criar pipeline/i }).at(-1)!);
     await waitFor(() =>
       expect(createPipelineAction).toHaveBeenCalledWith({ name: "Sales" }, "csrf-token"),
     );
@@ -51,20 +51,20 @@ describe("CreatePipelineButton", () => {
     createPipelineAction.mockRejectedValue(new Error("boom"));
     render(<CreatePipelineButton label="Create pipeline" />);
     fireEvent.click(screen.getByRole("button", { name: "Create pipeline" }));
-    fireEvent.change(screen.getByLabelText("Pipeline name"), { target: { value: "Sales" } });
-    fireEvent.click(screen.getAllByRole("button", { name: /create pipeline/i }).at(-1)!);
+    fireEvent.change(screen.getByLabelText("Nome do pipeline"), { target: { value: "Sales" } });
+    fireEvent.click(screen.getAllByRole("button", { name: /criar pipeline/i }).at(-1)!);
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(push).not.toHaveBeenCalled();
     // Dialog remains open so the user can retry.
-    expect(screen.getByLabelText("Pipeline name")).toBeInTheDocument();
+    expect(screen.getByLabelText("Nome do pipeline")).toBeInTheDocument();
   });
 
   it("surfaces an error and does not navigate on failure", async () => {
     createPipelineAction.mockResolvedValue({ ok: false, error: { id: "E_PERM_001" } });
     render(<CreatePipelineButton label="Create pipeline" />);
     fireEvent.click(screen.getByRole("button", { name: "Create pipeline" }));
-    fireEvent.change(screen.getByLabelText("Pipeline name"), { target: { value: "Sales" } });
-    fireEvent.click(screen.getAllByRole("button", { name: /create pipeline/i }).at(-1)!);
+    fireEvent.change(screen.getByLabelText("Nome do pipeline"), { target: { value: "Sales" } });
+    fireEvent.click(screen.getAllByRole("button", { name: /criar pipeline/i }).at(-1)!);
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(push).not.toHaveBeenCalled();
   });

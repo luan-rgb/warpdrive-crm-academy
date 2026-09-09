@@ -24,7 +24,9 @@ describe("ImportPage", () => {
     const { default: ImportPage } = await import("./page");
     render(await ImportPage());
 
-    expect(screen.getByRole("link", { name: "Settings" }).getAttribute("href")).toBe("/settings");
+    expect(screen.getByRole("link", { name: "Configurações" }).getAttribute("href")).toBe(
+      "/settings",
+    );
     // Exactly one page title (SettingsHeading owns it; ImportHistory no longer renders its own h1).
     expect(screen.getAllByRole("heading", { level: 1, name: "Import data" })).toHaveLength(1);
     // The New-import action moved into the heading actions slot.

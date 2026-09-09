@@ -20,15 +20,15 @@ describe("ContactsNav", () => {
   it("uses the Settings secondary-navigation icon and active-state treatment", () => {
     render(<ContactsNav />);
 
-    for (const label of ["People", "Organizations", "Timeline"]) {
+    for (const label of ["Pessoas", "Organizações", "Linha do tempo"]) {
       expect(screen.getByRole("link", { name: label }).querySelector("svg")).not.toBeNull();
     }
 
-    const active = screen.getByRole("link", { name: "People" });
+    const active = screen.getByRole("link", { name: "Pessoas" });
     expect(active).toHaveAttribute("aria-current", "page");
     expect(active).toHaveClass("bg-blue-50", "font-semibold", "text-blue-700");
 
-    const idle = screen.getByRole("link", { name: "Organizations" });
+    const idle = screen.getByRole("link", { name: "Organizações" });
     expect(idle).toHaveClass("font-normal", "text-foreground");
   });
 

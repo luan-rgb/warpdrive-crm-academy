@@ -80,7 +80,7 @@ describe("PeopleList", () => {
 
   it("shows an Organization column linking to the org", () => {
     render(<PeopleList rows={rows} total={2} />);
-    expect(screen.getByRole("columnheader", { name: "Organization" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Organização" })).toBeInTheDocument();
     const janeRow = screen.getByText("Jane Roe").closest("tr") as HTMLElement;
     expect(within(janeRow).getByRole("link", { name: "Acme Inc" })).toHaveAttribute(
       "href",
@@ -176,7 +176,7 @@ describe("PeopleList", () => {
     listPeopleQuery.mockResolvedValue({ total: 2, rows: [] });
     render(<PeopleList rows={rows} total={2} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Name" }));
+    fireEvent.click(screen.getByRole("button", { name: "Nome" }));
 
     await vi.waitFor(() =>
       expect(listPeopleQuery).toHaveBeenCalledWith(

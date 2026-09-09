@@ -30,7 +30,7 @@ describe("(app) error boundary", () => {
     const user = userEvent.setup();
     const reset = vi.fn();
     render(<AppSegmentError error={new Error("boom")} reset={reset} />);
-    await user.click(screen.getByRole("button", { name: /try again/i }));
+    await user.click(screen.getByRole("button", { name: /tentar novamente/i }));
     expect(reset).toHaveBeenCalledTimes(1);
   });
 });

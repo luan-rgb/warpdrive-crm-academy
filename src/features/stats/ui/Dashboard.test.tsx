@@ -37,7 +37,7 @@ import { Dashboard } from "./Dashboard";
 describe("Dashboard heading", () => {
   it("titles the screen 'Performance', not 'Dashboard'", () => {
     render(<Dashboard today="2026-03-01" canViewOthers currency="USD" />);
-    expect(screen.getByRole("heading", { name: "Performance" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Desempenho" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Dashboard" })).not.toBeInTheDocument();
   });
 });
@@ -50,7 +50,7 @@ describe("Dashboard date range", () => {
     expect(useQuery).toHaveBeenLastCalledWith(
       expect.objectContaining({ from: `${year}-01-01`, to: `${year}-12-31` }),
     );
-    fireEvent.click(screen.getByLabelText("Range start"));
+    fireEvent.click(screen.getByLabelText("Início do período"));
     // Day buttons carry the full date as their aria-label (e.g. "Thursday,
     // January 15th, 2026"); the visible "15" is plain text content, so match
     // on text rather than accessible name (same convention as
@@ -71,7 +71,7 @@ describe("Dashboard pipeline switcher", () => {
     expect(useQuery).toHaveBeenLastCalledWith(expect.objectContaining({ pipelineId: null }));
 
     fireEvent.click(screen.getByLabelText("Pipeline"));
-    expect(screen.getByRole("option", { name: "All pipelines" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Todos os pipelines" })).toBeInTheDocument();
   });
 
   it("rescopes to a specific pipeline and back to 'All pipelines' without reload", () => {
@@ -85,7 +85,7 @@ describe("Dashboard pipeline switcher", () => {
 
     // Return to "All pipelines": pipelineId clears back to null in-session.
     fireEvent.click(screen.getByLabelText("Pipeline"));
-    fireEvent.click(screen.getByRole("option", { name: "All pipelines" }));
+    fireEvent.click(screen.getByRole("option", { name: "Todos os pipelines" }));
     expect(useQuery).toHaveBeenLastCalledWith(expect.objectContaining({ pipelineId: null }));
   });
 });

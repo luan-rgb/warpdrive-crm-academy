@@ -58,7 +58,7 @@ describe("BoardSortControl", () => {
       />,
     );
     // Ascending now: the button offers to sort descending.
-    const btn = screen.getByRole("button", { name: "Sort descending" });
+    const btn = screen.getByRole("button", { name: "Ordenar decrescente" });
     fireEvent.click(btn);
     expect(onToggleDirection).toHaveBeenCalledTimes(1);
 
@@ -70,6 +70,6 @@ describe("BoardSortControl", () => {
         onToggleDirection={onToggleDirection}
       />,
     );
-    expect(screen.getByRole("button", { name: "Sort ascending" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ordenar crescente" })).toBeInTheDocument();
   });
 });

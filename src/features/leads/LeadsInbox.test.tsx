@@ -106,7 +106,7 @@ describe("LeadsInbox", () => {
   it("shows an empty state when there are no leads", () => {
     listQuery.mockReturnValue({ data: { rows: [], total: 0 }, refetch });
     render(<LeadsInbox />);
-    expect(screen.getByText(/No leads yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/Nenhum lead ainda/i)).toBeInTheDocument();
   });
 
   it("opens the Add lead modal from the + Lead button", () => {

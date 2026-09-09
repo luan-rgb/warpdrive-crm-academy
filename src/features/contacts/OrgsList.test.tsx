@@ -60,7 +60,7 @@ describe("OrgsList", () => {
 
   it("renders the empty state when there are no orgs", () => {
     render(<OrgsList rows={[]} total={0} />);
-    expect(screen.getByText(/no organizations/i)).toBeInTheDocument();
+    expect(screen.getByText(/nenhuma organização/i)).toBeInTheDocument();
   });
 
   it("hides Load more when every org is already loaded", () => {
@@ -127,9 +127,9 @@ describe("OrgsList", () => {
       />,
     );
 
-    expect(screen.getByRole("columnheader", { name: "Address" })).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "Closed deals" })).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "Open deals" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Endereço" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Negócios fechados" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Negócios em aberto" })).toBeInTheDocument();
     // People is not a default column now (opt-in), so its header must be absent.
     expect(screen.queryByRole("columnheader", { name: "People" })).not.toBeInTheDocument();
 
@@ -166,7 +166,7 @@ describe("OrgsList", () => {
     listOrgsQuery.mockResolvedValue({ total: 1, rows: [] });
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={1} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Name" }));
+    fireEvent.click(screen.getByRole("button", { name: "Nome" }));
 
     await vi.waitFor(() =>
       expect(listOrgsQuery).toHaveBeenCalledWith(

@@ -29,7 +29,9 @@ describe("EmailSettingsPage", () => {
     const { default: EmailSettingsPage } = await import("./page");
     render(await EmailSettingsPage());
 
-    expect(screen.getByRole("link", { name: "Settings" }).getAttribute("href")).toBe("/settings");
+    expect(screen.getByRole("link", { name: "Configurações" }).getAttribute("href")).toBe(
+      "/settings",
+    );
     expect(screen.getByRole("heading", { level: 1, name: "Modelos de e-mail" })).not.toBeNull();
   });
 });

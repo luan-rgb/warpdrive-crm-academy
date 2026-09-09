@@ -118,7 +118,7 @@ describe("board toolbar view restored from the saved preference", () => {
       savedFilter: null,
       conditions: null,
     });
-    expect(screen.getByLabelText("Sort by")).toHaveTextContent("Deal value");
+    expect(screen.getByLabelText("Ordenar por")).toHaveTextContent("Valor do negócio");
     expect(cardOrder()).toEqual(["Deal One", "Ben Deal", "Deal Two"]);
   });
 
@@ -184,15 +184,15 @@ describe("board toolbar view restored from the saved preference", () => {
 describe("board toolbar view saved when a control changes", () => {
   test("persists the chosen sort field", async () => {
     renderBoard();
-    fireEvent.click(screen.getByLabelText("Sort by"));
-    fireEvent.click(screen.getByText("Deal value"));
+    fireEvent.click(screen.getByLabelText("Ordenar por"));
+    fireEvent.click(screen.getByText("Valor do negócio"));
     await waitFor(() => expect(setBoardView).toHaveBeenCalled());
     expect(setBoardView.mock.calls.at(-1)?.[0]).toMatchObject({ sortKey: "value" });
   });
 
   test("persists the sort direction toggle", async () => {
     renderBoard();
-    fireEvent.click(screen.getByLabelText("Sort descending"));
+    fireEvent.click(screen.getByLabelText("Ordenar decrescente"));
     await waitFor(() => expect(setBoardView).toHaveBeenCalled());
     expect(setBoardView.mock.calls.at(-1)?.[0]).toMatchObject({ sortDir: "desc" });
   });

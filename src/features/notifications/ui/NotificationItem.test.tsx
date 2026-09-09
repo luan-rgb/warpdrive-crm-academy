@@ -40,7 +40,7 @@ describe("NotificationItem", () => {
         onOpen={() => {}}
       />,
     );
-    expect(screen.getByText("New email: Re: Valley Metro procurement")).toBeInTheDocument();
+    expect(screen.getByText("Novo e-mail: Re: Valley Metro procurement")).toBeInTheDocument();
   });
 
   it("falls back when an inbound deal email has no subject", () => {
@@ -50,7 +50,7 @@ describe("NotificationItem", () => {
         onOpen={() => {}}
       />,
     );
-    expect(screen.getByText("New email: on a deal")).toBeInTheDocument();
+    expect(screen.getByText("Novo e-mail: em um negócio")).toBeInTheDocument();
   });
 
   it("hides the unread indicator once read", () => {

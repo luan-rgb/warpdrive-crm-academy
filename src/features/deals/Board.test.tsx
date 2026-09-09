@@ -204,8 +204,8 @@ describe("Board column sorting", () => {
 
   test("re-sorts the column when a different sort field is chosen", () => {
     renderBoard(CARDS);
-    fireEvent.click(screen.getByLabelText("Sort by"));
-    fireEvent.click(screen.getByText("Deal value"));
+    fireEvent.click(screen.getByLabelText("Ordenar por"));
+    fireEvent.click(screen.getByText("Valor do negócio"));
     // By value ascending: 100, 200, 300 (a different order than the next-activity default,
     // proving the control drives the per-column sort).
     expect(cardOrder("Alpha")).toEqual(["Deal Two", "Deal Three", "Deal One"]);

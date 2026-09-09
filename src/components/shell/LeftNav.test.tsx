@@ -51,12 +51,12 @@ describe("LeftNav", () => {
     render(<LeftNav />);
     expect(screen.getByRole("navigation", { name: "Primary" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Pipeline" })).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Settings" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Configurações" })).toBeTruthy();
   });
 
   test("labels the stats destination 'Performance', not 'Dashboard'", () => {
     render(<LeftNav />);
-    expect(screen.getByRole("link", { name: "Performance" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Desempenho" })).toBeTruthy();
     expect(screen.queryByRole("link", { name: "Dashboard" })).toBeNull();
   });
 
@@ -65,7 +65,7 @@ describe("LeftNav", () => {
     expect(screen.getByRole("link", { name: "Pipeline" }).getAttribute("aria-current")).toBe(
       "page",
     );
-    expect(screen.getByRole("link", { name: "Contacts" }).getAttribute("aria-current")).toBeNull();
+    expect(screen.getByRole("link", { name: "Contatos" }).getAttribute("aria-current")).toBeNull();
   });
 
   test("each destination shows a decorative icon (Pipedrive-style icon+label nav)", () => {
@@ -118,7 +118,7 @@ describe("LeftNav", () => {
 
     render(<LeftNav />);
     expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
-    expect(screen.getByText("Settings").className).not.toContain("sr-only");
+    expect(screen.getByText("Configurações").className).not.toContain("sr-only");
   });
 
   test("an explicit collapse preference overrides the wide-screen default across mounts", () => {
@@ -130,7 +130,7 @@ describe("LeftNav", () => {
 
     render(<LeftNav />);
     expect(screen.getByRole("button", { name: "Expand sidebar" })).not.toBeNull();
-    expect(screen.getByText("Settings").className).toContain("sr-only");
+    expect(screen.getByText("Configurações").className).toContain("sr-only");
   });
 
   test("is a narrow, dark, icon-only rail (Pipedrive) with visually hidden labels when collapsed", () => {
