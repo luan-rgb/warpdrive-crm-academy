@@ -18,6 +18,12 @@ import { useInlineEdit } from "./useInlineEdit";
 // Server caps a deal title at 255 chars; the inline editor rejects anything longer client-side.
 const MAX_TITLE_LEN = 255;
 
+// Pulled out of DealList's render so a pt-BR plural check doesn't add a branch to that function's
+// cognitive-complexity count.
+function selectedCountLabel(count: number): string {
+  return `${count} selecionado${count === 1 ? "" : "s"}`;
+}
+
 export interface DealListStage {
   id: string;
   name: string;
@@ -118,7 +124,7 @@ export function DealList(props: DealListProps) {
           <input
             // biome-ignore lint/a11y/noAutofocus: focus follows the explicit edit click
             autoFocus
-            aria-label="Edit title"
+            aria-label="Editar título"
             maxLength={MAX_TITLE_LEN}
             defaultValue={row.title}
             className="w-full rounded border px-1 py-0.5 text-sm"
@@ -135,11 +141,11 @@ export function DealList(props: DealListProps) {
             </Link>
             <button
               type="button"
-              aria-label="Edit title"
+              aria-label="Editar título"
               onClick={() => setEditingId(row.id)}
               className="text-xs text-muted-foreground opacity-0 transition-[color,opacity] duration-150 hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
             >
-              Edit
+              Editar
             </button>
           </span>
         );
@@ -195,17 +201,17 @@ export function DealList(props: DealListProps) {
       {selected.size > 0 ? (
         <div
           role="toolbar"
-          aria-label="Bulk actions"
+          aria-label="Ações em massa"
           className="flex items-center gap-3 border-b bg-accent px-4 py-2"
         >
           <span className="text-sm font-medium tabular-nums text-accent-foreground">
-            {selected.size} selected
+            {selectedCountLabel(selected.size)}
           </span>
           <Select
-            ariaLabel="Move to stage"
+            ariaLabel="Mover para etapa"
             value=""
             onChange={(v) => setPendingStageId(v === "" ? null : v)}
-            placeholder="Move to stage..."
+            placeholder="Mover para etapa..."
             options={stages.map<SelectOption>((s) => ({ value: s.id, label: s.name }))}
           />
         </div>
@@ -219,18 +225,18 @@ export function DealList(props: DealListProps) {
           }}
           title={bulkMoveTitle(selected.size, stageNameById.get(pendingStageId) ?? "")}
           description={BULK_MOVE_DESCRIPTION}
-          confirmLabel="Move deals"
+          confirmLabel="Mover negócios"
           onConfirm={() => void confirmBulkStage(pendingStageId)}
         />
       )}
 
       <table className="w-full border-collapse text-sm">
-        <caption className="sr-only">Deals list</caption>
+        <caption className="sr-only">Lista de negócios</caption>
         <thead>
           <tr className="border-b bg-muted/60 text-left text-muted-foreground">
             <th scope="col" className="w-10 px-3 py-2">
               <Checkbox
-                label="Select all deals"
+                label="Selecionar todos os negócios"
                 checked={allSelected ? true : someSelected ? "indeterminate" : false}
                 onCheckedChange={toggleAll}
               />

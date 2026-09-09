@@ -52,7 +52,7 @@ interface BoardFilterMenuProps {
 // rows plus actions, so it is the shadcn/Radix DropdownMenu primitive.
 export function BoardFilterMenu(props: BoardFilterMenuProps): React.ReactNode {
   const { savedFilters = [], selectedFilterId = null, appliedDefinition = null } = props;
-  const { activeCount = 0, triggerLabel = "Filter", onSelectFilter, onClearConditions } = props;
+  const { activeCount = 0, triggerLabel = "Filtro", onSelectFilter, onClearConditions } = props;
   const { onToggleFavorite, onDeleteFilter, onCreateFilter } = props;
   const { ownerFiltered = false, onClearOwner } = props;
   const [pendingDelete, setPendingDelete] = useState<PendingFilterDelete | null>(null);
@@ -116,7 +116,7 @@ export function BoardFilterMenu(props: BoardFilterMenuProps): React.ReactNode {
             onSelect={clearAll}
             className={cn(!filtered && "bg-accent font-medium")}
           >
-            All open deals
+            Todos os negócios abertos
           </DropdownMenuItem>
           {ordered.map((f) => (
             <SavedFilterItem
@@ -137,7 +137,7 @@ export function BoardFilterMenu(props: BoardFilterMenuProps): React.ReactNode {
             </DropdownMenuItem>
           </>
         )}
-        {filtered && <DropdownMenuItem onSelect={clearAll}>Clear filter</DropdownMenuItem>}
+        {filtered && <DropdownMenuItem onSelect={clearAll}>Limpar filtro</DropdownMenuItem>}
       </DropdownMenuContent>
 
       {/* Sibling of the menu content, so a menu that closes cannot take the dialog with it. */}

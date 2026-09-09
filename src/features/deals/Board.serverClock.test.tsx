@@ -77,7 +77,7 @@ function ssr(): string {
 describe("Board first paint", () => {
   test("describes an overdue activity as overdue, not as nothing scheduled", () => {
     const html = ssr();
-    expect(html).toContain("3 days overdue");
+    expect(html).toContain("atrasada há 3 dias");
     expect(html).not.toContain("No activity scheduled");
   });
 

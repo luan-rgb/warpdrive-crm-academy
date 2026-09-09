@@ -137,7 +137,7 @@ export function BoardColumn(props: BoardColumnProps): React.ReactNode {
         <>
           <ul
             className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto"
-            aria-label={`${stageName} deals`}
+            aria-label={`${stageName}: negócios`}
           >
             {cards.map((card) => (
               <li

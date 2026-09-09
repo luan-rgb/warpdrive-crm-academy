@@ -28,17 +28,17 @@ const AD_HOC: FilterDefinition = {
 describe("board filter trigger", () => {
   it("reads plain Filter when nothing is applied", () => {
     render(<BoardFilterMenu savedFilters={[ROTTING]} />);
-    expect(screen.getByRole("button", { name: "Filter" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Filtro" })).toBeInTheDocument();
   });
 
   it("names the applied saved filter", () => {
     render(<BoardFilterMenu savedFilters={[ROTTING]} selectedFilterId="f1" />);
-    expect(screen.getByRole("button", { name: "Filter: Rotting deals" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Filtro: Rotting deals" })).toBeInTheDocument();
   });
 
   it("marks itself active while a filter is applied", () => {
     render(<BoardFilterMenu savedFilters={[ROTTING]} selectedFilterId="f1" />);
-    expect(screen.getByRole("button", { name: /^Filter:/ })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: /^Filtro:/ })).toHaveAttribute(
       "data-filtered",
       "true",
     );
@@ -46,7 +46,7 @@ describe("board filter trigger", () => {
 
   it("is not marked active with no filter applied", () => {
     render(<BoardFilterMenu savedFilters={[ROTTING]} />);
-    expect(screen.getByRole("button", { name: "Filter" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: "Filtro" })).toHaveAttribute(
       "data-filtered",
       "false",
     );
@@ -54,6 +54,6 @@ describe("board filter trigger", () => {
 
   it("stays active for an ad-hoc filter that has no saved name", () => {
     render(<BoardFilterMenu appliedDefinition={AD_HOC} activeCount={1} />);
-    expect(screen.getByRole("button", { name: /Filter/ })).toHaveAttribute("data-filtered", "true");
+    expect(screen.getByRole("button", { name: /Filtro/ })).toHaveAttribute("data-filtered", "true");
   });
 });

@@ -3,32 +3,32 @@
 
 // A filter that excluded every card is a different sentence from a pipeline with nothing in it:
 // one is hiding deals and can be undone, the other is waiting for a first deal.
-export const BOARD_EMPTY_FILTERED_TITLE = "No deals match these filters";
+export const BOARD_EMPTY_FILTERED_TITLE = "Nenhum negócio corresponde a esses filtros";
 export const BOARD_EMPTY_FILTERED_BODY =
-  "The board is showing a subset. Clear the filters to see the whole pipeline again.";
-export const BOARD_CLEAR_FILTERS = "Clear filters";
+  "O quadro está mostrando um subconjunto. Limpe os filtros para ver o pipeline inteiro novamente.";
+export const BOARD_CLEAR_FILTERS = "Limpar filtros";
 
 // Filters are applied and the server returned nothing, which looks identical whether the filters
 // excluded everything or the pipeline is empty. Neither is asserted, and both exits are offered.
-export const BOARD_EMPTY_UNSURE_TITLE = "Nothing to show here";
+export const BOARD_EMPTY_UNSURE_TITLE = "Nada para mostrar aqui";
 export const BOARD_EMPTY_UNSURE_BODY =
-  "This pipeline has filters applied. Clear them to see everything in it, or add a deal.";
+  "Este pipeline tem filtros aplicados. Limpe-os para ver tudo nele, ou adicione um negócio.";
 
-export const BOARD_EMPTY_TITLE = "No deals in this pipeline yet";
+export const BOARD_EMPTY_TITLE = "Ainda não há negócios neste pipeline";
 export const BOARD_EMPTY_BODY =
-  "A deal is one opportunity: a value, a stage and an owner. Add the first one and it lands in a stage column below.";
+  "Um negócio é uma oportunidade: um valor, uma etapa e um responsável. Adicione o primeiro e ele aparece numa coluna de etapa abaixo.";
 
-export const BOARD_CHIPS_LABEL = "Applied filters";
-export const BOARD_CLEAR_ALL = "Clear all";
+export const BOARD_CHIPS_LABEL = "Filtros aplicados";
+export const BOARD_CLEAR_ALL = "Limpar tudo";
 
 export function ownerChipLabel(name: string): string {
-  return `Owner: ${name}`;
+  return `Responsável: ${name}`;
 }
 
 export function savedFilterChipLabel(name: string): string {
-  return `Filter: ${name}`;
+  return `Filtro: ${name}`;
 }
 
 export function conditionChipLabel(count: number): string {
-  return `${count} ${count === 1 ? "condition" : "conditions"}`;
+  return `${count} ${count === 1 ? "condição" : "condições"}`;
 }

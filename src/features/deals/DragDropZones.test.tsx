@@ -23,12 +23,12 @@ describe("DragDropZones", () => {
 
   it("reveals the Lost/Won/Move action zones during a drag (no Delete drag target)", () => {
     wrap(true);
-    for (const label of ["Lost", "Won", "Move"]) {
+    for (const label of ["Perdido", "Ganho", "Mover"]) {
       expect(screen.getByText(label)).not.toBeNull();
     }
     // Delete is deliberately not a drag target (deletion is a confirmed menu action).
     expect(screen.queryByText("Delete")).toBeNull();
-    expect(screen.getByRole("region", { name: "Deal drop actions" })).not.toBeNull();
+    expect(screen.getByRole("region", { name: "Ações ao soltar o negócio" })).not.toBeNull();
   });
 
   it("maps the won/lost zones to a deal status and other targets to null", () => {

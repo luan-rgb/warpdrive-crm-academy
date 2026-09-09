@@ -48,7 +48,7 @@ describe("AddDealLeftColumn owner picker", () => {
   it("renders the owner picker as a searchable avatar Combobox and flows a selection into state", () => {
     const set = vi.fn();
     render(<AddDealLeftColumn {...baseProps(set)} />);
-    fireEvent.click(screen.getByLabelText("Owner"));
+    fireEvent.click(screen.getByLabelText("Responsável"));
     fireEvent.click(screen.getByText("Alice"));
     expect(set).toHaveBeenCalledWith({ ownerId: "u1" });
   });
@@ -74,9 +74,9 @@ describe("AddDealLeftColumn title label association", () => {
   it("focuses the title input when its visible Title label is clicked", async () => {
     const user = userEvent.setup();
     render(<AddDealLeftColumn {...baseProps()} />);
-    const input = screen.getByRole("textbox", { name: "Deal title" });
+    const input = screen.getByRole("textbox", { name: "Título do negócio" });
     expect(input).not.toHaveFocus();
-    await user.click(screen.getByText("Title"));
+    await user.click(screen.getByText("Título"));
     expect(input).toHaveFocus();
   });
 });

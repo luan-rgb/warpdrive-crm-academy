@@ -28,11 +28,11 @@ export function activityDayDelta(nextActivityAt: Date, now: Date): number {
 
 // Copy shown when a card has no scheduled activity, and the noun used when the soonest activity's
 // subject is unknown (e.g. a stale cached next_activity_at with no matching open row).
-const NO_ACTIVITY_TOOLTIP = "No activity scheduled";
-const UNKNOWN_SUBJECT = "Activity";
+const NO_ACTIVITY_TOOLTIP = "Nenhuma atividade agendada";
+const UNKNOWN_SUBJECT = "Atividade";
 
 function dayUnit(n: number): string {
-  return n === 1 ? "day" : "days";
+  return n === 1 ? "dia" : "dias";
 }
 
 // Hover copy for the next-action badge: the soonest open activity's subject plus its timing, e.g.
@@ -46,10 +46,10 @@ export function activityTooltip(
   if (nextActivityAt === null) return NO_ACTIVITY_TOOLTIP;
   const s = subject ?? UNKNOWN_SUBJECT;
   const delta = activityDayDelta(nextActivityAt, now);
-  if (delta === 0) return `${s} · today`;
-  if (delta > 0) return `${s} · in ${delta} ${dayUnit(delta)}`;
+  if (delta === 0) return `${s} · hoje`;
+  if (delta > 0) return `${s} · em ${delta} ${dayUnit(delta)}`;
   const overdue = -delta;
-  return `${s} · ${overdue} ${dayUnit(overdue)} overdue`;
+  return `${s} · atrasada há ${overdue} ${dayUnit(overdue)}`;
 }
 
 // Graded rot severity. 0 = healthy (age at or below the threshold, or no threshold). Once a deal

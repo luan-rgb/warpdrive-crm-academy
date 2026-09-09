@@ -22,20 +22,20 @@ export function CreateFilterModalNameRow({
     <div className="grid grid-cols-2 gap-4 pt-4">
       <label className="block text-sm">
         <span className="mb-1 block font-medium" id={nameId}>
-          Filter name
+          Nome do filtro
         </span>
         <input
           aria-labelledby={nameId}
-          aria-label="Filter name"
+          aria-label="Nome do filtro"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
-          placeholder="Named from your conditions"
+          placeholder="Nomeado a partir das suas condições"
           className="w-full rounded-md border px-2.5 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring/50"
         />
       </label>
       <div className="flex items-center gap-2 self-end pb-1.5 text-sm">
-        <Checkbox label="Shared" checked={isShared} onCheckedChange={onSharedChange} />
-        <span>Shared with everyone</span>
+        <Checkbox label="Compartilhado" checked={isShared} onCheckedChange={onSharedChange} />
+        <span>Compartilhado com todos</span>
       </div>
     </div>
   );

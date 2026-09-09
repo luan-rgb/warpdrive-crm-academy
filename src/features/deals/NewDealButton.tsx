@@ -37,7 +37,7 @@ export function NewDealButton({
         className="px-3"
         onClick={() => setOpen(true)}
       >
-        + Deal
+        + Negócio
       </Button>
 
       {open && (

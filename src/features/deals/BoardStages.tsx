@@ -31,7 +31,7 @@ export function BoardStages({
 }: BoardStagesProps): React.ReactNode {
   return (
     <ul
-      aria-label="Pipeline stages"
+      aria-label="Etapas do pipeline"
       className="flex min-h-0 flex-1 list-none gap-4 overflow-x-auto pb-4"
     >
       {stages.map((s, index) => {

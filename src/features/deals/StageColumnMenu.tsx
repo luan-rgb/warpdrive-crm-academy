@@ -37,7 +37,7 @@ export function StageColumnMenu(props: StageColumnMenuProps): React.ReactNode {
   const { collapsed, onToggleCollapse } = props;
   // Stage name is folded into the trigger's accessible name so screen-reader users know which
   // column's actions they are opening (multiple identical "Stage actions" triggers otherwise).
-  const triggerLabel = `Stage actions: ${stageName}`;
+  const triggerLabel = `Ações da etapa: ${stageName}`;
   const qc = useQueryClient();
   const [addOpen, setAddOpen] = useState(false);
 
@@ -52,13 +52,13 @@ export function StageColumnMenu(props: StageColumnMenuProps): React.ReactNode {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-52">
           <DropdownMenuItem onSelect={() => setAddOpen(true)}>
-            Add deal to this stage
+            Adicionar negócio a esta etapa
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/pipeline/${pipelineId}/edit`}>Edit pipeline stages</Link>
+            <Link href={`/pipeline/${pipelineId}/edit`}>Editar etapas do pipeline</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onToggleCollapse}>
-            {collapsed ? "Expand column" : "Collapse column"}
+            {collapsed ? "Expandir coluna" : "Recolher coluna"}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

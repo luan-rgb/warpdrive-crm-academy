@@ -30,11 +30,11 @@ export function StageAddButton(props: StageAddButtonProps): React.ReactNode {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label="Add deal to this stage"
+        aria-label="Adicionar negócio a esta etapa"
         className="mt-1 flex w-full items-center justify-center gap-1 rounded-md border border-dashed py-1.5 text-sm text-muted-foreground transition-[color,border-color,transform] hover:border-ring hover:text-foreground active:scale-[0.96]"
       >
         <Plus aria-hidden="true" className="h-4 w-4" />
-        Deal
+        Negócio
       </button>
       {open && (
         <AddDealModal

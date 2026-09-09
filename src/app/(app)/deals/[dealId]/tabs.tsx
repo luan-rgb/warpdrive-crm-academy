@@ -147,15 +147,15 @@ export function WorkspaceTabs({
           while the rest of the timeline still renders. */}
       {emailQuery.isError === true && (
         <p role="alert" className="text-sm text-destructive">
-          Não foi possível carregar os e-mails deste negócio. Tente novamente.
+          Couldn't load emails for this deal. Please try again.
         </p>
       )}
 
-      <section aria-label="foco">
-        <SectionHeading>Foco</SectionHeading>
+      <section aria-label="focus">
+        <SectionHeading>Focus</SectionHeading>
         <HistoryFeed
           items={focus}
-          emptyLabel="Nada precisa da sua atenção"
+          emptyLabel="Nothing needs your attention"
           onActivityChanged={onActivityChanged}
           onNoteChanged={onNoteChanged}
           onEditActivity={onEditActivity}
@@ -166,8 +166,8 @@ export function WorkspaceTabs({
         />
       </section>
 
-      <section aria-label="histórico">
-        <SectionHeading>Histórico</SectionHeading>
+      <section aria-label="history">
+        <SectionHeading>History</SectionHeading>
         <HistoryTypeTabs
           tab={tab}
           onTab={onTab}

@@ -248,7 +248,7 @@ export function DealListClient({
               onApplyDefinition={setInlineDefinition}
               // The list keeps its own ad-hoc Filter builder, so this menu is the saved-filter
               // picker and the badge stays on the builder.
-              triggerLabel="Saved filters"
+              triggerLabel="Filtros salvos"
             />
           </>
         }

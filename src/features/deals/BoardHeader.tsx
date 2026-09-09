@@ -13,7 +13,7 @@ import type { BoardViewControls } from "./useBoardView";
 
 // An owner whose every deal is excluded is absent from `owners`, so the chip still reports the
 // board is narrowed even when the visible cards cannot name them.
-const UNNAMED_OWNER = "Unknown";
+const UNNAMED_OWNER = "Desconhecido";
 
 interface BoardHeaderProps {
   pipelineId: string;

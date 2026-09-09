@@ -22,15 +22,15 @@ export function BoardActionsMenu(props: BoardActionsMenuProps): React.ReactNode 
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger aria-label="Board actions" className={ICON_BUTTON}>
+      <DropdownMenuTrigger aria-label="Ações do quadro" className={ICON_BUTTON}>
         <Ellipsis aria-hidden="true" className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-48">
         <DropdownMenuItem asChild>
-          <Link href={`/pipeline/${pipelineId}/edit`}>Edit pipeline</Link>
+          <Link href={`/pipeline/${pipelineId}/edit`}>Editar pipeline</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={`/pipeline/${pipelineId}/list`}>Select multiple deals</Link>
+          <Link href={`/pipeline/${pipelineId}/list`}>Selecionar vários negócios</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

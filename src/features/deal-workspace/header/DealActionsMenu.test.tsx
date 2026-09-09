@@ -72,22 +72,22 @@ it("the ellipsis opens the actions menu", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   expect(screen.queryByRole("menu")).toBeNull();
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
   expect(screen.getByRole("menu")).toBeTruthy();
 });
 
 it("renders the six deal-actions items in Pipedrive order", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
   const labels = screen.getAllByRole("menuitem").map((el) => el.textContent);
   expect(labels).toEqual([
-    "Copiar link",
-    "Duplicar",
-    "Converter em lead",
-    "Mesclar",
-    "Arquivar",
-    "Excluir negócio",
+    "Copy link",
+    "Duplicate",
+    "Convert to a lead",
+    "Merge",
+    "Archive",
+    "Delete deal",
   ]);
 });
 
@@ -95,16 +95,16 @@ it("Copy link writes the deal URL to the clipboard", async () => {
   const user = userEvent.setup();
   mockClipboard();
   render(<DealActionsMenu {...props} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  await user.click(screen.getByRole("menuitem", { name: "Copiar link" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  await user.click(screen.getByRole("menuitem", { name: "Copy link" }));
   await waitFor(() => expect(writeText).toHaveBeenCalledWith(`${location.origin}/deals/d1`));
 });
 
 it("Duplicate calls duplicateDealAction and navigates to the new deal", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  await user.click(screen.getByRole("menuitem", { name: "Duplicar" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  await user.click(screen.getByRole("menuitem", { name: "Duplicate" }));
   await waitFor(() => expect(duplicateDealAction).toHaveBeenCalledWith({ dealId: "d1" }, "csrf"));
   await waitFor(() => expect(push).toHaveBeenCalledWith("/deals/d2"));
 });
@@ -112,23 +112,23 @@ it("Duplicate calls duplicateDealAction and navigates to the new deal", async ()
 it("Convert to a lead opens the convert confirm dialog", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  await user.click(screen.getByRole("menuitem", { name: "Converter em lead" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  await user.click(screen.getByRole("menuitem", { name: "Convert to a lead" }));
   expect(screen.getByTestId("convert-dialog")).toBeTruthy();
 });
 
 it("Merge opens the merge picker dialog", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  await user.click(screen.getByRole("menuitem", { name: "Mesclar" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  await user.click(screen.getByRole("menuitem", { name: "Merge" }));
   expect(screen.getByTestId("merge-dialog")).toBeTruthy();
 });
 
-// Opens the menu and picks "Excluir negócio", returning the confirmation surface it raises.
+// Opens the menu and picks "Delete deal", returning the confirmation surface it raises.
 async function openDeleteConfirm(user: ReturnType<typeof userEvent.setup>): Promise<HTMLElement> {
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  await user.click(screen.getByRole("menuitem", { name: "Excluir negócio" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  await user.click(screen.getByRole("menuitem", { name: "Delete deal" }));
   return await screen.findByRole("alertdialog");
 }
 
@@ -138,7 +138,7 @@ it("Delete deal raises an in-app confirm dialog, not a native browser confirm", 
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  expect(within(dialog).getByText("Excluir este negócio?")).toBeTruthy();
+  expect(within(dialog).getByText("Delete this deal?")).toBeTruthy();
   expect(nativeConfirm).not.toHaveBeenCalled();
   expect(deleteDealAction).not.toHaveBeenCalled();
 });
@@ -147,7 +147,7 @@ it("confirming the dialog calls deleteDealAction and returns to the pipeline", a
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
+  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
   await waitFor(() =>
     expect(deleteDealAction).toHaveBeenCalledWith(
       { dealId: "d1", expectedUpdatedAt: props.expectedUpdatedAt },
@@ -168,7 +168,7 @@ it("dismisses the drawer instead of pushing when the deal is open as a slide-ove
     </DetailDrawerCloseContext.Provider>,
   );
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
+  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
   await waitFor(() => expect(close).toHaveBeenCalled());
   expect(push).not.toHaveBeenCalled();
 });
@@ -177,7 +177,7 @@ it("cancelling the dialog closes it without deleting", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
+  await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
   await waitFor(() => expect(screen.queryByRole("alertdialog")).toBeNull());
   expect(deleteDealAction).not.toHaveBeenCalled();
 });
@@ -189,8 +189,8 @@ it("surfaces the error when Duplicate is denied (no silent swallow)", async () =
   } as never);
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  await user.click(screen.getByRole("menuitem", { name: "Duplicar" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  await user.click(screen.getByRole("menuitem", { name: "Duplicate" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(push).not.toHaveBeenCalled();
 });
@@ -202,8 +202,8 @@ it("surfaces the error when Archive is denied (no silent swallow)", async () => 
   } as never);
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  await user.click(screen.getByRole("menuitem", { name: "Arquivar" }));
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  await user.click(screen.getByRole("menuitem", { name: "Archive" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
 });
 
@@ -215,7 +215,7 @@ it("surfaces the error when Delete is denied (no silent swallow)", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
+  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(push).not.toHaveBeenCalled();
 });
@@ -225,8 +225,8 @@ it("surfaces the error when Delete is denied (no silent swallow)", async () => {
 it("hides Delete deal when canDelete is false", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} canDelete={false} />);
-  await user.click(screen.getByRole("button", { name: "Ações do negócio" }));
-  expect(screen.queryByRole("menuitem", { name: "Excluir negócio" })).toBeNull();
+  await user.click(screen.getByRole("button", { name: "Deal actions" }));
+  expect(screen.queryByRole("menuitem", { name: "Delete deal" })).toBeNull();
   // The non-destructive items still render.
-  expect(screen.getByRole("menuitem", { name: "Copiar link" })).toBeTruthy();
+  expect(screen.getByRole("menuitem", { name: "Copy link" })).toBeTruthy();
 });

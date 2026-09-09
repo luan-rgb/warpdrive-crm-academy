@@ -56,7 +56,7 @@ describe("CreateFilterModal editing a saved filter", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} savedFilter={view()} />);
 
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Globex" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar alterações" }));
 
     await waitFor(() => expect(updateSavedFilterAction).toHaveBeenCalledTimes(1));
     expect(createSavedFilterAction).not.toHaveBeenCalled();
@@ -81,8 +81,8 @@ describe("CreateFilterModal editing a saved filter", () => {
 
   it("titles the dialog as an edit, not a create, for a filter the actor owns", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} savedFilter={view()} />);
-    expect(screen.getByRole("dialog", { name: "Edit filter" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Save" })).toBeNull();
+    expect(screen.getByRole("dialog", { name: "Editar filtro" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Salvar" })).toBeNull();
   });
 
   // Update is owner-scoped server-side, so the dialog must not offer it on someone else's filter.
@@ -97,10 +97,10 @@ describe("CreateFilterModal editing a saved filter", () => {
       />,
     );
 
-    expect(screen.getByRole("dialog", { name: "Save as a new filter" })).toBeInTheDocument();
-    expect(screen.getByText(/you don't own this filter/i)).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Salvar como novo filtro" })).toBeInTheDocument();
+    expect(screen.getByText(/você não é dono deste filtro/i)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Save as new" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar como novo" }));
     await waitFor(() => expect(createSavedFilterAction).toHaveBeenCalledTimes(1));
     expect(updateSavedFilterAction).not.toHaveBeenCalled();
     expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ id: "srv-9" }));
@@ -109,10 +109,10 @@ describe("CreateFilterModal editing a saved filter", () => {
   it("still creates when the dialog opens on no saved filter", async () => {
     createSavedFilterAction.mockResolvedValue({ ok: true, value: { id: "srv-1" } });
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
-    expect(screen.getByRole("dialog", { name: "Create new filter" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Criar novo filtro" })).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(createSavedFilterAction).toHaveBeenCalledTimes(1));
     expect(updateSavedFilterAction).not.toHaveBeenCalled();
@@ -124,7 +124,7 @@ describe("CreateFilterModal editing a saved filter", () => {
     const onSave = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} savedFilter={view()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar alterações" }));
     await waitFor(() =>
       expect(screen.getByText("One of these conditions isn't valid")).toBeInTheDocument(),
     );
@@ -135,7 +135,7 @@ describe("CreateFilterModal editing a saved filter", () => {
   // Saving an owned filter must not rename it to a description derived from its conditions.
   it("keeps the saved filter's own name in the name field", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} savedFilter={view()} />);
-    expect(screen.getByLabelText<HTMLInputElement>("Filter name").value).toBe("Acme or Corp");
+    expect(screen.getByLabelText<HTMLInputElement>("Nome do filtro").value).toBe("Acme or Corp");
   });
 
   // Its shared flag is part of the row being updated, so it must round-trip, not reset to private.
@@ -148,7 +148,7 @@ describe("CreateFilterModal editing a saved filter", () => {
         savedFilter={view({ isShared: true })}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar alterações" }));
     await waitFor(() => expect(updateSavedFilterAction).toHaveBeenCalledTimes(1));
     expect(updateSavedFilterAction.mock.calls[0]![1]).toMatchObject({ isShared: true });
   });

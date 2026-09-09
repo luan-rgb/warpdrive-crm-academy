@@ -50,30 +50,30 @@ export function BoardToolbar(props: BoardToolbarProps): React.ReactNode {
         <div className="inline-flex rounded-md border bg-card p-0.5">
           <Link
             href={`/pipeline/${pipelineId}`}
-            aria-label="Board view"
+            aria-label="Visualização em quadro"
             aria-current={current("board")}
             className={cn(ICON_BTN, activeView === "board" ? ACTIVE : IDLE)}
           >
             <Kanban aria-hidden="true" className="h-4 w-4" />
-            Board
+            Quadro
           </Link>
           <Link
             href={`/pipeline/${pipelineId}/list`}
-            aria-label="List view"
+            aria-label="Visualização em lista"
             aria-current={current("list")}
             className={cn(ICON_BTN, activeView === "list" ? ACTIVE : IDLE)}
           >
             <List aria-hidden="true" className="h-4 w-4" />
-            List
+            Lista
           </Link>
           <Link
             href={`/pipeline/${pipelineId}/archived`}
-            aria-label="Archive view"
+            aria-label="Visualização de arquivados"
             aria-current={current("archived")}
             className={cn(ICON_BTN, activeView === "archived" ? ACTIVE : IDLE)}
           >
             <Archive aria-hidden="true" className="h-4 w-4" />
-            Archive
+            Arquivados
           </Link>
         </div>
 
@@ -85,7 +85,7 @@ export function BoardToolbar(props: BoardToolbarProps): React.ReactNode {
 
           <Link
             href={`/pipeline/${pipelineId}/edit`}
-            aria-label="Edit pipeline"
+            aria-label="Editar pipeline"
             className={ICON_BUTTON}
           >
             <Pencil aria-hidden="true" className="h-4 w-4" />

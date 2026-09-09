@@ -25,8 +25,8 @@ export interface NewDealFields {
 // derived server-side; ownerId is honored server-side only for actors with deal.changeOwner.
 export function parseNewDeal(fields: NewDealFields, pipelineId: string): ParseNewDealResult {
   const title = fields.title.trim();
-  if (title === "") return { ok: false, error: "Title is required" };
-  if (fields.stageId === "") return { ok: false, error: "Stage is required" };
+  if (title === "") return { ok: false, error: "Título é obrigatório" };
+  if (fields.stageId === "") return { ok: false, error: "Etapa é obrigatória" };
 
   const money = parseMoneyValue(fields.value);
   if (!money.ok) return money;

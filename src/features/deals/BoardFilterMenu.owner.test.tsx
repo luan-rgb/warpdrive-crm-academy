@@ -19,7 +19,7 @@ const SAVED = [
 ];
 
 function trigger(): HTMLElement {
-  return screen.getByRole("button", { name: /Filter/ });
+  return screen.getByRole("button", { name: /Filtro/ });
 }
 
 // The owner picker is a separate control, so this menu knows the board is narrowed to one owner
@@ -38,7 +38,7 @@ describe("BoardFilterMenu owner dimension", () => {
 
     await user.click(trigger());
 
-    expect(screen.getByRole("menuitem", { name: "Clear filter" })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Limpar filtro" })).not.toBeNull();
   });
 
   it("clears the owner alongside the saved filter and the conditions", async () => {
@@ -58,7 +58,7 @@ describe("BoardFilterMenu owner dimension", () => {
     );
 
     await user.click(trigger());
-    await user.click(screen.getByRole("menuitem", { name: "Clear filter" }));
+    await user.click(screen.getByRole("menuitem", { name: "Limpar filtro" }));
 
     expect(onClearOwner).toHaveBeenCalled();
     expect(onSelectFilter).toHaveBeenCalledWith(null);

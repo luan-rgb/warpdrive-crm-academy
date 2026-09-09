@@ -98,10 +98,10 @@ function renderModal(onCreated = vi.fn(), onClose = vi.fn(), autoPrefixLeadDealT
 describe("AddDealModal", () => {
   it("renders the two-column Pipedrive layout with the key fields", () => {
     renderModal();
-    expect(screen.getByRole("dialog", { name: "Add deal" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Contact person")).toBeInTheDocument();
-    expect(screen.getByLabelText("Organization")).toBeInTheDocument();
-    expect(screen.getByLabelText("Deal title")).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Adicionar negócio" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Pessoa de contato")).toBeInTheDocument();
+    expect(screen.getByLabelText("Organização")).toBeInTheDocument();
+    expect(screen.getByLabelText("Título do negócio")).toBeInTheDocument();
     expect(screen.getByLabelText("Pipeline")).toBeInTheDocument();
     // Stage chevron radios.
     expect(screen.getByRole("radio", { name: "Qualified" })).toBeInTheDocument();
@@ -109,8 +109,8 @@ describe("AddDealModal", () => {
     expect(screen.getByLabelText("Phone 1")).toBeInTheDocument();
     expect(screen.getByLabelText("Email 1")).toBeInTheDocument();
     // Manager-only fields hidden (no users/groups).
-    expect(screen.queryByLabelText("Owner")).toBeNull();
-    expect(screen.queryByLabelText("Visible to")).toBeNull();
+    expect(screen.queryByLabelText("Responsável")).toBeNull();
+    expect(screen.queryByLabelText("Visível para")).toBeNull();
   });
 
   it("lets both grid columns shrink so the body never scrolls horizontally", () => {
@@ -120,7 +120,7 @@ describe("AddDealModal", () => {
     // fr tracks resolve to the container width. jsdom has no layout engine, so this asserts the
     // structural guard that the browser confirmed removes the overflow.
     renderModal();
-    const dialog = screen.getByRole("dialog", { name: "Add deal" });
+    const dialog = screen.getByRole("dialog", { name: "Adicionar negócio" });
     const grid = dialog.querySelector<HTMLElement>(".grid");
     expect(grid).not.toBeNull();
     const columns = Array.from(grid?.children ?? []);
@@ -132,7 +132,7 @@ describe("AddDealModal", () => {
 
   it("submits the parsed deal (title + pipeline + first stage) via createDealAction", async () => {
     const { onCreated } = renderModal();
-    fireEvent.change(screen.getByLabelText("Deal title"), { target: { value: "Big deal" } });
+    fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
     expect(screen.getByText(`8/${TITLE_MAX_LEN}`)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     await waitFor(() =>
@@ -159,9 +159,9 @@ describe("AddDealModal", () => {
       archivedAt: null,
     });
     renderModal();
-    fireEvent.change(screen.getByLabelText("Deal title"), { target: { value: "Big deal" } });
+    fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("Account tier is required");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Account tier é obrigatório");
     expect(createDealAction).not.toHaveBeenCalled();
 
     fireEvent.change(screen.getByLabelText("Account tier"), { target: { value: "Enterprise" } });
@@ -192,7 +192,7 @@ describe("AddDealModal", () => {
         </QueryClientProvider>
       </InterfacePrefsProvider>,
     );
-    fireEvent.change(screen.getByLabelText("Deal title"), { target: { value: "Big deal" } });
+    fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/deals/d1"));
   });
@@ -217,7 +217,7 @@ describe("AddDealModal", () => {
         </QueryClientProvider>
       </InterfacePrefsProvider>,
     );
-    fireEvent.change(screen.getByLabelText("Deal title"), { target: { value: "Big deal" } });
+    fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     await waitFor(() => expect(onCreated).toHaveBeenCalledWith("d1", "Big deal"));
     expect(routerPush).not.toHaveBeenCalled();
@@ -225,8 +225,8 @@ describe("AddDealModal", () => {
 
   it("picks the expected close date via the DatePicker and submits it as YYYY-MM-DD", async () => {
     const { onCreated } = renderModal();
-    fireEvent.change(screen.getByLabelText("Deal title"), { target: { value: "Big deal" } });
-    fireEvent.click(screen.getByLabelText("Expected close date"));
+    fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
+    fireEvent.click(screen.getByLabelText("Data prevista de fechamento"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -242,19 +242,19 @@ describe("AddDealModal", () => {
   it("blocks submit with an inline error when the title is empty", async () => {
     renderModal();
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent(/title/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/título/i);
     expect(createDealAction).not.toHaveBeenCalled();
   });
 
   it("does not create an inline org/person when the deal is invalid (no orphans)", async () => {
     renderModal();
     // Commit a brand-new org via the combobox (type + blur reconciles to create-new).
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Brand New Org" } });
-    fireEvent.blur(screen.getByLabelText("Organization"));
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Brand New Org" } });
+    fireEvent.blur(screen.getByLabelText("Organização"));
     // The org autofills the title; clear it so the deal is invalid (blank title) again.
-    fireEvent.change(screen.getByLabelText("Deal title"), { target: { value: "" } });
+    fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "" } });
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent(/title/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/título/i);
     expect(createOrgAction).not.toHaveBeenCalled();
     expect(createPersonAction).not.toHaveBeenCalled();
     expect(createDealAction).not.toHaveBeenCalled();
@@ -262,16 +262,18 @@ describe("AddDealModal", () => {
 
   it("autofills '{org} deal' when the auto-prefix preference is on", () => {
     renderModal(vi.fn(), vi.fn(), true);
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Acme Corp" } });
-    fireEvent.blur(screen.getByLabelText("Organization"));
-    expect(screen.getByLabelText<HTMLInputElement>("Deal title").value).toBe("Acme Corp deal");
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Acme Corp" } });
+    fireEvent.blur(screen.getByLabelText("Organização"));
+    expect(screen.getByLabelText<HTMLInputElement>("Título do negócio").value).toBe(
+      "Acme Corp negócio",
+    );
   });
 
   it("autofills just the name when the auto-prefix preference is off (default)", () => {
     renderModal();
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Acme Corp" } });
-    fireEvent.blur(screen.getByLabelText("Organization"));
-    expect(screen.getByLabelText<HTMLInputElement>("Deal title").value).toBe("Acme Corp");
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Acme Corp" } });
+    fireEvent.blur(screen.getByLabelText("Organização"));
+    expect(screen.getByLabelText<HTMLInputElement>("Título do negócio").value).toBe("Acme Corp");
   });
 
   it("links a newly-created person to the org chosen in the same modal (even without blurring first)", async () => {
@@ -279,8 +281,10 @@ describe("AddDealModal", () => {
     // Type a new inline person + org and click Save WITHOUT blurring the fields first (the real
     // scenario: the combobox must commit the typed text on change, not only on blur, or the person
     // is created with no org).
-    fireEvent.change(screen.getByLabelText("Contact person"), { target: { value: "Test User" } });
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Acme Corp" } });
+    fireEvent.change(screen.getByLabelText("Pessoa de contato"), {
+      target: { value: "Test User" },
+    });
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Acme Corp" } });
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
 
     await waitFor(() => expect(createPersonAction).toHaveBeenCalledTimes(1));

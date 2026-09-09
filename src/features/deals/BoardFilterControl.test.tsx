@@ -84,9 +84,9 @@ function renderControl(
 // filter the actor owns is selected.
 async function openBuilder(
   user: ReturnType<typeof userEvent.setup>,
-  entry: RegExp = /Create new filter/,
+  entry: RegExp = /Criar novo filtro/,
 ): Promise<void> {
-  await user.click(screen.getByRole("button", { name: /^Filter/ }));
+  await user.click(screen.getByRole("button", { name: /^Filtro/ }));
   await user.click(screen.getByRole("menuitem", { name: entry }));
 }
 
@@ -96,7 +96,7 @@ describe("BoardFilterControl", () => {
     const user = userEvent.setup();
     renderControl("f1");
 
-    await openBuilder(user, /Edit filter/);
+    await openBuilder(user, /Editar filtro/);
 
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
     expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
@@ -120,10 +120,10 @@ describe("BoardFilterControl menu split", () => {
     const user = userEvent.setup();
     renderControl(null);
 
-    await user.click(screen.getByRole("button", { name: /Owner: Everyone/ }));
+    await user.click(screen.getByRole("button", { name: /Responsável: Todos/ }));
 
     expect(screen.queryByText("Acme or Corp")).toBeNull();
-    expect(screen.queryByText("All open deals")).toBeNull();
+    expect(screen.queryByText("Todos os negócios abertos")).toBeNull();
   });
 
   it("lists the saved filters in the Filter menu", async () => {
@@ -131,7 +131,7 @@ describe("BoardFilterControl menu split", () => {
     const user = userEvent.setup();
     renderControl(null);
 
-    await user.click(screen.getByRole("button", { name: /^Filter/ }));
+    await user.click(screen.getByRole("button", { name: /^Filtro/ }));
 
     expect(screen.getByRole("menuitem", { name: "Acme or Corp" })).not.toBeNull();
   });
@@ -143,8 +143,8 @@ describe("BoardFilterControl menu split", () => {
     const user = userEvent.setup();
     renderControl("f1", { onSelectFilter, onApplyDefinition, appliedDefinition: OR_DEFINITION });
 
-    await user.click(screen.getByRole("button", { name: /^Filter/ }));
-    await user.click(screen.getByRole("menuitem", { name: "Clear filter" }));
+    await user.click(screen.getByRole("button", { name: /^Filtro/ }));
+    await user.click(screen.getByRole("menuitem", { name: "Limpar filtro" }));
 
     expect(onSelectFilter).toHaveBeenCalledWith(null);
     expect(onApplyDefinition).toHaveBeenCalledWith(null);
@@ -175,7 +175,7 @@ describe("BoardFilterControl menu split", () => {
     const user = userEvent.setup();
     renderControl("f1", { onSelectFilter, onApplyDefinition });
 
-    await openBuilder(user, /Edit filter/);
+    await openBuilder(user, /Editar filtro/);
     await user.click(screen.getByRole("button", { name: "Apply" }));
 
     expect(onApplyDefinition).toHaveBeenCalled();
@@ -186,7 +186,7 @@ describe("BoardFilterControl menu split", () => {
 // Opens the Filter menu, asks to delete the row and accepts the confirmation.
 async function confirmDelete(user: ReturnType<typeof userEvent.setup>): Promise<void> {
   // The trigger names the applied filter ("Filter: Acme or Corp"), so match its prefix.
-  await user.click(screen.getByRole("button", { name: /^Filter/ }));
+  await user.click(screen.getByRole("button", { name: /^Filtro/ }));
   await user.click(screen.getByRole("menuitem", { name: "Delete Acme or Corp" }));
   const dialog = await screen.findByRole("alertdialog");
   await user.click(within(dialog).getByRole("button", { name: "Delete" }));

@@ -31,41 +31,41 @@ describe("activityTooltip", () => {
   const subject = "Call Acme back";
 
   it("says nothing is scheduled when there is no next activity", () => {
-    expect(activityTooltip(subject, null, now)).toBe("No activity scheduled");
+    expect(activityTooltip(subject, null, now)).toBe("Nenhuma atividade agendada");
   });
 
   it("names the activity and 'today' when due the same UTC day", () => {
     expect(activityTooltip(subject, new Date("2026-06-29T09:00:00Z"), now)).toBe(
-      "Call Acme back · today",
+      "Call Acme back · hoje",
     );
   });
 
   it("counts a single upcoming day in the singular", () => {
     expect(activityTooltip(subject, new Date("2026-06-30T09:00:00Z"), now)).toBe(
-      "Call Acme back · in 1 day",
+      "Call Acme back · em 1 dia",
     );
   });
 
   it("counts several upcoming days in the plural", () => {
     expect(activityTooltip(subject, new Date("2026-07-03T09:00:00Z"), now)).toBe(
-      "Call Acme back · in 4 days",
+      "Call Acme back · em 4 dias",
     );
   });
 
   it("counts a single overdue day in the singular", () => {
     expect(activityTooltip(subject, new Date("2026-06-28T09:00:00Z"), now)).toBe(
-      "Call Acme back · 1 day overdue",
+      "Call Acme back · atrasada há 1 dia",
     );
   });
 
   it("counts several overdue days in the plural", () => {
     expect(activityTooltip(subject, new Date("2026-06-26T09:00:00Z"), now)).toBe(
-      "Call Acme back · 3 days overdue",
+      "Call Acme back · atrasada há 3 dias",
     );
   });
 
   it("falls back to a generic noun when the subject is unknown", () => {
-    expect(activityTooltip(null, new Date("2026-06-29T09:00:00Z"), now)).toBe("Activity · today");
+    expect(activityTooltip(null, new Date("2026-06-29T09:00:00Z"), now)).toBe("Atividade · hoje");
   });
 });
 

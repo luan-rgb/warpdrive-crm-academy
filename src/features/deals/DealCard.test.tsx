@@ -22,7 +22,7 @@ describe("DealCard", () => {
       />,
     );
     const card = screen.getByRole("button", { name: /Acme renewal/ });
-    expect(card.getAttribute("aria-roledescription")).toBe("draggable deal card");
+    expect(card.getAttribute("aria-roledescription")).toBe("cartão de negócio arrastável");
   });
 
   it("shows a colored owner avatar with initials (Pipedrive parity, not muted gray)", () => {
@@ -38,7 +38,7 @@ describe("DealCard", () => {
         now={new Date("2026-06-10T00:00:00Z")}
       />,
     );
-    const avatar = screen.getByRole("img", { name: "owner: Ada King" });
+    const avatar = screen.getByRole("img", { name: "responsável: Ada King" });
     // Two-letter initials, not a single first char.
     expect(avatar.textContent).toBe("AK");
     // A palette swatch (bg-*-100), not the muted bg-secondary.
@@ -60,7 +60,7 @@ describe("DealCard", () => {
         now={new Date("2026-06-10T00:00:00Z")}
       />,
     );
-    const img = screen.getByRole("img", { name: "owner: Ada King" });
+    const img = screen.getByRole("img", { name: "responsável: Ada King" });
     expect(img.tagName).toBe("IMG");
     expect(img.getAttribute("src")).toBe("/api/users/u1/avatar?v=1");
     // No initials span when a photo is shown.
@@ -190,7 +190,7 @@ describe("DealCard", () => {
       />,
     );
     expect(screen.getByText(/19d/)).toBeTruthy();
-    expect(screen.getByLabelText(/rotting/i)).toBeTruthy();
+    expect(screen.getByLabelText(/estagnado/i)).toBeTruthy();
   });
 
   it("hides the description line in compact density but keeps the deal-title primary line", () => {

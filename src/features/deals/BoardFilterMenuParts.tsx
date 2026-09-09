@@ -32,7 +32,7 @@ export function OwnerRow({
       >
         <Avatar name={name} className="h-5 w-5 text-[10px]" />
         <span className="truncate">{name}</span>
-        {isCurrentUser && <span className="shrink-0 text-muted-foreground">(my)</span>}
+        {isCurrentUser && <span className="shrink-0 text-muted-foreground">(eu)</span>}
       </button>
     </li>
   );
@@ -66,7 +66,7 @@ export function SavedFilterItem({
           row, so both controls are shown only for owned filters. */}
       {filter.isOwn && (
         <DropdownMenuItem
-          aria-label={filter.favorite ? "Unfavorite filter" : "Favorite filter"}
+          aria-label={filter.favorite ? "Desfavoritar filtro" : "Favoritar filtro"}
           aria-pressed={filter.favorite}
           // Starring is not picking, so the menu stays open.
           onSelect={(e) => {

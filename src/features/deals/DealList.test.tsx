@@ -59,9 +59,9 @@ const props = {
 // select, then affirm the confirmation the move now goes through.
 function selectRowAndMove(stageName: string): void {
   fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme renewal" }));
-  fireEvent.click(screen.getByLabelText("Move to stage"));
+  fireEvent.click(screen.getByLabelText("Mover para etapa"));
   fireEvent.click(screen.getByRole("option", { name: stageName }));
-  fireEvent.click(screen.getByRole("button", { name: "Move deals" }));
+  fireEvent.click(screen.getByRole("button", { name: "Mover negócios" }));
 }
 
 describe("DealList", () => {
@@ -74,8 +74,8 @@ describe("DealList", () => {
 
   it("shows Organization and Owner columns (Pipedrive column-rich list)", () => {
     render(<DealList {...props} />);
-    expect(screen.getByRole("columnheader", { name: "Organization" })).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "Owner" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Organização" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Responsável" })).toBeInTheDocument();
     const titleRow = screen.getByText("Acme renewal").closest("tr") as HTMLElement;
     expect(within(titleRow).getByText("Acme Inc")).toBeInTheDocument();
     expect(within(titleRow).getByText("User A")).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe("DealList", () => {
         visibleColumns={DEAL_LIST_COLUMNS.filter((c) => c.defaultVisible === true)}
       />,
     );
-    expect(screen.getByRole("columnheader", { name: "Expected close date" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Data prevista de fechamento" })).toBeInTheDocument();
     const titleRow = screen.getByText("Acme renewal").closest("tr") as HTMLElement;
     // Date-only value must render in local time (no UTC off-by-one).
     expect(within(titleRow).getByText("Aug 1, 2026")).toBeInTheDocument();
@@ -107,7 +107,7 @@ describe("DealList", () => {
   it("still allows inline title edit via an explicit edit control", () => {
     render(<DealList {...props} />);
     const titleRow = screen.getByText("Acme renewal").closest("tr") as HTMLElement;
-    fireEvent.click(within(titleRow).getByRole("button", { name: /edit title/i }));
+    fireEvent.click(within(titleRow).getByRole("button", { name: /editar título/i }));
     const input = within(titleRow).getByRole("textbox");
     fireEvent.change(input, { target: { value: "Acme renewal 2027" } });
     fireEvent.blur(input);
@@ -119,7 +119,7 @@ describe("DealList", () => {
   it("does not save an empty/whitespace title", () => {
     render(<DealList {...props} />);
     const titleRow = screen.getByText("Acme renewal").closest("tr") as HTMLElement;
-    fireEvent.click(within(titleRow).getByRole("button", { name: /edit title/i }));
+    fireEvent.click(within(titleRow).getByRole("button", { name: /editar título/i }));
     const input = within(titleRow).getByRole("textbox");
     fireEvent.change(input, { target: { value: "   " } });
     fireEvent.blur(input);
@@ -129,7 +129,7 @@ describe("DealList", () => {
   it("does not save a title longer than 255 chars", () => {
     render(<DealList {...props} />);
     const titleRow = screen.getByText("Acme renewal").closest("tr") as HTMLElement;
-    fireEvent.click(within(titleRow).getByRole("button", { name: /edit title/i }));
+    fireEvent.click(within(titleRow).getByRole("button", { name: /editar título/i }));
     const input = within(titleRow).getByRole("textbox");
     fireEvent.change(input, { target: { value: "x".repeat(256) } });
     fireEvent.blur(input);
@@ -144,7 +144,7 @@ describe("DealList", () => {
     await vi.waitFor(() => expect(onBulkStage).toHaveBeenCalledWith(["d1"], "s2"));
     // Success: the selection bar (only shown when rows are selected) disappears.
     await vi.waitFor(() =>
-      expect(screen.queryByRole("toolbar", { name: "Bulk actions" })).not.toBeInTheDocument(),
+      expect(screen.queryByRole("toolbar", { name: "Ações em massa" })).not.toBeInTheDocument(),
     );
   });
 
@@ -179,7 +179,7 @@ describe("DealList", () => {
     );
 
     expect(screen.queryByRole("table")).toBeNull();
-    expect(screen.queryByRole("checkbox", { name: "Select all deals" })).toBeNull();
+    expect(screen.queryByRole("checkbox", { name: "Selecionar todos os negócios" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Columns" })).toBeNull();
     expect(screen.queryByText(/total value/i)).toBeNull();
     expect(screen.getByText("Nothing archived")).toBeInTheDocument();
@@ -203,7 +203,7 @@ describe("DealList", () => {
 
     await vi.waitFor(() => expect(onBulkStage).toHaveBeenCalledWith(["d1"], "s2"));
     // Failure: selection is retained so the user can see it didn't apply and retry.
-    expect(screen.getByRole("toolbar", { name: "Bulk actions" })).toBeInTheDocument();
-    expect(screen.getByText("1 selected")).toBeInTheDocument();
+    expect(screen.getByRole("toolbar", { name: "Ações em massa" })).toBeInTheDocument();
+    expect(screen.getByText("1 selecionado")).toBeInTheDocument();
   });
 });

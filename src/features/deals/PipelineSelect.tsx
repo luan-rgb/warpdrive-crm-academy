@@ -30,7 +30,7 @@ export function PipelineSelect(props: PipelineSelectProps): React.ReactNode {
         <span className="max-w-40 truncate">{current?.name ?? "Pipeline"}</span>
         <ChevronDown aria-hidden="true" className="h-3.5 w-3.5" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" aria-label="Select pipeline" className="min-w-44">
+      <DropdownMenuContent align="end" aria-label="Selecionar pipeline" className="min-w-44">
         {pipelines.map((p) => (
           <DropdownMenuItem
             key={p.id}

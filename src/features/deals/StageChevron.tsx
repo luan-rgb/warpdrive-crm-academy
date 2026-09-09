@@ -19,7 +19,7 @@ export function StageChevron({ stages, selectedId, onSelect }: StageChevronProps
     <RadioGroup
       value={selectedId}
       onValueChange={onSelect}
-      aria-label="Pipeline stage"
+      aria-label="Etapa do pipeline"
       className="flex w-full gap-0 overflow-hidden"
     >
       {stages.map((s, i) => {

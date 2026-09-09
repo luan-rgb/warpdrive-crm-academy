@@ -30,7 +30,7 @@ const OWNERS = [{ ownerId: "u1", name: "Ada King" }];
 describe("CreateFilterModal", () => {
   it("renders a Create new filter dialog with one condition row", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
-    expect(screen.getByRole("dialog", { name: "Create new filter" })).not.toBeNull();
+    expect(screen.getByRole("dialog", { name: "Criar novo filtro" })).not.toBeNull();
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(1);
   });
 
@@ -66,9 +66,9 @@ describe("CreateFilterModal", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} />);
     // Add a second row and leave it empty so it is dropped.
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.change(screen.getByLabelText("Filter name"), { target: { value: "Big deals" } });
+    fireEvent.change(screen.getByLabelText("Nome do filtro"), { target: { value: "Big deals" } });
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledTimes(1));
     const saved = onSave.mock.calls[0]![0] as {
@@ -96,7 +96,7 @@ describe("CreateFilterModal", () => {
     const onSave = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} />);
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(screen.getByText("One of these conditions isn't valid")).toBeInTheDocument(),
     );
@@ -112,7 +112,7 @@ describe("CreateFilterModal", () => {
     fireEvent.click(screen.getByLabelText("Condition 1 field"));
     fireEvent.click(screen.getByRole("option", { name: "Value" }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "1000" } });
-    expect(screen.getByRole("button", { name: "Save" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeEnabled();
   });
 
   // A saved deal filter was AND-only, so "any of these" was unreachable from the saved side.
@@ -132,7 +132,7 @@ describe("CreateFilterModal", () => {
     fireEvent.change(screen.getByLabelText("Condition 2 value"), { target: { value: "Corp" } });
     fireEvent.click(screen.getByLabelText("Match combinator"));
     fireEvent.click(screen.getByRole("option", { name: "any condition" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledTimes(1));
     const saved = onSave.mock.calls[0]![0] as { definition: { combinator: string } };
@@ -169,7 +169,7 @@ describe("CreateFilterModal", () => {
   it("auto-populates the filter name from the conditions until the user edits it", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
-    const nameInput = screen.getByLabelText<HTMLInputElement>("Filter name");
+    const nameInput = screen.getByLabelText<HTMLInputElement>("Nome do filtro");
     expect(nameInput.value).toBe("Title contains Acme");
     // Once the user types their own name, auto-population stops overwriting it.
     fireEvent.change(nameInput, { target: { value: "My filter" } });
@@ -185,7 +185,7 @@ describe("CreateFilterModal", () => {
     fireEvent.click(screen.getByRole("option", { name: "Owner" }));
     fireEvent.click(screen.getByLabelText("Condition 1 value"));
     fireEvent.click(screen.getByRole("option", { name: "Ada King" }));
-    expect(screen.getByLabelText<HTMLInputElement>("Filter name").value).toBe("Owner is Ada King");
+    expect(screen.getByLabelText<HTMLInputElement>("Nome do filtro").value).toBe("Owner is Ada King");
   });
 
   it("previews the in-progress definition without saving it", () => {

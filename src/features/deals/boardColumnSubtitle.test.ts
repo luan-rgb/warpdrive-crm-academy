@@ -5,14 +5,14 @@ import { stageSubtitle } from "./boardColumnSubtitle";
 // shape exactly when the rep most needs to read it as a real answer rather than a blank.
 describe("stageSubtitle", () => {
   it("names the count alongside the value", () => {
-    expect(stageSubtitle("$232,000", 7)).toBe("$232,000 · 7 deals");
+    expect(stageSubtitle("$232,000", 7)).toBe("$232,000 · 7 negócios");
   });
 
   it("keeps the count when a column is empty", () => {
-    expect(stageSubtitle("$0", 0)).toBe("$0 · 0 deals");
+    expect(stageSubtitle("$0", 0)).toBe("$0 · 0 negócios");
   });
 
   it("uses the singular for one deal", () => {
-    expect(stageSubtitle("$8,000", 1)).toBe("$8,000 · 1 deal");
+    expect(stageSubtitle("$8,000", 1)).toBe("$8,000 · 1 negócio");
   });
 });

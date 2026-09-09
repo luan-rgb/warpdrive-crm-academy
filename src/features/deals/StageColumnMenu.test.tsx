@@ -35,25 +35,25 @@ describe("StageColumnMenu (P1 per-column actions)", () => {
   it("exposes a stage-actions trigger with the column-scoped items", async () => {
     const user = userEvent.setup();
     renderMenu();
-    await user.click(screen.getByRole("button", { name: /Stage actions/ }));
-    expect(screen.getByRole("menuitem", { name: "Add deal to this stage" })).not.toBeNull();
-    const edit = screen.getByRole("menuitem", { name: "Edit pipeline stages" });
+    await user.click(screen.getByRole("button", { name: /Ações da etapa/ }));
+    expect(screen.getByRole("menuitem", { name: "Adicionar negócio a esta etapa" })).not.toBeNull();
+    const edit = screen.getByRole("menuitem", { name: "Editar etapas do pipeline" });
     expect(edit.getAttribute("href")).toBe("/pipeline/p1/edit");
-    expect(screen.getByRole("menuitem", { name: "Collapse column" })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Recolher coluna" })).not.toBeNull();
   });
 
   it("calls onToggleCollapse when the collapse item is chosen", async () => {
     const user = userEvent.setup();
     const { onToggleCollapse } = renderMenu();
-    await user.click(screen.getByRole("button", { name: /Stage actions/ }));
-    await user.click(screen.getByRole("menuitem", { name: "Collapse column" }));
+    await user.click(screen.getByRole("button", { name: /Ações da etapa/ }));
+    await user.click(screen.getByRole("menuitem", { name: "Recolher coluna" }));
     expect(onToggleCollapse).toHaveBeenCalledOnce();
   });
 
   it("labels the toggle 'Expand column' when already collapsed", async () => {
     const user = userEvent.setup();
     renderMenu({ collapsed: true });
-    await user.click(screen.getByRole("button", { name: /Stage actions/ }));
-    expect(screen.getByRole("menuitem", { name: "Expand column" })).not.toBeNull();
+    await user.click(screen.getByRole("button", { name: /Ações da etapa/ }));
+    expect(screen.getByRole("menuitem", { name: "Expandir coluna" })).not.toBeNull();
   });
 });

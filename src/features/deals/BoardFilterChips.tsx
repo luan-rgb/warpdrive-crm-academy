@@ -40,7 +40,7 @@ export function BoardFilterChips(props: BoardFilterChipsProps): React.ReactNode 
     chips.push({
       key: "owner",
       label: ownerChipLabel(ownerName),
-      removeLabel: "Remove owner filter",
+      removeLabel: "Remover filtro de responsável",
       onClear: onClearOwner,
     });
   }
@@ -48,7 +48,7 @@ export function BoardFilterChips(props: BoardFilterChipsProps): React.ReactNode 
     chips.push({
       key: "saved",
       label: savedFilterChipLabel(savedFilterName),
-      removeLabel: "Remove saved filter",
+      removeLabel: "Remover filtro salvo",
       onClear: onClearSavedFilter,
     });
   }
@@ -56,7 +56,7 @@ export function BoardFilterChips(props: BoardFilterChipsProps): React.ReactNode 
     chips.push({
       key: "conditions",
       label: conditionChipLabel(conditionCount),
-      removeLabel: "Remove conditions",
+      removeLabel: "Remover condições",
       onClear: onClearConditions,
     });
   }

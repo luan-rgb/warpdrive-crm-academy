@@ -142,7 +142,7 @@ describe("board toolbar view restored from the saved preference", () => {
       savedFilter: null,
       conditions: { conditions: [{ field: "value", op: "gt", value: 150 }] },
     });
-    expect(screen.getByLabelText("Filter")).toHaveTextContent("1");
+    expect(screen.getByLabelText("Filtro")).toHaveTextContent("1");
   });
 
   test("reopens the ad-hoc builder on the applied conditions and combinator", async () => {
@@ -160,8 +160,8 @@ describe("board toolbar view restored from the saved preference", () => {
         ],
       },
     });
-    await user.click(screen.getByLabelText("Filter"));
-    await user.click(screen.getByRole("menuitem", { name: /Create new filter/ }));
+    await user.click(screen.getByLabelText("Filtro"));
+    await user.click(screen.getByRole("menuitem", { name: /Criar novo filtro/ }));
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
     expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
   });
@@ -175,9 +175,9 @@ describe("board toolbar view restored from the saved preference", () => {
       savedFilter: null,
       conditions: { conditions: [{ field: "value", op: "gt", value: 150 }] },
     });
-    await user.click(screen.getByLabelText("Filter"));
-    await user.click(screen.getByRole("menuitem", { name: "Clear filter" }));
-    expect(screen.getByLabelText("Filter")).not.toHaveTextContent("1");
+    await user.click(screen.getByLabelText("Filtro"));
+    await user.click(screen.getByRole("menuitem", { name: "Limpar filtro" }));
+    expect(screen.getByLabelText("Filtro")).not.toHaveTextContent("1");
   });
 });
 
@@ -199,7 +199,7 @@ describe("board toolbar view saved when a control changes", () => {
 
   test("persists the owner filter", async () => {
     renderBoard();
-    fireEvent.click(screen.getByText("Everyone"));
+    fireEvent.click(screen.getByText("Todos"));
     fireEvent.click(await screen.findByText("Ben"));
     await waitFor(() => expect(setBoardView).toHaveBeenCalled());
     expect(setBoardView.mock.calls.at(-1)?.[0]).toMatchObject({ ownerId: BEN });

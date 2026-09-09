@@ -95,7 +95,7 @@ export function CreateFilterModal({
 
   async function save(): Promise<void> {
     const definition = buildDefinition();
-    const filterName = effectiveName.trim() === "" ? "Untitled filter" : effectiveName.trim();
+    const filterName = effectiveName.trim() === "" ? "Filtro sem título" : effectiveName.trim();
     if (mode === "update" && savedFilter !== undefined) {
       const res = await updateSavedFilterAction(
         savedFilter.id,

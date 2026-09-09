@@ -8,7 +8,7 @@ describe("parseNewDeal", () => {
   it("rejects an empty title", () => {
     const r = parseNewDeal({ title: "   ", stageId: STAGE, value: "" }, PIPE);
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.error).toMatch(/title/i);
+    if (!r.ok) expect(r.error).toMatch(/título/i);
   });
 
   it("builds an input with a null value when value is blank", () => {

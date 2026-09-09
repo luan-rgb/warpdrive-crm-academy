@@ -9,7 +9,7 @@ import type { BoardCard } from "./dealRepo";
 
 // String constants: no magic strings, no em dashes.
 const STRINGS = {
-  roledescription: "draggable deal card",
+  roledescription: "cartão de negócio arrastável",
   contactSeparator: ", ",
   // Next-action affordance: a small colored circle, one fill per urgency. Indigo = booked for
   // later, green = due today, red = overdue, amber = nothing planned. Amber is the nudge, so a
@@ -137,13 +137,13 @@ export function DealCard(props: DealCardProps): React.ReactNode {
           // biome-ignore lint/performance/noImgElement: tiny board-card avatar, next/image not warranted
           <img
             src={ownerAvatarUrl}
-            alt={`owner: ${ownerName}`}
+            alt={`responsável: ${ownerName}`}
             className="h-5 w-5 shrink-0 rounded-full object-cover outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10"
           />
         ) : (
           <span
             role="img"
-            aria-label={`owner: ${ownerName}`}
+            aria-label={`responsável: ${ownerName}`}
             className={cn(
               "flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-semibold uppercase",
               avatarColorClass(ownerName),
@@ -175,7 +175,7 @@ export function DealCard(props: DealCardProps): React.ReactNode {
           {rot.rotting && (
             <span
               role="status"
-              aria-label={`rotting, idle ${rot.ageDays} days`}
+              aria-label={`estagnado, parado há ${rot.ageDays} dias`}
               className="rounded bg-white/80 px-1 py-0.5 text-xs font-medium tabular-nums text-red-700 dark:bg-black/40 dark:text-red-300"
             >
               {rot.ageDays}d

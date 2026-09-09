@@ -25,7 +25,7 @@ const SAVED = [savedRow("f1", "Rotting deals")];
 const INLINE = { match: "all", conditions: [] } as unknown as FilterDefinition;
 
 function trigger(): HTMLElement {
-  return screen.getByRole("button", { name: /Filter/ });
+  return screen.getByRole("button", { name: /Filtro/ });
 }
 
 // Board and DealListClient both resolve `inlineDefinition ?? savedFilter?.definition`, so an
@@ -35,7 +35,7 @@ describe("BoardFilterMenu trigger", () => {
   it("names the saved filter when that filter is what is applied", () => {
     render(<BoardFilterMenu savedFilters={SAVED} selectedFilterId="f1" />);
 
-    expect(trigger()).toHaveTextContent("Filter: Rotting deals");
+    expect(trigger()).toHaveTextContent("Filtro: Rotting deals");
   });
 
   it("does not name a saved filter that an ad-hoc definition has overridden", () => {
@@ -52,6 +52,6 @@ describe("BoardFilterMenu trigger", () => {
 
     // The visible label is capped, while the accessible name keeps the whole thing.
     expect(trigger().textContent ?? "").not.toContain(long);
-    expect(trigger()).toHaveAccessibleName(`Filter: ${long}`);
+    expect(trigger()).toHaveAccessibleName(`Filtro: ${long}`);
   });
 });

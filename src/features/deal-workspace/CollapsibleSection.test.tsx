@@ -20,7 +20,7 @@ it("hides empty fields when the funnel is toggled on", () => {
   expect(screen.getByText("Website")).toBeInTheDocument();
   expect(screen.getByText("LinkedIn")).toBeInTheDocument();
   // Toggle the funnel: the empty LinkedIn row hides, Website stays.
-  fireEvent.click(screen.getByRole("button", { name: /ocultar campos vazios/i }));
+  fireEvent.click(screen.getByRole("button", { name: /hide empty fields/i }));
   expect(screen.getByText("Website")).toBeInTheDocument();
   expect(screen.queryByText("LinkedIn")).not.toBeInTheDocument();
 });

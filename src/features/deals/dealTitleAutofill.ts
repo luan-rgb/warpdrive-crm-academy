@@ -23,7 +23,7 @@ export function deriveEntityTitle(
   s: TitleSources,
   orgs: Option[],
   people: Option[],
-  noun = "deal",
+  noun = "negócio",
   appendNoun = true,
 ): string {
   const orgName =

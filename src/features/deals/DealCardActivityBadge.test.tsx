@@ -25,7 +25,7 @@ describe("DealCard activity badge", () => {
         now={new Date("2026-06-10T00:00:00Z")}
       />,
     );
-    const ind = screen.getByRole("img", { name: "Activity · 9 days overdue" });
+    const ind = screen.getByRole("img", { name: "Atividade · atrasada há 9 dias" });
     expect(ind.className).toContain("rounded-full");
     expect(ind.className).toContain("bg-destructive");
     expect(ind.className).toContain("text-destructive-foreground");
@@ -46,7 +46,7 @@ describe("DealCard activity badge", () => {
         now={new Date("2026-06-10T15:00:00Z")}
       />,
     );
-    const ind = screen.getByRole("img", { name: "Activity · today" });
+    const ind = screen.getByRole("img", { name: "Atividade · hoje" });
     expect(ind.className).toContain("bg-action");
     expect(ind.className).not.toContain("bg-destructive");
   });
@@ -64,7 +64,7 @@ describe("DealCard activity badge", () => {
         now={new Date("2026-06-10T00:00:00Z")}
       />,
     );
-    const ind = screen.getByRole("img", { name: "No activity scheduled" });
+    const ind = screen.getByRole("img", { name: "Nenhuma atividade agendada" });
     expect(ind.className).toContain("rounded-full");
     // Amber attention fill with dark amber ink, no longer the muted gray dot or white on yellow.
     expect(ind.className).toContain("bg-attention");
@@ -91,7 +91,7 @@ describe("DealCard activity badge", () => {
         now={new Date("2026-06-10T00:00:00Z")}
       />,
     );
-    const ind = screen.getByRole("img", { name: "Activity · in 4 days" });
+    const ind = screen.getByRole("img", { name: "Atividade · em 4 dias" });
     expect(ind.className).toContain("bg-scheduled");
     expect(ind.className).toContain("text-scheduled-foreground");
     expect(ind.className).not.toContain("bg-attention");
@@ -115,7 +115,7 @@ describe("DealCard activity badge", () => {
         now={new Date("2026-06-10T00:00:00Z")}
       />,
     );
-    expect(screen.getByRole("img", { name: "Call Acme back · 5 days overdue" })).not.toBeNull();
+    expect(screen.getByRole("img", { name: "Call Acme back · atrasada há 5 dias" })).not.toBeNull();
   });
 
   it("names the next action and 'today' when it is due today", () => {
@@ -135,7 +135,7 @@ describe("DealCard activity badge", () => {
         now={new Date("2026-06-10T15:00:00Z")}
       />,
     );
-    expect(screen.getByRole("img", { name: "Send the contract · today" })).not.toBeNull();
+    expect(screen.getByRole("img", { name: "Send the contract · hoje" })).not.toBeNull();
   });
 
   it("falls back to a generic 'Activity' noun in the label when the title is unknown", () => {
@@ -151,6 +151,6 @@ describe("DealCard activity badge", () => {
         now={new Date("2026-06-10T00:00:00Z")}
       />,
     );
-    expect(screen.getByRole("img", { name: "Activity · 5 days overdue" })).not.toBeNull();
+    expect(screen.getByRole("img", { name: "Atividade · atrasada há 5 dias" })).not.toBeNull();
   });
 });

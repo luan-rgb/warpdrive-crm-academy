@@ -29,8 +29,8 @@ export function BoardOwnerMenu({
 
   const triggerLabel =
     selectedOwnerId === null
-      ? "Everyone"
-      : (owners.find((o) => o.ownerId === selectedOwnerId)?.name ?? "Owner");
+      ? "Todos"
+      : (owners.find((o) => o.ownerId === selectedOwnerId)?.name ?? "Responsável");
 
   const q = query.trim().toLowerCase();
   const shown = useMemo(
@@ -48,7 +48,7 @@ export function BoardOwnerMenu({
       <PopoverTrigger asChild>
         <button
           type="button"
-          aria-label={`Owner: ${triggerLabel}`}
+          aria-label={`Responsável: ${triggerLabel}`}
           className="inline-flex items-center gap-1.5 rounded-md border bg-card px-2.5 py-1 text-sm text-foreground hover:bg-accent"
         >
           <span className="max-w-32 truncate">{triggerLabel}</span>
@@ -60,15 +60,11 @@ export function BoardOwnerMenu({
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search owner"
+          placeholder="Buscar responsável"
           className="mb-2 w-full rounded-md border px-2.5 py-1.5 text-sm"
         />
         <ul className="max-h-80 overflow-y-auto py-1">
-          <OwnerRow
-            name="Everyone"
-            selected={selectedOwnerId === null}
-            onClick={() => pick(null)}
-          />
+          <OwnerRow name="Todos" selected={selectedOwnerId === null} onClick={() => pick(null)} />
           {shown.map((o) => (
             <OwnerRow
               key={o.ownerId}

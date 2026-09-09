@@ -27,7 +27,7 @@ export function MoveDealDialog(props: MoveDealDialogProps): React.ReactNode {
       }}
     >
       <DialogContent aria-describedby={undefined} className="max-w-sm gap-0 bg-card p-4">
-        <DialogTitle className="mb-3 text-sm font-semibold">Move deal to stage</DialogTitle>
+        <DialogTitle className="mb-3 text-sm font-semibold">Mover negócio para etapa</DialogTitle>
         <ul className="flex flex-col gap-1">
           {stages.map((s) => (
             <li key={s.id}>
@@ -46,7 +46,7 @@ export function MoveDealDialog(props: MoveDealDialogProps): React.ReactNode {
           onClick={onClose}
           className="mt-3 w-full rounded-md border px-3 py-1.5 text-sm hover:bg-accent"
         >
-          Cancel
+          Cancelar
         </button>
       </DialogContent>
     </Dialog>

@@ -17,7 +17,7 @@ describe("deriveEntityTitle", () => {
   it("uses a newly-typed org name: '{org} deal'", () => {
     expect(
       deriveEntityTitle({ ...base, orgMode: "new", newOrgName: "Acme Corp" }, orgs, people),
-    ).toBe("Acme Corp deal");
+    ).toBe("Acme Corp negócio");
   });
 
   it("uses a newly-typed person name when there is no org", () => {
@@ -27,7 +27,7 @@ describe("deriveEntityTitle", () => {
         orgs,
         people,
       ),
-    ).toBe("test acme user deal");
+    ).toBe("test acme user negócio");
   });
 
   it("prefers the org over the person when both are present", () => {
@@ -43,16 +43,16 @@ describe("deriveEntityTitle", () => {
         orgs,
         people,
       ),
-    ).toBe("Acme Corp deal");
+    ).toBe("Acme Corp negócio");
   });
 
   it("resolves an existing org selection to its name", () => {
-    expect(deriveEntityTitle({ ...base, orgId: "o1" }, orgs, people)).toBe("Acme Corp deal");
+    expect(deriveEntityTitle({ ...base, orgId: "o1" }, orgs, people)).toBe("Acme Corp negócio");
   });
 
   it("resolves an existing person selection to its name", () => {
     expect(deriveEntityTitle({ ...base, personId: "p1" }, orgs, people)).toBe(
-      "Test Acme User deal",
+      "Test Acme User negócio",
     );
   });
 

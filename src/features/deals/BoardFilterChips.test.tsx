@@ -34,15 +34,15 @@ describe("BoardFilterChips", () => {
   it("names each applied narrowing dimension", () => {
     renderChips({ ownerName: "Ben", savedFilterName: "Rotting deals", conditionCount: 2 });
 
-    expect(screen.getByText("Owner: Ben")).not.toBeNull();
-    expect(screen.getByText("Filter: Rotting deals")).not.toBeNull();
-    expect(screen.getByText("2 conditions")).not.toBeNull();
+    expect(screen.getByText("Responsável: Ben")).not.toBeNull();
+    expect(screen.getByText("Filtro: Rotting deals")).not.toBeNull();
+    expect(screen.getByText("2 condições")).not.toBeNull();
   });
 
   it("reads a single condition in the singular", () => {
     renderChips({ conditionCount: 1 });
 
-    expect(screen.getByText("1 condition")).not.toBeNull();
+    expect(screen.getByText("1 condição")).not.toBeNull();
   });
 
   it("dismisses one dimension without touching the others", async () => {
@@ -56,7 +56,7 @@ describe("BoardFilterChips", () => {
       onClearSavedFilter,
     });
 
-    await user.click(screen.getByRole("button", { name: "Remove owner filter" }));
+    await user.click(screen.getByRole("button", { name: "Remover filtro de responsável" }));
 
     expect(onClearOwner).toHaveBeenCalled();
     expect(onClearSavedFilter).not.toHaveBeenCalled();
@@ -67,7 +67,7 @@ describe("BoardFilterChips", () => {
     const user = userEvent.setup();
     renderChips({ ownerName: "Ben", conditionCount: 3, onClearConditions });
 
-    await user.click(screen.getByRole("button", { name: "Remove conditions" }));
+    await user.click(screen.getByRole("button", { name: "Remover condições" }));
 
     expect(onClearConditions).toHaveBeenCalled();
   });
@@ -77,7 +77,7 @@ describe("BoardFilterChips", () => {
     const user = userEvent.setup();
     renderChips({ ownerName: "Ben", conditionCount: 1, onClearAll });
 
-    await user.click(screen.getByRole("button", { name: "Clear all" }));
+    await user.click(screen.getByRole("button", { name: "Limpar tudo" }));
 
     expect(onClearAll).toHaveBeenCalled();
   });

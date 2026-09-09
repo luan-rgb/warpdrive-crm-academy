@@ -37,17 +37,17 @@ async function openMenu(
 ): Promise<ReturnType<typeof userEvent.setup>> {
   const user = userEvent.setup();
   renderMenu(props);
-  // The trigger names the applied filter ("Filter: Big deals"), so match on the prefix.
-  await user.click(screen.getByRole("button", { name: /^Filter/ }));
+  // The trigger names the applied filter ("Filtro: Big deals"), so match on the prefix.
+  await user.click(screen.getByRole("button", { name: /^Filtro/ }));
   return user;
 }
 
 describe("BoardFilterMenu", () => {
   it("lists the saved filters and the create entry", async () => {
     await openMenu({ savedFilters: [own], onCreateFilter: () => {} });
-    expect(screen.getByRole("menuitem", { name: "All open deals" })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Todos os negócios abertos" })).not.toBeNull();
     expect(screen.getByRole("menuitem", { name: "Big deals" })).not.toBeNull();
-    expect(screen.getByRole("menuitem", { name: /Create new filter/ })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: /Criar novo filtro/ })).not.toBeNull();
   });
 
   it("reports the picked saved filter", async () => {
@@ -59,13 +59,13 @@ describe("BoardFilterMenu", () => {
 
   it("shows the applied ad-hoc condition count on the trigger", () => {
     renderMenu({ activeCount: 2 });
-    expect(screen.getByLabelText("Filter")).toHaveTextContent("2");
+    expect(screen.getByLabelText("Filtro")).toHaveTextContent("2");
   });
 
   it("opens the create-filter dialog from the create entry", async () => {
     const onCreateFilter = vi.fn();
     const user = await openMenu({ onCreateFilter });
-    await user.click(screen.getByRole("menuitem", { name: /Create new filter/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Criar novo filtro/ }));
     expect(onCreateFilter).toHaveBeenCalledTimes(1);
   });
 });
@@ -73,17 +73,17 @@ describe("BoardFilterMenu", () => {
 describe("BoardFilterMenu clear action", () => {
   it("offers Clear filter while an ad-hoc definition is applied", async () => {
     await openMenu({ appliedDefinition: AD_HOC, activeCount: 1 });
-    expect(screen.getByRole("menuitem", { name: "Clear filter" })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Limpar filtro" })).not.toBeNull();
   });
 
   it("offers Clear filter while a saved filter is selected", async () => {
     await openMenu({ savedFilters: [own], selectedFilterId: "f1" });
-    expect(screen.getByRole("menuitem", { name: "Clear filter" })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Limpar filtro" })).not.toBeNull();
   });
 
   it("hides Clear filter when nothing is applied", async () => {
     await openMenu({ savedFilters: [own], selectedFilterId: null, appliedDefinition: null });
-    expect(screen.queryByRole("menuitem", { name: "Clear filter" })).toBeNull();
+    expect(screen.queryByRole("menuitem", { name: "Limpar filtro" })).toBeNull();
   });
 
   it("clears both the saved selection and the ad-hoc definition", async () => {
@@ -96,7 +96,7 @@ describe("BoardFilterMenu clear action", () => {
       onSelectFilter,
       onClearConditions,
     });
-    await user.click(screen.getByRole("menuitem", { name: "Clear filter" }));
+    await user.click(screen.getByRole("menuitem", { name: "Limpar filtro" }));
     expect(onSelectFilter).toHaveBeenCalledWith(null);
     expect(onClearConditions).toHaveBeenCalledTimes(1);
   });
@@ -105,7 +105,7 @@ describe("BoardFilterMenu clear action", () => {
     const onSelectFilter = vi.fn();
     const onClearConditions = vi.fn();
     const user = await openMenu({ appliedDefinition: AD_HOC, onSelectFilter, onClearConditions });
-    await user.click(screen.getByRole("menuitem", { name: "All open deals" }));
+    await user.click(screen.getByRole("menuitem", { name: "Todos os negócios abertos" }));
     expect(onSelectFilter).toHaveBeenCalledWith(null);
     expect(onClearConditions).toHaveBeenCalledTimes(1);
   });
@@ -114,17 +114,17 @@ describe("BoardFilterMenu clear action", () => {
 describe("BoardFilterMenu current row", () => {
   it("marks All open deals current when nothing is applied", async () => {
     await openMenu({ savedFilters: [own], selectedFilterId: null, appliedDefinition: null });
-    expect(screen.getByRole("menuitem", { name: "All open deals" })).toHaveAttribute(
+    expect(screen.getByRole("menuitem", { name: "Todos os negócios abertos" })).toHaveAttribute(
       "aria-current",
       "true",
     );
   });
 
   // An ad-hoc filter leaves selectedFilterId null too, so keying the highlight off the id alone
-  // claims "All open deals" while the board shows a filtered subset.
+  // claims "Todos os negócios abertos" while the board shows a filtered subset.
   it("does not mark All open deals current while an ad-hoc filter is applied", async () => {
     await openMenu({ savedFilters: [own], selectedFilterId: null, appliedDefinition: AD_HOC });
-    expect(screen.getByRole("menuitem", { name: "All open deals" })).not.toHaveAttribute(
+    expect(screen.getByRole("menuitem", { name: "Todos os negócios abertos" })).not.toHaveAttribute(
       "aria-current",
     );
   });
@@ -141,18 +141,18 @@ describe("BoardFilterMenu current row", () => {
 describe("BoardFilterMenu create-filter entry", () => {
   it("offers Create new filter when no saved filter is selected", async () => {
     await openMenu({ savedFilters: [own], selectedFilterId: null, onCreateFilter: () => {} });
-    expect(screen.getByRole("menuitem", { name: /Create new filter/ })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: /Criar novo filtro/ })).not.toBeNull();
   });
 
   it("offers Edit filter when the selected filter is the actor's own", async () => {
     await openMenu({ savedFilters: [own], selectedFilterId: "f1", onCreateFilter: () => {} });
-    expect(screen.getByRole("menuitem", { name: /Edit filter/ })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: /Editar filtro/ })).not.toBeNull();
   });
 
   it("offers Save as a new filter for someone else's shared filter", async () => {
     const shared = { ...own, isOwn: false, isShared: true };
     await openMenu({ savedFilters: [shared], selectedFilterId: "f1", onCreateFilter: () => {} });
-    expect(screen.getByRole("menuitem", { name: /Save as a new filter/ })).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: /Salvar como novo filtro/ })).not.toBeNull();
   });
 });
 
@@ -171,7 +171,7 @@ describe("BoardFilterMenu favorites", () => {
     const onToggleFavorite = vi.fn();
     const onSelectFilter = vi.fn();
     const user = await openMenu({ savedFilters: [own], onToggleFavorite, onSelectFilter });
-    await user.click(screen.getByRole("menuitem", { name: "Favorite filter" }));
+    await user.click(screen.getByRole("menuitem", { name: "Favoritar filtro" }));
     expect(onToggleFavorite).toHaveBeenCalledWith("f1");
     expect(onSelectFilter).not.toHaveBeenCalled();
   });

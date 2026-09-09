@@ -80,7 +80,7 @@ describe("BoardStages layout", () => {
   test("every lane after the first carries a divider between columns", () => {
     renderStages([]);
     const items = screen
-      .getByRole("list", { name: "Pipeline stages" })
+      .getByRole("list", { name: "Etapas do pipeline" })
       .querySelectorAll(":scope > li");
     expect(items).toHaveLength(3);
     expect(items[0]?.getAttribute("data-column-divider")).toBeNull();
@@ -92,7 +92,7 @@ describe("BoardStages layout", () => {
     renderStages([card("d1", STAGES[0]!.id), card("d2", STAGES[0]!.id)]);
     const lane = screen.getByRole("region", { name: "Alpha" });
     expect(lane.className).toContain("overflow-hidden");
-    const deals = screen.getByRole("list", { name: "Alpha deals" });
+    const deals = screen.getByRole("list", { name: "Alpha: negócios" });
     expect(deals.className).toContain("overflow-y-auto");
     expect(deals.className).toContain("flex-1");
   });

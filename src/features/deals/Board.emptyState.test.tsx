@@ -107,7 +107,7 @@ function renderBoard(cards: BoardCard[], initialView?: BoardViewState) {
 }
 
 function stageList(): HTMLElement | null {
-  return screen.queryByRole("list", { name: "Pipeline stages" });
+  return screen.queryByRole("list", { name: "Etapas do pipeline" });
 }
 
 // Board filter state survives a reload, so a filter that excludes every deal can greet a rep with
@@ -130,7 +130,7 @@ describe("Board with a filter that provably excludes every deal", () => {
   test("replaces the stage columns with an empty state", () => {
     renderBoard(ONLY_ANA, OWNER_BEN);
 
-    expect(screen.getByText("No deals match these filters")).not.toBeNull();
+    expect(screen.getByText("Nenhum negócio corresponde a esses filtros")).not.toBeNull();
     expect(stageList()).toBeNull();
   });
 
@@ -138,10 +138,10 @@ describe("Board with a filter that provably excludes every deal", () => {
     const user = userEvent.setup();
     renderBoard(ONLY_ANA, OWNER_BEN);
 
-    await user.click(screen.getByRole("button", { name: "Clear filters" }));
+    await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
 
     expect(stageList()).not.toBeNull();
-    expect(screen.queryByText("No deals match these filters")).toBeNull();
+    expect(screen.queryByText("Nenhum negócio corresponde a esses filtros")).toBeNull();
   });
 });
 
@@ -151,14 +151,14 @@ describe("Board where the filter and an empty pipeline look the same", () => {
   test("claims neither cause and offers both ways out", () => {
     renderBoard([], ROTTING);
 
-    const title = screen.getByText("Nothing to show here");
-    expect(screen.queryByText("No deals match these filters")).toBeNull();
+    const title = screen.getByText("Nada para mostrar aqui");
+    expect(screen.queryByText("Nenhum negócio corresponde a esses filtros")).toBeNull();
     // Scoped to the empty state: the add-deal control also lives in the toolbar above it.
     const panel = title.parentElement;
     if (panel === null) throw new Error("empty state has no container");
     const empty = within(panel);
-    expect(empty.getByRole("button", { name: "Clear filters" })).not.toBeNull();
-    expect(empty.getByRole("button", { name: /Deal/ })).not.toBeNull();
+    expect(empty.getByRole("button", { name: "Limpar filtros" })).not.toBeNull();
+    expect(empty.getByRole("button", { name: /Negócio/ })).not.toBeNull();
   });
 
   test("keeps the stage columns, since the pipeline may simply be empty", () => {
@@ -174,9 +174,9 @@ describe("Board with an empty, unfiltered pipeline", () => {
   test("says the pipeline is empty and keeps the stage columns", () => {
     renderBoard([]);
 
-    expect(screen.getByText("No deals in this pipeline yet")).not.toBeNull();
+    expect(screen.getByText("Ainda não há negócios neste pipeline")).not.toBeNull();
     expect(stageList()).not.toBeNull();
-    expect(screen.queryByRole("button", { name: "Clear filters" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Limpar filtros" })).toBeNull();
   });
 });
 
@@ -186,7 +186,7 @@ describe("Board applied-filter chips", () => {
   test("names the owner the board is narrowed to", () => {
     renderBoard(CARDS, { ...ROTTING, savedFilter: null, ownerId: BEN });
 
-    expect(screen.getByText("Owner: Ben")).not.toBeNull();
+    expect(screen.getByText("Responsável: Ben")).not.toBeNull();
   });
 
   test("clears the owner too, so Clear all leaves the board unfiltered", async () => {
@@ -194,18 +194,18 @@ describe("Board applied-filter chips", () => {
     renderBoard(CARDS, { ...ROTTING, savedFilter: null, ownerId: BEN });
 
     expect(screen.queryByRole("button", { name: "Deal One" })).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Clear all" }));
+    await user.click(screen.getByRole("button", { name: "Limpar tudo" }));
 
     expect(screen.getByRole("button", { name: "Deal One" })).not.toBeNull();
-    expect(screen.queryByText("Owner: Ben")).toBeNull();
+    expect(screen.queryByText("Responsável: Ben")).toBeNull();
   });
 
   test("clears the owner from the Filter menu's Clear filter", async () => {
     const user = userEvent.setup();
     renderBoard(CARDS, { ...ROTTING, savedFilter: null, ownerId: BEN });
 
-    await user.click(screen.getByLabelText("Filter"));
-    await user.click(screen.getByRole("menuitem", { name: "Clear filter" }));
+    await user.click(screen.getByLabelText("Filtro"));
+    await user.click(screen.getByRole("menuitem", { name: "Limpar filtro" }));
 
     expect(screen.getByRole("button", { name: "Deal One" })).not.toBeNull();
   });

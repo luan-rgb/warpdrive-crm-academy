@@ -58,8 +58,8 @@ function baseProps(onBulkStage: (ids: string[], to: string) => Promise<boolean>)
 
 // Select every row, then pick a destination stage. Stops short of confirming.
 function selectAllAndPick(stageName: string): void {
-  fireEvent.click(screen.getByRole("checkbox", { name: "Select all deals" }));
-  fireEvent.click(screen.getByLabelText("Move to stage"));
+  fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todos os negócios" }));
+  fireEvent.click(screen.getByLabelText("Mover para etapa"));
   fireEvent.click(screen.getByRole("option", { name: stageName }));
 }
 
@@ -79,7 +79,7 @@ describe("DealList bulk stage move", () => {
     selectAllAndPick("Proposal");
 
     const dialog = screen.getByRole("alertdialog");
-    expect(dialog).toHaveTextContent("3 deals");
+    expect(dialog).toHaveTextContent("3 negócios");
     expect(dialog).toHaveTextContent("Proposal");
   });
 
@@ -91,7 +91,7 @@ describe("DealList bulk stage move", () => {
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(onBulkStage).not.toHaveBeenCalled();
-    expect(screen.getByText("3 selected")).toBeInTheDocument();
+    expect(screen.getByText("3 selecionados")).toBeInTheDocument();
   });
 
   it("performs the move once confirmed", async () => {
@@ -99,7 +99,7 @@ describe("DealList bulk stage move", () => {
     render(<DealList {...baseProps(onBulkStage)} />);
 
     selectAllAndPick("Proposal");
-    fireEvent.click(screen.getByRole("button", { name: "Move deals" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mover negócios" }));
 
     await vi.waitFor(() => expect(onBulkStage).toHaveBeenCalledWith(["d1", "d2", "d3"], "s2"));
   });

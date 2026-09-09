@@ -19,14 +19,14 @@ export interface FilterSaveCopy {
 export function filterSaveCopy(mode: FilterSaveMode): FilterSaveCopy {
   switch (mode) {
     case "create":
-      return { title: "Create new filter", saveLabel: "Save", note: null };
+      return { title: "Criar novo filtro", saveLabel: "Salvar", note: null };
     case "update":
-      return { title: "Edit filter", saveLabel: "Save changes", note: null };
+      return { title: "Editar filtro", saveLabel: "Salvar alterações", note: null };
     case "fork":
       return {
-        title: "Save as a new filter",
-        saveLabel: "Save as new",
-        note: "You don't own this filter, so your changes are saved as a new one.",
+        title: "Salvar como novo filtro",
+        saveLabel: "Salvar como novo",
+        note: "Você não é dono deste filtro, então suas alterações são salvas como um novo.",
       };
     default:
       return assertNever(mode);

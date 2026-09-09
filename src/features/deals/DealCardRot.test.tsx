@@ -87,6 +87,6 @@ describe("DealCard rot tint", () => {
     const card = screen.getByRole("button", { name: /Acme renewal/ });
     expect(card.className).toMatch(/bg-red-\d/);
     expect(screen.queryByLabelText("No activity scheduled")).toBeNull();
-    expect(screen.getByLabelText("Discovery call · 3 days overdue")).not.toBeNull();
+    expect(screen.getByLabelText("Discovery call · atrasada há 3 dias")).not.toBeNull();
   });
 });
