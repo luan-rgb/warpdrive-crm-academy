@@ -55,15 +55,15 @@ export function ContactActionsMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger aria-label="Contact actions" disabled={pending} className={ICON_BUTTON}>
+      <DropdownMenuTrigger aria-label="Ações do contato" disabled={pending} className={ICON_BUTTON}>
         <EllipsisVertical aria-hidden="true" className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
-        <DropdownMenuItem onSelect={() => void copyLink()}>Copy link</DropdownMenuItem>
-        {canMerge && <DropdownMenuItem onSelect={onMerge}>Merge duplicates</DropdownMenuItem>}
+        <DropdownMenuItem onSelect={() => void copyLink()}>Copiar link</DropdownMenuItem>
+        {canMerge && <DropdownMenuItem onSelect={onMerge}>Mesclar duplicados</DropdownMenuItem>}
         {canDelete && (
           <DropdownMenuItem onSelect={() => setConfirmingDelete(true)} className="text-destructive">
-            Delete
+            Excluir
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
@@ -73,9 +73,10 @@ export function ContactActionsMenu({
       <ConfirmDialog
         open={confirmingDelete}
         onOpenChange={setConfirmingDelete}
-        title="Delete this record?"
-        description="This cannot be undone."
-        confirmLabel="Delete"
+        title="Excluir este registro?"
+        description="Isso não pode ser desfeito."
+        confirmLabel="Excluir"
+        cancelLabel="Cancelar"
         destructive
         pending={pending}
         onConfirm={() => void remove()}

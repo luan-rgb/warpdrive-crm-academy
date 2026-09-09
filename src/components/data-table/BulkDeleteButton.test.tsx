@@ -11,7 +11,7 @@ describe("BulkDeleteButton", () => {
     const onConfirm = vi.fn();
     render(<BulkDeleteButton count={4} noun="person" nounPlural="people" onConfirm={onConfirm} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
 
     expect(onConfirm).not.toHaveBeenCalled();
   });
@@ -19,7 +19,7 @@ describe("BulkDeleteButton", () => {
   it("names how many records are about to go", () => {
     render(<BulkDeleteButton count={4} noun="person" nounPlural="people" onConfirm={vi.fn()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
 
     expect(screen.getByRole("alertdialog")).toHaveTextContent("4 people");
   });
@@ -27,7 +27,7 @@ describe("BulkDeleteButton", () => {
   it("uses the singular noun for a single record", () => {
     render(<BulkDeleteButton count={1} noun="person" nounPlural="people" onConfirm={vi.fn()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
 
     expect(screen.getByRole("alertdialog")).toHaveTextContent("1 person");
   });
@@ -36,8 +36,8 @@ describe("BulkDeleteButton", () => {
     const onConfirm = vi.fn();
     render(<BulkDeleteButton count={2} noun="person" nounPlural="people" onConfirm={onConfirm} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
 
     expect(onConfirm).not.toHaveBeenCalled();
   });
@@ -46,8 +46,8 @@ describe("BulkDeleteButton", () => {
     const onConfirm = vi.fn();
     render(<BulkDeleteButton count={2} noun="person" nounPlural="people" onConfirm={onConfirm} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete people" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir people" }));
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });

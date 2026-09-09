@@ -22,10 +22,10 @@ import { PEOPLE_COLUMNS } from "./peopleColumns";
 import type { PersonSortField } from "./schemas";
 
 const PAGE_SIZE = 50;
-const LOAD_MORE = "Load more";
-const LOAD_MORE_ERROR = "Couldn't load more people. Please try again.";
-const RELOAD_ERROR = "Couldn't load people. Please try again.";
-const BULK_DELETE_ERROR = "Couldn't delete some people. Please try again.";
+const LOAD_MORE = "Carregar mais";
+const LOAD_MORE_ERROR = "Não foi possível carregar mais pessoas. Tente novamente.";
+const RELOAD_ERROR = "Não foi possível carregar as pessoas. Tente novamente.";
+const BULK_DELETE_ERROR = "Não foi possível excluir algumas pessoas. Tente novamente.";
 // Stable module reference: passed as useColumnSort's fallback, so `effective` only changes
 // reference when the sort state itself changes (not on every PeopleList re-render).
 const DEFAULT_SORT: ColumnSort<PersonSortField> = { field: "name", dir: "asc" };
@@ -187,7 +187,7 @@ export function PeopleList({
         <div className="flex items-center gap-2">
           <SavedViewControl
             targetEntity="person"
-            allLabel="All people"
+            allLabel="Todas as pessoas"
             currentDefinition={filter}
             selectedViewId={savedViewId}
             onSelectView={(view) => {
@@ -216,13 +216,13 @@ export function PeopleList({
               onClick={() => setMerging(true)}
               className="rounded-md border px-3 py-1 text-sm hover:bg-accent active:scale-[0.96] transition-transform"
             >
-              Merge duplicates
+              Mesclar duplicados
             </button>
           )}
           <BulkDeleteButton
             count={selection.count}
-            noun="person"
-            nounPlural="people"
+            noun="pessoa"
+            nounPlural="pessoas"
             onConfirm={() => void bulkDelete()}
           />
         </BulkActionBar>
@@ -272,7 +272,7 @@ export function PeopleList({
           onClick={() => void loadMore()}
           className="self-center rounded-md border px-4 py-1.5 text-sm hover:bg-accent disabled:opacity-50 active:not-disabled:scale-[0.96] transition-transform"
         >
-          {loading ? "Loading..." : LOAD_MORE}
+          {loading ? "Carregando..." : LOAD_MORE}
         </button>
       )}
     </div>

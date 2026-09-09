@@ -85,7 +85,7 @@ describe("EditContactModal (person)", () => {
         onClose={() => {}}
       />,
     );
-    expect(screen.getByLabelText(/name/i)).toHaveValue("Jane Roe");
+    expect(screen.getByLabelText(/nome/i)).toHaveValue("Jane Roe");
     expect(screen.getByDisplayValue("jane@acme.com")).toBeInTheDocument();
     // Custom field renders through the shared CustomFieldFormControl (aria-label = def.name).
     expect(screen.getByLabelText("Role")).toHaveValue("CTO");
@@ -101,7 +101,7 @@ describe("EditContactModal (person)", () => {
         onClose={() => {}}
       />,
     );
-    const panel = screen.getByRole("dialog", { name: "Edit person" });
+    const panel = screen.getByRole("dialog", { name: "Editar pessoa" });
     expect(panel).toHaveClass("bg-card");
     expect(panel.className).not.toMatch(/-gray-/);
   });
@@ -117,9 +117,9 @@ describe("EditContactModal (person)", () => {
         onClose={() => {}}
       />,
     );
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: "Jane R. Roe" } });
+    fireEvent.change(screen.getByLabelText(/nome/i), { target: { value: "Jane R. Roe" } });
     fireEvent.change(screen.getByLabelText("Role"), { target: { value: "CEO" } });
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
 
     await vi.waitFor(() =>
       expect(updatePersonAction).toHaveBeenCalledWith(
@@ -147,11 +147,11 @@ describe("EditContactModal (person)", () => {
         onClose={() => {}}
       />,
     );
-    const trigger = screen.getByLabelText("Organization");
+    const trigger = screen.getByLabelText("Organização");
     fireEvent.click(trigger);
     fireEvent.click(screen.getByText("Globex"));
     expect(trigger).toHaveTextContent("Globex");
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     await vi.waitFor(() =>
       expect(updatePersonAction).toHaveBeenCalledWith(
         expect.objectContaining({ orgId: "o2" }),
@@ -172,7 +172,7 @@ describe("EditContactModal (person)", () => {
         onClose={() => {}}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     expect(onSaved).not.toHaveBeenCalled();
   });
@@ -193,10 +193,10 @@ describe("EditContactModal (person)", () => {
         onClose={() => {}}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     const alert = await screen.findByRole("alert");
     expect(alert).not.toHaveTextContent("E_CONTACT_008");
-    expect(alert).toHaveTextContent(/check the highlighted fields/i);
+    expect(alert).toHaveTextContent(/campos destacados/i);
   });
 });
 
@@ -211,9 +211,9 @@ describe("EditContactModal (org)", () => {
         onClose={() => {}}
       />,
     );
-    expect(screen.getByLabelText(/name/i)).toHaveValue("Acme Inc");
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: "Acme LLC" } });
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    expect(screen.getByLabelText(/nome/i)).toHaveValue("Acme Inc");
+    fireEvent.change(screen.getByLabelText(/nome/i), { target: { value: "Acme LLC" } });
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     await vi.waitFor(() =>
       expect(updateOrgAction).toHaveBeenCalledWith(
         expect.objectContaining({ id: "o1", name: "Acme LLC" }),

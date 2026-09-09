@@ -21,9 +21,9 @@ it("hides the org select when 'org' is hidden, keeps email/phone", () => {
       hidden={new Set(["org"])}
     />,
   );
-  expect(screen.queryByLabelText("Organization")).toBeNull();
-  expect(screen.getByText("Email")).toBeTruthy();
-  expect(screen.getByText("Phone")).toBeTruthy();
+  expect(screen.queryByLabelText("Organização")).toBeNull();
+  expect(screen.getByText("E-mail")).toBeTruthy();
+  expect(screen.getByText("Telefone")).toBeTruthy();
 });
 
 it("hides email rows when 'emails' is hidden", () => {
@@ -39,8 +39,8 @@ it("hides email rows when 'emails' is hidden", () => {
       hidden={new Set(["emails"])}
     />,
   );
-  expect(screen.queryByText("Email")).toBeNull();
-  expect(screen.getByText("Phone")).toBeTruthy();
+  expect(screen.queryByText("E-mail")).toBeNull();
+  expect(screen.getByText("Telefone")).toBeTruthy();
 });
 
 it("shows all fields when nothing is hidden", () => {
@@ -55,15 +55,15 @@ it("shows all fields when nothing is hidden", () => {
       onOrgId={noop}
     />,
   );
-  expect(screen.getByText("Email")).toBeTruthy();
-  expect(screen.getByLabelText("Organization")).toBeTruthy();
+  expect(screen.getByText("E-mail")).toBeTruthy();
+  expect(screen.getByLabelText("Organização")).toBeTruthy();
 });
 
 it("labels and inputs use theme tokens, so a Night form is not a white box", () => {
   render(<AddressFields value={{}} onChange={noop} />);
-  const legend = screen.getByText("Address");
+  const legend = screen.getByText("Endereço");
   expect(legend).toHaveClass("text-muted-foreground");
-  const street = screen.getByLabelText("Street");
+  const street = screen.getByLabelText("Rua");
   expect(street).toHaveClass("bg-background", "text-foreground");
   expect(street.className).not.toMatch(/-gray-/);
 });

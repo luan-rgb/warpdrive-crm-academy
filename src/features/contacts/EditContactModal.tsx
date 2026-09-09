@@ -21,15 +21,15 @@ import {
 
 // error id -> human copy. Anything unmapped still surfaces its id so nothing fails silently.
 const ERROR_MESSAGES: Record<string, string> = {
-  E_AUTH_CSRF: "Your session expired. Refresh the page and try again.",
-  E_AUTH_003: "Your session is no longer valid. Sign in again.",
-  E_PERM_001: "You do not have permission to edit this record.",
-  E_CONTACT_001: "This record could not be found.",
-  E_CONTACT_002: "The address could not be saved (invalid).",
-  E_CONTACT_008: "Please check the highlighted fields and try again.",
+  E_AUTH_CSRF: "Sua sessão expirou. Atualize a página e tente novamente.",
+  E_AUTH_003: "Sua sessão não é mais válida. Entre novamente.",
+  E_PERM_001: "Você não tem permissão para editar este registro.",
+  E_CONTACT_001: "Este registro não foi encontrado.",
+  E_CONTACT_002: "O endereço não pôde ser salvo (inválido).",
+  E_CONTACT_008: "Verifique os campos destacados e tente novamente.",
 };
 function messageFor(id: string): string {
-  return ERROR_MESSAGES[id] ?? `Could not save (${id})`;
+  return ERROR_MESSAGES[id] ?? `Não foi possível salvar (${id})`;
 }
 
 export type EditContactModalProps =
@@ -137,12 +137,12 @@ export function EditContactModal(props: EditContactModalProps): React.ReactNode 
   return (
     <div
       role="dialog"
-      aria-label={kind === "person" ? "Edit person" : "Edit organization"}
+      aria-label={kind === "person" ? "Editar pessoa" : "Editar organização"}
       className="space-y-3 rounded-md border bg-card p-4"
     >
       <TextField
         id="edit-name"
-        label="Name"
+        label="Nome"
         value={state.name}
         onChange={(name) => set({ name })}
       />
@@ -174,10 +174,10 @@ export function EditContactModal(props: EditContactModalProps): React.ReactNode 
 
       <div className="flex justify-end gap-2">
         <Button type="button" variant="outline" size="sm" onClick={onClose}>
-          Cancel
+          Cancelar
         </Button>
         <Button type="button" size="sm" disabled={pending} onClick={() => void submit()}>
-          {pending ? "Saving..." : "Save"}
+          {pending ? "Salvando..." : "Salvar"}
         </Button>
       </div>
     </div>

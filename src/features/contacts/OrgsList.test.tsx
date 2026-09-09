@@ -65,7 +65,7 @@ describe("OrgsList", () => {
 
   it("hides Load more when every org is already loaded", () => {
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={1} />);
-    expect(screen.queryByRole("button", { name: /load more/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /carregar mais/i })).not.toBeInTheDocument();
   });
 
   it("fetches and appends the next page of orgs on Load more", async () => {
@@ -76,22 +76,22 @@ describe("OrgsList", () => {
       ],
     });
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={2} />);
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
     await vi.waitFor(() =>
       expect(listOrgsQuery).toHaveBeenCalledWith(expect.objectContaining({ offset: 1, limit: 50 })),
     );
     await screen.findByText("Globex");
-    expect(screen.queryByRole("button", { name: /load more/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /carregar mais/i })).not.toBeInTheDocument();
   });
 
   it("surfaces a load-more failure as an inline alert instead of swallowing it", async () => {
     listOrgsQuery.mockRejectedValueOnce(new Error("timeout"));
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={2} />);
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
 
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/couldn't load more|could not load more|failed/i);
-    expect(screen.getByRole("button", { name: /load more/i })).toBeEnabled();
+    expect(alert).toHaveTextContent(/não foi possível carregar mais|failed/i);
+    expect(screen.getByRole("button", { name: /carregar mais/i })).toBeEnabled();
   });
 
   it("clears the error after a successful retry", async () => {
@@ -103,10 +103,10 @@ describe("OrgsList", () => {
     });
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={2} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
     await screen.findByRole("alert");
 
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
     await screen.findByText("Globex");
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
@@ -149,15 +149,17 @@ describe("OrgsList", () => {
 
   it("selecting a row shows the bulk action bar with a count", () => {
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={1} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme Inc" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme Inc" }));
     expect(screen.getByText("1 selected")).toBeInTheDocument();
   });
 
   it("selecting all visible rows checks the header checkbox", () => {
     render(<OrgsList rows={[orgRow("o1", "Acme Inc"), orgRow("o2", "Globex")]} total={2} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all organizations" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as organizações" }));
     expect(screen.getByText("2 selected")).toBeInTheDocument();
-    expect(screen.getByRole("checkbox", { name: "Select all organizations" })).toBeChecked();
+    expect(
+      screen.getByRole("checkbox", { name: "Selecionar todas as organizações" }),
+    ).toBeChecked();
   });
 
   it("clicking the Name header re-queries listOrgs with the new sort", async () => {
@@ -182,9 +184,9 @@ describe("OrgsList", () => {
     listOrgsQuery.mockResolvedValue({ total: 0, rows: [] });
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={1} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme Inc" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete organizations" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme Inc" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir organizações" }));
 
     await vi.waitFor(() => expect(deleteOrgAction).toHaveBeenCalledWith({ id: "o1" }, "csrf"));
     await vi.waitFor(() => expect(screen.queryByText(/selected/)).not.toBeInTheDocument());
@@ -207,14 +209,14 @@ describe("OrgsList", () => {
     });
     render(<OrgsList rows={[orgRow("o1", "Acme Inc"), orgRow("o2", "Globex")]} total={2} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all organizations" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete organizations" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as organizações" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir organizações" }));
 
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/couldn't delete|could not delete|failed/i);
+    expect(alert).toHaveTextContent(/não foi possível excluir|failed/i);
     await vi.waitFor(() => expect(screen.getByText("1 selected")).toBeInTheDocument());
-    expect(screen.getByRole("checkbox", { name: "Select Globex" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Selecionar Globex" })).toBeChecked();
   });
 
   it("applies a saved org view to the list query", async () => {
@@ -255,11 +257,11 @@ describe("OrgsList", () => {
     listOrgsQuery.mockResolvedValue({ total: 1, rows: [] });
     render(<OrgsList rows={[orgRow("o1", "Acme Inc"), orgRow("o2", "Globex")]} total={2} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme Inc" }));
-    expect(screen.queryByRole("button", { name: "Merge duplicates" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Globex" }));
-    fireEvent.click(screen.getByRole("button", { name: "Merge duplicates" }));
-    fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme Inc" }));
+    expect(screen.queryByRole("button", { name: "Mesclar duplicados" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Globex" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar duplicados" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar" }));
 
     await vi.waitFor(() =>
       expect(mergeOrgsAction).toHaveBeenCalledWith(

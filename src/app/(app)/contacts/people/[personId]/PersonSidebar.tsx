@@ -61,7 +61,7 @@ export function PersonSidebar({
           href={`/contacts/orgs/${person.orgId}`}
           className="block rounded px-1 py-1 text-sm text-primary transition-colors duration-150 hover:bg-accent hover:underline motion-reduce:transition-none"
         >
-          View {orgName}
+          Ver {orgName}
         </Link>
       )}
 
@@ -70,7 +70,7 @@ export function PersonSidebar({
       <CollapsibleSection title={sections.deals}>
         <ListPanel
           items={deals}
-          empty="No deals yet."
+          empty="Ainda não há negócios."
           render={(deal) => <LinkedDealRow key={deal.id} deal={deal} />}
         />
       </CollapsibleSection>

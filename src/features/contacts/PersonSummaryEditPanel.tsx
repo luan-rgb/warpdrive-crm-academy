@@ -10,7 +10,7 @@ import { err, ok, type Result } from "@/types/result";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { updatePersonAction } from "./actions";
 
-const NO_ORGANIZATION_LABEL = "No organization";
+const NO_ORGANIZATION_LABEL = "Sem organização";
 
 interface PanelPerson {
   id: string;
@@ -87,37 +87,37 @@ export function PersonSummaryEditPanel({
 
   return (
     <>
-      <FieldRow label="Name">
+      <FieldRow label="Nome">
         <InlineTextField
-          label="Name"
+          label="Nome"
           value={person.name}
           onSave={(v) => save({ name: v.trim() })}
         />
       </FieldRow>
       {!hidden.has("emails") && (
-        <FieldRow label="Primary email" empty={primaryValue(person.emails) === ""}>
+        <FieldRow label="E-mail principal" empty={primaryValue(person.emails) === ""}>
           <InlineTextField
-            label="Primary email"
+            label="E-mail principal"
             value={primaryValue(person.emails)}
-            placeholder="+ Add email"
+            placeholder="+ Adicionar e-mail"
             onSave={(v) => save({ emails: setPrimaryPoint(person.emails, v) })}
           />
         </FieldRow>
       )}
       {!hidden.has("phones") && (
-        <FieldRow label="Primary phone" empty={primaryValue(person.phones) === ""}>
+        <FieldRow label="Telefone principal" empty={primaryValue(person.phones) === ""}>
           <InlineTextField
-            label="Primary phone"
+            label="Telefone principal"
             value={primaryValue(person.phones)}
-            placeholder="+ Add phone"
+            placeholder="+ Adicionar telefone"
             onSave={(v) => save({ phones: setPrimaryPoint(person.phones, v) })}
           />
         </FieldRow>
       )}
       {!hidden.has("org") && (
-        <FieldRow label="Organization" empty={person.orgId === null}>
+        <FieldRow label="Organização" empty={person.orgId === null}>
           <InlineSelectField
-            label="Organization"
+            label="Organização"
             value={person.orgId ?? ""}
             options={orgSelectOptions}
             placeholder={NO_ORGANIZATION_LABEL}

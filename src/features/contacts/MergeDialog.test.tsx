@@ -58,19 +58,19 @@ function pick(labelText: string, optionText: string): void {
 describe("MergeDialog", () => {
   it("disables confirm until both a partner and a survivor are chosen", () => {
     render(<MergeDialog kind="org" current={{ id: "o1", name: "Acme" }} onMerged={() => {}} />);
-    const confirm = screen.getByRole("button", { name: "Merge" });
+    const confirm = screen.getByRole("button", { name: "Mesclar" });
     expect(confirm).toBeDisabled();
-    pick("Merge with", "Globex");
-    pick("Survivor", "Acme");
+    pick("Mesclar com", "Globex");
+    pick("Sobrevivente", "Acme");
     expect(confirm).toBeEnabled();
   });
 
   it("calls mergeOrgsAction with the chosen survivor and merged-away ids", async () => {
     const onMerged = vi.fn();
     render(<MergeDialog kind="org" current={{ id: "o1", name: "Acme" }} onMerged={onMerged} />);
-    pick("Merge with", "Globex");
-    pick("Survivor", "Acme");
-    fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    pick("Mesclar com", "Globex");
+    pick("Sobrevivente", "Acme");
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar" }));
     await vi.waitFor(() =>
       expect(mergeOrgsAction).toHaveBeenCalledWith(
         expect.objectContaining({ survivorId: "o1", mergedId: "o2" }),
@@ -87,9 +87,9 @@ describe("MergeDialog", () => {
     render(
       <MergeDialog kind="person" current={{ id: "p1", name: "Jane Roe" }} onMerged={onMerged} />,
     );
-    pick("Merge with", "John Doe");
-    pick("Survivor", "John Doe");
-    fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    pick("Mesclar com", "John Doe");
+    pick("Sobrevivente", "John Doe");
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar" }));
     await vi.waitFor(() =>
       expect(mergePersonsAction).toHaveBeenCalledWith(
         expect.objectContaining({ survivorId: "p2", mergedId: "p1" }),
@@ -102,7 +102,7 @@ describe("MergeDialog", () => {
 
   it("sits on a card surface with token-coloured labels", () => {
     render(<MergeDialog kind="org" current={{ id: "o1", name: "Acme" }} onMerged={() => {}} />);
-    const label = screen.getByText("Merge with");
+    const label = screen.getByText("Mesclar com");
     expect(label).toHaveClass("text-muted-foreground");
     const panel = label.closest("div.rounded-md");
     expect(panel).toHaveClass("bg-card");

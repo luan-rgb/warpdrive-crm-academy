@@ -127,11 +127,11 @@ describe("OrgDetailClient", () => {
   it("renders one shared Organization section instead of separate Summary and Details cards", () => {
     render(<OrgDetailClient org={org as never} defs={[]} canMerge={true} baseCurrency="USD" />);
     expect(screen.getByRole("region", { name: "Organization" })).toBeInTheDocument();
-    expect(screen.queryByRole("region", { name: "Summary" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("region", { name: "Details" })).not.toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Related organizations" })).toBeInTheDocument();
-    const stats = within(screen.getByRole("region", { name: "Stats" }));
-    expect(stats.getByText("Open deals")).toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Resumo" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Detalhes" })).not.toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Organizações relacionadas" })).toBeInTheDocument();
+    const stats = within(screen.getByRole("region", { name: "Estatísticas" }));
+    expect(stats.getByText("Negócios em aberto")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Organization options/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Edit Organization section/i })).toBeInTheDocument();
   });
@@ -141,19 +141,19 @@ describe("OrgDetailClient", () => {
 
     const header = screen.getByRole("banner");
     expect(header.parentElement?.firstElementChild).toBe(header);
-    const people = within(screen.getByRole("region", { name: "People" }));
+    const people = within(screen.getByRole("region", { name: "Pessoas" }));
     expect(people.getByRole("link", { name: "Jane Roe" })).toHaveAttribute(
       "href",
       "/contacts/people/p1",
     );
-    const deals = within(screen.getByRole("region", { name: "Deals" }));
+    const deals = within(screen.getByRole("region", { name: "Negócios" }));
     expect(deals.getByRole("link", { name: "Acme renewal, status open" })).toHaveAttribute(
       "href",
       "/deals/d1",
     );
     expect(deals.getByLabelText("Deal status: Open")).toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "People" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "Deals" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Pessoas" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Negócios" })).not.toBeInTheDocument();
     const mainTabList = screen.getAllByRole("tablist").find((tabList) => {
       const tabs = within(tabList);
       return (

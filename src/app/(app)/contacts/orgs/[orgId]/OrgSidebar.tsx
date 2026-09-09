@@ -80,7 +80,7 @@ export function OrgSidebar({
       </CollapsibleSection>
 
       <CollapsibleSection title={sections.stats}>
-        <FieldRow label="Open deals">
+        <FieldRow label="Negócios em aberto">
           <span className="tabular-nums">{openDealsCount}</span>
         </FieldRow>
       </CollapsibleSection>
@@ -91,7 +91,7 @@ export function OrgSidebar({
       <CollapsibleSection title={sections.people}>
         <ListPanel
           items={people}
-          empty="No people yet."
+          empty="Ainda não há pessoas."
           render={(person) => (
             <li key={person.id}>
               <Link
@@ -108,7 +108,7 @@ export function OrgSidebar({
       <CollapsibleSection title={sections.deals}>
         <ListPanel
           items={deals}
-          empty="No deals yet."
+          empty="Ainda não há negócios."
           render={(deal) => <LinkedDealRow key={deal.id} deal={deal} />}
         />
       </CollapsibleSection>

@@ -90,7 +90,7 @@ describe("PeopleList", () => {
 
   it("hides Load more when every person is already loaded", () => {
     render(<PeopleList rows={rows} total={2} />);
-    expect(screen.queryByRole("button", { name: /load more/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /carregar mais/i })).not.toBeInTheDocument();
   });
 
   it("fetches and appends the next page, resolving org names from the supplied map", async () => {
@@ -107,7 +107,7 @@ describe("PeopleList", () => {
       ],
     });
     render(<PeopleList rows={rows} total={3} orgNames={{ o2: "Globex" }} />);
-    const loadMore = screen.getByRole("button", { name: /load more/i });
+    const loadMore = screen.getByRole("button", { name: /carregar mais/i });
     fireEvent.click(loadMore);
     // Fetches starting at the current loaded count.
     await vi.waitFor(() =>
@@ -122,18 +122,18 @@ describe("PeopleList", () => {
       "/contacts/orgs/o2",
     );
     // All three now loaded, so the affordance is gone.
-    expect(screen.queryByRole("button", { name: /load more/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /carregar mais/i })).not.toBeInTheDocument();
   });
 
   it("surfaces a load-more failure as an inline alert instead of swallowing it", async () => {
     listPeopleQuery.mockRejectedValueOnce(new Error("timeout"));
     render(<PeopleList rows={rows} total={3} />);
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
 
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/couldn't load more|could not load more|failed/i);
+    expect(alert).toHaveTextContent(/não foi possível carregar mais|failed/i);
     // The button returns so the user can retry (not stuck in "Loading...").
-    expect(screen.getByRole("button", { name: /load more/i })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /carregar mais/i })).toBeEnabled();
   });
 
   it("clears the error after a successful retry", async () => {
@@ -151,25 +151,25 @@ describe("PeopleList", () => {
     });
     render(<PeopleList rows={rows} total={3} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
     await screen.findByRole("alert");
 
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
     await screen.findByText("Zed Zephyr");
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("selecting a row shows the bulk action bar with a count", () => {
     render(<PeopleList rows={rows} total={2} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Jane Roe" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Jane Roe" }));
     expect(screen.getByText("1 selected")).toBeInTheDocument();
   });
 
   it("selecting all visible rows checks the header checkbox", () => {
     render(<PeopleList rows={rows} total={2} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all people" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as pessoas" }));
     expect(screen.getByText("2 selected")).toBeInTheDocument();
-    expect(screen.getByRole("checkbox", { name: "Select all people" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Selecionar todas as pessoas" })).toBeChecked();
   });
 
   it("clicking the Name header re-queries listPeople with the new sort", async () => {
@@ -194,9 +194,9 @@ describe("PeopleList", () => {
     listPeopleQuery.mockResolvedValue({ total: 1, rows: [] });
     render(<PeopleList rows={rows} total={2} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Jane Roe" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete people" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Jane Roe" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir pessoas" }));
 
     await vi.waitFor(() => expect(deletePersonAction).toHaveBeenCalledWith({ id: "p1" }, "csrf"));
     await vi.waitFor(() => expect(screen.queryByText(/selected/)).not.toBeInTheDocument());
@@ -217,22 +217,22 @@ describe("PeopleList", () => {
     });
     render(<PeopleList rows={rows} total={2} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all people" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete people" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as pessoas" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir pessoas" }));
 
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/couldn't delete|could not delete|failed/i);
+    expect(alert).toHaveTextContent(/não foi possível excluir|failed/i);
     await vi.waitFor(() => expect(screen.getByText("1 selected")).toBeInTheDocument());
-    expect(screen.getByRole("checkbox", { name: "Select John Doe" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Selecionar John Doe" })).toBeChecked();
   });
 
   it("offers Merge duplicates only when exactly two people are selected", () => {
     render(<PeopleList rows={rows} total={2} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Jane Roe" }));
-    expect(screen.queryByRole("button", { name: "Merge duplicates" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select John Doe" }));
-    expect(screen.getByRole("button", { name: "Merge duplicates" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Jane Roe" }));
+    expect(screen.queryByRole("button", { name: "Mesclar duplicados" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar John Doe" }));
+    expect(screen.getByRole("button", { name: "Mesclar duplicados" })).toBeInTheDocument();
   });
 
   it("applies a saved person view to the list query", async () => {
@@ -273,11 +273,11 @@ describe("PeopleList", () => {
     listPeopleQuery.mockResolvedValue({ total: 1, rows: [] });
     render(<PeopleList rows={rows} total={2} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Jane Roe" }));
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select John Doe" }));
-    fireEvent.click(screen.getByRole("button", { name: "Merge duplicates" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Jane Roe" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar John Doe" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar duplicados" }));
     // Confirm in the opened dialog (survivor defaults to the first selected, p1).
-    fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar" }));
 
     await vi.waitFor(() =>
       expect(mergePersonsAction).toHaveBeenCalledWith(

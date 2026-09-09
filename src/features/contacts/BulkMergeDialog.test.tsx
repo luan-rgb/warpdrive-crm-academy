@@ -33,7 +33,7 @@ describe("BulkMergeDialog", () => {
     );
 
     // Survivor defaults to the first record; confirm merges the second into it.
-    fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar" }));
 
     await waitFor(() =>
       expect(mergePersonsAction).toHaveBeenCalledWith(
@@ -50,9 +50,9 @@ describe("BulkMergeDialog", () => {
     render(
       <BulkMergeDialog kind="person" records={RECORDS} onMerged={onMerged} onClose={vi.fn()} />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mesclar" }));
 
-    await screen.findByText(/could not merge/i);
+    await screen.findByText(/não foi possível mesclar/i);
     expect(onMerged).not.toHaveBeenCalled();
   });
 });

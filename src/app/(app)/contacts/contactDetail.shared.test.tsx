@@ -115,19 +115,19 @@ describe("ContactTimelinePanel", () => {
     // Focus (open activities) is unaffected.
     render(<ContactTimelinePanel entityType="person" entityId="pe1" />);
 
-    expect(screen.getByRole("tab", { name: /^All/ })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /Activities/ })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /Notes/ })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /^Email/ })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /^Files/ })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /^Changelog/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /^Todas/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Atividades/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Notas/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /^E-mail/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /^Arquivos/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /^Histórico de alterações/ })).toBeInTheDocument();
 
     // Default "All": the done activity and the note both show under History.
     expect(screen.getByText("Done call")).toBeInTheDocument();
     expect(screen.getByText("Called Jane")).toBeInTheDocument();
 
     // Click "Notes": only the note remains in History; the done activity is filtered out.
-    await userEvent.click(screen.getByRole("tab", { name: /Notes/ }));
+    await userEvent.click(screen.getByRole("tab", { name: /Notas/ }));
     expect(screen.getByText("Called Jane")).toBeInTheDocument();
     expect(screen.queryByText("Done call")).not.toBeInTheDocument();
     // Focus is above the filter row and unaffected by it.
@@ -137,13 +137,13 @@ describe("ContactTimelinePanel", () => {
   it("counts every History tab and leaves the empty ones unbadged", () => {
     render(<ContactTimelinePanel entityType="person" entityId="pe1" />);
     // History holds the done activity and the note; the open one lives in Focus.
-    expect(screen.getByRole("tab", { name: "All (2)" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Activities (1)" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Notes (1)" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Files (2)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Todas (2)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Atividades (1)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Notas (1)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Arquivos (2)" })).toBeInTheDocument();
     // Nothing under Email or Changelog, so neither carries a (0).
-    expect(screen.getByRole("tab", { name: "Email" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Changelog" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "E-mail" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Histórico de alterações" })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: /\(0\)/ })).not.toBeInTheDocument();
   });
 
@@ -215,7 +215,7 @@ describe("CustomFieldsPanel", () => {
         renderValue={(_def, value) => String(value)}
       />,
     );
-    const toggle = screen.getByRole("button", { name: /custom fields/i });
+    const toggle = screen.getByRole("button", { name: /campos personalizados/i });
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByText("VIP tier")).toBeInTheDocument();
     expect(screen.getByText("Gold")).toBeInTheDocument();

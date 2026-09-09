@@ -5,7 +5,7 @@ import { CustomFieldFormControl } from "@/features/custom-fields/render";
 import type { CustomFieldDef } from "@/types/customFields";
 import { MAX_EMAIL_LEN, MAX_PHONE_LEN } from "./fieldBounds";
 
-const NO_ORGANIZATION_LABEL = "No organization";
+const NO_ORGANIZATION_LABEL = "Sem organização";
 
 export interface ContactPoint {
   label: string;
@@ -30,12 +30,15 @@ export function cleanAddress(a: Record<string, string>): Record<string, string> 
 
 const INPUT = "w-full rounded border bg-background px-2 py-1 text-sm text-foreground";
 const ADDRESS_FIELDS: Array<[string, string]> = [
-  ["street", "Street"],
-  ["city", "City"],
-  ["region", "Region"],
-  ["postal", "Postal"],
-  ["country", "Country"],
+  ["street", "Rua"],
+  ["city", "Cidade"],
+  ["region", "Região"],
+  ["postal", "CEP"],
+  ["country", "País"],
 ];
+// Internal "Email" | "Phone" kind stays as the English type discriminant (drives input type/
+// maxLength logic below); this map is only what the user sees.
+const KIND_LABEL: Record<"Email" | "Phone", string> = { Email: "E-mail", Phone: "Telefone" };
 
 export function TextField({
   id,
@@ -75,14 +78,14 @@ export function ContactPointRows({
   }
   return (
     <div className="space-y-1">
-      <span className="block text-sm text-muted-foreground">{kind}</span>
+      <span className="block text-sm text-muted-foreground">{KIND_LABEL[kind]}</span>
       <div className="flex flex-col gap-2">
         {rows.map((row, idx) => (
           // Positional rows in an ephemeral edit form: index is a stable-enough key here.
           // biome-ignore lint/suspicious/noArrayIndexKey: positional contact rows
           <div key={idx} className="flex items-center gap-2">
             <input
-              aria-label={`${kind} ${idx + 1}`}
+              aria-label={`${KIND_LABEL[kind]} ${idx + 1}`}
               type={kind === "Email" ? "email" : "tel"}
               maxLength={max}
               value={row.value}
@@ -91,7 +94,7 @@ export function ContactPointRows({
             />
             <button
               type="button"
-              aria-label={`Remove ${kind.toLowerCase()} ${idx + 1}`}
+              aria-label={`Remover ${KIND_LABEL[kind].toLowerCase()} ${idx + 1}`}
               onClick={() => onChange(rows.filter((_, i) => i !== idx))}
               className="rounded border px-2 py-1 text-sm text-muted-foreground hover:bg-muted"
             >
@@ -107,7 +110,7 @@ export function ContactPointRows({
         }
         className="text-sm font-medium text-link hover:underline"
       >
-        + Add {kind.toLowerCase()}
+        + Adicionar {KIND_LABEL[kind].toLowerCase()}
       </button>
     </div>
   );
@@ -142,9 +145,9 @@ export function PersonBaseFields({
       {!hidden.has("phones") && <ContactPointRows kind="Phone" rows={phones} onChange={onPhones} />}
       {!hidden.has("org") && (
         <div className="space-y-1">
-          <span className="block text-sm text-muted-foreground">Organization</span>
+          <span className="block text-sm text-muted-foreground">Organização</span>
           <Select
-            ariaLabel="Organization"
+            ariaLabel="Organização"
             value={orgId}
             onChange={onOrgId}
             placeholder={NO_ORGANIZATION_LABEL}
@@ -168,7 +171,7 @@ export function AddressFields({
 }): React.ReactNode {
   return (
     <fieldset className="space-y-1">
-      <legend className="text-sm text-muted-foreground">Address</legend>
+      <legend className="text-sm text-muted-foreground">Endereço</legend>
       {ADDRESS_FIELDS.map(([name, label]) => (
         <input
           key={name}
@@ -197,7 +200,7 @@ export function CustomFieldRows({
   if (defs.length === 0) return null;
   return (
     <fieldset className="space-y-2">
-      <legend className="text-sm font-medium text-muted-foreground">Custom fields</legend>
+      <legend className="text-sm font-medium text-muted-foreground">Campos personalizados</legend>
       {defs.map((def) => (
         <div key={def.id} className="space-y-1">
           <span className="block text-sm text-muted-foreground">{def.name}</span>

@@ -29,14 +29,15 @@ export function BulkDeleteButton({
         onClick={() => setConfirming(true)}
         className="rounded-md border px-3 py-1 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
       >
-        Delete
+        Excluir
       </button>
       <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
-        title={`Delete ${count} ${unit}?`}
-        description={`This cannot be undone, and it removes them for everyone on the team.`}
-        confirmLabel={`Delete ${nounPlural}`}
+        title={`Excluir ${count} ${unit}?`}
+        description={`Isso não pode ser desfeito, e remove os registros para todo o time.`}
+        confirmLabel={`Excluir ${nounPlural}`}
+        cancelLabel="Cancelar"
         destructive
         onConfirm={onConfirm}
       />

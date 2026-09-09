@@ -20,8 +20,8 @@ import { ContactHistoryTabs } from "./ContactHistoryTabs";
 const EMPTY_CLASS = "text-sm text-muted-foreground";
 // Threads link to person_id (and deal_id), never to an organization, so an org's Email filter
 // states the reason instead of implying the record merely has no mail yet.
-const ORG_EMAIL_EMPTY = "Email is tracked on people, not organizations.";
-const EMAIL_LOAD_ERROR = "Couldn't load emails for this contact. Please try again.";
+const ORG_EMAIL_EMPTY = "O e-mail é rastreado em pessoas, não em organizações.";
+const EMAIL_LOAD_ERROR = "Não foi possível carregar os e-mails deste contato. Tente novamente.";
 
 export function TabStrip<T extends string>({
   tabs,
@@ -182,7 +182,7 @@ export function CustomFieldsPanel<T extends { id: string; key: string; name: str
   // shared FieldRow so labels/values align with every other sidebar section instead of the old
   // bespoke bordered <section> with a 14px/500 heading and hard-coded gray tokens.
   return (
-    <CollapsibleSection title="Custom fields">
+    <CollapsibleSection title="Campos personalizados">
       {defs.map((def) => {
         const value = values[def.key];
         return (

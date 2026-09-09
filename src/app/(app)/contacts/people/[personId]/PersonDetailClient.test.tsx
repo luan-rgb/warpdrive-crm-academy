@@ -150,19 +150,19 @@ describe("PersonDetailClient", () => {
     expect(screen.getByText("+14155550100")).toBeInTheDocument();
     const header = screen.getByRole("banner");
     expect(header.parentElement?.firstElementChild).toBe(header);
-    const dealsSection = within(screen.getByRole("region", { name: "Deals" }));
+    const dealsSection = within(screen.getByRole("region", { name: "Negócios" }));
     expect(dealsSection.getByRole("link", { name: "Acme renewal, status won" })).toHaveAttribute(
       "href",
       "/deals/d1",
     );
     expect(dealsSection.getByLabelText("Deal status: Won")).toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "Deals" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Negócios" })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Focus" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "History" })).toBeInTheDocument();
     // Merge is now inside the header Options overflow (CO-3), not a standalone button.
     const user = userEvent.setup();
-    await user.click(screen.getByRole("button", { name: /contact actions/i }));
-    expect(screen.getByRole("menuitem", { name: /merge duplicates/i })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /ações do contato/i }));
+    expect(screen.getByRole("menuitem", { name: /mesclar duplicados/i })).toBeInTheDocument();
   });
 
   // Wave 4, Task 5: the header shows who owns the person via the shared OwnerBadge.
@@ -196,10 +196,10 @@ describe("PersonDetailClient", () => {
         baseCurrency="USD"
       />,
     );
-    const overview = within(screen.getByRole("region", { name: "Overview" }));
-    expect(overview.getByText("Total activities")).toBeInTheDocument();
+    const overview = within(screen.getByRole("region", { name: "Visão geral" }));
+    expect(overview.getByText("Total de atividades")).toBeInTheDocument();
     expect(overview.getByText("4")).toBeInTheDocument();
-    expect(overview.getByText("Inactive")).toBeInTheDocument();
+    expect(overview.getByText("Inativo")).toBeInTheDocument();
   });
 
   it("omits the redundant header Edit action while keeping the Person section editable", () => {

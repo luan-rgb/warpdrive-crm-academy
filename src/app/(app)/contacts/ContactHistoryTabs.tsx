@@ -16,20 +16,20 @@ import { FileAttachments } from "@/features/files/FileAttachments";
 // Partial, not the full Record: this contact-scoped tab bar never renders "products"
 // (contacts have no line items), so TABS below simply omits it.
 const TAB_LABELS: Partial<Record<HistoryTab, string>> = {
-  all: "All",
-  activities: "Activities",
-  notes: "Notes",
-  email: "Email",
-  files: "Files",
-  changelog: "Changelog",
+  all: "Todas",
+  activities: "Atividades",
+  notes: "Notas",
+  email: "E-mail",
+  files: "Arquivos",
+  changelog: "Histórico de alterações",
 };
 
 const EMPTY_LABELS: Partial<Record<HistoryTab, string>> = {
-  all: "No history yet.",
-  activities: "No activities yet.",
-  notes: "No notes yet.",
-  changelog: "No changes recorded yet.",
-  email: "No emails linked to this contact yet.",
+  all: "Ainda não há histórico.",
+  activities: "Ainda não há atividades.",
+  notes: "Ainda não há notas.",
+  changelog: "Nenhuma alteração registrada ainda.",
+  email: "Nenhum e-mail vinculado a este contato ainda.",
 };
 
 const TABS: HistoryTab[] = ["all", "activities", "notes", "email", "files", "changelog"];
@@ -85,7 +85,7 @@ export function ContactHistoryTabs({
             emptyLabel={
               (tab === "email" ? emailEmptyLabel : undefined) ??
               EMPTY_LABELS[tab] ??
-              "No history yet."
+              "Ainda não há histórico."
             }
             onActivityChanged={onActivityChanged}
             onNoteChanged={onNoteChanged}

@@ -11,8 +11,8 @@ import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { mergeOrgsAction, mergePersonsAction } from "./actions";
 
-const SELECT_A_RECORD_LABEL = "Select a record";
-const SELECT_THE_SURVIVOR_LABEL = "Select the survivor";
+const SELECT_A_RECORD_LABEL = "Selecione um registro";
+const SELECT_THE_SURVIVOR_LABEL = "Selecione o registro sobrevivente";
 
 type Option = { id: string; name: string };
 
@@ -56,7 +56,7 @@ export function MergeDialog({
       const result =
         kind === "org" ? await mergeOrgsAction(args, csrf) : await mergePersonsAction(args, csrf);
       if (!result.ok) {
-        setError(`Could not merge (${result.error.id})`);
+        setError(`Não foi possível mesclar (${result.error.id})`);
         return;
       }
       onMerged(survivorId);
@@ -68,9 +68,9 @@ export function MergeDialog({
   return (
     <div className="space-y-3 rounded-md border bg-card p-4">
       <div className="space-y-1">
-        <span className="block text-sm text-muted-foreground">Merge with</span>
+        <span className="block text-sm text-muted-foreground">Mesclar com</span>
         <Select
-          ariaLabel="Merge with"
+          ariaLabel="Mesclar com"
           value={partnerId}
           onChange={(next) => {
             setPartnerId(next);
@@ -85,10 +85,10 @@ export function MergeDialog({
       </div>
 
       <div className="space-y-1">
-        <span className="block text-sm text-muted-foreground">Survivor</span>
+        <span className="block text-sm text-muted-foreground">Sobrevivente</span>
         <div className={partner === null ? "pointer-events-none opacity-50" : undefined}>
           <Select
-            ariaLabel="Survivor"
+            ariaLabel="Sobrevivente"
             value={survivorId}
             onChange={setSurvivorId}
             placeholder={SELECT_THE_SURVIVOR_LABEL}
@@ -105,11 +105,11 @@ export function MergeDialog({
       <div className="flex justify-end gap-2">
         {onClose !== undefined && (
           <Button type="button" variant="outline" size="sm" onClick={onClose}>
-            Cancel
+            Cancelar
           </Button>
         )}
         <Button type="button" size="sm" disabled={!canConfirm} onClick={() => void confirm()}>
-          Merge
+          Mesclar
         </Button>
       </div>
     </div>

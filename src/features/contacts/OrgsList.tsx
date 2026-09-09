@@ -22,10 +22,10 @@ import { ORG_COLUMNS } from "./orgColumns";
 import type { OrgSortField } from "./schemas";
 
 const PAGE_SIZE = 50;
-const LOAD_MORE = "Load more";
-const LOAD_MORE_ERROR = "Couldn't load more organizations. Please try again.";
-const RELOAD_ERROR = "Couldn't load organizations. Please try again.";
-const BULK_DELETE_ERROR = "Couldn't delete some organizations. Please try again.";
+const LOAD_MORE = "Carregar mais";
+const LOAD_MORE_ERROR = "Não foi possível carregar mais organizações. Tente novamente.";
+const RELOAD_ERROR = "Não foi possível carregar as organizações. Tente novamente.";
+const BULK_DELETE_ERROR = "Não foi possível excluir algumas organizações. Tente novamente.";
 // Stable module reference: passed as useColumnSort's fallback, so `effective` only changes
 // reference when the sort state itself changes (not on every OrgsList re-render).
 const DEFAULT_SORT: ColumnSort<OrgSortField> = { field: "name", dir: "asc" };
@@ -184,7 +184,7 @@ export function OrgsList({
         <div className="flex items-center gap-2">
           <SavedViewControl
             targetEntity="organization"
-            allLabel="All organizations"
+            allLabel="Todas as organizações"
             currentDefinition={filter}
             selectedViewId={savedViewId}
             onSelectView={(view) => {
@@ -213,13 +213,13 @@ export function OrgsList({
               onClick={() => setMerging(true)}
               className="rounded-md border px-3 py-1 text-sm hover:bg-accent active:scale-[0.96] transition-transform"
             >
-              Merge duplicates
+              Mesclar duplicados
             </button>
           )}
           <BulkDeleteButton
             count={selection.count}
-            noun="organization"
-            nounPlural="organizations"
+            noun="organização"
+            nounPlural="organizações"
             onConfirm={() => void bulkDelete()}
           />
         </BulkActionBar>
@@ -269,7 +269,7 @@ export function OrgsList({
           onClick={() => void loadMore()}
           className="self-center rounded-md border px-4 py-1.5 text-sm hover:bg-accent disabled:opacity-50 active:not-disabled:scale-[0.96] transition-transform"
         >
-          {loading ? "Loading..." : LOAD_MORE}
+          {loading ? "Carregando..." : LOAD_MORE}
         </button>
       )}
     </div>

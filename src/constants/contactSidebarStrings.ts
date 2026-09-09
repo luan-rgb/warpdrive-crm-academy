@@ -3,13 +3,13 @@
 // SectionHeaderMenu, so only the contact-specific section titles live here.
 export const CONTACT_SIDEBAR_STRINGS = {
   sections: {
-    contact: "Contact",
-    summary: "Summary",
-    details: "Details",
-    relatedOrgs: "Related organizations",
-    stats: "Stats",
-    overview: "Overview",
-    people: "People",
-    deals: "Deals",
+    contact: "Contato",
+    summary: "Resumo",
+    details: "Detalhes",
+    relatedOrgs: "Organizações relacionadas",
+    stats: "Estatísticas",
+    overview: "Visão geral",
+    people: "Pessoas",
+    deals: "Negócios",
   },
 } as const;

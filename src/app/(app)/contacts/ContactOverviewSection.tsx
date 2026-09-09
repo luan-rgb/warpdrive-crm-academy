@@ -27,8 +27,8 @@ export function ContactOverviewSection({
   const inactiveDays = stats?.inactiveDays ?? null;
 
   return (
-    <CollapsibleSection title="Overview">
-      <FieldRow label="Total activities">
+    <CollapsibleSection title="Visão geral">
+      <FieldRow label="Total de atividades">
         <span className="tabular-nums">{total}</span>
       </FieldRow>
       {Object.entries(byType).map(([key, count]) => (
@@ -36,22 +36,22 @@ export function ContactOverviewSection({
           <span className="tabular-nums">{count}</span>
         </FieldRow>
       ))}
-      <FieldRow label="Most active users" empty={mostActiveUsers.length === 0}>
+      <FieldRow label="Usuários mais ativos" empty={mostActiveUsers.length === 0}>
         {mostActiveUsers.length > 0
           ? mostActiveUsers.map((u) => `${u.name} (${u.count})`).join(", ")
           : "-"}
       </FieldRow>
-      <FieldRow label="Last activity" empty={lastActivityAt === null}>
+      <FieldRow label="Última atividade" empty={lastActivityAt === null}>
         {lastActivityAt !== null ? (
           <span className="tabular-nums">{lastActivityAt.toLocaleDateString()}</span>
         ) : (
           "-"
         )}
       </FieldRow>
-      <FieldRow label="Inactive" empty={inactiveDays === null}>
+      <FieldRow label="Inativo" empty={inactiveDays === null}>
         {inactiveDays !== null ? (
           <span>
-            <span className="tabular-nums">{inactiveDays}</span> days
+            <span className="tabular-nums">{inactiveDays}</span> dias
           </span>
         ) : (
           "-"

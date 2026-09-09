@@ -26,10 +26,10 @@ const NONE: ReadonlySet<string> = new Set();
 type AddressField = "street" | "city" | "region" | "country";
 
 const ADDRESS_ROWS: readonly { field: AddressField; label: string }[] = [
-  { field: "street", label: "Street" },
-  { field: "city", label: "City" },
-  { field: "region", label: "Region" },
-  { field: "country", label: "Country" },
+  { field: "street", label: "Rua" },
+  { field: "city", label: "Cidade" },
+  { field: "region", label: "Região" },
+  { field: "country", label: "País" },
 ];
 
 // Click-to-edit-in-place Summary rows (name + address) for the org detail aside, autosaving
@@ -68,8 +68,8 @@ export function OrgSummaryEditPanel({
 
   return (
     <>
-      <FieldRow label="Name">
-        <InlineTextField label="Name" value={org.name} onSave={(v) => save({ name: v.trim() })} />
+      <FieldRow label="Nome">
+        <InlineTextField label="Nome" value={org.name} onSave={(v) => save({ name: v.trim() })} />
       </FieldRow>
       {!hidden.has("address") &&
         ADDRESS_ROWS.map(({ field, label }) => (

@@ -32,7 +32,7 @@ const ITEMS = [
 export function ContactsNav(): React.ReactNode {
   const pathname = usePathname();
   return (
-    <nav aria-label="Contacts sections" className="w-56 shrink-0">
+    <nav aria-label="Seções de contatos" className="w-56 shrink-0">
       <ul className="space-y-0.5">
         {ITEMS.map((item) => {
           const active = pathname === item.section || pathname.startsWith(`${item.section}/`);

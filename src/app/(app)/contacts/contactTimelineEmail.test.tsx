@@ -57,38 +57,40 @@ describe("person timeline email", () => {
     listQuery.mockReturnValue({ data: undefined, isLoading: true, isError: false });
 
     render(<ContactTimelinePanel entityType="person" entityId="p1" />);
-    await userEvent.click(screen.getByRole("tab", { name: "Email" }));
+    await userEvent.click(screen.getByRole("tab", { name: "E-mail" }));
 
     expect(screen.getByText("Loading emails...")).toBeInTheDocument();
-    expect(screen.queryByText(/No emails linked/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Nenhum e-mail vinculado/i)).not.toBeInTheDocument();
   });
 
   it("says the read failed rather than that the person has no email", async () => {
     listQuery.mockReturnValue({ data: undefined, isLoading: false, isError: true });
 
     render(<ContactTimelinePanel entityType="person" entityId="p1" />);
-    await userEvent.click(screen.getByRole("tab", { name: "Email" }));
+    await userEvent.click(screen.getByRole("tab", { name: "E-mail" }));
 
     expect(screen.getByText("Couldn't load emails. Please try again.")).toBeInTheDocument();
-    expect(screen.queryByText(/No emails linked/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Nenhum e-mail vinculado/i)).not.toBeInTheDocument();
   });
 
   it("says no emails are linked only after a successful empty read", async () => {
     listQuery.mockReturnValue({ data: [], isLoading: false, isError: false });
 
     render(<ContactTimelinePanel entityType="person" entityId="p1" />);
-    await userEvent.click(screen.getByRole("tab", { name: "Email" }));
+    await userEvent.click(screen.getByRole("tab", { name: "E-mail" }));
 
-    expect(screen.getByText("No emails linked to this contact yet.")).toBeInTheDocument();
+    expect(screen.getByText("Nenhum e-mail vinculado a este contato ainda.")).toBeInTheDocument();
   });
 
   it("keeps the organization explanation, whose read never runs at all", async () => {
     listQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
 
     render(<ContactTimelinePanel entityType="organization" entityId="o1" />);
-    await userEvent.click(screen.getByRole("tab", { name: "Email" }));
+    await userEvent.click(screen.getByRole("tab", { name: "E-mail" }));
 
-    expect(screen.getByText("Email is tracked on people, not organizations.")).toBeInTheDocument();
+    expect(
+      screen.getByText("O e-mail é rastreado em pessoas, não em organizações."),
+    ).toBeInTheDocument();
   });
 
   it("does not query linked email for an organization", () => {

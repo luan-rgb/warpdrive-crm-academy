@@ -34,6 +34,6 @@ describe("ContactsNav", () => {
 
   it("uses the same rail width as Settings navigation", () => {
     render(<ContactsNav />);
-    expect(screen.getByRole("navigation", { name: "Contacts sections" })).toHaveClass("w-56");
+    expect(screen.getByRole("navigation", { name: "Seções de contatos" })).toHaveClass("w-56");
   });
 });

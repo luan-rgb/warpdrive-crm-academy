@@ -168,7 +168,7 @@ export function PeopleTable({
           <tr className="border-b bg-muted/60 text-left text-muted-foreground">
             <th className="w-8 px-3 py-2">
               <Checkbox
-                label="Select all people"
+                label="Selecionar todas as pessoas"
                 checked={allSelected}
                 onCheckedChange={onToggleAll}
               />
@@ -195,7 +195,7 @@ export function PeopleTable({
             <tr key={row.id} className="border-b last:border-0 hover:bg-muted/50">
               <td className="px-3 py-2">
                 <Checkbox
-                  label={`Select ${row.name}`}
+                  label={`Selecionar ${row.name}`}
                   checked={isSelected(row.id)}
                   onCheckedChange={() => onToggleRow(row.id)}
                 />

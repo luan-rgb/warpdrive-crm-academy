@@ -34,7 +34,7 @@ it("renders the follower count", () => {
       isFollowedBySelf={false}
     />,
   );
-  expect(screen.getByText("2 followers")).toBeTruthy();
+  expect(screen.getByText("2 seguidores")).toBeTruthy();
 });
 
 it("opening the menu shows follower names", async () => {
@@ -47,7 +47,7 @@ it("opening the menu shows follower names", async () => {
       isFollowedBySelf={false}
     />,
   );
-  await user.click(screen.getByRole("button", { name: /followers/ }));
+  await user.click(screen.getByRole("button", { name: /seguidores/ }));
   expect(screen.getByText("Ada Lovelace")).toBeTruthy();
   expect(screen.getByText("Alan Turing")).toBeTruthy();
 });
@@ -62,8 +62,8 @@ it("toggles follow via followContactAction when not yet following", async () => 
       isFollowedBySelf={false}
     />,
   );
-  await user.click(screen.getByRole("button", { name: /followers/ }));
-  await user.click(screen.getByRole("menuitem", { name: "Follow" }));
+  await user.click(screen.getByRole("button", { name: /seguidores/ }));
+  await user.click(screen.getByRole("menuitem", { name: "Seguir" }));
   expect(followContactAction).toHaveBeenCalledWith(
     { entityType: "person", entityId: "pe1" },
     "csrf",
@@ -81,8 +81,8 @@ it("toggles unfollow via unfollowContactAction when already following, for an or
       isFollowedBySelf={true}
     />,
   );
-  await user.click(screen.getByRole("button", { name: /followers/ }));
-  await user.click(screen.getByRole("menuitem", { name: "Following" }));
+  await user.click(screen.getByRole("button", { name: /seguidores/ }));
+  await user.click(screen.getByRole("menuitem", { name: "Seguindo" }));
   expect(unfollowContactAction).toHaveBeenCalledWith(
     { entityType: "organization", entityId: "o1" },
     "csrf",

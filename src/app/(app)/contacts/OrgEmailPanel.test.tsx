@@ -10,6 +10,6 @@ describe("OrgEmailPanel", () => {
   it("shows an honest not-applicable state, not the Phase 4 placeholder", () => {
     render(<OrgEmailPanel />);
     expect(screen.queryByText(/phase 4/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/tracked on people/i)).toBeInTheDocument();
+    expect(screen.getByText(/rastreado em pessoas/i)).toBeInTheDocument();
   });
 });

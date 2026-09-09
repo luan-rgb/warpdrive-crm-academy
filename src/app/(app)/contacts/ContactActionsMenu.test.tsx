@@ -37,8 +37,8 @@ it("hides Merge and Delete when the actor lacks the capability", async () => {
       onMerge={vi.fn()}
     />,
   );
-  await user.click(screen.getByRole("button", { name: "Contact actions" }));
-  expect(screen.getByRole("menuitem", { name: "Copy link" })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Ações do contato" }));
+  expect(screen.getByRole("menuitem", { name: "Copiar link" })).toBeInTheDocument();
   expect(screen.queryByRole("menuitem", { name: /merge/i })).not.toBeInTheDocument();
   expect(screen.queryByRole("menuitem", { name: /delete/i })).not.toBeInTheDocument();
 });
@@ -57,8 +57,8 @@ function renderMenu(onMerge = vi.fn()): void {
 
 // Opens the menu and picks "Delete", returning the confirmation surface it raises.
 async function openDeleteConfirm(user: ReturnType<typeof userEvent.setup>): Promise<HTMLElement> {
-  await user.click(screen.getByRole("button", { name: "Contact actions" }));
-  await user.click(screen.getByRole("menuitem", { name: "Delete" }));
+  await user.click(screen.getByRole("button", { name: "Ações do contato" }));
+  await user.click(screen.getByRole("menuitem", { name: "Excluir" }));
   return await screen.findByRole("alertdialog");
 }
 
@@ -66,8 +66,8 @@ it("invokes onMerge when permitted", async () => {
   const onMerge = vi.fn();
   const user = userEvent.setup();
   renderMenu(onMerge);
-  await user.click(screen.getByRole("button", { name: "Contact actions" }));
-  await user.click(screen.getByRole("menuitem", { name: "Merge duplicates" }));
+  await user.click(screen.getByRole("button", { name: "Ações do contato" }));
+  await user.click(screen.getByRole("menuitem", { name: "Mesclar duplicados" }));
   expect(onMerge).toHaveBeenCalled();
 });
 
@@ -77,7 +77,7 @@ it("Delete raises an in-app confirm dialog, not a native browser confirm", async
   const user = userEvent.setup();
   renderMenu();
   const dialog = await openDeleteConfirm(user);
-  expect(within(dialog).getByText("Delete this record?")).toBeInTheDocument();
+  expect(within(dialog).getByText("Excluir este registro?")).toBeInTheDocument();
   expect(nativeConfirm).not.toHaveBeenCalled();
   expect(deletePersonAction).not.toHaveBeenCalled();
 });
@@ -86,7 +86,7 @@ it("confirming the dialog deletes and routes back to the list", async () => {
   const user = userEvent.setup();
   renderMenu();
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
   await waitFor(() => expect(deletePersonAction).toHaveBeenCalledWith({ id: "pe1" }, "tok"));
   await waitFor(() => expect(push).toHaveBeenCalledWith("/contacts/people"));
 });
@@ -95,7 +95,7 @@ it("cancelling the dialog closes it without deleting", async () => {
   const user = userEvent.setup();
   renderMenu();
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+  await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
   await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
   expect(deletePersonAction).not.toHaveBeenCalled();
 });
