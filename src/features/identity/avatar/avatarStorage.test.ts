@@ -43,7 +43,7 @@ describe("avatar content-type allowlist", () => {
   });
 
   it("caps avatars well below the attachment limit", () => {
-    expect(AVATAR_MAX_BYTES).toBe(2 * 1024 * 1024);
+    expect(AVATAR_MAX_BYTES).toBe(5 * 1024 * 1024);
     expect(AVATAR_CONTENT_TYPES.length).toBeGreaterThan(0);
   });
 });

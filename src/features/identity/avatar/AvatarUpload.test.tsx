@@ -68,7 +68,7 @@ describe("AvatarUpload", () => {
 
   it("rejects an oversize image client-side without calling the server", async () => {
     render(<AvatarUpload name="Ada" avatarUrl={null} />);
-    selectFile("image/png", 5 * 1024 * 1024);
+    selectFile("image/png", 5 * 1024 * 1024 + 1);
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(requestMock).not.toHaveBeenCalled();
   });

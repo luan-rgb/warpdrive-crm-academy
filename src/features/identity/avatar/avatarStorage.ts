@@ -2,9 +2,10 @@
 // upload component can import the allowlist/cap for its client-side guard without
 // pulling the server-only env boundary into the browser bundle (mirrors files/contentTypes).
 
-// Avatars are tiny and the serve route buffers the whole object in memory, so the cap
-// is far below the 25 MB attachment limit.
-export const AVATAR_MAX_BYTES = 2 * 1024 * 1024;
+// Avatars (and invoice header/footer images, which reuse this cap via invoiceImageStorage.ts)
+// are small and their serve routes buffer the whole object in memory, so the cap stays well
+// below the 25 MB attachment limit.
+export const AVATAR_MAX_BYTES = 5 * 1024 * 1024;
 
 export const AVATAR_CONTENT_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"] as const;
 

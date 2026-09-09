@@ -36,7 +36,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
     if (!isInvoiceImageContentType(file.type)) {
       return "Escolha uma imagem PNG, JPEG, WebP ou GIF.";
     }
-    if (file.size > INVOICE_IMAGE_MAX_BYTES) return "Essa imagem é muito grande (máx. 2 MB).";
+    if (file.size > INVOICE_IMAGE_MAX_BYTES) return "Essa imagem é muito grande (máx. 5 MB).";
 
     const csrf = readCsrfToken();
     const requested = await requestInvoiceImageUploadAction(
@@ -131,7 +131,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
               </Button>
             )}
           </div>
-          <span className="text-xs text-muted-foreground">PNG, JPEG, WebP ou GIF, até 2 MB.</span>
+          <span className="text-xs text-muted-foreground">PNG, JPEG, WebP ou GIF, até 5 MB.</span>
         </div>
       </div>
       {error !== null && (

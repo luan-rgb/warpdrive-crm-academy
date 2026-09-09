@@ -62,6 +62,9 @@ RUN NODE_ENV=production \
 # --- runtime: minimal, non-root ---
 FROM base AS runtime
 ENV NODE_ENV=production
+# Server-side date-only logic (activity due-today boundaries, goal periods, report ranges) runs
+# in this timezone. Node 22's bundled full-ICU has the IANA database, so no tzdata package needed.
+ENV TZ=America/Sao_Paulo
 # Optional version stamp for the update-check banner (e.g. a release tag). When unset, the app
 # falls back to the bundled package.json version, then "dev" (banner disabled). Not compile-time
 # inlined: it is a server-only runtime env, read via src/config/env.ts.
