@@ -49,7 +49,7 @@ export function CreatePermissionSetForm({ onCreated }: Props): React.ReactElemen
       </div>
       <div className="p-5">
         <label htmlFor="ps-name" className="sr-only">
-          Permission set name
+          Nome do conjunto de permissão
         </label>
         <Input
           ref={ref}
@@ -57,7 +57,7 @@ export function CreatePermissionSetForm({ onCreated }: Props): React.ReactElemen
           type="text"
           required
           maxLength={80}
-          placeholder="New permission set name"
+          placeholder="Nome do novo conjunto de permissão"
           className="w-full"
           disabled={isPending}
         />
@@ -69,7 +69,7 @@ export function CreatePermissionSetForm({ onCreated }: Props): React.ReactElemen
       </div>
       <div className="flex justify-end border-t bg-muted/20 px-5 py-3">
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Creating..." : "Create"}
+          {isPending ? "Criando..." : "Criar"}
         </Button>
       </div>
     </form>

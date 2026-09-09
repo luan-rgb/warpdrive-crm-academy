@@ -39,11 +39,11 @@ describe("CompanyGeneralClient", () => {
 
   it("saves the edited company name via the action", async () => {
     render(<CompanyGeneralClient companyName="Acme" baseCurrency="USD" {...brandingProps} />);
-    fireEvent.change(screen.getByLabelText("Company name"), { target: { value: "Acme Corp" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.change(screen.getByLabelText("Nome da empresa"), { target: { value: "Acme Corp" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(updateCompanyGeneralAction).toHaveBeenCalledWith({ companyName: "Acme Corp" }, "csrf"),
     );
-    expect(await screen.findByText("Saved")).toBeInTheDocument();
+    expect(await screen.findByText("Salvo")).toBeInTheDocument();
   });
 });

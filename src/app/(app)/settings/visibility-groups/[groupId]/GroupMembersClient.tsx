@@ -68,9 +68,11 @@ export function GroupMembersClient({ groupId, members, allUsers }: Props): React
 
   return (
     <SettingsCard>
-      <SettingsCardHeader title="Members" description="Add or remove users from this group." />
+      <SettingsCardHeader title="Membros" description="Adicione ou remova usuários deste grupo." />
       <ul className="divide-y">
-        {members.length === 0 && <li className="text-sm text-muted-foreground">No members yet.</li>}
+        {members.length === 0 && (
+          <li className="text-sm text-muted-foreground">Nenhum membro ainda.</li>
+        )}
         {members.map((m) => (
           <li key={m.userId} className="flex items-center justify-between gap-2 px-5 py-3">
             <span className="text-sm">{m.name}</span>
@@ -78,12 +80,12 @@ export function GroupMembersClient({ groupId, members, allUsers }: Props): React
               type="button"
               variant="outline"
               size="sm"
-              aria-label={`Remove ${m.name}`}
+              aria-label={`Remover ${m.name}`}
               disabled={isPending}
               onClick={() => handleRemove(m.userId)}
               className="text-red-600"
             >
-              Remove
+              Remover
             </Button>
           </li>
         ))}
@@ -92,12 +94,12 @@ export function GroupMembersClient({ groupId, members, allUsers }: Props): React
       <SettingsCardBody className="border-t">
         <div className="flex items-end gap-2">
           <div className="flex-1">
-            <span className="mb-1 block text-sm font-medium">Add member</span>
+            <span className="mb-1 block text-sm font-medium">Adicionar membro</span>
             <Combobox
-              ariaLabel="Add member"
+              ariaLabel="Adicionar membro"
               value={selectedUserId}
               onChange={setSelectedUserId}
-              placeholder="Select a user"
+              placeholder="Selecionar um usuário"
               options={nonMembers.map<ComboboxOption>((u) => ({
                 value: u.id,
                 label: u.name,
@@ -107,7 +109,7 @@ export function GroupMembersClient({ groupId, members, allUsers }: Props): React
             />
           </div>
           <Button type="button" disabled={isPending || selectedUserId === ""} onClick={handleAdd}>
-            Add
+            Adicionar
           </Button>
         </div>
 

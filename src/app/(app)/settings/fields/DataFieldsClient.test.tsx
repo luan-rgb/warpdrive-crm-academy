@@ -94,8 +94,8 @@ function chooseSelect(label: string, option: string): void {
 describe("DataFieldsClient", () => {
   it("lists fields for the selected entity", () => {
     render(<DataFieldsClient byTarget={BY_TARGET} />);
-    expect(screen.getByLabelText("Entity")).toHaveTextContent("Deal");
-    expect(screen.getByLabelText("Type")).toHaveTextContent("text");
+    expect(screen.getByLabelText("Entidade")).toHaveTextContent("Negócio");
+    expect(screen.getByLabelText("Tipo")).toHaveTextContent("text");
     // "monetary" also appears as a type-select option, so scope to the row.
     expect(screen.getByText("Budget").closest("li")).toHaveTextContent("monetary");
   });
@@ -109,9 +109,9 @@ describe("DataFieldsClient", () => {
       />,
     );
     // The built-in Industry row shows with a Built-in badge...
-    expect(screen.getByText("Industry").closest("li")).toHaveTextContent("Built-in");
+    expect(screen.getByText("Industry").closest("li")).toHaveTextContent("Nativo");
     // ...and a Hidden switch (reflecting its hidden=true state).
-    expect(screen.getByRole("switch", { name: /Hidden: Industry/i })).toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: /Oculto: Industry/i })).toBeInTheDocument();
     // The custom field (Region) still renders below.
     expect(screen.getByText("Region")).toBeInTheDocument();
   });
@@ -125,8 +125,8 @@ describe("DataFieldsClient", () => {
       />,
     );
     const titleRow = screen.getByText("Title").closest("li");
-    expect(titleRow).toHaveTextContent("Always shown");
-    expect(screen.getByRole("switch", { name: /Hidden: Value/i })).toBeInTheDocument();
+    expect(titleRow).toHaveTextContent("Sempre exibido");
+    expect(screen.getByRole("switch", { name: /Oculto: Value/i })).toBeInTheDocument();
   });
 
   it("opens the entity given by initialTarget (from ?entity=), not always deal", () => {
@@ -138,7 +138,7 @@ describe("DataFieldsClient", () => {
 
   it("archives a field via archiveDefAction", async () => {
     render(<DataFieldsClient byTarget={BY_TARGET} />);
-    fireEvent.click(screen.getByRole("button", { name: "Archive" }));
+    fireEvent.click(screen.getByRole("button", { name: "Arquivar" }));
     await waitFor(() =>
       expect(actions.archiveDefAction).toHaveBeenCalledWith({ id: "d1" }, "csrf"),
     );
@@ -146,8 +146,8 @@ describe("DataFieldsClient", () => {
 
   it("creates a field via createDefAction with the selected target and type", async () => {
     render(<DataFieldsClient byTarget={BY_TARGET} />);
-    fireEvent.change(screen.getByLabelText("Field name"), { target: { value: "Region" } });
-    fireEvent.click(screen.getByRole("button", { name: "Add field" }));
+    fireEvent.change(screen.getByLabelText("Nome do campo"), { target: { value: "Region" } });
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar campo" }));
     await waitFor(() =>
       expect(actions.createDefAction).toHaveBeenCalledWith(
         expect.objectContaining({ targetEntity: "deal", type: "text", name: "Region" }),
@@ -158,9 +158,9 @@ describe("DataFieldsClient", () => {
 
   it("renames a field via renameDefAction (name only)", async () => {
     render(<DataFieldsClient byTarget={BY_TARGET} />);
-    fireEvent.click(screen.getByRole("button", { name: "Rename" }));
-    fireEvent.change(screen.getByLabelText("Rename"), { target: { value: "Deal size" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Renomear" }));
+    fireEvent.change(screen.getByLabelText("Renomear"), { target: { value: "Deal size" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(actions.renameDefAction).toHaveBeenCalledWith({ id: "d1", name: "Deal size" }, "csrf"),
     );
@@ -168,9 +168,9 @@ describe("DataFieldsClient", () => {
 
   it("uses arrow controls to reorder fields", async () => {
     render(<DataFieldsClient byTarget={BY_TARGET} />);
-    chooseSelect("Entity", "Organization");
-    const moveUp = screen.getAllByRole("button", { name: "Move up" });
-    const moveDown = screen.getAllByRole("button", { name: "Move down" });
+    chooseSelect("Entidade", "Organização");
+    const moveUp = screen.getAllByRole("button", { name: "Mover para cima" });
+    const moveDown = screen.getAllByRole("button", { name: "Mover para baixo" });
     expect(moveUp).toHaveLength(2);
     expect(moveDown).toHaveLength(2);
     expect(moveUp[0]).toBeDisabled();
@@ -183,10 +183,10 @@ describe("DataFieldsClient", () => {
 
   it("adds an option via addOptionAction from the option editor", async () => {
     render(<DataFieldsClient byTarget={BY_TARGET} />);
-    chooseSelect("Entity", "Person");
-    fireEvent.click(screen.getByRole("button", { name: "Edit options" }));
-    fireEvent.change(screen.getByLabelText("New option"), { target: { value: "Medium" } });
-    fireEvent.click(screen.getByRole("button", { name: "Add option" }));
+    chooseSelect("Entidade", "Pessoa");
+    fireEvent.click(screen.getByRole("button", { name: "Editar opções" }));
+    fireEvent.change(screen.getByLabelText("Nova opção"), { target: { value: "Medium" } });
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar opção" }));
     await waitFor(() =>
       expect(actions.addOptionAction).toHaveBeenCalledWith({ id: "p1", label: "Medium" }, "csrf"),
     );
@@ -194,10 +194,10 @@ describe("DataFieldsClient", () => {
 
   it("removes an active option via archiveOptionAction (never a hard-delete)", async () => {
     render(<DataFieldsClient byTarget={BY_TARGET} />);
-    chooseSelect("Entity", "Person");
-    fireEvent.click(screen.getByRole("button", { name: "Edit options" }));
+    chooseSelect("Entidade", "Pessoa");
+    fireEvent.click(screen.getByRole("button", { name: "Editar opções" }));
     // Only the active option ("Low") has a Remove button; the archived one shows a tag.
-    fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remover" }));
     await waitFor(() =>
       expect(actions.archiveOptionAction).toHaveBeenCalledWith(
         { id: "p1", optionId: "o1" },

@@ -13,11 +13,11 @@ import { setUserActiveAction, setUserAdminAction } from "@/features/identity/act
 import { readCsrfToken } from "@/utils/csrfCookie";
 
 const T = {
-  menu: "User actions",
-  makeAdmin: "Make admin",
-  revokeAdmin: "Revoke admin",
-  activate: "Activate",
-  deactivate: "Deactivate",
+  menu: "Ações do usuário",
+  makeAdmin: "Tornar administrador",
+  revokeAdmin: "Remover administrador",
+  activate: "Ativar",
+  deactivate: "Desativar",
 } as const;
 
 interface Props {

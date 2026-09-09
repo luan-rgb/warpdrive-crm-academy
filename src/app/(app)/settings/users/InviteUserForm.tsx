@@ -11,36 +11,36 @@ import { isValidEmail } from "@/lib/isValidEmail";
 import { readCsrfToken } from "@/utils/csrfCookie";
 
 const T = {
-  emailMissing: "Enter an email address.",
-  emailInvalid: "Enter a valid email address.",
-  nameMissing: "Enter a name.",
-  emailLabel: "Email",
-  emailPlaceholder: "person@example.com",
-  nameLabel: "Name",
-  namePlaceholder: "Full name",
-  admin: "Admin",
-  invite: "Invite",
-  inviting: "Inviting...",
-  inviteLinkLabel: "Invite link",
-  copy: "Copy link",
-  copied: "Copied",
+  emailMissing: "Digite um endereço de e-mail.",
+  emailInvalid: "Digite um endereço de e-mail válido.",
+  nameMissing: "Digite um nome.",
+  emailLabel: "E-mail",
+  emailPlaceholder: "pessoa@exemplo.com",
+  nameLabel: "Nome",
+  namePlaceholder: "Nome completo",
+  admin: "Administrador",
+  invite: "Convidar",
+  inviting: "Convidando...",
+  inviteLinkLabel: "Link de convite",
+  copy: "Copiar link",
+  copied: "Copiado",
 } as const;
 
 // warpdrive has no outbound email/invite delivery: inviteUser only pre-authorizes the email for
 // Google SSO adoption on first login. So we never silently imply an email was sent. Instead we
 // surface the shareable sign-in link (the app login URL) for the admin to pass along themselves.
 function noEmailNotice(name: string, email: string): string {
-  return `No email is sent automatically. Share the sign-in link below with ${name} (${email}), who signs in with Google using that address.`;
+  return `Nenhum e-mail é enviado automaticamente. Compartilhe o link de login abaixo com ${name} (${email}), que entra usando o Google com esse endereço.`;
 }
 
 const MESSAGES: Record<string, string> = {
-  [ERROR_IDS.AUTH_EMAIL_TAKEN]: "That email is already registered.",
-  [ERROR_IDS.PERM_DENIED]: "You do not have permission to invite users.",
-  [ERROR_IDS.AUTH_INVITE_INPUT_INVALID]: "Enter a valid email and name.",
+  [ERROR_IDS.AUTH_EMAIL_TAKEN]: "Esse e-mail já está cadastrado.",
+  [ERROR_IDS.PERM_DENIED]: "Você não tem permissão para convidar usuários.",
+  [ERROR_IDS.AUTH_INVITE_INPUT_INVALID]: "Digite um e-mail e nome válidos.",
 };
 
 function inviteErrorMessage(id: string): string {
-  return MESSAGES[id] ?? "Something went wrong. Please try again.";
+  return MESSAGES[id] ?? "Algo deu errado. Tente novamente.";
 }
 
 interface FieldErrors {
@@ -115,9 +115,10 @@ export function InviteUserForm({ onInvited }: Props): React.ReactElement {
           <UserPlus className="size-4" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="text-sm font-semibold">Invite a user</h2>
+          <h2 className="text-sm font-semibold">Convidar um usuário</h2>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Add a teammate and choose whether they can manage company settings.
+            Adicione um colega de equipe e escolha se ele pode gerenciar as configurações da
+            empresa.
           </p>
         </div>
       </div>

@@ -110,12 +110,12 @@ export function TeamEditClient({
 
   return (
     <SettingsCard>
-      <SettingsCardHeader title="Team details" description={T.membersHelp} />
+      <SettingsCardHeader title="Detalhes da equipe" description={T.membersHelp} />
       <SettingsCardBody className="space-y-5">
         <div className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium">Team name</span>
+          <span className="text-sm font-medium">Nome da equipe</span>
           <Input
-            aria-label="Team name"
+            aria-label="Nome da equipe"
             type="text"
             value={name}
             maxLength={80}
@@ -146,7 +146,7 @@ export function TeamEditClient({
             values={memberIds}
             onChange={(v) => !isPending && setMemberIds(v)}
             options={memberOptions}
-            placeholder="Add members"
+            placeholder="Adicionar membros"
           />
         </div>
 
@@ -165,10 +165,10 @@ export function TeamEditClient({
           onClick={remove}
           className="text-red-600"
         >
-          Delete team
+          Excluir equipe
         </Button>
         <Button type="button" disabled={isPending} onClick={save}>
-          {isPending ? "Saving..." : "Save changes"}
+          {isPending ? "Salvando..." : "Salvar alterações"}
         </Button>
       </SettingsCardFooter>
     </SettingsCard>

@@ -44,8 +44,8 @@ describe("EmailSyncClient", () => {
       url: "https://accounts.google.com/o/oauth2/v2/auth?x=1",
     });
     render(<EmailSyncClient mailbox={null} />);
-    expect(screen.getByText("No mailbox is connected yet.")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Connect Gmail" }));
+    expect(screen.getByText("Nenhuma caixa de entrada conectada ainda.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Conectar Gmail" }));
     await waitFor(() =>
       expect(window.location.href).toBe("https://accounts.google.com/o/oauth2/v2/auth?x=1"),
     );
@@ -54,15 +54,15 @@ describe("EmailSyncClient", () => {
 
   it("shows the connected address, last sync, and a Disconnect button when connected", () => {
     render(<EmailSyncClient mailbox={connected} />);
-    expect(screen.getByText("Connected as rep@example.com")).toBeInTheDocument();
-    expect(screen.getByText(/Last synced/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Disconnect" })).toBeInTheDocument();
+    expect(screen.getByText("Conectado como rep@example.com")).toBeInTheDocument();
+    expect(screen.getByText(/Última sincronização/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Desconectar" })).toBeInTheDocument();
   });
 
   it("Disconnect calls the action with csrf + account id then refreshes", async () => {
     disconnectMailboxAction.mockResolvedValue({ ok: true, value: { disconnected: true } });
     render(<EmailSyncClient mailbox={connected} />);
-    fireEvent.click(screen.getByRole("button", { name: "Disconnect" }));
+    fireEvent.click(screen.getByRole("button", { name: "Desconectar" }));
     await waitFor(() =>
       expect(disconnectMailboxAction).toHaveBeenCalledWith("csrf-token", { accountId: "acc-1" }),
     );
@@ -75,7 +75,7 @@ describe("EmailSyncClient", () => {
         mailbox={{ ...connected, status: "disconnected", lastErrorId: "E_GMAIL_002" }}
       />,
     );
-    expect(screen.getByRole("button", { name: "Reconnect" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reconectar" })).toBeInTheDocument();
     expect(screen.getByText(/E_GMAIL_002/)).toBeInTheDocument();
   });
 

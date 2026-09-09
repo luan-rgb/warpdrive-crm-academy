@@ -10,7 +10,7 @@ afterEach(cleanup);
 describe("UserStatusTabs", () => {
   it("renders the filters as a named toggle-button group", () => {
     render(<UserStatusTabs value="all" onChange={() => {}} />);
-    expect(screen.getByRole("group", { name: "User status filter" })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "Filtro de status do usuário" })).toBeInTheDocument();
     for (const name of ["All", "Active", "Invited", "Deactivated"]) {
       expect(screen.getByRole("button", { name })).toBeInTheDocument();
     }

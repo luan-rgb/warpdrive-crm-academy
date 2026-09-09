@@ -53,17 +53,17 @@ describe("ActivityTypesClient", () => {
     render(<ActivityTypesClient rows={ROWS} />);
     expect(screen.getByText("Call")).toBeInTheDocument();
     expect(screen.getByText("Demo")).toBeInTheDocument();
-    expect(screen.getByText("System")).toBeInTheDocument();
+    expect(screen.getByText("Sistema")).toBeInTheDocument();
     // Only the non-system row exposes a Delete button.
-    expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: "Excluir" })).toHaveLength(1);
   });
 
   it("submits the add form via createActivityTypeAction", async () => {
     render(<ActivityTypesClient rows={ROWS} />);
-    fireEvent.change(screen.getByLabelText("Activity type name"), {
+    fireEvent.change(screen.getByLabelText("Nome do tipo de atividade"), {
       target: { value: "Lunch meeting" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Add activity type" }));
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar tipo de atividade" }));
     await waitFor(() =>
       expect(createActivityTypeAction).toHaveBeenCalledWith(
         expect.objectContaining({ name: "Lunch meeting", key: "lunch_meeting" }),
@@ -74,9 +74,9 @@ describe("ActivityTypesClient", () => {
 
   it("shows the guarded-delete message when the action is blocked", async () => {
     render(<ActivityTypesClient rows={ROWS} />);
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(deleteActivityTypeAction).toHaveBeenCalled());
-    expect(await screen.findByText(/Can't delete/)).toBeInTheDocument();
+    expect(await screen.findByText(/Não é possível excluir/)).toBeInTheDocument();
   });
 
   it("renders an enabled/disabled switch per activity type", () => {

@@ -104,7 +104,7 @@ export function SettingsNav({
       : [MY_ACCOUNT];
 
   return (
-    <nav aria-label="Settings sections" className="w-56 shrink-0 space-y-4">
+    <nav aria-label="Seções de configurações" className="w-56 shrink-0 space-y-4">
       {sections.map((section) => (
         <div key={section.title}>
           {/* PD section header: 13px uppercase, muted, no extra letter-spacing. */}

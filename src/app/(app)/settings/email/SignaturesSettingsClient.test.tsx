@@ -32,8 +32,10 @@ describe("SignaturesSettingsClient", () => {
       />,
     );
     // "Default" (exact) matches only the badge, not the "Set as default" button text.
-    expect(screen.getByText("Default")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /set as default.*Personal/i })).toBeInTheDocument();
+    expect(screen.getByText("Padrão")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /definir como padrão.*Personal/i }),
+    ).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /set as default.*Work/i })).not.toBeInTheDocument();
   });
 
@@ -41,19 +43,19 @@ describe("SignaturesSettingsClient", () => {
     const user = userEvent.setup();
     const { createSignatureAction } = await import("@/features/email/authoringActions");
     render(<SignaturesSettingsClient signatures={[]} />);
-    await user.click(screen.getByRole("button", { name: /new signature/i }));
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: /nova assinatura/i }));
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createSignatureAction).not.toHaveBeenCalled();
-    expect(await screen.findByRole("alert")).toHaveTextContent(/name/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/nome/i);
     // The message clears once the user starts typing a name.
-    await user.type(screen.getByLabelText(/name/i), "Work");
+    await user.type(screen.getByLabelText(/nome/i), "Work");
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("caps the signature name at 40 characters and shows the hint", () => {
     render(<SignaturesSettingsClient signatures={[]} />);
-    fireEvent.click(screen.getByRole("button", { name: /new signature/i }));
-    expect(screen.getByLabelText(/name/i)).toHaveAttribute("maxLength", "40");
-    expect(screen.getByText("Max 40 characters")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /nova assinatura/i }));
+    expect(screen.getByLabelText(/nome/i)).toHaveAttribute("maxLength", "40");
+    expect(screen.getByText("Máx. 40 caracteres")).toBeInTheDocument();
   });
 });

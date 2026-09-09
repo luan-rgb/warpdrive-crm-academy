@@ -6,22 +6,22 @@
 export const IDENTITY_SETTINGS_STRINGS = {
   flagEditor: {
     global: "Global",
-    ownership: "Ownership",
-    save: "Save flags",
-    saving: "Saving...",
+    ownership: "Propriedade",
+    save: "Salvar permissões",
+    saving: "Salvando...",
   },
   teamEditor: {
-    createTitle: "Create a team",
-    createDescription: "Group users under one manager and keep ownership organized.",
-    nameLabel: "Team name",
-    namePlaceholder: "New team name",
-    create: "Create",
-    creating: "Creating...",
-    manager: "Manager",
-    managerNone: "No manager",
-    members: "Members",
-    membersHelp: "Select the users who belong to this team.",
-    membersPlaceholder: "Search and add members",
+    createTitle: "Criar uma equipe",
+    createDescription: "Agrupe usuários sob um gestor e mantenha a propriedade organizada.",
+    nameLabel: "Nome da equipe",
+    namePlaceholder: "Nome da nova equipe",
+    create: "Criar",
+    creating: "Criando...",
+    manager: "Gestor",
+    managerNone: "Sem gestor",
+    members: "Membros",
+    membersHelp: "Selecione os usuários que pertencem a esta equipe.",
+    membersPlaceholder: "Buscar e adicionar membros",
   },
 } as const;
 
@@ -30,16 +30,16 @@ export const IDENTITY_SETTINGS_STRINGS = {
 // internal strings into friendly messages and fall back to a generic one so no
 // raw internal wording ever leaks to the UI.
 export const IDENTITY_ERROR_MESSAGES = {
-  generic: "Something went wrong. Please try again.",
-  session: "Your session looks stale. Refresh the page and try again.",
-  permission: "You do not have permission to do that.",
-  selfPromote: "You can't grant yourself admin.",
-  lastAdmin: "You can't remove the last active administrator.",
-  selfDeactivate: "You can't deactivate your own account.",
-  reactivateAdmin: "Only an administrator can reactivate users.",
-  selfPermissionSet: "You can't edit your own permission set.",
-  notFound: "That record no longer exists.",
-  invalidInput: "Some of the details entered are invalid.",
+  generic: "Algo deu errado. Tente novamente.",
+  session: "Sua sessão parece expirada. Atualize a página e tente novamente.",
+  permission: "Você não tem permissão para fazer isso.",
+  selfPromote: "Você não pode se tornar administrador.",
+  lastAdmin: "Você não pode remover o último administrador ativo.",
+  selfDeactivate: "Você não pode desativar sua própria conta.",
+  reactivateAdmin: "Somente um administrador pode reativar usuários.",
+  selfPermissionSet: "Você não pode editar seu próprio conjunto de permissão.",
+  notFound: "Esse registro não existe mais.",
+  invalidInput: "Alguns dos dados informados são inválidos.",
 } as const;
 
 type ErrorKey = keyof typeof IDENTITY_ERROR_MESSAGES;

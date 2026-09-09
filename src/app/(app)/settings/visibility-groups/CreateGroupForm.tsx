@@ -49,7 +49,7 @@ export function CreateGroupForm({ onCreated }: Props): React.ReactElement {
       </div>
       <div className="p-5">
         <label htmlFor="group-name" className="sr-only">
-          Visibility group name
+          Nome do grupo de visibilidade
         </label>
         <Input
           ref={ref}
@@ -57,7 +57,7 @@ export function CreateGroupForm({ onCreated }: Props): React.ReactElement {
           type="text"
           required
           maxLength={80}
-          placeholder="New visibility group name"
+          placeholder="Nome do novo grupo de visibilidade"
           className="w-full"
           disabled={isPending}
         />
@@ -69,7 +69,7 @@ export function CreateGroupForm({ onCreated }: Props): React.ReactElement {
       </div>
       <div className="flex justify-end border-t bg-muted/20 px-5 py-3">
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Creating..." : "Create"}
+          {isPending ? "Criando..." : "Criar"}
         </Button>
       </div>
     </form>

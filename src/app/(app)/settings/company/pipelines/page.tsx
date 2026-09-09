@@ -45,7 +45,7 @@ export default async function PipelinesSettingsPage(): Promise<ReactNode> {
               <div>
                 <div className="text-sm font-medium">{p.name}</div>
                 <div className="text-xs text-muted-foreground">
-                  {p.stages.length} {p.stages.length === 1 ? "stage" : "stages"}
+                  {p.stages.length} {p.stages.length === 1 ? "etapa" : "etapas"}
                 </div>
               </div>
               <Link

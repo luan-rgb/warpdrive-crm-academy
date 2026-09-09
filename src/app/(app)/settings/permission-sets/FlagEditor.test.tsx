@@ -47,7 +47,7 @@ describe("FlagEditor", () => {
       <FlagEditor setId={SET_ID} name="Sales" flags={{ "deal.create": true }} onSaved={vi.fn()} />,
     );
     fireEvent.click(screen.getByRole("checkbox", { name: "contact.create" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save flags" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar permissões" }));
     await waitFor(() => expect(updateFlagsAction).toHaveBeenCalledTimes(1));
     expect(updateFlagsAction).toHaveBeenCalledWith(
       "csrf",
@@ -65,7 +65,7 @@ describe("FlagEditor", () => {
   it("shows an inline error when the update fails", async () => {
     updateFlagsAction.mockResolvedValueOnce({ ok: false as const, error: "unauthorized" });
     render(<FlagEditor setId={SET_ID} name="Sales" flags={{}} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Save flags" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar permissões" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(IDENTITY_ERROR_MESSAGES.permission);
   });
 

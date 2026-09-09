@@ -40,7 +40,7 @@ const PROPS = {
 type User = ReturnType<typeof userEvent.setup>;
 
 async function openMenu(user: User): Promise<void> {
-  await user.click(screen.getByRole("button", { name: "User actions" }));
+  await user.click(screen.getByRole("button", { name: "Ações do usuário" }));
   await screen.findByRole("menu");
 }
 
@@ -60,14 +60,14 @@ describe("UserRowControls", () => {
     expect(within(container).getAllByRole("button")).toHaveLength(1);
 
     await openMenu(user);
-    expect(screen.getByRole("menuitem", { name: "Make admin" })).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: "Deactivate" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Tornar administrador" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Desativar" })).toBeInTheDocument();
   });
 
   it("shows an inline error when the admin toggle fails", async () => {
     const user = userEvent.setup();
     render(<UserRowControls {...PROPS} />);
-    await chooseAction(user, "Make admin");
+    await chooseAction(user, "Tornar administrador");
     await waitFor(() => expect(setUserAdminAction).toHaveBeenCalled());
     expect(await screen.findByText(IDENTITY_ERROR_MESSAGES.permission)).toBeInTheDocument();
     expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -77,9 +77,9 @@ describe("UserRowControls", () => {
     // First admin toggle fails, then the active toggle (succeeds) clears the error.
     const user = userEvent.setup();
     render(<UserRowControls {...PROPS} />);
-    await chooseAction(user, "Make admin");
+    await chooseAction(user, "Tornar administrador");
     expect(await screen.findByText(IDENTITY_ERROR_MESSAGES.permission)).toBeInTheDocument();
-    await chooseAction(user, "Deactivate");
+    await chooseAction(user, "Desativar");
     await waitFor(() => expect(PROPS.onChanged).toHaveBeenCalled());
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });

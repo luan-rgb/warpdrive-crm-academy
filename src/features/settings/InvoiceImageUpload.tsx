@@ -34,9 +34,9 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
 
   async function upload(file: File): Promise<string | null> {
     if (!isInvoiceImageContentType(file.type)) {
-      return "Please choose a PNG, JPEG, WebP or GIF image.";
+      return "Escolha uma imagem PNG, JPEG, WebP ou GIF.";
     }
-    if (file.size > INVOICE_IMAGE_MAX_BYTES) return "That image is too large (max 2 MB).";
+    if (file.size > INVOICE_IMAGE_MAX_BYTES) return "Essa imagem é muito grande (máx. 2 MB).";
 
     const csrf = readCsrfToken();
     const requested = await requestInvoiceImageUploadAction(
@@ -44,16 +44,16 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
       { contentType: file.type, size: file.size },
       csrf,
     );
-    if (!requested.ok) return "Could not upload the image.";
+    if (!requested.ok) return "Não foi possível enviar a imagem.";
 
     const form = new FormData();
     for (const [k, v] of Object.entries(requested.value.post.fields)) form.append(k, v);
     form.append("file", file);
     const uploaded = await fetch(requested.value.post.url, { method: "POST", body: form });
-    if (!uploaded.ok) return "Could not upload the image.";
+    if (!uploaded.ok) return "Não foi possível enviar a imagem.";
 
     const confirmed = await confirmInvoiceImageUploadAction(kind, csrf);
-    if (!confirmed.ok) return "Could not upload the image.";
+    if (!confirmed.ok) return "Não foi possível enviar a imagem.";
     return null;
   }
 
@@ -70,7 +70,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
       }
       router.refresh();
     } catch {
-      setError("Could not upload the image.");
+      setError("Não foi possível enviar a imagem.");
     } finally {
       setBusy(false);
       if (inputRef.current !== null) inputRef.current.value = "";
@@ -83,7 +83,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
     try {
       const r = await removeInvoiceImageAction(kind, readCsrfToken());
       if (!r.ok) {
-        setError("Could not remove the image.");
+        setError("Não foi possível remover a imagem.");
         return;
       }
       router.refresh();
@@ -105,7 +105,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
           />
         ) : (
           <div className="flex h-12 w-40 items-center justify-center rounded border border-dashed text-xs text-muted-foreground">
-            No image
+            Sem imagem
           </div>
         )}
         <div className="flex flex-col gap-1">
@@ -117,7 +117,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
               onClick={() => inputRef.current?.click()}
               className="min-h-10 px-3"
             >
-              {imageUrl !== null ? "Change image" : "Upload image"}
+              {imageUrl !== null ? "Trocar imagem" : "Enviar imagem"}
             </Button>
             {imageUrl !== null && (
               <Button
@@ -131,7 +131,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
               </Button>
             )}
           </div>
-          <span className="text-xs text-muted-foreground">PNG, JPEG, WebP or GIF, up to 2 MB.</span>
+          <span className="text-xs text-muted-foreground">PNG, JPEG, WebP ou GIF, até 2 MB.</span>
         </div>
       </div>
       {error !== null && (

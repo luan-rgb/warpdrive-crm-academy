@@ -44,7 +44,7 @@ describe("SignaturesSettingsClient surfaces failed mutations", () => {
       error: { id: "E_PERM_001" },
     });
     render(<SignaturesSettingsClient signatures={SIGS} />);
-    fireEvent.click(screen.getByRole("button", { name: /delete.*Work/i }));
+    fireEvent.click(screen.getByRole("button", { name: /excluir.*Work/i }));
     await waitFor(() => expect(report).toHaveBeenCalledWith("E_PERM_001"));
   });
 
@@ -58,7 +58,7 @@ describe("SignaturesSettingsClient surfaces failed mutations", () => {
         signatures={[{ id: "s2", name: "Personal", isDefault: false, bodyHtml: "<p>p</p>" }]}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /set as default.*Personal/i }));
+    fireEvent.click(screen.getByRole("button", { name: /definir como padrão.*Personal/i }));
     await waitFor(() => expect(report).toHaveBeenCalledWith("E_PERM_001"));
   });
 
@@ -68,9 +68,9 @@ describe("SignaturesSettingsClient surfaces failed mutations", () => {
       error: { id: "E_PERM_001" },
     });
     render(<SignaturesSettingsClient signatures={SIGS} />);
-    fireEvent.click(screen.getByRole("button", { name: /new signature/i }));
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: "Draft" } });
-    fireEvent.click(screen.getByRole("button", { name: /^save$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /nova assinatura/i }));
+    fireEvent.change(screen.getByLabelText(/nome/i), { target: { value: "Draft" } });
+    fireEvent.click(screen.getByRole("button", { name: /^salvar$/i }));
     await waitFor(() => expect(report).toHaveBeenCalledWith("E_PERM_001"));
   });
 });

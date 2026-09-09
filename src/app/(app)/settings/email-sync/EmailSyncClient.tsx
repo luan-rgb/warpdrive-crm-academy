@@ -74,7 +74,7 @@ export function EmailSyncClient({ mailbox }: { mailbox: MailboxView | null }): R
     <SettingsCard>
       <SettingsCardHeader
         icon={<Mail className="size-4" aria-hidden="true" />}
-        title="Gmail connection"
+        title="Conexão do Gmail"
         description="Connect one mailbox to sync messages and activity."
       />
       <SettingsCardBody>

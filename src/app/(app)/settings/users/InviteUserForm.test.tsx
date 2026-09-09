@@ -18,9 +18,9 @@ afterEach(() => {
 });
 
 function fillAndSubmit(): void {
-  fireEvent.change(screen.getByLabelText("Email"), { target: { value: "taken@example.com" } });
-  fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Taken Person" } });
-  fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+  fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "taken@example.com" } });
+  fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Taken Person" } });
+  fireEvent.click(screen.getByRole("button", { name: /convidar/i }));
 }
 
 describe("InviteUserForm inline validation", () => {
@@ -33,34 +33,34 @@ describe("InviteUserForm inline validation", () => {
 
   it("shows an inline error for a malformed email and does not call the action", async () => {
     render(<InviteUserForm onInvited={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "nope" } });
-    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "No Pe" } });
-    fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "nope" } });
+    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "No Pe" } });
+    fireEvent.click(screen.getByRole("button", { name: /convidar/i }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/valid email address/i);
-    expect(screen.getByLabelText("Email")).toHaveAttribute("aria-invalid", "true");
+    expect(await screen.findByRole("alert")).toHaveTextContent(/endereço de e-mail válido/i);
+    expect(screen.getByLabelText("E-mail")).toHaveAttribute("aria-invalid", "true");
     expect(inviteUserAction).not.toHaveBeenCalled();
   });
 
   it("shows an inline error when a field is empty", async () => {
     render(<InviteUserForm onInvited={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "new@example.com" } });
-    fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "new@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: /convidar/i }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/name/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/nome/i);
     expect(inviteUserAction).not.toHaveBeenCalled();
   });
 
   it("clears the inline error once the email is corrected", async () => {
     inviteUserAction.mockResolvedValueOnce({ ok: true, userId: "u-1" });
     render(<InviteUserForm onInvited={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "nope" } });
-    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "No Pe" } });
-    fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "nope" } });
+    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "No Pe" } });
+    fireEvent.click(screen.getByRole("button", { name: /convidar/i }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "ok@example.com" } });
-    fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "ok@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: /convidar/i }));
     await vi.waitFor(() => expect(inviteUserAction).toHaveBeenCalled());
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
@@ -76,7 +76,7 @@ describe("InviteUserForm error mapping (IDENTITY-02)", () => {
     fillAndSubmit();
 
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/already registered/i);
+    expect(alert).toHaveTextContent(/já está cadastrado/i);
     expect(alert).not.toHaveTextContent(/something went wrong/i);
   });
 
@@ -85,7 +85,7 @@ describe("InviteUserForm error mapping (IDENTITY-02)", () => {
     render(<InviteUserForm onInvited={() => {}} />);
     fillAndSubmit();
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/do not have permission/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/não tem permissão/i);
   });
 
   it("calls onInvited and shows no error on success", async () => {
@@ -103,17 +103,17 @@ describe("InviteUserForm link invite (no email is sent)", () => {
   it("after a successful invite, states no email is sent and offers a shareable sign-in link", async () => {
     inviteUserAction.mockResolvedValueOnce({ ok: true, userId: "u-9" });
     render(<InviteUserForm onInvited={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "new@example.com" } });
-    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "New Person" } });
-    fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "new@example.com" } });
+    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New Person" } });
+    fireEvent.click(screen.getByRole("button", { name: /convidar/i }));
 
     const status = await screen.findByRole("status");
-    expect(status).toHaveTextContent(/no email/i);
+    expect(status).toHaveTextContent(/nenhum e-mail/i);
     expect(status).toHaveTextContent(/new@example.com/);
     // A shareable sign-in link is shown (the login URL, since access is Google SSO).
-    const link = screen.getByRole("textbox", { name: /invite link/i });
+    const link = screen.getByRole("textbox", { name: /link de convite/i });
     expect((link as HTMLInputElement).value).toContain("/login");
-    expect(screen.getByRole("button", { name: /copy/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /copiar/i })).toBeInTheDocument();
   });
 
   it("copies the sign-in link to the clipboard", async () => {
@@ -121,12 +121,12 @@ describe("InviteUserForm link invite (no email is sent)", () => {
     Object.assign(navigator, { clipboard: { writeText } });
     inviteUserAction.mockResolvedValueOnce({ ok: true, userId: "u-9" });
     render(<InviteUserForm onInvited={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "new@example.com" } });
-    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "New Person" } });
-    fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "new@example.com" } });
+    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New Person" } });
+    fireEvent.click(screen.getByRole("button", { name: /convidar/i }));
 
     await screen.findByRole("status");
-    fireEvent.click(screen.getByRole("button", { name: /copy/i }));
+    fireEvent.click(screen.getByRole("button", { name: /copiar/i }));
     await vi.waitFor(() => expect(writeText).toHaveBeenCalled());
     expect(writeText.mock.calls[0]?.[0]).toContain("/login");
   });

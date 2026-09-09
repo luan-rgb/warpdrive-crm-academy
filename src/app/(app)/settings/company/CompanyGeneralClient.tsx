@@ -114,19 +114,20 @@ export function CompanyGeneralClient(props: Props): React.ReactNode {
 
       <SettingsCard>
         <SettingsCardHeader
-          title="Invoice branding"
-          description="Shown on every printed invoice, on top of the company name above."
+          title="Identidade visual da fatura"
+          description="Exibido em toda fatura impressa, além do nome da empresa acima."
         />
         <SettingsCardBody className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-3">
             <label htmlFor="invoice-header" className="block">
-              <span className="mb-1.5 block text-sm font-medium">Invoice header</span>
+              <span className="mb-1.5 block text-sm font-medium">Cabeçalho da fatura</span>
               <p className="mb-1.5 text-xs text-muted-foreground">
-                Shown at the top of every printed invoice: company address, tax id, contact info.
+                Exibido no topo de toda fatura impressa: endereço da empresa, CNPJ, dados de
+                contato.
               </p>
               <Textarea
                 id="invoice-header"
-                aria-label="Invoice header"
+                aria-label="Cabeçalho da fatura"
                 rows={5}
                 value={headerText}
                 onChange={(e) => {
@@ -137,21 +138,21 @@ export function CompanyGeneralClient(props: Props): React.ReactNode {
             </label>
             <InvoiceImageUpload
               kind="header"
-              label="Header image (logo)"
+              label="Imagem do cabeçalho (logo)"
               imageUrl={props.invoiceHeaderImageUrl}
             />
           </div>
 
           <div className="space-y-3">
             <label htmlFor="invoice-footer" className="block">
-              <span className="mb-1.5 block text-sm font-medium">Invoice footer</span>
+              <span className="mb-1.5 block text-sm font-medium">Rodapé da fatura</span>
               <p className="mb-1.5 text-xs text-muted-foreground">
-                Shown at the bottom of every printed invoice: payment terms, bank details, a
-                thank-you note.
+                Exibido no rodapé de toda fatura impressa: condições de pagamento, dados bancários,
+                uma mensagem de agradecimento.
               </p>
               <Textarea
                 id="invoice-footer"
-                aria-label="Invoice footer"
+                aria-label="Rodapé da fatura"
                 rows={5}
                 value={footerText}
                 onChange={(e) => {
@@ -162,7 +163,7 @@ export function CompanyGeneralClient(props: Props): React.ReactNode {
             </label>
             <InvoiceImageUpload
               kind="footer"
-              label="Footer image (signature/stamp)"
+              label="Imagem do rodapé (assinatura/carimbo)"
               imageUrl={props.invoiceFooterImageUrl}
             />
           </div>
@@ -180,7 +181,7 @@ export function CompanyGeneralClient(props: Props): React.ReactNode {
             disabled={brandingPending}
             onClick={() => void saveBranding()}
           >
-            Save branding
+            Salvar identidade visual
           </Button>
         </SettingsCardFooter>
       </SettingsCard>

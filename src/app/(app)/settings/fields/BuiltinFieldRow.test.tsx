@@ -28,7 +28,7 @@ describe("BuiltinFieldRow", () => {
       />,
     );
     expect(screen.getByText("Industry")).toBeTruthy();
-    expect(screen.getByText("Built-in")).toBeTruthy();
+    expect(screen.getByText("Nativo")).toBeTruthy();
   });
 
   it("toggles hidden via the action for a non-locked field", async () => {
@@ -38,7 +38,7 @@ describe("BuiltinFieldRow", () => {
         row={{ key: "industry", label: "Industry", locked: false, hidden: false }}
       />,
     );
-    fireEvent.click(screen.getByRole("switch", { name: /hidden/i }));
+    fireEvent.click(screen.getByRole("switch", { name: /oculto/i }));
     await waitFor(() =>
       expect(setBuiltinFieldHiddenAction).toHaveBeenCalledWith(
         { entity: "organization", key: "industry", hidden: true },
@@ -55,7 +55,7 @@ describe("BuiltinFieldRow", () => {
       />,
     );
     expect(screen.queryByRole("switch")).toBeNull();
-    expect(screen.getByText(/always shown/i)).toBeTruthy();
+    expect(screen.getByText(/sempre exibido/i)).toBeTruthy();
   });
 
   it("surfaces a failure via the error reporter", async () => {
@@ -69,7 +69,7 @@ describe("BuiltinFieldRow", () => {
         row={{ key: "industry", label: "Industry", locked: false, hidden: false }}
       />,
     );
-    fireEvent.click(screen.getByRole("switch", { name: /hidden/i }));
+    fireEvent.click(screen.getByRole("switch", { name: /oculto/i }));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_CF_005"));
   });
 });

@@ -20,7 +20,7 @@ export function UserStatusTabs({
 }): React.ReactNode {
   return (
     <fieldset
-      aria-label="User status filter"
+      aria-label="Filtro de status do usuário"
       className="flex min-w-0 items-center gap-1 border-0 p-0"
     >
       {TABS.map((tab) => (

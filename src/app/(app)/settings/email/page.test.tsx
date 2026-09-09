@@ -30,6 +30,6 @@ describe("EmailSettingsPage", () => {
     render(await EmailSettingsPage());
 
     expect(screen.getByRole("link", { name: "Settings" }).getAttribute("href")).toBe("/settings");
-    expect(screen.getByRole("heading", { level: 1, name: "Email templates" })).not.toBeNull();
+    expect(screen.getByRole("heading", { level: 1, name: "Modelos de e-mail" })).not.toBeNull();
   });
 });

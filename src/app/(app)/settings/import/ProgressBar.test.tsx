@@ -7,7 +7,7 @@ import { ProgressBar } from "./ProgressBar";
 it("describes current progress without announcing every poll update", () => {
   render(<ProgressBar processed={25} total={100} />);
 
-  expect(screen.getByRole("progressbar", { name: "Import progress" })).toHaveAttribute(
+  expect(screen.getByRole("progressbar", { name: "Progresso da importação" })).toHaveAttribute(
     "aria-valuetext",
     "25 of 100 (25%)",
   );

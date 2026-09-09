@@ -23,7 +23,7 @@ describe("mailboxStatusLabel", () => {
   });
 
   test("the stalled wording says mail is not arriving, not merely that something is wrong", () => {
-    expect(EMAIL_SYNC_STRINGS.statusStalled).toMatch(/not (arriving|syncing)/i);
+    expect(EMAIL_SYNC_STRINGS.statusStalled).toMatch(/não sincronizando/i);
   });
 
   test("before the browser clock exists, a disconnected mailbox still reads disconnected", () => {

@@ -40,7 +40,7 @@ export default function NotificationSettingsPage() {
       {error !== null && <p className="mb-4 text-sm text-destructive">{error}</p>}
       <SettingsCard>
         <SettingsCardHeader
-          title="Notification channels"
+          title="Canais de notificação"
           description="Choose how each kind of update reaches you."
         />
         <div className="px-5">

@@ -24,10 +24,10 @@ import { CreateGroupForm } from "./CreateGroupForm";
 describe("CreateGroupForm", () => {
   it("renders an inline error when the create action fails", async () => {
     render(<CreateGroupForm onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Visibility group name"), {
+    fireEvent.change(screen.getByLabelText("Nome do grupo de visibilidade"), {
       target: { value: "Sales" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.click(screen.getByRole("button", { name: "Criar" }));
     await waitFor(() => expect(createGroupAction).toHaveBeenCalledWith("csrf", { name: "Sales" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(IDENTITY_ERROR_MESSAGES.permission);
   });
@@ -37,16 +37,18 @@ describe("CreateGroupForm", () => {
     createGroupAction.mockResolvedValueOnce({ ok: true as const, value: { id: "g1" } });
     const onCreated = vi.fn();
     render(<CreateGroupForm onCreated={onCreated} />);
-    fireEvent.change(screen.getByLabelText("Visibility group name"), {
+    fireEvent.change(screen.getByLabelText("Nome do grupo de visibilidade"), {
       target: { value: "Sales" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.click(screen.getByRole("button", { name: "Criar" }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Visibility group name"), { target: { value: "Ops" } });
+    fireEvent.change(screen.getByLabelText("Nome do grupo de visibilidade"), {
+      target: { value: "Ops" },
+    });
     // The alert can render one commit before the transition finishes and isPending flips back, so
     // the button may still read "Creating..." at this point. findByRole retries until it returns to
     // "Create" (isPending === false); a synchronous getByRole here was the flake (button not found).
-    fireEvent.click(await screen.findByRole("button", { name: "Create" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Criar" }));
     await waitFor(() => expect(onCreated).toHaveBeenCalled());
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });

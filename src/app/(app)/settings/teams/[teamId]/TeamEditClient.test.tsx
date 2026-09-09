@@ -57,7 +57,7 @@ function renderClient() {
 describe("TeamEditClient", () => {
   it("pre-loads the team name and current members (view existing team)", () => {
     renderClient();
-    expect(screen.getByLabelText("Team name")).toHaveValue("West Team");
+    expect(screen.getByLabelText("Nome da equipe")).toHaveValue("West Team");
     // Alice is the manager AND a current member, so she renders in both the manager select and the
     // members chip list (at least once each). Pre-loading the roster is the point.
     expect(screen.getAllByText("Alice").length).toBeGreaterThanOrEqual(1);
@@ -65,8 +65,8 @@ describe("TeamEditClient", () => {
 
   it("saves a rename + membership via updateTeamAction then setTeamMembersAction", async () => {
     renderClient();
-    fireEvent.change(screen.getByLabelText("Team name"), { target: { value: "West Region" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    fireEvent.change(screen.getByLabelText("Nome da equipe"), { target: { value: "West Region" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar alterações" }));
     await waitFor(() => expect(updateTeamAction).toHaveBeenCalledTimes(1));
     expect(updateTeamAction.mock.calls[0]?.[1]).toMatchObject({
       teamId: TEAM_ID,
@@ -80,7 +80,7 @@ describe("TeamEditClient", () => {
 
   it("deletes the team and navigates back to the list", async () => {
     renderClient();
-    fireEvent.click(screen.getByRole("button", { name: "Delete team" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir equipe" }));
     await waitFor(() => expect(deleteTeamAction).toHaveBeenCalledTimes(1));
     expect(deleteTeamAction.mock.calls[0]?.[1]).toMatchObject({ teamId: TEAM_ID });
     await waitFor(() => expect(push).toHaveBeenCalledWith("/settings/teams"));
@@ -90,7 +90,7 @@ describe("TeamEditClient", () => {
     renderClient();
     // The same copy also heads the card, so pin the one under the Members field.
     const help = screen
-      .getAllByText("Select the users who belong to this team.")
+      .getAllByText("Selecione os usuários que pertencem a esta equipe.")
       .find((el) => el.classList.contains("text-xs"));
     expect(help).toHaveClass("text-muted-foreground");
   });

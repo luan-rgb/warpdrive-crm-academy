@@ -89,33 +89,33 @@ describe("TemplatesSettingsClient", () => {
     render(<TemplatesSettingsClient templates={[own, shared]} canShare={true} />);
     expect(screen.getByText("Mine")).toBeInTheDocument();
     expect(screen.getByText("Theirs")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /delete Mine/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /delete Theirs/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /excluir Mine/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /excluir Theirs/i })).not.toBeInTheDocument();
   });
 
   it("T4a: renders Created-on and Owner columns (You for own, name for shared)", () => {
     render(<TemplatesSettingsClient templates={[own, shared]} canShare={true} />);
     expect(screen.getByText(formatCreatedOn(own.createdAt))).toBeInTheDocument();
-    expect(screen.getByText("You")).toBeInTheDocument();
+    expect(screen.getByText("Você")).toBeInTheDocument();
     expect(screen.getByText("Ada")).toBeInTheDocument();
   });
 
   it("T2: search filters rows by name (case-insensitive); no match shows empty copy", async () => {
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[own, shared]} canShare={true} />);
-    await user.type(screen.getByLabelText("Search templates"), "min");
+    await user.type(screen.getByLabelText("Buscar modelos"), "min");
     expect(screen.getByText("Mine")).toBeInTheDocument();
     expect(screen.queryByText("Theirs")).not.toBeInTheDocument();
 
-    await user.clear(screen.getByLabelText("Search templates"));
-    await user.type(screen.getByLabelText("Search templates"), "zzz");
-    expect(screen.getByText("Nothing here yet.")).toBeInTheDocument();
+    await user.clear(screen.getByLabelText("Buscar modelos"));
+    await user.type(screen.getByLabelText("Buscar modelos"), "zzz");
+    expect(screen.getByText("Nada aqui ainda.")).toBeInTheDocument();
   });
 
   it("T1: insert-field menu inserts a {{token}} at the cursor", async () => {
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[]} canShare={true} />);
-    await user.click(screen.getByRole("button", { name: "New template" }));
+    await user.click(screen.getByRole("button", { name: "Novo modelo" }));
     await user.click(screen.getByRole("button", { name: "Insert field" }));
     await user.click(screen.getByRole("option", { name: "First name" }));
     await waitFor(() =>
@@ -126,8 +126,8 @@ describe("TemplatesSettingsClient", () => {
   it("T4b: bulk-select + delete calls the action with selected ids", async () => {
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[own, shared]} canShare={true} />);
-    await user.click(screen.getByRole("checkbox", { name: /select Mine/i }));
-    await user.click(screen.getByRole("button", { name: "Delete selected" }));
+    await user.click(screen.getByRole("checkbox", { name: /selecionar Mine/i }));
+    await user.click(screen.getByRole("button", { name: "Excluir selecionados" }));
     await waitFor(() =>
       expect(deleteTemplatesAction).toHaveBeenCalledWith("csrf", { ids: [own.id] }),
     );
@@ -141,8 +141,8 @@ describe("TemplatesSettingsClient", () => {
     } as never);
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[own]} canShare={true} />);
-    await user.click(screen.getByRole("checkbox", { name: /select Mine/i }));
-    await user.click(screen.getByRole("button", { name: "Delete selected" }));
+    await user.click(screen.getByRole("checkbox", { name: /selecionar Mine/i }));
+    await user.click(screen.getByRole("button", { name: "Excluir selecionados" }));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_GMAIL_010"));
   });
 
@@ -153,9 +153,9 @@ describe("TemplatesSettingsClient", () => {
     } as never);
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[]} canShare={true} />);
-    await user.click(screen.getByRole("button", { name: "New template" }));
-    await user.type(screen.getByLabelText("Name"), "New one");
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Novo modelo" }));
+    await user.type(screen.getByLabelText("Nome"), "New one");
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_GMAIL_010"));
   });
 
@@ -166,26 +166,26 @@ describe("TemplatesSettingsClient", () => {
     } as never);
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[own]} canShare={true} />);
-    await user.click(screen.getByRole("button", { name: /delete Mine/i }));
+    await user.click(screen.getByRole("button", { name: /excluir Mine/i }));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   });
 
   it("tells the user a name is required instead of failing silently", async () => {
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[]} canShare={true} />);
-    await user.click(screen.getByRole("button", { name: "New template" }));
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Novo modelo" }));
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createTemplateAction).not.toHaveBeenCalled();
-    expect(await screen.findByRole("alert")).toHaveTextContent(/name/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/nome/i);
     // The message clears once the user starts typing a name.
-    await user.type(screen.getByLabelText("Name"), "Outreach");
+    await user.type(screen.getByLabelText("Nome"), "Outreach");
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("hides the share toggle when canShare is false", async () => {
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[]} canShare={false} />);
-    await user.click(screen.getByRole("button", { name: "New template" }));
+    await user.click(screen.getByRole("button", { name: "Novo modelo" }));
     expect(screen.queryByLabelText(/share with team/i)).not.toBeInTheDocument();
   });
 });

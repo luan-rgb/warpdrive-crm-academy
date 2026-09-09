@@ -68,7 +68,7 @@ export function GoalsTable({ goals, assigneeNames, onChanged, onEdit }: Props): 
               <td className="px-3 py-2">{goalLabel(g)}</td>
               <td className="px-3 py-2">
                 {g.assigneeId === null
-                  ? "Whole company"
+                  ? "Toda a empresa"
                   : (assigneeNames[g.assigneeId] ?? g.assigneeKind)}
               </td>
               <td className="px-3 py-2 tabular-nums">{goalNumberText(g.target, g.metric)}</td>

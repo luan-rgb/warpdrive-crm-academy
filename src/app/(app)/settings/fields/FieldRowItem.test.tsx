@@ -73,7 +73,7 @@ describe("FieldRowItem placement toggles", () => {
 
   it("toggles Important via setDefFlagsAction, sending the full flag pair", async () => {
     renderRow(ROW);
-    fireEvent.click(screen.getByRole("switch", { name: "Important" }));
+    fireEvent.click(screen.getByRole("switch", { name: "Importante" }));
     await waitFor(() =>
       expect(actions.setDefFlagsAction).toHaveBeenCalledWith(
         { id: "d1", isImportant: true, showInAddForm: false },
@@ -84,7 +84,7 @@ describe("FieldRowItem placement toggles", () => {
 
   it("toggles Show in add form via setDefFlagsAction, sending the full flag pair", async () => {
     renderRow({ ...ROW, isImportant: true });
-    fireEvent.click(screen.getByRole("switch", { name: "Show in add form" }));
+    fireEvent.click(screen.getByRole("switch", { name: "Exibir no formulário de adição" }));
     await waitFor(() =>
       expect(actions.setDefFlagsAction).toHaveBeenCalledWith(
         { id: "d1", isImportant: true, showInAddForm: true },
@@ -95,11 +95,11 @@ describe("FieldRowItem placement toggles", () => {
 
   it("reflects the def's current flag state in the switches", () => {
     renderRow({ ...ROW, isImportant: true, showInAddForm: true });
-    expect(screen.getByRole("switch", { name: "Important" })).toHaveAttribute(
+    expect(screen.getByRole("switch", { name: "Importante" })).toHaveAttribute(
       "aria-checked",
       "true",
     );
-    expect(screen.getByRole("switch", { name: "Show in add form" })).toHaveAttribute(
+    expect(screen.getByRole("switch", { name: "Exibir no formulário de adição" })).toHaveAttribute(
       "aria-checked",
       "true",
     );

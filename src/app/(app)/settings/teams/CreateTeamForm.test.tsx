@@ -44,9 +44,9 @@ function chooseSelect(label: string, option: string): void {
 describe("CreateTeamForm", () => {
   it("submits the chosen manager id to createTeamAction", async () => {
     render(<CreateTeamForm users={USERS} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Team name"), { target: { value: "Sales" } });
-    chooseSelect("Manager", ALICE.name);
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.change(screen.getByLabelText("Nome da equipe"), { target: { value: "Sales" } });
+    chooseSelect("Gestor", ALICE.name);
+    fireEvent.click(screen.getByRole("button", { name: "Criar" }));
     await waitFor(() =>
       expect(createTeamAction).toHaveBeenCalledWith("csrf", {
         name: "Sales",
@@ -57,10 +57,10 @@ describe("CreateTeamForm", () => {
 
   it("calls setTeamMembersAction with the selected member ids after creation", async () => {
     render(<CreateTeamForm users={USERS} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Team name"), { target: { value: "Sales" } });
-    fireEvent.click(screen.getByLabelText("Members"));
+    fireEvent.change(screen.getByLabelText("Nome da equipe"), { target: { value: "Sales" } });
+    fireEvent.click(screen.getByLabelText("Membros"));
     fireEvent.click(screen.getByRole("option", { name: /Bob/ }));
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.click(screen.getByRole("button", { name: "Criar" }));
     await waitFor(() =>
       expect(setTeamMembersAction).toHaveBeenCalledWith("csrf", {
         teamId: "team-new",
@@ -71,8 +71,8 @@ describe("CreateTeamForm", () => {
 
   it("passes managerId null when no manager is chosen", async () => {
     render(<CreateTeamForm users={USERS} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Team name"), { target: { value: "Ops" } });
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.change(screen.getByLabelText("Nome da equipe"), { target: { value: "Ops" } });
+    fireEvent.click(screen.getByRole("button", { name: "Criar" }));
     await waitFor(() =>
       expect(createTeamAction).toHaveBeenCalledWith("csrf", { name: "Ops", managerId: null }),
     );
@@ -84,28 +84,28 @@ describe("CreateTeamForm", () => {
     // omitted below) must never surface as a selectable manager or member. This locks the picker
     // contract: CreateTeamForm renders exactly the users it receives and pulls no wider list.
     render(<CreateTeamForm users={[ALICE]} onCreated={vi.fn()} />);
-    fireEvent.click(screen.getByLabelText("Manager"));
+    fireEvent.click(screen.getByLabelText("Gestor"));
     expect(screen.getByRole("option", { name: ALICE.name })).toBeInTheDocument();
     expect(screen.queryByRole("option", { name: BOB.name })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("option", { name: ALICE.name }));
-    fireEvent.click(screen.getByLabelText("Members"));
+    fireEvent.click(screen.getByLabelText("Membros"));
     expect(screen.getByRole("option", { name: /Alice/ })).toBeInTheDocument();
     expect(screen.queryByRole("option", { name: /Bob/ })).not.toBeInTheDocument();
   });
 
   it("keeps the create action disabled until a team name is entered", () => {
     render(<CreateTeamForm users={USERS} onCreated={vi.fn()} />);
-    const create = screen.getByRole("button", { name: "Create" });
+    const create = screen.getByRole("button", { name: "Criar" });
     expect(create).toBeDisabled();
-    fireEvent.change(screen.getByLabelText("Team name"), { target: { value: "Sales" } });
+    fireEvent.change(screen.getByLabelText("Nome da equipe"), { target: { value: "Sales" } });
     expect(create).toBeEnabled();
   });
 
   it("shows an inline error when creation fails", async () => {
     createTeamAction.mockResolvedValueOnce({ ok: false as const, error: "unauthorized" });
     render(<CreateTeamForm users={USERS} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Team name"), { target: { value: "Sales" } });
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.change(screen.getByLabelText("Nome da equipe"), { target: { value: "Sales" } });
+    fireEvent.click(screen.getByRole("button", { name: "Criar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(IDENTITY_ERROR_MESSAGES.permission);
   });
 });

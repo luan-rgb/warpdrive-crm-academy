@@ -161,9 +161,9 @@ export function GoalForm({
           setAssigneeId(ANY);
         }}
         options={[
-          { value: "company", label: "Whole company" },
+          { value: "company", label: "Toda a empresa" },
           { value: "team", label: "A team" },
-          { value: "user", label: "One person" },
+          { value: "user", label: "Uma pessoa" },
         ]}
       />
       {assigneeKind !== "company" && (

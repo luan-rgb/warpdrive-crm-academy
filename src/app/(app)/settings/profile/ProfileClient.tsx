@@ -92,7 +92,7 @@ export function ProfileClient(props: ProfileClientProps): React.ReactNode {
   return (
     <SettingsCard>
       <SettingsCardHeader
-        title="Account details"
+        title="Detalhes da conta"
         description="Update your photo, display name, timezone, and interface density."
       />
       <SettingsCardBody className="space-y-5">

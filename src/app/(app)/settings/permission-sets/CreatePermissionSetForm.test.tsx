@@ -26,8 +26,10 @@ import { CreatePermissionSetForm } from "./CreatePermissionSetForm";
 describe("CreatePermissionSetForm", () => {
   it("renders an inline error when the create action fails", async () => {
     render(<CreatePermissionSetForm onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Permission set name"), { target: { value: "Sales" } });
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.change(screen.getByLabelText("Nome do conjunto de permissão"), {
+      target: { value: "Sales" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Criar" }));
     await waitFor(() =>
       expect(createPermissionSetAction).toHaveBeenCalledWith("csrf", { name: "Sales" }),
     );

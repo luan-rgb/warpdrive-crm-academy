@@ -49,7 +49,7 @@ describe("GroupMembersClient", () => {
 
   it("removes a member and refreshes the page", async () => {
     render(<GroupMembersClient groupId="g1" members={[ANN]} allUsers={[BOB]} />);
-    fireEvent.click(screen.getByRole("button", { name: "Remove Ann" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remover Ann" }));
     await waitFor(() =>
       expect(removeGroupMemberAction).toHaveBeenCalledWith("csrf", {
         groupId: "g1",
@@ -61,11 +61,11 @@ describe("GroupMembersClient", () => {
 
   it("adds the picked user and refreshes the page", async () => {
     render(<GroupMembersClient groupId="g1" members={[ANN]} allUsers={[BOB]} />);
-    fireEvent.click(screen.getByLabelText("Add member"));
+    fireEvent.click(screen.getByLabelText("Adicionar membro"));
     // The picker option's accessible name doubles up the avatar's aria-label with the
     // visible text (both say "Bob"), so match by role + visible text instead of name.
     fireEvent.click(screen.getAllByRole("option").find((o) => o.textContent?.includes("Bob"))!);
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar" }));
     await waitFor(() =>
       expect(addGroupMemberAction).toHaveBeenCalledWith("csrf", {
         groupId: "g1",
@@ -83,7 +83,7 @@ describe("GroupMembersClient", () => {
         allUsers={[{ ...BOB, id: ANN.userId, name: "Ann" }, BOB]}
       />,
     );
-    fireEvent.click(screen.getByLabelText("Add member"));
+    fireEvent.click(screen.getByLabelText("Adicionar membro"));
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(1);
     expect(options[0]).toHaveTextContent("Bob");
@@ -92,12 +92,12 @@ describe("GroupMembersClient", () => {
   it("shows an inline error when the remove action fails", async () => {
     removeGroupMemberAction.mockResolvedValueOnce({ ok: false, error: "unauthorized" });
     render(<GroupMembersClient groupId="g1" members={[ANN]} allUsers={[BOB]} />);
-    fireEvent.click(screen.getByRole("button", { name: "Remove Ann" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remover Ann" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(IDENTITY_ERROR_MESSAGES.permission);
   });
 
   it("renders the empty roster line from the muted token", () => {
     render(<GroupMembersClient groupId="g1" members={[]} allUsers={[BOB]} />);
-    expect(screen.getByText("No members yet.")).toHaveClass("text-muted-foreground");
+    expect(screen.getByText("Nenhum membro ainda.")).toHaveClass("text-muted-foreground");
   });
 });

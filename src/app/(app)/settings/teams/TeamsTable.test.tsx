@@ -19,6 +19,6 @@ describe("TeamsTable", () => {
 
   it("renders None when a team has no manager", () => {
     render(<TeamsTable teams={[{ id: "t2", name: "Ops", managerId: null }]} users={USERS} />);
-    expect(screen.getByText("None")).toBeInTheDocument();
+    expect(screen.getByText("Nenhum")).toBeInTheDocument();
   });
 });

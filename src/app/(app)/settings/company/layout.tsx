@@ -24,7 +24,7 @@ export default function CompanyLayout({ children }: { children: ReactNode }): Re
         title={STRINGS.settings.companySettings}
         description={STRINGS.settings.companySettingsDescription}
       />
-      <nav aria-label="Company settings" className="flex flex-wrap gap-1 border-b">
+      <nav aria-label="Configurações da empresa" className="flex flex-wrap gap-1 border-b">
         {TABS.map((tab) => {
           const active = pathname === tab.href;
           return (

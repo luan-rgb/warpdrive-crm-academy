@@ -46,7 +46,7 @@ describe("LabelsClient", () => {
     render(<LabelsClient rows={[row("l1", "Hot")]} />);
 
     const rowPicker = screen.getByRole("combobox", { name: STRINGS.settings.color });
-    const addPicker = screen.getByRole("combobox", { name: "Deals Color" });
+    const addPicker = screen.getByRole("combobox", { name: "Negócios Cor" });
     expect(rowPicker.className).toBe(addPicker.className);
     expect(rowPicker.parentElement).toHaveClass("w-32");
     expect(addPicker.parentElement).toHaveClass("w-32");
@@ -54,7 +54,7 @@ describe("LabelsClient", () => {
 
   it("renders each group's add-label row inside that group's bordered box", () => {
     render(<LabelsClient rows={[row("l1", "Hot")]} />);
-    const addButton = screen.getAllByRole("button", { name: /add label/i })[0];
+    const addButton = screen.getAllByRole("button", { name: /adicionar etiqueta/i })[0];
     if (addButton === undefined) throw new Error("no add-label button");
     // The add-row must live in the same bordered <ul> as the group's label rows, not below it.
     const box = addButton.closest("ul");
@@ -64,10 +64,10 @@ describe("LabelsClient", () => {
 
   it("creates a label via createLabelAction when Add label is clicked", async () => {
     render(<LabelsClient rows={[row("l1", "Hot")]} />);
-    fireEvent.change(screen.getByLabelText("Deals Label name"), {
+    fireEvent.change(screen.getByLabelText("Negócios Nome da etiqueta"), {
       target: { value: "Enterprise" },
     });
-    const addButton = screen.getAllByRole("button", { name: /add label/i })[0];
+    const addButton = screen.getAllByRole("button", { name: /adicionar etiqueta/i })[0];
     if (addButton === undefined) throw new Error("no add-label button");
     fireEvent.click(addButton);
     await vi.waitFor(() =>

@@ -1,3 +1,4 @@
 export const DATA_FIELDS_STRINGS = {
-  description: "Customize the fields available for deals, contacts, organizations, and activities.",
+  description:
+    "Personalize os campos disponíveis para negócios, contatos, organizações e atividades.",
 } as const;
