@@ -52,7 +52,7 @@ export function RecipientField({ label, values, onChange }: RecipientFieldProps)
       return;
     }
     if (!isValidEmail(trimmed)) {
-      setError("Enter a valid email address.");
+      setError("Informe um endereço de email válido.");
       return;
     }
     setError(null);

@@ -41,7 +41,7 @@ export default function NotificationSettingsPage() {
       <SettingsCard>
         <SettingsCardHeader
           title="Canais de notificação"
-          description="Choose how each kind of update reaches you."
+          description="Escolha como cada tipo de atualização chega até você."
         />
         <div className="px-5">
           <PreferencesForm

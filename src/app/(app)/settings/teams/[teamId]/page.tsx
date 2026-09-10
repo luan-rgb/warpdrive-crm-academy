@@ -41,7 +41,7 @@ export default async function TeamDetailPage({
       >
         &larr; {STRINGS.settings.teams}
       </Link>
-      <SettingsHeading title={team.name} description="Update the team manager and membership." />
+      <SettingsHeading title={team.name} description="Atualize o gestor e os membros da equipe." />
       <TeamEditClient
         teamId={teamId}
         name={team.name}

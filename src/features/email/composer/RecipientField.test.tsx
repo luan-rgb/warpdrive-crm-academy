@@ -64,7 +64,7 @@ describe("RecipientField", () => {
     fireEvent.change(input, { target: { value: "not-an-email" } });
     fireEvent.keyDown(input, { key: "Enter" });
     expect(onChange).not.toHaveBeenCalled();
-    expect(screen.getByText(/valid email address/i)).toBeInTheDocument();
+    expect(screen.getByText(/endereço de email válido/i)).toBeInTheDocument();
   });
 
   it("commits a free-typed email when the field loses focus", () => {
@@ -83,7 +83,7 @@ describe("RecipientField", () => {
     fireEvent.change(input, { target: { value: "not-an-email" } });
     fireEvent.blur(input);
     expect(onChange).not.toHaveBeenCalled();
-    expect(screen.getByText(/valid email address/i)).toBeInTheDocument();
+    expect(screen.getByText(/endereço de email válido/i)).toBeInTheDocument();
     expect(input).toHaveValue("not-an-email");
   });
 

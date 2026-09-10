@@ -278,7 +278,7 @@ export function DealList(props: DealListProps) {
                     onClick={() => onUnarchive(row.id)}
                     className="rounded border px-2 py-1 text-xs font-medium text-foreground hover:bg-muted"
                   >
-                    Unarchive
+                    Desarquivar
                   </button>
                 </td>
               ) : null}

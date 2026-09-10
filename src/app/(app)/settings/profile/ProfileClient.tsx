@@ -93,7 +93,7 @@ export function ProfileClient(props: ProfileClientProps): React.ReactNode {
     <SettingsCard>
       <SettingsCardHeader
         title="Detalhes da conta"
-        description="Update your photo, display name, timezone, and interface density."
+        description="Atualize sua foto, nome de exibição, fuso horário e densidade da interface."
       />
       <SettingsCardBody className="space-y-5">
         <AvatarUpload name={props.name} avatarUrl={props.avatarUrl} />

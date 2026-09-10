@@ -47,7 +47,7 @@ export default async function GroupDetailPage({
       </Link>
       <SettingsHeading
         title={group.name}
-        description="Manage who belongs to this visibility group."
+        description="Gerencie quem pertence a este grupo de visibilidade."
       />
       <GroupMembersClient groupId={groupId} members={members} allUsers={allUsers} />
     </SettingsPage>

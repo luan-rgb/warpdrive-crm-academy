@@ -36,13 +36,13 @@ export function ActivityTableBody({
           role="alert"
           className="px-3 py-10 text-center text-muted-foreground"
         >
-          Couldn&apos;t load activities.{" "}
+          Não foi possível carregar as atividades.{" "}
           <button
             type="button"
             onClick={onRetry}
             className="font-medium text-primary underline underline-offset-2 hover:opacity-90"
           >
-            Retry
+            Tentar novamente
           </button>
         </td>
       </tr>

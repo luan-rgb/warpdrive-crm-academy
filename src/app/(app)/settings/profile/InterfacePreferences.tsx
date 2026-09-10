@@ -142,7 +142,7 @@ export function InterfacePreferences({
     <SettingsCard>
       <SettingsCardHeader
         title={STRINGS.settings.interfaceHeading}
-        description="Choose how creation, navigation, formatting, and notifications behave."
+        description="Escolha como a criação, navegação, formatação e notificações se comportam."
       />
       <SettingsCardBody className="space-y-4">
         <Row

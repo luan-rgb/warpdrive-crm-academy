@@ -145,8 +145,8 @@ describe("WorkspaceTabs", () => {
         createdActorName="Nick"
       />,
     );
-    expect(screen.getByRole("tab", { name: "Activities (1)" })).toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "Activities (4)" })).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Atividades (1)" })).toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Atividades (4)" })).not.toBeInTheDocument();
   });
 
   it("resolves stageId changelog ids to names and synthesizes a Deal created anchor", () => {
@@ -185,7 +185,7 @@ describe("WorkspaceTabs", () => {
         createdActorName="Nick"
       />,
     );
-    await userEvent.click(screen.getByRole("tab", { name: "Notes (1)" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Notas (1)" }));
     expect(onTab).toHaveBeenCalledWith("notes");
   });
 
@@ -203,8 +203,8 @@ describe("WorkspaceTabs", () => {
     expect(historySection.getByText("Deal created")).toBeInTheDocument();
     expect(historySection.getByText("hi")).toBeInTheDocument();
     // The open activity lives in Focus, so History's Activities tab carries no badge at all.
-    expect(historySection.getByRole("tab", { name: "Activities" })).toBeInTheDocument();
-    expect(historySection.queryByRole("tab", { name: "Activities (1)" })).not.toBeInTheDocument();
+    expect(historySection.getByRole("tab", { name: "Atividades" })).toBeInTheDocument();
+    expect(historySection.queryByRole("tab", { name: "Atividades (1)" })).not.toBeInTheDocument();
   });
 
   it("floats a pinned note into a Pinned section above Focus, out of the History Notes list", () => {
@@ -227,7 +227,7 @@ describe("WorkspaceTabs", () => {
     expect(historySection.queryByText("keep me on top")).not.toBeInTheDocument();
     // The unpinned note still lives in History, and the Notes badge counts only that one.
     expect(historySection.getByText("hi")).toBeInTheDocument();
-    expect(historySection.getByRole("tab", { name: "Notes (1)" })).toBeInTheDocument();
+    expect(historySection.getByRole("tab", { name: "Notas (1)" })).toBeInTheDocument();
   });
 
   it("renders no Pinned section when no note is pinned", () => {

@@ -31,7 +31,7 @@ export function AutomationsClient({
     const r = await setAutomationRuleActiveAction({ id, isActive }, readCsrfToken());
     if (!r.ok) {
       setRules((prev) => prev.map((rr) => (rr.id === id ? { ...rr, isActive: !isActive } : rr)));
-      setError("Could not update the automation.");
+      setError("Não foi possível atualizar a automação.");
     }
   }
 
@@ -45,7 +45,7 @@ export function AutomationsClient({
       refresh();
       return;
     }
-    setError("Could not delete the automation.");
+    setError("Não foi possível excluir a automação.");
   }
 
   return (

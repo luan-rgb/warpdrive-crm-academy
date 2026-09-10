@@ -117,18 +117,18 @@ function renderTabs(activities: CalendarActivity[]) {
 describe("History tab counts", () => {
   it("counts every tab, not just Activities and Notes", () => {
     renderTabs([doneActivity]);
-    expect(screen.getByRole("tab", { name: "Activities (1)" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Notes (1)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Atividades (1)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Notas (1)" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Email (1)" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Files (2)" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Changelog (1)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Arquivos (2)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Histórico de alterações (1)" })).toBeInTheDocument();
     // All: the completed activity, the note, the email, the stage change, the created anchor.
-    expect(screen.getByRole("tab", { name: "All (5)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Todos (5)" })).toBeInTheDocument();
   });
 
   it("shows an empty tab's label alone instead of a (0) badge", () => {
     renderTabs([]);
-    expect(screen.getByRole("tab", { name: "Activities" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Atividades" })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: /\(0\)/ })).not.toBeInTheDocument();
   });
 });

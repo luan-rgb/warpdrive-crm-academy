@@ -197,7 +197,7 @@ describe("ActivitiesTable", () => {
     render(<ActivitiesTable />);
     expect(screen.queryByText("No activities in this view.")).toBeNull();
     expect(screen.getByRole("alert")).toBeInTheDocument();
-    const retry = screen.getByRole("button", { name: /retry/i });
+    const retry = screen.getByRole("button", { name: /tentar novamente/i });
     fireEvent.click(retry);
     expect(refetch).toHaveBeenCalled();
   });

@@ -99,7 +99,7 @@ function ContactCreateModal({
     if (submitting.current || pending || customFieldsQ.isLoading) return;
     const trimmed = name.trim();
     if (trimmed === "") {
-      setError("Name is required");
+      setError("O nome é obrigatório");
       return;
     }
     const defs = customFieldsQ.data ?? [];

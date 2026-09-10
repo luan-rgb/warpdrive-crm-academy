@@ -85,17 +85,17 @@ export function LeadTimeline({
               {tab === "all" && (
                 <HistoryFeed
                   items={history}
-                  emptyLabel="No history yet."
+                  emptyLabel="Ainda não há histórico."
                   onNoteChanged={onNoteChanged}
                 />
               )}
               {tab === "activities" && (
-                <HistoryFeed items={activities} emptyLabel="No activities yet." />
+                <HistoryFeed items={activities} emptyLabel="Ainda não há atividades." />
               )}
               {tab === "notes" && (
                 <HistoryFeed
                   items={notes}
-                  emptyLabel="No notes yet."
+                  emptyLabel="Ainda não há notas."
                   onNoteChanged={onNoteChanged}
                 />
               )}

@@ -157,6 +157,6 @@ describe("deal workspace Email filter status", () => {
 
     renderEmailTab();
 
-    expect(screen.getByText("No emails linked to this deal yet.")).toBeInTheDocument();
+    expect(screen.getByText("Ainda não há emails vinculados a este negócio.")).toBeInTheDocument();
   });
 });

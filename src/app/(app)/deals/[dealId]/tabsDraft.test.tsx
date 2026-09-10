@@ -120,6 +120,6 @@ describe("deal workspace drafts", () => {
       />,
     );
 
-    expect(screen.getByText("No emails linked to this deal yet.")).toBeInTheDocument();
+    expect(screen.getByText("Ainda não há emails vinculados a este negócio.")).toBeInTheDocument();
   });
 });

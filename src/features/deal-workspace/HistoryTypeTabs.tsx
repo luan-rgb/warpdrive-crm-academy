@@ -18,21 +18,21 @@ export type HistoryTab =
   | "changelog";
 
 const TAB_LABELS: Record<HistoryTab, string> = {
-  all: "All",
-  activities: "Activities",
-  notes: "Notes",
+  all: "Todos",
+  activities: "Atividades",
+  notes: "Notas",
   email: "Email",
-  files: "Files",
-  products: "Products",
-  changelog: "Changelog",
+  files: "Arquivos",
+  products: "Produtos",
+  changelog: "Histórico de alterações",
 };
 
 const EMPTY_LABELS: Partial<Record<HistoryTab, string>> = {
-  all: "No history yet.",
-  activities: "No activities yet.",
-  notes: "No notes yet.",
-  changelog: "No changes recorded yet.",
-  email: "No emails linked to this deal yet.",
+  all: "Ainda não há histórico.",
+  activities: "Ainda não há atividades.",
+  notes: "Ainda não há notas.",
+  changelog: "Ainda não há alterações registradas.",
+  email: "Ainda não há emails vinculados a este negócio.",
 };
 
 const TABS: HistoryTab[] = [
@@ -108,7 +108,7 @@ export function HistoryTypeTabs({
             emptyLabel={
               (tab === "email" ? emailEmptyLabel : undefined) ??
               EMPTY_LABELS[tab] ??
-              "No history yet."
+              "Ainda não há histórico."
             }
             onActivityChanged={onActivityChanged}
             onNoteChanged={onNoteChanged}
