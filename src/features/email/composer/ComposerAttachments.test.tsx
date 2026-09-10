@@ -85,7 +85,7 @@ describe("Composer – attachments wired (Task 6.3)", () => {
     await waitFor(() => expect(screen.getByText("test.pdf")).toBeInTheDocument());
 
     // Send the email.
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
     await waitFor(() => expect(sendEmailSpy).toHaveBeenCalledTimes(1));
 
     // The second argument to sendEmail is rawInput; it must carry attachments.
@@ -113,14 +113,14 @@ describe("Composer – attachments wired (Task 6.3)", () => {
     fireEvent.change(fileInput);
 
     // While fetch is pending, Send must be disabled (uploading=true blocks canSend).
-    await waitFor(() => expect(screen.getByRole("button", { name: /^send$/i })).toBeDisabled());
+    await waitFor(() => expect(screen.getByRole("button", { name: /^enviar$/i })).toBeDisabled());
 
     // Resolve the upload.
     resolveFetch();
 
     // After upload completes, Send must re-enable and the fileId must be in the chip list.
     await waitFor(() => expect(screen.getByText("inflight.pdf")).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: /^send$/i })).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: /^enviar$/i })).not.toBeDisabled();
 
     // Restore fetch stub for subsequent tests.
     vi.stubGlobal("fetch", () => Promise.resolve(new Response(null, { status: 204 })));
@@ -139,7 +139,7 @@ describe("Composer – attachments wired (Task 6.3)", () => {
     await waitFor(() => expect(screen.getByText("draft.pdf")).toBeInTheDocument());
 
     // Discard clears the draft including attachments.
-    fireEvent.click(screen.getByRole("button", { name: /discard/i }));
+    fireEvent.click(screen.getByRole("button", { name: /descartar/i }));
     expect(screen.queryByText("draft.pdf")).not.toBeInTheDocument();
   });
 });

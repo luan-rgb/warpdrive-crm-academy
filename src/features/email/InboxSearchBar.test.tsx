@@ -14,21 +14,21 @@ afterEach(() => {
 describe("InboxSearchBar collapse (A2)", () => {
   it("renders collapsed as a search icon button by default (no input shown)", () => {
     render(<InboxSearchBar onQuery={() => {}} />);
-    expect(screen.getByRole("button", { name: "Search mail" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Buscar e-mail" })).toBeInTheDocument();
     expect(screen.queryByRole("searchbox")).not.toBeInTheDocument();
   });
 
   it("expands to a search input when the icon is activated", () => {
     render(<InboxSearchBar onQuery={() => {}} />);
-    fireEvent.click(screen.getByRole("button", { name: "Search mail" }));
-    expect(screen.getByRole("searchbox", { name: "Search mail" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Buscar e-mail" }));
+    expect(screen.getByRole("searchbox", { name: "Buscar e-mail" })).toBeInTheDocument();
   });
 });
 
 describe("InboxSearchBar", () => {
   function expandAndGetInput(): HTMLElement {
-    fireEvent.click(screen.getByRole("button", { name: "Search mail" }));
-    return screen.getByRole("searchbox", { name: "Search mail" });
+    fireEvent.click(screen.getByRole("button", { name: "Buscar e-mail" }));
+    return screen.getByRole("searchbox", { name: "Buscar e-mail" });
   }
 
   it("debounces typed input before calling onQuery", () => {

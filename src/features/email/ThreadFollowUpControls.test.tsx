@@ -27,8 +27,8 @@ vi.mock("./mailLabelsActions", () => ({ createMailLabelAction: vi.fn() }));
 vi.mock("@/utils/csrfCookie", () => ({ readCsrfToken: () => "csrf" }));
 
 const catalog = [
-  { id: "l1", key: "important", name: "Important", color: "red", order: 0 },
-  { id: "l2", key: "to_do", name: "To do", color: "orange", order: 1 },
+  { id: "l1", key: "important", name: "Importante", color: "red", order: 0 },
+  { id: "l2", key: "to_do", name: "A fazer", color: "orange", order: 1 },
 ];
 vi.mock("@/lib/trpc-client", () => ({
   trpc: {
@@ -56,8 +56,8 @@ it("picking a follow-up status calls setFollowUpStatusAction with the picked val
       onChanged={onChanged}
     />,
   );
-  fireEvent.click(screen.getByLabelText("Follow-up"));
-  fireEvent.click(screen.getByText("Waiting"));
+  fireEvent.click(screen.getByLabelText("Acompanhamento"));
+  fireEvent.click(screen.getByText("Esperando"));
   expect(setFollowUpStatusMock).toHaveBeenCalledWith("csrf", { threadId: "t1", status: "waiting" });
 });
 
@@ -71,8 +71,8 @@ it("picking an inactive catalog label adds it via setThreadLabelsAction", async 
     />,
   );
   const user = userEvent.setup();
-  await user.click(screen.getByRole("button", { name: /add label/i }));
-  await user.click(screen.getByText("Important"));
+  await user.click(screen.getByRole("button", { name: /adicionar etiqueta/i }));
+  await user.click(screen.getByText("Importante"));
   expect(setThreadLabelsMock).toHaveBeenCalledWith("csrf", {
     threadId: "t1",
     labels: ["important"],
@@ -89,8 +89,8 @@ it("picking an active catalog label removes it via setThreadLabelsAction", async
     />,
   );
   const user = userEvent.setup();
-  await user.click(screen.getByRole("button", { name: /add label/i }));
-  // "Important" appears both as an applied chip and as a menu row; target the menu option.
-  await user.click(screen.getByRole("option", { name: /Important/ }));
+  await user.click(screen.getByRole("button", { name: /adicionar etiqueta/i }));
+  // "Importante" appears both as an applied chip and as a menu row; target the menu option.
+  await user.click(screen.getByRole("option", { name: /Importante/ }));
   expect(setThreadLabelsMock).toHaveBeenCalledWith("csrf", { threadId: "t1", labels: [] });
 });

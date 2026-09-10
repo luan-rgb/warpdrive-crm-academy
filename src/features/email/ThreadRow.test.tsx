@@ -27,7 +27,7 @@ vi.mock("@/lib/trpc-client", () => ({
     mailLabels: {
       list: {
         useQuery: () => ({
-          data: [{ id: "l1", key: "important", name: "Important", color: "red", order: 0 }],
+          data: [{ id: "l1", key: "important", name: "Importante", color: "red", order: 0 }],
         }),
       },
     },
@@ -115,7 +115,7 @@ it("renders the correspondent column in a non-Inbox folder row (Sent)", () => {
 
 it("renders a colored chip for each of the thread's labels", () => {
   render(<ThreadRow {...props} thread={{ ...thread, labels: ["important"] }} />);
-  expect(screen.getByText("Important")).toBeInTheDocument();
+  expect(screen.getByText("Importante")).toBeInTheDocument();
 });
 
 it("shows the privacy toggle only to the mailbox owner", () => {
@@ -128,10 +128,10 @@ it("shows the privacy toggle only to the mailbox owner", () => {
 
 it("shows an attachment indicator only when the thread has an attachment", () => {
   const { rerender } = render(<ThreadRow {...props} thread={{ ...thread, hasAttachment: true }} />);
-  expect(screen.getByLabelText("Has attachment")).toBeInTheDocument();
+  expect(screen.getByLabelText("Tem anexo")).toBeInTheDocument();
 
   rerender(<ThreadRow {...props} thread={{ ...thread, hasAttachment: false }} />);
-  expect(screen.queryByLabelText("Has attachment")).not.toBeInTheDocument();
+  expect(screen.queryByLabelText("Tem anexo")).not.toBeInTheDocument();
 });
 
 // U7 row visual polish (assert classes/structure, not px, since jsdom has no layout).
@@ -147,7 +147,7 @@ describe("ThreadRow U7 visual polish", () => {
     render(
       <ThreadRow {...props} thread={{ ...thread, subject: "Hello", labels: ["important"] }} />,
     );
-    const chip = screen.getByText("Important");
+    const chip = screen.getByText("Importante");
     const subject = screen.getByText("Hello");
     // DOCUMENT_POSITION_FOLLOWING (4) means subject comes after the chip in document order.
     expect(chip.compareDocumentPosition(subject) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();

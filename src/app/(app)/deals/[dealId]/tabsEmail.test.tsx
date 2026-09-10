@@ -109,7 +109,9 @@ describe("deal workspace email timeline", () => {
       />,
     );
 
-    expect(screen.getByText(/Couldn't load emails/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Não foi possível carregar os e-mails deste negócio/i),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Deal created/i)).toBeInTheDocument();
   });
 });
@@ -135,7 +137,7 @@ describe("deal workspace Email filter status", () => {
 
     renderEmailTab();
 
-    expect(screen.getByText("Loading emails...")).toBeInTheDocument();
+    expect(screen.getByText("Carregando e-mails...")).toBeInTheDocument();
     expect(screen.queryByText(/No emails linked/i)).not.toBeInTheDocument();
   });
 
@@ -144,7 +146,9 @@ describe("deal workspace Email filter status", () => {
 
     renderEmailTab();
 
-    expect(screen.getByText("Couldn't load emails. Please try again.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Não foi possível carregar os e-mails. Tente novamente."),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/No emails linked/i)).not.toBeInTheDocument();
   });
 

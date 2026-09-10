@@ -44,7 +44,7 @@ describe("ComposerFooter", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    const sendBtn = screen.getByRole("button", { name: /^send$/i });
+    const sendBtn = screen.getByRole("button", { name: /^enviar$/i });
     expect(sendBtn).not.toBeDisabled();
     expect(sendBtn.className).toMatch(/bg-success/);
   });
@@ -62,7 +62,7 @@ describe("ComposerFooter", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    const laterBtn = screen.getByRole("button", { name: /send later/i });
+    const laterBtn = screen.getByRole("button", { name: /enviar mais tarde/i });
     expect(laterBtn).toBeDisabled();
   });
 
@@ -80,7 +80,7 @@ describe("ComposerFooter", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /discard/i }));
+    fireEvent.click(screen.getByRole("button", { name: /descartar/i }));
     expect(onDiscard).toHaveBeenCalledTimes(1);
   });
 
@@ -97,7 +97,7 @@ describe("ComposerFooter", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    expect(screen.getByRole("button", { name: /^send$/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /^enviar$/i })).toBeDisabled();
   });
 
   it("disables Send while sending is true", () => {
@@ -113,7 +113,7 @@ describe("ComposerFooter", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    expect(screen.getByRole("button", { name: /^send$/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /^enviar$/i })).toBeDisabled();
   });
 });
 
@@ -131,7 +131,7 @@ describe("ComposerFooter tracking toggles", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    const toggle = screen.getByRole("switch", { name: /track opens/i });
+    const toggle = screen.getByRole("switch", { name: /rastrear aberturas/i });
     expect(toggle).toBeChecked();
   });
 
@@ -148,7 +148,7 @@ describe("ComposerFooter tracking toggles", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    const toggle = screen.getByRole("switch", { name: /track links/i });
+    const toggle = screen.getByRole("switch", { name: /rastrear links/i });
     expect(toggle).toBeChecked();
   });
 
@@ -166,7 +166,7 @@ describe("ComposerFooter tracking toggles", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("switch", { name: /track opens/i }));
+    fireEvent.click(screen.getByRole("switch", { name: /rastrear aberturas/i }));
     expect(onTrackOpensChange).toHaveBeenCalledWith(true);
   });
 
@@ -184,7 +184,7 @@ describe("ComposerFooter tracking toggles", () => {
         onTrackLinksChange={onTrackLinksChange}
       />,
     );
-    fireEvent.click(screen.getByRole("switch", { name: /track links/i }));
+    fireEvent.click(screen.getByRole("switch", { name: /rastrear links/i }));
     expect(onTrackLinksChange).toHaveBeenCalledWith(true);
   });
 
@@ -201,8 +201,8 @@ describe("ComposerFooter tracking toggles", () => {
         onTrackLinksChange={vi.fn()}
       />,
     );
-    const discard = screen.getByRole("button", { name: "Discard" });
-    const send = screen.getByRole("button", { name: /^Send$/ });
+    const discard = screen.getByRole("button", { name: "Descartar" });
+    const send = screen.getByRole("button", { name: /^Enviar$/ });
     // Flex row with no `order` styling, so DOM order equals visual left-to-right order.
     // PD places Discard to the LEFT of the Send split; Send must follow Discard in the document.
     expect(discard.compareDocumentPosition(send) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -211,7 +211,7 @@ describe("ComposerFooter tracking toggles", () => {
   // The tracking toggles sit in the same bar as the visibility picker, so their visible text is
   // part of the hit area and the whole control takes the shared hover surface too.
   it.each([
-    ["Opens", "onTrackOpensChange"],
+    ["Aberturas", "onTrackOpensChange"],
     ["Links", "onTrackLinksChange"],
   ] as const)("toggles %s when its visible label text is clicked", async (text, handlerProp) => {
     const user = userEvent.setup();
@@ -233,7 +233,7 @@ describe("ComposerFooter tracking toggles", () => {
   });
 
   it.each([
-    "Opens",
+    "Aberturas",
     "Links",
   ])("gives the %s toggle the same inline hover surface as the visibility control", (text) => {
     render(

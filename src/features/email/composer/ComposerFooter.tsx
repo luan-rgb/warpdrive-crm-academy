@@ -92,15 +92,15 @@ export function ComposerFooter({
       <div className="flex items-center gap-2">
         <ToggleField
           control="switch"
-          label="Opens"
-          accessibleLabel="Track opens"
+          label="Aberturas"
+          accessibleLabel="Rastrear aberturas"
           checked={trackOpens}
           onCheckedChange={onTrackOpensChange}
         />
         <ToggleField
           control="switch"
           label="Links"
-          accessibleLabel="Track links"
+          accessibleLabel="Rastrear links"
           checked={trackLinks}
           onCheckedChange={onTrackLinksChange}
         />
@@ -120,9 +120,9 @@ export function ComposerFooter({
           type="button"
           onClick={onDiscard}
           className="px-3 py-1.5 rounded-md border border-border text-sm text-muted-foreground transition-[transform,background-color,color] hover:bg-accent hover:text-foreground active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Discard"
+          aria-label="Descartar"
         >
-          Discard
+          Descartar
         </button>
 
         <div className="flex flex-col items-end gap-1">
@@ -136,11 +136,11 @@ export function ComposerFooter({
             >
               {STRINGS.inbox.send}
             </button>
-            <Tip label={onSendLater === undefined ? "Coming soon" : "Send later"}>
+            <Tip label={onSendLater === undefined ? "Em breve" : "Enviar mais tarde"}>
               <button
                 type="button"
                 disabled={sending || !canSend || onSendLater === undefined}
-                aria-label="Send later"
+                aria-label="Enviar mais tarde"
                 onClick={() => {
                   if (onSendLater !== undefined) setShowPicker((p) => !p);
                 }}
@@ -169,7 +169,7 @@ export function ComposerFooter({
                   onClick={handleSchedule}
                   className="ml-1 rounded-md bg-action px-2 py-1 text-sm text-action-foreground transition-transform hover:opacity-90 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
                 >
-                  Schedule
+                  Agendar
                 </button>
               </div>
               {pickerError !== null && (

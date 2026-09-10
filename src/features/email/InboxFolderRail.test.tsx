@@ -65,19 +65,22 @@ it("marks New email active on the compose route and leaves every folder inactive
   pathname = "/inbox/compose";
   searchParamsStr = "";
   render(<InboxFolderRail newEmailEnabled={true} />);
-  expect(screen.getByRole("link", { name: /New email/ })).toHaveAttribute("aria-current", "page");
+  expect(screen.getByRole("link", { name: /Novo e-mail/ })).toHaveAttribute("aria-current", "page");
   expect(screen.getByRole("link", { name: /Inbox/ })).not.toHaveAttribute("aria-current");
 });
 
 it("New email is a disabled, non-navigating button without a mailbox", () => {
   render(<InboxFolderRail newEmailEnabled={false} />);
-  expect(screen.getByRole("button", { name: /New email/ })).toBeDisabled();
-  expect(screen.queryByRole("link", { name: /New email/ })).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /Novo e-mail/ })).toBeDisabled();
+  expect(screen.queryByRole("link", { name: /Novo e-mail/ })).not.toBeInTheDocument();
 });
 
 it("New email navigates to the full-pane compose route when a mailbox is connected", () => {
   render(<InboxFolderRail newEmailEnabled={true} />);
-  expect(screen.getByRole("link", { name: /New email/ })).toHaveAttribute("href", "/inbox/compose");
+  expect(screen.getByRole("link", { name: /Novo e-mail/ })).toHaveAttribute(
+    "href",
+    "/inbox/compose",
+  );
 });
 
 it("shows an unread count badge on Inbox when the count is greater than zero", () => {

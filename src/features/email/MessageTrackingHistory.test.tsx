@@ -18,7 +18,7 @@ describe("MessageTrackingHistory", () => {
         ]}
       />,
     );
-    expect(screen.getByText("Opened 2 times")).toBeInTheDocument();
+    expect(screen.getByText("Aberto 2 vezes")).toBeInTheDocument();
   });
 
   it("renders both opened and clicked indicators when both event types are present", () => {
@@ -30,8 +30,8 @@ describe("MessageTrackingHistory", () => {
         ]}
       />,
     );
-    expect(screen.getByText("Opened 1 time")).toBeInTheDocument();
-    expect(screen.getByText("Clicked 1 time")).toBeInTheDocument();
+    expect(screen.getByText("Aberto 1 vez")).toBeInTheDocument();
+    expect(screen.getByText("Clicado 1 vez")).toBeInTheDocument();
   });
 
   it("renders nothing for a message with no tracking history", () => {

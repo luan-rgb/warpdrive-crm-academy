@@ -31,14 +31,14 @@ const FOLLOW_UP_FILTER_STATES = ["waiting", "replied", "closed"] as const;
 // control. Copy is local (owned-file constant) rather than STRINGS.inbox to keep this change
 // scoped to the files U5 owns.
 const QUICK_FILTER_OPTIONS: { value: InboxFilter; label: string }[] = [
-  { value: "shared", label: "Shared" },
-  { value: "private", label: "Private" },
-  { value: "tracked", label: "Tracked emails" },
-  { value: "to_me", label: "To: me" },
-  { value: "from_contact", label: "From an existing contact" },
-  { value: "linked_open_deal", label: "Linked with an open deal" },
+  { value: "shared", label: "Compartilhados" },
+  { value: "private", label: "Privados" },
+  { value: "tracked", label: "E-mails rastreados" },
+  { value: "to_me", label: "Para: mim" },
+  { value: "from_contact", label: "De um contato existente" },
+  { value: "linked_open_deal", label: "Vinculados a um negócio aberto" },
 ];
-const QUICK_FILTER_TRIGGER = "More filters";
+const QUICK_FILTER_TRIGGER = "Mais filtros";
 const QUICK_FILTER_NONE = "none";
 
 // The dropdown only owns the six quick-filters; when the active InboxFilter is a linking tab
@@ -70,7 +70,7 @@ function QuickFilterMenu({
             onQuickFilterChange(v === QUICK_FILTER_NONE ? "all" : (v as InboxFilter))
           }
         >
-          <DropdownMenuRadioItem value={QUICK_FILTER_NONE}>None</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={QUICK_FILTER_NONE}>Nenhum</DropdownMenuRadioItem>
           {QUICK_FILTER_OPTIONS.map((o) => (
             <DropdownMenuRadioItem key={o.value} value={o.value}>
               {o.label}
@@ -120,11 +120,11 @@ export function InboxAttributeFilters({
   const statusNames = inbox.followUpStatusNames;
   const labelNames = inbox.labelNames;
   const followUpOptions: SelectOption[] = [
-    { value: "", label: "All follow-ups" },
+    { value: "", label: "Todos os acompanhamentos" },
     ...FOLLOW_UP_FILTER_STATES.map((s) => ({ value: s, label: statusNames[s] })),
   ];
   const labelOptions: SelectOption[] = [
-    { value: "", label: "All labels" },
+    { value: "", label: "Todas as etiquetas" },
     ...MAIL_LABELS.map((l) => ({ value: l, label: labelNames[l] })),
   ];
   const dateRangeOptions: SelectOption[] = [
@@ -135,18 +135,18 @@ export function InboxAttributeFilters({
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Select
-        ariaLabel="Follow-up status filter"
+        ariaLabel="Filtro de status de acompanhamento"
         value={value.followUp}
         onChange={(followUp) => onChange({ ...value, followUp })}
-        placeholder="Follow-up"
+        placeholder="Acompanhamento"
         options={followUpOptions}
         triggerClassName="w-auto"
       />
       <Select
-        ariaLabel="Label filter"
+        ariaLabel="Filtro de etiqueta"
         value={value.label}
         onChange={(label) => onChange({ ...value, label })}
-        placeholder="Label"
+        placeholder="Etiqueta"
         options={labelOptions}
         triggerClassName="w-auto"
       />

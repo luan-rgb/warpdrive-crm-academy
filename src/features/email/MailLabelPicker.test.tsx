@@ -17,7 +17,7 @@ afterEach(() => {
 });
 
 const catalog = [
-  { id: "l1", key: "important", name: "Important", color: "red", order: 0 },
+  { id: "l1", key: "important", name: "Importante", color: "red", order: 0 },
   { id: "l2", key: "newsletter", name: "Newsletter", color: "green", order: 1 },
 ];
 const invalidate = vi.fn();
@@ -37,7 +37,7 @@ vi.mock("./mailLabelsActions", () => ({
 import { MailLabelPicker } from "./MailLabelPicker";
 
 async function open(): Promise<void> {
-  await userEvent.setup().click(screen.getByRole("button", { name: /add label/i }));
+  await userEvent.setup().click(screen.getByRole("button", { name: /adicionar etiqueta/i }));
 }
 
 describe("MailLabelPicker", () => {
@@ -45,7 +45,7 @@ describe("MailLabelPicker", () => {
     const onChange = vi.fn();
     render(<MailLabelPicker value={[]} onChange={onChange} />);
     await open();
-    expect(screen.getByText("Important")).toBeInTheDocument();
+    expect(screen.getByText("Importante")).toBeInTheDocument();
     await userEvent.setup().click(screen.getByText("Newsletter"));
     expect(onChange).toHaveBeenCalledWith(["newsletter"]);
   });
@@ -54,7 +54,7 @@ describe("MailLabelPicker", () => {
     const onChange = vi.fn();
     render(<MailLabelPicker value={["important"]} onChange={onChange} />);
     await open();
-    await userEvent.setup().click(screen.getByText("Important"));
+    await userEvent.setup().click(screen.getByText("Importante"));
     expect(onChange).toHaveBeenCalledWith([]);
   });
 
@@ -64,8 +64,8 @@ describe("MailLabelPicker", () => {
     render(<MailLabelPicker value={[]} onChange={onChange} />);
     await open();
     const user = userEvent.setup();
-    await user.type(screen.getByPlaceholderText(/search or create/i), "VIP");
-    await user.click(screen.getByText(/create "VIP"/i));
+    await user.type(screen.getByPlaceholderText(/buscar ou criar/i), "VIP");
+    await user.click(screen.getByText(/criar "VIP"/i));
     await waitFor(() => expect(createMailLabelAction).toHaveBeenCalled());
     expect(onChange).toHaveBeenCalledWith(["vip"]);
     expect(invalidate).toHaveBeenCalled();
@@ -74,13 +74,13 @@ describe("MailLabelPicker", () => {
   it("does not offer create when the term exactly matches an existing label", async () => {
     render(<MailLabelPicker value={[]} onChange={vi.fn()} />);
     await open();
-    await userEvent.setup().type(screen.getByPlaceholderText(/search or create/i), "Important");
-    expect(screen.queryByText(/create "/i)).not.toBeInTheDocument();
+    await userEvent.setup().type(screen.getByPlaceholderText(/buscar ou criar/i), "Importante");
+    expect(screen.queryByText(/criar "/i)).not.toBeInTheDocument();
   });
 
   it("gives the dashed trigger the token border instead of a fixed gray", () => {
     render(<MailLabelPicker value={[]} onChange={vi.fn()} />);
-    const trigger = screen.getByRole("button", { name: /add label/i });
+    const trigger = screen.getByRole("button", { name: /adicionar etiqueta/i });
     expect(trigger).toHaveClass("border-dashed", "hover:border-muted-foreground");
     expect(trigger.className).not.toMatch(/-gray-/);
   });

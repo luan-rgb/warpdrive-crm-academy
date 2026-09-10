@@ -69,7 +69,7 @@ describe("Composer when the send action rejects", () => {
       />,
     );
 
-    const send = screen.getByRole("button", { name: /^send$/i });
+    const send = screen.getByRole("button", { name: /^enviar$/i });
     fireEvent.click(send);
 
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());

@@ -74,12 +74,12 @@ afterEach(() => {
 
 it("links Back to the inbox", () => {
   render(<ReaderTopBar threadId="t1" canManage />);
-  expect(screen.getByRole("link", { name: /back/i })).toHaveAttribute("href", "/inbox");
+  expect(screen.getByRole("link", { name: /voltar/i })).toHaveAttribute("href", "/inbox");
 });
 
 it("archives then returns to the inbox on success", async () => {
   render(<ReaderTopBar threadId="t1" canManage />);
-  screen.getByRole("button", { name: "Archive" }).click();
+  screen.getByRole("button", { name: "Arquivar" }).click();
   await waitFor(() => expect(archiveMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
   await waitFor(() => expect(push).toHaveBeenCalledWith("/inbox"));
 });
@@ -87,7 +87,7 @@ it("archives then returns to the inbox on success", async () => {
 it("reports the error and stays put when archiving is denied (no silent no-op)", async () => {
   archiveMock.mockResolvedValueOnce({ ok: false, error: { id: "E_PERM_001" } } as never);
   render(<ReaderTopBar threadId="t1" canManage />);
-  screen.getByRole("button", { name: "Archive" }).click();
+  screen.getByRole("button", { name: "Arquivar" }).click();
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(push).not.toHaveBeenCalled();
 });
@@ -97,31 +97,31 @@ it("shows the N / total position and navigates to prev/next carrying the folder"
   searchParamsStr = "folder=sent";
   render(<ReaderTopBar threadId="t1" canManage />);
   expect(screen.getByText("2 / 3")).toBeInTheDocument();
-  screen.getByRole("button", { name: /previous/i }).click();
+  screen.getByRole("button", { name: /anterior/i }).click();
   expect(push).toHaveBeenCalledWith("/inbox/t0?folder=sent");
-  screen.getByRole("button", { name: /next/i }).click();
+  screen.getByRole("button", { name: /próxima/i }).click();
   expect(push).toHaveBeenCalledWith("/inbox/t2?folder=sent");
 });
 
 it("disables prev at the newest thread and next at the oldest", () => {
   neighborsData = { prevId: null, nextId: "t2", index: 1, total: 3 };
   render(<ReaderTopBar threadId="t1" canManage />);
-  expect(screen.getByRole("button", { name: /previous/i })).toBeDisabled();
-  expect(screen.getByRole("button", { name: /next/i })).not.toBeDisabled();
+  expect(screen.getByRole("button", { name: /anterior/i })).toBeDisabled();
+  expect(screen.getByRole("button", { name: /próxima/i })).not.toBeDisabled();
 });
 
 it("renders no position nav for a non-owner (neighbors null)", () => {
   neighborsData = null;
   render(<ReaderTopBar threadId="t1" canManage />);
-  expect(screen.queryByRole("button", { name: /previous/i })).toBeNull();
-  expect(screen.queryByRole("button", { name: /next/i })).toBeNull();
+  expect(screen.queryByRole("button", { name: /anterior/i })).toBeNull();
+  expect(screen.queryByRole("button", { name: /próxima/i })).toBeNull();
 });
 
 it("deletes to Gmail Trash after confirming, then returns to the inbox", async () => {
   render(<ReaderTopBar threadId="t1" canManage />);
-  screen.getByRole("button", { name: "Delete" }).click();
+  screen.getByRole("button", { name: "Excluir" }).click();
   // Confirm in the AlertDialog (role=alertdialog, its Action button).
-  const confirm = await screen.findByRole("button", { name: /move to trash/i });
+  const confirm = await screen.findByRole("button", { name: /mover para a lixeira/i });
   confirm.click();
   await waitFor(() => expect(trashMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
   // REPLACE (not push) so the deleted reader route is not left in history; caches invalidated
@@ -133,15 +133,15 @@ it("deletes to Gmail Trash after confirming, then returns to the inbox", async (
 
 it("refreshes the record timelines so a deleted thread leaves the deal and person pages", async () => {
   render(<ReaderTopBar threadId="t1" canManage />);
-  screen.getByRole("button", { name: "Delete" }).click();
-  (await screen.findByRole("button", { name: /move to trash/i })).click();
+  screen.getByRole("button", { name: "Excluir" }).click();
+  (await screen.findByRole("button", { name: /mover para a lixeira/i })).click();
   await waitFor(() => expect(invalidateDealMessages).toHaveBeenCalled());
   expect(invalidateContactMessages).toHaveBeenCalled();
 });
 
 it("refreshes the record timelines on archive too", async () => {
   render(<ReaderTopBar threadId="t1" canManage />);
-  screen.getByRole("button", { name: "Archive" }).click();
+  screen.getByRole("button", { name: "Arquivar" }).click();
   await waitFor(() => expect(invalidateDealMessages).toHaveBeenCalled());
   expect(invalidateContactMessages).toHaveBeenCalled();
 });
@@ -149,16 +149,16 @@ it("refreshes the record timelines on archive too", async () => {
 it("surfaces a failed delete and stays put (no silent no-op)", async () => {
   trashMock.mockResolvedValueOnce({ ok: false, error: { id: "E_GMAIL_001" } } as never);
   render(<ReaderTopBar threadId="t1" canManage />);
-  screen.getByRole("button", { name: "Delete" }).click();
-  (await screen.findByRole("button", { name: /move to trash/i })).click();
+  screen.getByRole("button", { name: "Excluir" }).click();
+  (await screen.findByRole("button", { name: /mover para a lixeira/i })).click();
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_GMAIL_001"));
   expect(push).not.toHaveBeenCalled();
 });
 
 it("groups Archive and Delete together on the left, not pushed to the far right (B3)", () => {
   render(<ReaderTopBar threadId="t1" canManage />);
-  const archive = screen.getByRole("button", { name: "Archive" });
-  const del = screen.getByRole("button", { name: "Delete" });
+  const archive = screen.getByRole("button", { name: "Arquivar" });
+  const del = screen.getByRole("button", { name: "Excluir" });
   // PD groups the reader actions top-left; WD previously pushed Archive right with ml-auto.
   expect(archive.className).not.toMatch(/ml-auto/);
   // Archive + Delete share one action group wrapper (grouped per PD), distinct from the Back link.
@@ -166,12 +166,12 @@ it("groups Archive and Delete together on the left, not pushed to the far right 
   expect(group).not.toBeNull();
   expect(del.closest("[data-reader-actions-group]")).toBe(group);
   expect(
-    screen.getByRole("link", { name: /back/i }).closest("[data-reader-actions-group]"),
+    screen.getByRole("link", { name: /voltar/i }).closest("[data-reader-actions-group]"),
   ).toBeNull();
 });
 
 it("hides Archive and Delete for a non-owner (canManage false)", () => {
   render(<ReaderTopBar threadId="t1" canManage={false} />);
-  expect(screen.queryByRole("button", { name: "Archive" })).toBeNull();
-  expect(screen.queryByRole("button", { name: "Delete" })).toBeNull();
+  expect(screen.queryByRole("button", { name: "Arquivar" })).toBeNull();
+  expect(screen.queryByRole("button", { name: "Excluir" })).toBeNull();
 });

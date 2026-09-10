@@ -42,7 +42,7 @@ beforeEach(() => {
   inboxListQuery.mockReset();
 });
 
-// A pending feed must never be painted as an empty mailbox: "No threads found." and a "0
+// A pending feed must never be painted as an empty mailbox: "Nenhuma conversa encontrada." and a "0
 // conversations" count are both assertions the query has not yet made.
 describe("ThreadList loading state", () => {
   it("renders a skeleton instead of the no-threads copy while the feed is pending", () => {

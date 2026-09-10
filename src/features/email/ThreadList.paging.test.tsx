@@ -83,12 +83,12 @@ afterEach(() => {
 describe("ThreadList paging", () => {
   it("offers Load more while the mailbox has another page", () => {
     render(<ThreadList folder="inbox" />);
-    expect(screen.getByRole("button", { name: /load more/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /carregar mais/i })).toBeInTheDocument();
   });
 
   it("fetches the next page when Load more is pressed", () => {
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
     expect(fetchNextPage).toHaveBeenCalledTimes(1);
   });
 
@@ -110,7 +110,7 @@ describe("ThreadList paging", () => {
   it("hides Load more once the mailbox is exhausted", () => {
     infiniteState.hasNextPage = false;
     render(<ThreadList folder="inbox" />);
-    expect(screen.queryByRole("button", { name: /load more/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /carregar mais/i })).toBeNull();
     infiniteState.hasNextPage = true;
   });
 });

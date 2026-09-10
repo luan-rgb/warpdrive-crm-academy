@@ -134,7 +134,7 @@ describe("ThreadPane", () => {
     await waitFor(() => expect(invalidateUnreadCount).toHaveBeenCalledTimes(1));
     invalidateUnreadCount.mockClear();
 
-    fireEvent.click(screen.getByRole("button", { name: "Mark as unread" }));
+    fireEvent.click(screen.getByRole("button", { name: "Marcar como não lida" }));
     expect(markUnreadMock).toHaveBeenCalledWith("csrf", { threadId: "t1" });
     await waitFor(() => expect(invalidateInboxList).toHaveBeenCalled());
     await waitFor(() => expect(invalidateUnreadCount).toHaveBeenCalled());
@@ -148,7 +148,7 @@ describe("ThreadPane", () => {
     invalidateUnreadCount.mockClear();
     invalidateInboxList.mockClear();
 
-    fireEvent.click(screen.getByRole("button", { name: "Mark as unread" }));
+    fireEvent.click(screen.getByRole("button", { name: "Marcar como não lida" }));
     expect(await screen.findByText(STRINGS.inbox.errorMarkUnread)).toBeInTheDocument();
     expect(invalidateInboxList).not.toHaveBeenCalled();
     expect(invalidateUnreadCount).not.toHaveBeenCalled();
@@ -234,7 +234,7 @@ describe("ThreadPane", () => {
       },
     ] as never;
     render(<ThreadPane threadId="t1" trackingBadge={null} />);
-    expect(screen.getByText("Opened 2 times")).toBeInTheDocument();
+    expect(screen.getByText("Aberto 2 vezes")).toBeInTheDocument();
     threadData.messages = [];
   });
 

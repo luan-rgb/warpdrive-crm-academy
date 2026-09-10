@@ -87,7 +87,7 @@ describe("Composer (deal context)", () => {
     fireEvent.keyDown(input, { key: "Enter" });
     expect(screen.getByText("extra@x.com")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /discard/i }));
+    fireEvent.click(screen.getByRole("button", { name: /descartar/i }));
 
     // After discard: defaultTo chip is restored, added chip is gone.
     expect(screen.getByText("sofia@x.com")).toBeInTheDocument();
@@ -135,7 +135,7 @@ describe("Cc/Bcc collapse on Discard", () => {
     expect(screen.getByText("secret@x.com")).toBeInTheDocument();
 
     // Discard
-    fireEvent.click(screen.getByRole("button", { name: /discard/i }));
+    fireEvent.click(screen.getByRole("button", { name: /descartar/i }));
 
     // Cc and Bcc rows must be hidden
     expect(screen.queryByText("Cc")).not.toBeInTheDocument();
@@ -164,7 +164,7 @@ describe("Composer – insertToken cleared on reset", () => {
       <Composer accountId="a1" context={{ kind: "deal", dealId: "d1", defaultTo: "x@x.com" }} />,
     );
     // Discard – this should call resetDraft() including setInsertToken(undefined).
-    fireEvent.click(screen.getByRole("button", { name: /discard/i }));
+    fireEvent.click(screen.getByRole("button", { name: /descartar/i }));
 
     // After discard the composer should still render without error and
     // the recipient is restored to the defaultTo chip.
@@ -206,7 +206,7 @@ describe("Composer error banner", () => {
     );
 
     // Click Send (To is prefilled as a chip so button is enabled).
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     // Banner appears with role=alert.
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
@@ -269,7 +269,7 @@ describe("Composer – send-success ordering (fire-and-forget activity)", () => 
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     // onSent fires after sendEmail resolves, without any activity-create delay.
     await waitFor(() => expect(onSent).toHaveBeenCalledTimes(1));
@@ -290,7 +290,7 @@ describe("Composer – send-success ordering (fire-and-forget activity)", () => 
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(onSent).toHaveBeenCalledTimes(1));
     // Only one send happened (no duplicate).

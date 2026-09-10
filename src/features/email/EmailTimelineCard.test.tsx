@@ -116,7 +116,7 @@ describe("EmailTimelineCard expanded", () => {
   it("enables the body query once expanded", async () => {
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /expand email/i }));
+    await userEvent.click(screen.getByRole("button", { name: /expandir e-mail/i }));
 
     expect(useQuery).toHaveBeenLastCalledWith(
       { messageId: "m1", allowRemote: false },
@@ -132,7 +132,7 @@ describe("EmailTimelineCard expanded", () => {
     });
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /expand email/i }));
+    await userEvent.click(screen.getByRole("button", { name: /expandir e-mail/i }));
 
     expect(screen.getByTestId("reader-message-card")).toBeInTheDocument();
   });
@@ -141,10 +141,10 @@ describe("EmailTimelineCard expanded", () => {
     useQuery.mockReturnValue({ data: undefined, isLoading: false, isError: true });
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /expand email/i }));
+    await userEvent.click(screen.getByRole("button", { name: /expandir e-mail/i }));
 
-    expect(screen.getByText(/Couldn't load this email/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
+    expect(screen.getByText(/Não foi possível carregar este e-mail/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Tentar novamente" })).toBeInTheDocument();
     expect(screen.queryByTestId("reader-message-card")).not.toBeInTheDocument();
   });
 
@@ -156,8 +156,8 @@ describe("EmailTimelineCard expanded", () => {
     });
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /expand email/i }));
-    await userEvent.click(screen.getByRole("button", { name: /collapse email/i }));
+    await userEvent.click(screen.getByRole("button", { name: /expandir e-mail/i }));
+    await userEvent.click(screen.getByRole("button", { name: /recolher e-mail/i }));
 
     expect(screen.queryByTestId("reader-message-card")).not.toBeInTheDocument();
   });
@@ -175,7 +175,7 @@ describe("EmailTimelineCard compose modes", () => {
   it("opens the composer in reply mode from the Reply button", async () => {
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Reply" }));
+    await userEvent.click(screen.getByRole("button", { name: "Responder" }));
 
     expect(screen.getByTestId("reader-reply")).toHaveTextContent("reply");
     expect(readerActionsProps).toHaveBeenLastCalledWith(
@@ -186,8 +186,8 @@ describe("EmailTimelineCard compose modes", () => {
   it("opens the composer in reply-all mode from the menu", async () => {
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Reply all" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Responder a todos" }));
 
     expect(screen.getByTestId("reader-reply")).toHaveTextContent("replyAll");
     expect(readerActionsProps).toHaveBeenLastCalledWith(
@@ -198,8 +198,8 @@ describe("EmailTimelineCard compose modes", () => {
   it("opens the composer in forward mode from the menu", async () => {
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Forward" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Encaminhar" }));
 
     expect(screen.getByTestId("reader-reply")).toHaveTextContent("forward");
     expect(readerActionsProps).toHaveBeenLastCalledWith(
@@ -210,9 +210,9 @@ describe("EmailTimelineCard compose modes", () => {
   it("re-seeds the composer when a second mode is picked while it is open", async () => {
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={() => {}} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Reply" }));
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Forward" }));
+    await userEvent.click(screen.getByRole("button", { name: "Responder" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Encaminhar" }));
 
     expect(screen.getByTestId("reader-reply")).toHaveTextContent("forward");
   });
@@ -228,7 +228,7 @@ describe("EmailTimelineCard actions", () => {
       />,
     );
 
-    expect(screen.queryByRole("button", { name: /^reply$/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^responder$/i })).not.toBeInTheDocument();
   });
 
   it("clears the deal link and reports success on unlink", async () => {
@@ -236,9 +236,9 @@ describe("EmailTimelineCard actions", () => {
     const onUnlinked = vi.fn();
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={onUnlinked} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Unlink from deal" }));
-    await userEvent.click(screen.getByRole("button", { name: "Unlink" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Desvincular do negócio" }));
+    await userEvent.click(screen.getByRole("button", { name: "Desvincular" }));
 
     await waitFor(() => {
       expect(linkThread).toHaveBeenCalledWith("csrf", { threadId: "t1", dealId: null });
@@ -256,9 +256,9 @@ describe("EmailTimelineCard actions", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Unlink from person" }));
-    await userEvent.click(screen.getByRole("button", { name: "Unlink" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Desvincular da pessoa" }));
+    await userEvent.click(screen.getByRole("button", { name: "Desvincular" }));
 
     await waitFor(() => {
       expect(linkThread).toHaveBeenCalledWith("csrf", { threadId: "t1", personId: null });
@@ -270,9 +270,9 @@ describe("EmailTimelineCard actions", () => {
     const onUnlinked = vi.fn();
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={onUnlinked} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Unlink from deal" }));
-    await userEvent.click(screen.getByRole("button", { name: "Unlink" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Desvincular do negócio" }));
+    await userEvent.click(screen.getByRole("button", { name: "Desvincular" }));
 
     await waitFor(() => expect(linkThread).toHaveBeenCalled());
     expect(onUnlinked).not.toHaveBeenCalled();
@@ -289,8 +289,8 @@ describe("EmailTimelineCard reply invalidation", () => {
     const onUnlinked = vi.fn();
     render(<EmailTimelineCard message={message} scope={dealScope} onUnlinked={onUnlinked} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /expand email/i }));
-    await userEvent.click(screen.getByRole("button", { name: /^reply$/i }));
+    await userEvent.click(screen.getByRole("button", { name: /expandir e-mail/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^responder$/i }));
     await userEvent.click(screen.getByTestId("reader-sent"));
 
     // A thread can be linked to a deal AND a person: replying from one record must not leave the

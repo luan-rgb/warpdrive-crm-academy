@@ -87,7 +87,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     );
 
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(createActivityMock).toHaveBeenCalledTimes(1));
 
@@ -107,7 +107,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     fireEvent.keyDown(input, { key: "Enter" });
 
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(createActivityMock).toHaveBeenCalledTimes(1));
 
@@ -122,7 +122,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
       <Composer accountId="a1" context={{ kind: "deal", dealId: "d1", defaultTo: "x@x.com" }} />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(1));
     expect(createActivityMock).not.toHaveBeenCalled();
@@ -136,7 +136,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     fireEvent.change(input, { target: { value: "a@b.com" } });
     fireEvent.keyDown(input, { key: "Enter" });
 
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(1));
     expect(createActivityMock).not.toHaveBeenCalled();
@@ -157,7 +157,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     );
 
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(onSent).toHaveBeenCalledTimes(1));
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
@@ -171,7 +171,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
     expect(screen.getByRole("checkbox", { name: /add as activity/i })).toBeChecked();
 
-    fireEvent.click(screen.getByRole("button", { name: /discard/i }));
+    fireEvent.click(screen.getByRole("button", { name: /descartar/i }));
     expect(screen.getByRole("checkbox", { name: /add as activity/i })).not.toBeChecked();
   });
 
@@ -194,7 +194,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     fireEvent.change(subjectInput, { target: { value: "Q2 Partnership Proposal" } });
 
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(createActivityMock).toHaveBeenCalledTimes(1));
 
@@ -220,7 +220,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     );
 
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(onSent).toHaveBeenCalledTimes(1));
     // The email was actually sent (not skipped).
@@ -252,7 +252,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     );
 
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     // onSent must fire even though createActivity hasn't resolved yet.
     await waitFor(() => expect(onSent).toHaveBeenCalledTimes(1));

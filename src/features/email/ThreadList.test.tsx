@@ -143,9 +143,9 @@ describe("ThreadList", () => {
   it("shows an Archive affordance for inbox rows and no filter chips off-inbox", () => {
     const { rerender } = render(<ThreadList folder="inbox" />);
     expect(screen.getByRole("button", { name: "Archive" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /All/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Todos" })).toBeInTheDocument();
     rerender(<ThreadList folder="sent" />);
-    expect(screen.queryByRole("button", { name: /All/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Todos" })).toBeNull();
   });
 
   it("bolds the subject of an unread row", () => {
@@ -161,7 +161,7 @@ describe("ThreadList", () => {
   it("does not apply inbox quick-filters after switching to a non-inbox folder", () => {
     const readRow = { ...inboxRow, id: "t9", subject: "Archived read", unread: false };
     const { rerender } = render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByLabelText("Unread only"));
+    fireEvent.click(screen.getByLabelText("Somente não lidas"));
     rerender(<ThreadList folder="archive" threads={[readRow]} />);
     expect(screen.getByText("Archived read")).toBeInTheDocument();
   });

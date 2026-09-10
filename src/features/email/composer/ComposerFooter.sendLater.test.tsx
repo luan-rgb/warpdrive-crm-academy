@@ -23,7 +23,7 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={vi.fn()}
       />,
     );
-    expect(screen.getByRole("button", { name: /send later/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /enviar mais tarde/i })).toBeDisabled();
   });
 
   it("Send later is disabled while a send is in-flight (sending)", () => {
@@ -40,7 +40,7 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={vi.fn()}
       />,
     );
-    expect(screen.getByRole("button", { name: /send later/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /enviar mais tarde/i })).toBeDisabled();
   });
 
   it("Send later button is enabled when onSendLater is provided", () => {
@@ -57,7 +57,7 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={vi.fn()}
       />,
     );
-    const laterBtn = screen.getByRole("button", { name: /send later/i });
+    const laterBtn = screen.getByRole("button", { name: /enviar mais tarde/i });
     expect(laterBtn).not.toBeDisabled();
   });
 
@@ -75,7 +75,7 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /send later/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     expect(await screen.findByTestId("scheduled-at-picker")).toBeInTheDocument();
   });
 
@@ -94,14 +94,14 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={onSendLater}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /send later/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     const picker = await screen.findByTestId("scheduled-at-picker");
     // Set a future datetime value (1 hour from now)
     const future = new Date(Date.now() + 3_600_000);
     const pad = (n: number) => String(n).padStart(2, "0");
     const local = `${future.getFullYear()}-${pad(future.getMonth() + 1)}-${pad(future.getDate())}T${pad(future.getHours())}:${pad(future.getMinutes())}`;
     fireEvent.change(picker, { target: { value: local } });
-    const confirmBtn = screen.getByRole("button", { name: /^schedule$/i });
+    const confirmBtn = screen.getByRole("button", { name: /^agendar$/i });
     fireEvent.click(confirmBtn);
     expect(onSendLater).toHaveBeenCalledTimes(1);
     const calledWith = onSendLater.mock.calls[0]?.[0] as Date;
@@ -126,13 +126,13 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={onSendLater}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /send later/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     const picker = await screen.findByTestId("scheduled-at-picker");
     const past = new Date(Date.now() - 60_000);
     const pad = (n: number) => String(n).padStart(2, "0");
     const local = `${past.getFullYear()}-${pad(past.getMonth() + 1)}-${pad(past.getDate())}T${pad(past.getHours())}:${pad(past.getMinutes())}`;
     fireEvent.change(picker, { target: { value: local } });
-    const confirmBtn = screen.getByRole("button", { name: /^schedule$/i });
+    const confirmBtn = screen.getByRole("button", { name: /^agendar$/i });
     fireEvent.click(confirmBtn);
     expect(onSendLater).not.toHaveBeenCalled();
   });
@@ -152,13 +152,13 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={onSendLater}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /send later/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     const picker = await screen.findByTestId("scheduled-at-picker");
     const past = new Date(Date.now() - 60_000);
     const pad = (n: number) => String(n).padStart(2, "0");
     const local = `${past.getFullYear()}-${pad(past.getMonth() + 1)}-${pad(past.getDate())}T${pad(past.getHours())}:${pad(past.getMinutes())}`;
     fireEvent.change(picker, { target: { value: local } });
-    fireEvent.click(screen.getByRole("button", { name: /^schedule$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^agendar$/i }));
     expect(onSendLater).not.toHaveBeenCalled();
     // Inline validation message, not an alert banner.
     expect(await screen.findByText(/in the future/i)).toBeInTheDocument();
@@ -178,7 +178,7 @@ describe("ComposerFooter Send later (Phase 7)", () => {
         onSendLater={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /send later/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     const picker = await screen.findByTestId("scheduled-at-picker");
     expect(picker).toHaveAttribute("min");
     expect(picker.getAttribute("min")).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);

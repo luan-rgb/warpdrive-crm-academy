@@ -22,11 +22,11 @@ describe("EmailCardMenu", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
 
-    expect(screen.getByRole("menuitem", { name: "Reply all" })).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: "Forward" })).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: "Open in Inbox" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Responder a todos" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Encaminhar" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Abrir na Caixa de entrada" })).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: "Unlink from deal" })).toBeInTheDocument();
   });
 
@@ -42,12 +42,12 @@ describe("EmailCardMenu", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
 
-    expect(screen.getByRole("menuitem", { name: "Open in Inbox" })).toBeInTheDocument();
-    expect(screen.queryByRole("menuitem", { name: "Reply all" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("menuitem", { name: "Forward" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("menuitem", { name: /unlink/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Abrir na Caixa de entrada" })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Responder a todos" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Encaminhar" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: /desvincular/i })).not.toBeInTheDocument();
   });
 
   it("links open-in-inbox to the thread route", async () => {
@@ -62,10 +62,10 @@ describe("EmailCardMenu", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
 
     // Radix merges the item onto the anchor (asChild), so the menuitem IS the link element.
-    expect(screen.getByRole("menuitem", { name: "Open in Inbox" })).toHaveAttribute(
+    expect(screen.getByRole("menuitem", { name: "Abrir na Caixa de entrada" })).toHaveAttribute(
       "href",
       "/inbox/t-42",
     );
@@ -84,13 +84,13 @@ describe("EmailCardMenu", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
     await userEvent.click(screen.getByRole("menuitem", { name: "Unlink from deal" }));
 
     expect(onUnlink).not.toHaveBeenCalled();
-    expect(screen.getByText(/Unlink this conversation\?/)).toBeInTheDocument();
+    expect(screen.getByText(/Desvincular esta conversa\?/)).toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole("button", { name: "Unlink" }));
+    await userEvent.click(screen.getByRole("button", { name: "Desvincular" }));
 
     expect(onUnlink).toHaveBeenCalledTimes(1);
   });
@@ -109,12 +109,12 @@ describe("EmailCardMenu", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Reply all" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Responder a todos" }));
     expect(onReplyAll).toHaveBeenCalledTimes(1);
 
-    await userEvent.click(screen.getByRole("button", { name: /more email actions/i }));
-    await userEvent.click(screen.getByRole("menuitem", { name: "Forward" }));
+    await userEvent.click(screen.getByRole("button", { name: /mais ações de e-mail/i }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Encaminhar" }));
     expect(onForward).toHaveBeenCalledTimes(1);
   });
 });

@@ -49,9 +49,9 @@ describe("ReaderActions", () => {
     render(
       <ReaderActions message={message} selfEmail="me@ex.com" accountId="acct-1" threadId="t1" />,
     );
-    expect(screen.getByRole("button", { name: "Reply" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Reply all" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Forward" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Responder" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Responder a todos" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Encaminhar" })).toBeInTheDocument();
     expect(screen.queryByTestId("composer-stub")).not.toBeInTheDocument();
   });
 
@@ -70,7 +70,7 @@ describe("ReaderActions", () => {
     render(
       <ReaderActions message={message} selfEmail="me@ex.com" accountId="acct-1" threadId="t1" />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Reply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Responder" }));
     const prefill = readPrefill();
     expect(prefill.to).toEqual(["ann@acme.com"]);
     expect(prefill.cc).toEqual([]);
@@ -81,7 +81,7 @@ describe("ReaderActions", () => {
     render(
       <ReaderActions message={message} selfEmail="me@ex.com" accountId="acct-1" threadId="t1" />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Reply all" }));
+    fireEvent.click(screen.getByRole("button", { name: "Responder a todos" }));
     const prefill = readPrefill();
     expect(prefill.to).toHaveLength(2);
     expect(prefill.to).toEqual(["ann@acme.com", "bob@acme.com"]);
@@ -93,7 +93,7 @@ describe("ReaderActions", () => {
     render(
       <ReaderActions message={message} selfEmail="me@ex.com" accountId="acct-1" threadId="t1" />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Forward" }));
+    fireEvent.click(screen.getByRole("button", { name: "Encaminhar" }));
     const prefill = readPrefill();
     expect(prefill.to).toEqual([]);
     expect(prefill.subject).toMatch(/^Fwd:/);
@@ -105,13 +105,13 @@ describe("ReaderActions", () => {
     render(
       <ReaderActions message={message} selfEmail="me@ex.com" accountId="acct-1" threadId="t1" />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Reply all" }));
+    fireEvent.click(screen.getByRole("button", { name: "Responder a todos" }));
     expect(readPrefill().to).toHaveLength(2);
 
     fireEvent.click(screen.getByRole("button", { name: "stub-close" }));
     expect(screen.queryByTestId("composer-stub")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Forward" }));
+    fireEvent.click(screen.getByRole("button", { name: "Encaminhar" }));
     expect(readPrefill().to).toEqual([]);
     expect(readPrefill().subject).toMatch(/^Fwd:/);
   });

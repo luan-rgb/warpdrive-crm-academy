@@ -81,7 +81,7 @@ describe("Composer scheduled send", () => {
         context={{ kind: "deal", dealId: "d1", defaultTo: "x@x.com" }}
       />,
     );
-    const laterBtn = screen.getByRole("button", { name: /send later/i });
+    const laterBtn = screen.getByRole("button", { name: /enviar mais tarde/i });
     expect(laterBtn).not.toBeDisabled();
   });
 });
@@ -105,10 +105,10 @@ describe("Composer scheduled send: activity creation (fix #3)", () => {
     );
 
     fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    fireEvent.click(screen.getByRole("button", { name: /send later/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     const picker = await screen.findByTestId("scheduled-at-picker");
     fireEvent.change(picker, { target: { value: toLocalInput(new Date(Date.now() + 3_600_000)) } });
-    fireEvent.click(screen.getByRole("button", { name: /^schedule$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^agendar$/i }));
 
     await waitFor(() => expect(createActivityMock).toHaveBeenCalledTimes(1));
     const [arg] = createActivityMock.mock.calls[0] as [ActivityInput];
@@ -124,10 +124,10 @@ describe("Composer scheduled send: activity creation (fix #3)", () => {
     );
 
     // Do NOT click the toggle.
-    fireEvent.click(screen.getByRole("button", { name: /send later/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     const picker = await screen.findByTestId("scheduled-at-picker");
     fireEvent.change(picker, { target: { value: toLocalInput(new Date(Date.now() + 3_600_000)) } });
-    fireEvent.click(screen.getByRole("button", { name: /^schedule$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^agendar$/i }));
 
     await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(1));
     expect(createActivityMock).not.toHaveBeenCalled();

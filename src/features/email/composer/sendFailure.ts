@@ -4,17 +4,18 @@ import { COMPOSER_STRINGS } from "./composer.constants";
 
 const MESSAGES: Record<string, string> = {
   [ERROR_IDS.UI_STALE_BUILD]:
-    "Warpdrive was updated while this page was open. Reload the page, then send again.",
+    "O Warpdrive foi atualizado enquanto esta página estava aberta. Atualize a página e envie novamente.",
   [ERROR_IDS.UI_ACTION_UNCONFIRMED]: COMPOSER_STRINGS.sendUnconfirmed,
-  [ERROR_IDS.PERM_DENIED]: "Your session is no longer valid. Reload the page and sign in again.",
+  [ERROR_IDS.PERM_DENIED]:
+    "Sua sessão não é mais válida. Atualize a página e faça login novamente.",
   [ERROR_IDS.GMAIL_GRANT_REVOKED]:
-    "Google has disconnected this mailbox. Reconnect it in Settings, then send again.",
+    "O Google desconectou esta caixa de entrada. Reconecte-a em Configurações e envie novamente.",
   [ERROR_IDS.GMAIL_TOKEN_DECRYPT_FAILED]:
-    "This mailbox's stored credentials could not be read. An admin needs to reconnect it.",
+    "Não foi possível ler as credenciais salvas desta caixa de entrada. Um administrador precisa reconectá-la.",
   [ERROR_IDS.GMAIL_ATTACHMENT_DENIED]:
-    "An attachment could not be read. Remove it and attach the file again.",
+    "Não foi possível ler um anexo. Remova-o e anexe o arquivo novamente.",
   [ERROR_IDS.GMAIL_SEND_INPUT_INVALID]:
-    "Something in this message was rejected before sending. Check the recipients and subject.",
+    "Algo nesta mensagem foi rejeitado antes do envio. Verifique os destinatários e o assunto.",
   [ERROR_IDS.GMAIL_API_EXHAUSTED]: STRINGS.inbox.errorSend,
 };
 

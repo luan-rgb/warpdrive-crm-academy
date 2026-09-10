@@ -147,7 +147,7 @@ export function WorkspaceTabs({
           while the rest of the timeline still renders. */}
       {emailQuery.isError === true && (
         <p role="alert" className="text-sm text-destructive">
-          Couldn't load emails for this deal. Please try again.
+          Não foi possível carregar os e-mails deste negócio. Tente novamente.
         </p>
       )}
 

@@ -37,7 +37,7 @@ describe("LinkExistingCombobox", () => {
     render(<LinkExistingCombobox kind="person" triggerLabel="Link to existing" onPick={onPick} />);
 
     fireEvent.click(screen.getByRole("button", { name: "Link to existing" }));
-    fireEvent.change(screen.getByPlaceholderText(/search/i), { target: { value: "Ja" } });
+    fireEvent.change(screen.getByPlaceholderText(/buscar/i), { target: { value: "Ja" } });
 
     // Person row appears; the deal and org rows are filtered out (kind="person" reads only people).
     expect(await screen.findByText("Jane Doe")).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe("LinkExistingCombobox", () => {
     render(<LinkExistingCombobox kind="deal" triggerLabel="Link to existing" onPick={onPick} />);
 
     fireEvent.click(screen.getByRole("button", { name: "Link to existing" }));
-    fireEvent.change(screen.getByPlaceholderText(/search/i), { target: { value: "Bi" } });
+    fireEvent.change(screen.getByPlaceholderText(/buscar/i), { target: { value: "Bi" } });
 
     expect(await screen.findByText("Big Deal")).toBeInTheDocument();
     expect(screen.queryByText("Jane Doe")).not.toBeInTheDocument();

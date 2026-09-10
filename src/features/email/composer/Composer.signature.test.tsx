@@ -95,7 +95,7 @@ describe("Composer signature-in-body (C3)", () => {
         prefill={{ bodyHtml: "<p>On Mon, someone wrote: original message</p>" }}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(1));
     const input = sendEmailMock.mock.calls[0]![1] as { bodyHtml: string; signatureId?: string };
@@ -117,7 +117,7 @@ describe("Composer signature-in-body (C3)", () => {
         draft={{ id: "dr1", subject: "S", bodyHtml: draftBody, to: ["x@x.com"], cc: [] }}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(1));
     const input = sendEmailMock.mock.calls[0]![1] as { bodyHtml: string; signatureId?: string };
@@ -132,7 +132,7 @@ describe("Composer signature-in-body (C3)", () => {
     // Wait for the editor to seed the signature into the body before sending.
     await screen.findByText(SIGNATURE_TEXT);
 
-    fireEvent.click(screen.getByRole("button", { name: /^send$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(1));
     const input = sendEmailMock.mock.calls[0]![1] as { bodyHtml: string; signatureId?: string };
