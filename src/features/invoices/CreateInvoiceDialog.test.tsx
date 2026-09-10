@@ -95,9 +95,9 @@ it("prefills customer details from the deal's org and person", () => {
       onCreated={() => {}}
     />,
   );
-  expect(screen.getByLabelText("Customer name")).toHaveValue("Acme Inc");
-  expect(screen.getByLabelText("Customer email")).toHaveValue("jane@acme.com");
-  expect(screen.getByLabelText("Customer address")).toHaveValue("1 Main St, Springfield");
+  expect(screen.getByLabelText("Nome do cliente")).toHaveValue("Acme Inc");
+  expect(screen.getByLabelText("Email do cliente")).toHaveValue("jane@acme.com");
+  expect(screen.getByLabelText("Endereço do cliente")).toHaveValue("1 Main St, Springfield");
 });
 
 it("shows a running subtotal/tax/total that updates when a line's tax rate changes", async () => {
@@ -116,7 +116,7 @@ it("shows a running subtotal/tax/total that updates when a line's tax rate chang
   expect(screen.getByTestId("create-invoice-subtotal")).toHaveTextContent("$200.00");
   expect(screen.getByTestId("create-invoice-tax-total")).toHaveTextContent("$0.00");
 
-  const taxInput = screen.getByLabelText("Tax % for Widget");
+  const taxInput = screen.getByLabelText("Imposto % de Widget");
   fireEvent.change(taxInput, { target: { value: "10" } });
 
   await waitFor(() => {
@@ -137,11 +137,11 @@ it("sends an explicit empty string, not null, when the user clears a prefilled b
       onCreated={() => {}}
     />,
   );
-  const nameInput = screen.getByLabelText("Customer name");
+  const nameInput = screen.getByLabelText("Nome do cliente");
   expect(nameInput).toHaveValue("Acme Inc");
   fireEvent.change(nameInput, { target: { value: "" } });
 
-  screen.getByRole("button", { name: "Create invoice" }).click();
+  screen.getByRole("button", { name: "Criar fatura" }).click();
   await waitFor(() => expect(createInvoiceAction).toHaveBeenCalled());
   const [input] = createInvoiceAction.mock.calls[0]! as unknown as [Record<string, unknown>];
   // Deliberately cleared by the user: must NOT be null, which the repo treats as "not supplied"
@@ -162,7 +162,7 @@ it("submits the bill-to fields, tax mode, and per-line tax rates on create", asy
       onCreated={onCreated}
     />,
   );
-  screen.getByRole("button", { name: "Create invoice" }).click();
+  screen.getByRole("button", { name: "Criar fatura" }).click();
   await waitFor(() => expect(createInvoiceAction).toHaveBeenCalled());
   const [input] = createInvoiceAction.mock.calls[0]! as unknown as [Record<string, unknown>];
   expect(input.dealId).toBe("deal-1");

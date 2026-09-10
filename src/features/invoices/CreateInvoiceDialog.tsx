@@ -118,8 +118,8 @@ export function CreateInvoiceDialog({
     if (!r.ok) {
       setError(
         r.error.id === "E_INVOICE_004"
-          ? "This deal has no products to invoice yet."
-          : "Could not create the invoice.",
+          ? "Este negócio ainda não tem produtos para faturar."
+          : "Não foi possível criar a fatura.",
       );
       return;
     }
@@ -131,7 +131,7 @@ export function CreateInvoiceDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Create invoice</DialogTitle>
+          <DialogTitle>Criar fatura</DialogTitle>
         </DialogHeader>
 
         {error !== null && (
@@ -142,35 +142,35 @@ export function CreateInvoiceDialog({
 
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">Customer details</h3>
+            <h3 className="text-sm font-medium">Dados do cliente</h3>
             <Input
-              aria-label="Customer name"
-              placeholder="Name"
+              aria-label="Nome do cliente"
+              placeholder="Nome"
               value={billToName}
               onChange={(e) => setBillToName(e.target.value)}
             />
             <Input
-              aria-label="Customer address"
-              placeholder="Address"
+              aria-label="Endereço do cliente"
+              placeholder="Endereço"
               value={billToAddress}
               onChange={(e) => setBillToAddress(e.target.value)}
             />
             <Input
-              aria-label="Customer email"
+              aria-label="Email do cliente"
               placeholder="Email"
               value={billToEmail}
               onChange={(e) => setBillToEmail(e.target.value)}
             />
             <Input
-              aria-label="Customer tax ID"
-              placeholder="Tax ID"
+              aria-label="CNPJ/CPF do cliente"
+              placeholder="CNPJ/CPF"
               value={billToTaxId}
               onChange={(e) => setBillToTaxId(e.target.value)}
             />
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">Invoice details</h3>
+            <h3 className="text-sm font-medium">Dados da fatura</h3>
             <RadioGroup
               value={taxMode}
               onValueChange={(v) => setTaxMode(v as InvoiceTaxMode)}
@@ -187,11 +187,11 @@ export function CreateInvoiceDialog({
                 </label>
               ))}
             </RadioGroup>
-            <DatePicker value={issueDate} onChange={setIssueDate} ariaLabel="Issue date" />
-            <DatePicker value={dueDate} onChange={setDueDate} ariaLabel="Due date" />
+            <DatePicker value={issueDate} onChange={setIssueDate} ariaLabel="Data de emissão" />
+            <DatePicker value={dueDate} onChange={setDueDate} ariaLabel="Data de vencimento" />
             <Textarea
-              aria-label="Notes"
-              placeholder="Notes"
+              aria-label="Notas"
+              placeholder="Notas"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
@@ -202,10 +202,10 @@ export function CreateInvoiceDialog({
           <thead className="text-left text-xs uppercase text-muted-foreground">
             <tr>
               <th className="py-2">Item</th>
-              <th className="py-2 text-right">Qty</th>
-              <th className="py-2 text-right">Unit price</th>
-              {taxMode !== "none" && <th className="py-2 text-right">Tax %</th>}
-              <th className="py-2 text-right">Amount</th>
+              <th className="py-2 text-right">Qtd.</th>
+              <th className="py-2 text-right">Preço unit.</th>
+              {taxMode !== "none" && <th className="py-2 text-right">Imposto %</th>}
+              <th className="py-2 text-right">Valor</th>
             </tr>
           </thead>
           <tbody>
@@ -219,7 +219,7 @@ export function CreateInvoiceDialog({
                 {taxMode !== "none" && (
                   <td className="py-2 w-24">
                     <Input
-                      aria-label={`Tax % for ${line.name}`}
+                      aria-label={`Imposto % de ${line.name}`}
                       value={taxRateFor(line.id)}
                       onChange={(e) =>
                         setTaxRates((prev) => ({ ...prev, [line.id]: e.target.value }))
@@ -248,7 +248,7 @@ export function CreateInvoiceDialog({
           </p>
           {taxMode !== "none" && (
             <p>
-              Tax:{" "}
+              Imposto:{" "}
               <span data-testid="create-invoice-tax-total" className="tabular-nums font-medium">
                 {money(totals.tax, baseCurrency)}
               </span>
@@ -264,10 +264,10 @@ export function CreateInvoiceDialog({
 
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={() => void submit()} disabled={pending || dealLines.length === 0}>
-            Create invoice
+            Criar fatura
           </Button>
         </div>
       </DialogContent>

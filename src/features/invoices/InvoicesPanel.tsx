@@ -30,9 +30,9 @@ function invoiceNumber(sequenceNumber: number): string {
 }
 
 const STATUS_LABEL: Record<string, string> = {
-  issued: "Issued",
-  paid: "Paid",
-  canceled: "Canceled",
+  issued: "Emitida",
+  paid: "Paga",
+  canceled: "Cancelada",
 };
 
 export function InvoicesPanel({
@@ -79,7 +79,7 @@ export function InvoicesPanel({
       refresh();
       return;
     }
-    setError("Could not delete the invoice.");
+    setError("Não foi possível excluir a fatura.");
   }
 
   return (
@@ -90,7 +90,7 @@ export function InvoicesPanel({
         </p>
       )}
       {invoices.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No invoices yet.</p>
+        <p className="text-sm text-muted-foreground">Ainda não há faturas.</p>
       ) : (
         <ul className="space-y-1 text-sm">
           {invoices.map((inv) => (
@@ -111,25 +111,25 @@ export function InvoicesPanel({
                 {inv.status === "issued" && (
                   <>
                     <Button variant="ghost" onClick={() => setEditing(inv.id)}>
-                      Edit
+                      Editar
                     </Button>
                     <Button variant="ghost" onClick={() => void markPaid(inv.id)}>
-                      Mark paid
+                      Marcar como paga
                     </Button>
                     <Button variant="ghost" onClick={() => void cancel(inv.id)}>
-                      Cancel
+                      Cancelar
                     </Button>
                   </>
                 )}
                 <Button variant="ghost" onClick={() => setPendingDelete(inv.id)}>
-                  Delete
+                  Excluir
                 </Button>
               </span>
             </li>
           ))}
         </ul>
       )}
-      <Button onClick={() => setCreating(true)}>Generate invoice</Button>
+      <Button onClick={() => setCreating(true)}>Gerar fatura</Button>
       <ConfirmDialog
         open={pendingDelete !== null}
         onOpenChange={(open) => {

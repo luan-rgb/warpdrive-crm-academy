@@ -195,14 +195,14 @@ function ContactCreateModal({
 
         {kind === "person" && (
           <div className="space-y-1">
-            <span className="block text-sm font-medium">Organization</span>
+            <span className="block text-sm font-medium">Organização</span>
             <Select
-              ariaLabel="Organization"
+              ariaLabel="Organização"
               value={selectedOrgId}
               onChange={setSelectedOrgId}
-              placeholder="No organization"
+              placeholder="Sem organização"
               options={[
-                { value: "", label: "No organization" },
+                { value: "", label: "Sem organização" },
                 ...orgOptions.map<SelectOption>((option) => ({
                   value: option.id,
                   label: option.name,

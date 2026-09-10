@@ -51,7 +51,7 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
       readCsrfToken(),
     );
     if (!r.ok) {
-      setError("Could not add the product to this deal.");
+      setError("Não foi possível adicionar o produto a este negócio.");
       return;
     }
     setSelectedProductId("");
@@ -65,7 +65,7 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
   ): Promise<void> {
     const r = await updateDealProductAction({ id, ...next }, readCsrfToken());
     if (!r.ok) {
-      setError("Could not update this line item.");
+      setError("Não foi possível atualizar este item.");
       return;
     }
     refresh();
@@ -74,7 +74,7 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
   async function removeLine(id: string): Promise<void> {
     const r = await removeDealProductAction({ id }, readCsrfToken());
     if (!r.ok) {
-      setError("Could not remove this line item.");
+      setError("Não foi possível remover este item.");
       return;
     }
     refresh();
@@ -94,15 +94,15 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
       )}
 
       {lines.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No products added to this deal yet.</p>
+        <p className="text-sm text-muted-foreground">Ainda não há produtos neste negócio.</p>
       ) : (
         <table className="w-full text-sm">
           <thead className="text-left text-xs uppercase text-muted-foreground">
             <tr>
-              <th className="px-3 py-2">Product</th>
-              <th className="px-3 py-2">Qty</th>
-              <th className="px-3 py-2">Unit price</th>
-              <th className="px-3 py-2">Discount %</th>
+              <th className="px-3 py-2">Produto</th>
+              <th className="px-3 py-2">Qtd.</th>
+              <th className="px-3 py-2">Preço unit.</th>
+              <th className="px-3 py-2">Desconto %</th>
               <th className="px-3 py-2">Total</th>
               <th className="px-3 py-2" />
             </tr>
@@ -113,7 +113,7 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
                 <td className="px-3 py-2">{l.name}</td>
                 <td className="px-3 py-2 w-20">
                   <Input
-                    aria-label="Quantity"
+                    aria-label="Quantidade"
                     value={l.quantity}
                     onChange={(e) =>
                       void updateLine(l.id, {
@@ -126,7 +126,7 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
                 </td>
                 <td className="px-3 py-2 w-28">
                   <Input
-                    aria-label="Unit price"
+                    aria-label="Preço unitário"
                     value={l.unitPrice}
                     onChange={(e) =>
                       void updateLine(l.id, {
@@ -139,7 +139,7 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
                 </td>
                 <td className="px-3 py-2 w-24">
                   <Input
-                    aria-label="Discount percent"
+                    aria-label="Percentual de desconto"
                     value={l.discountPercent}
                     onChange={(e) =>
                       void updateLine(l.id, {
@@ -155,7 +155,7 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
                 </td>
                 <td className="px-3 py-2 text-right">
                   <Button variant="ghost" onClick={() => void removeLine(l.id)}>
-                    Remove
+                    Remover
                   </Button>
                 </td>
               </tr>
@@ -176,24 +176,24 @@ export function DealProductsPanel({ dealId }: { dealId: string }): React.ReactNo
       <div className="flex items-end gap-2">
         <div className="min-w-48">
           <Select
-            ariaLabel="Product"
+            ariaLabel="Produto"
             value={selectedProductId}
             onChange={setSelectedProductId}
             options={[
-              { value: "", label: "Select a product" },
+              { value: "", label: "Selecione um produto" },
               ...catalog.map((p) => ({ value: p.id, label: `${p.name} (${money(p.price)})` })),
             ]}
           />
         </div>
         <div className="w-20">
           <Input
-            aria-label="Quantity"
+            aria-label="Quantidade"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
           />
         </div>
         <Button onClick={() => void addLine()} disabled={selectedProductId === ""}>
-          Add product
+          Adicionar produto
         </Button>
       </div>
     </div>

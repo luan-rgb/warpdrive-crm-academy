@@ -50,7 +50,7 @@ it("shows a tax % input per line and a subtotal/tax/total footer", () => {
       baseCurrency="USD"
     />,
   );
-  expect(screen.getByLabelText("Tax percent")).toHaveValue("10");
+  expect(screen.getByLabelText("Percentual de imposto")).toHaveValue("10");
   // base 200.00, 10% tax = 20.00, total 220.00
   // Note: $200.00 appears in both line item total and subtotal, so check for multiple
   expect(screen.queryAllByText("$200.00").length).toBeGreaterThan(0);

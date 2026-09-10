@@ -81,7 +81,7 @@ export function InvoiceEditDialog({
       readCsrfToken(),
     );
     if (!r.ok) {
-      setError("Could not add the item.");
+      setError("Não foi possível adicionar o item.");
       return;
     }
     setSelectedProductId("");
@@ -95,7 +95,7 @@ export function InvoiceEditDialog({
   ): Promise<void> {
     const r = await updateInvoiceLineItemAction({ id, ...next }, readCsrfToken());
     if (!r.ok) {
-      setError("Could not update this item.");
+      setError("Não foi possível atualizar este item.");
       return;
     }
     refresh();
@@ -104,7 +104,7 @@ export function InvoiceEditDialog({
   async function removeLine(id: string): Promise<void> {
     const r = await removeInvoiceLineItemAction({ id }, readCsrfToken());
     if (!r.ok) {
-      setError("Could not remove this item.");
+      setError("Não foi possível remover este item.");
       return;
     }
     refresh();
@@ -124,7 +124,7 @@ export function InvoiceEditDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Edit invoice</DialogTitle>
+          <DialogTitle>Editar fatura</DialogTitle>
         </DialogHeader>
 
         {error !== null && (
@@ -134,16 +134,16 @@ export function InvoiceEditDialog({
         )}
 
         {lines.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No line items yet.</p>
+          <p className="text-sm text-muted-foreground">Ainda não há itens.</p>
         ) : (
           <table className="w-full text-sm">
             <thead className="text-left text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="px-2 py-2">Item</th>
-                <th className="px-2 py-2">Qty</th>
-                <th className="px-2 py-2">Unit price</th>
-                <th className="px-2 py-2">Discount %</th>
-                {taxMode !== "none" && <th className="px-2 py-2">Tax %</th>}
+                <th className="px-2 py-2">Qtd.</th>
+                <th className="px-2 py-2">Preço unit.</th>
+                <th className="px-2 py-2">Desconto %</th>
+                {taxMode !== "none" && <th className="px-2 py-2">Imposto %</th>}
                 <th className="px-2 py-2">Total</th>
                 <th className="px-2 py-2" />
               </tr>
@@ -154,7 +154,7 @@ export function InvoiceEditDialog({
                   <td className="px-2 py-2">{l.name}</td>
                   <td className="px-2 py-2 w-20">
                     <Input
-                      aria-label="Quantity"
+                      aria-label="Quantidade"
                       value={l.quantity}
                       onChange={(e) =>
                         void updateLine(l.id, {
@@ -168,7 +168,7 @@ export function InvoiceEditDialog({
                   </td>
                   <td className="px-2 py-2 w-28">
                     <Input
-                      aria-label="Unit price"
+                      aria-label="Preço unitário"
                       value={l.unitPrice}
                       onChange={(e) =>
                         void updateLine(l.id, {
@@ -182,7 +182,7 @@ export function InvoiceEditDialog({
                   </td>
                   <td className="px-2 py-2 w-24">
                     <Input
-                      aria-label="Discount percent"
+                      aria-label="Percentual de desconto"
                       value={l.discountPercent}
                       onChange={(e) =>
                         void updateLine(l.id, {
@@ -197,7 +197,7 @@ export function InvoiceEditDialog({
                   {taxMode !== "none" && (
                     <td className="px-2 py-2 w-24">
                       <Input
-                        aria-label="Tax percent"
+                        aria-label="Percentual de imposto"
                         value={l.taxRatePercent}
                         onChange={(e) =>
                           void updateLine(l.id, {
@@ -215,7 +215,7 @@ export function InvoiceEditDialog({
                   </td>
                   <td className="px-2 py-2 text-right">
                     <Button variant="ghost" onClick={() => void removeLine(l.id)}>
-                      Remove
+                      Remover
                     </Button>
                   </td>
                 </tr>
@@ -232,7 +232,7 @@ export function InvoiceEditDialog({
               {taxMode !== "none" && (
                 <tr>
                   <td className="px-2 py-2" colSpan={5}>
-                    Tax
+                    Imposto
                   </td>
                   <td className="px-2 py-2 tabular-nums">{money(taxTotal, baseCurrency)}</td>
                   <td />
@@ -252,11 +252,11 @@ export function InvoiceEditDialog({
         <div className="flex items-end gap-2">
           <div className="min-w-48">
             <Select
-              ariaLabel="Product"
+              ariaLabel="Produto"
               value={selectedProductId}
               onChange={setSelectedProductId}
               options={[
-                { value: "", label: "Select a product" },
+                { value: "", label: "Selecione um produto" },
                 ...catalog.map((p) => ({
                   value: p.id,
                   label: `${p.name} (${money(p.price, baseCurrency)})`,
@@ -266,13 +266,13 @@ export function InvoiceEditDialog({
           </div>
           <div className="w-20">
             <Input
-              aria-label="Quantity"
+              aria-label="Quantidade"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />
           </div>
           <Button onClick={() => void addLine()} disabled={selectedProductId === ""}>
-            Add item
+            Adicionar item
           </Button>
         </div>
       </DialogContent>

@@ -28,15 +28,15 @@ export function GlobalNoteModal({
     <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>New note</DialogTitle>
+          <DialogTitle>Nova nota</DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
           <Combobox
             value={personId}
             onChange={setPersonId}
             options={options}
-            ariaLabel="Note target person"
-            placeholder="Select a person"
+            ariaLabel="Pessoa da nota"
+            placeholder="Selecione uma pessoa"
           />
           {personId !== "" && (
             <ComposeNoteTab

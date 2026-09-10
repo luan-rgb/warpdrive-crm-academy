@@ -149,7 +149,7 @@ describe("GlobalContactModal person (rich create, M1)", () => {
   it("offers Organization, Phone, and Email at create time, not name-only", () => {
     render(<GlobalContactModal kind="person" onClose={noop} onCreated={noop} />);
     expect(screen.getByLabelText("Name")).toBeInTheDocument();
-    expect(screen.getByLabelText("Organization")).toBeInTheDocument();
+    expect(screen.getByLabelText("Organização")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "+ Add email" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "+ Add phone" })).toBeInTheDocument();
   });
