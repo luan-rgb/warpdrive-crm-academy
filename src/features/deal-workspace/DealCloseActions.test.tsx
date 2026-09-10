@@ -206,7 +206,7 @@ it("with the pref enabled, Won opens a follow-up activity prompt prefilled for t
   await waitFor(() => expect(markWonAction).toHaveBeenCalledTimes(1));
 
   expect(await screen.findByRole("dialog")).toBeInTheDocument();
-  expect(screen.getByText("Add activity")).toBeInTheDocument();
+  expect(screen.getByText("Adicionar atividade")).toBeInTheDocument();
   expect(routerRefresh).not.toHaveBeenCalled();
 
   fireEvent.click(screen.getByRole("button", { name: "Close" }));

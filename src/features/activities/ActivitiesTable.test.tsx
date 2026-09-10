@@ -134,14 +134,14 @@ describe("ActivitiesTable", () => {
       expect(screen.getByText(h)).toBeInTheDocument();
     }
     // Type tabs come from listTypes (custom + system types), not a hardcoded list.
-    expect(screen.getByRole("button", { name: "All" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Todos" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Call" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Meeting" })).toBeInTheDocument();
     // The filter toolbar (owner, status, date range) is present.
-    expect(screen.getByLabelText("Owner")).toBeInTheDocument();
+    expect(screen.getByLabelText("Dono")).toBeInTheDocument();
     expect(screen.getByLabelText("Status")).toBeInTheDocument();
-    expect(screen.getByLabelText("From")).toBeInTheDocument();
-    expect(screen.getByLabelText("To")).toBeInTheDocument();
+    expect(screen.getByLabelText("De")).toBeInTheDocument();
+    expect(screen.getByLabelText("Até")).toBeInTheDocument();
     // Enriched cells.
     expect(screen.getByText("jane@acme.com")).toBeInTheDocument();
     expect(screen.getByText("+14155550100")).toBeInTheDocument();
