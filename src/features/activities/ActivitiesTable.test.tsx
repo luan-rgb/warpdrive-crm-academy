@@ -119,17 +119,17 @@ describe("ActivitiesTable", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
     for (const h of [
-      "Done",
-      "Subject",
-      "Deal",
-      "Priority",
-      "Contact",
+      "Concluída",
+      "Assunto",
+      "Negócio",
+      "Prioridade",
+      "Contato",
       "Email",
-      "Phone",
-      "Organization",
-      "Due",
-      "Duration",
-      "Assignee",
+      "Telefone",
+      "Organização",
+      "Vencimento",
+      "Duração",
+      "Responsável",
     ]) {
       expect(screen.getByText(h)).toBeInTheDocument();
     }

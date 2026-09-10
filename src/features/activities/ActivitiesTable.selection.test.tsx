@@ -131,9 +131,9 @@ describe("ActivitiesTable selection and bulk actions", () => {
       refetch,
     });
     render(<ActivitiesTable />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all activities" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as atividades" }));
     expect(screen.getByText("2 selected")).toBeInTheDocument();
-    expect(screen.getByRole("checkbox", { name: "Select all activities" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Selecionar todas as atividades" })).toBeChecked();
   });
 
   it("bulk Mark done calls completeActivityAction({ id, done: true }) for each selected row", async () => {
@@ -167,7 +167,7 @@ describe("ActivitiesTable selection and bulk actions", () => {
     });
     render(<ActivitiesTable />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all activities" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as atividades" }));
     fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
 
     const alert = await screen.findByRole("alert");

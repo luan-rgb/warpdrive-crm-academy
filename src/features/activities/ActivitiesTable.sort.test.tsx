@@ -81,7 +81,7 @@ describe("ActivitiesTable sort headers", () => {
   it("clicking the Subject header re-queries listRows with the new sort", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
-    fireEvent.click(screen.getByRole("button", { name: "Subject" }));
+    fireEvent.click(screen.getByRole("button", { name: "Assunto" }));
     expect(useQuery).toHaveBeenLastCalledWith({
       ...DEFAULT_FILTER,
       sort: { field: "subject", dir: "asc" },
@@ -91,7 +91,7 @@ describe("ActivitiesTable sort headers", () => {
   it("clicking the Duration header re-queries listRows with the new sort", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
-    fireEvent.click(screen.getByRole("button", { name: "Duration" }));
+    fireEvent.click(screen.getByRole("button", { name: "Duração" }));
     expect(useQuery).toHaveBeenLastCalledWith({
       ...DEFAULT_FILTER,
       sort: { field: "duration", dir: "asc" },
@@ -101,7 +101,7 @@ describe("ActivitiesTable sort headers", () => {
   it("cycles the Duration header asc to desc to the default sort on repeated clicks", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
-    const header = screen.getByRole("button", { name: "Duration" });
+    const header = screen.getByRole("button", { name: "Duração" });
     fireEvent.click(header);
     expect(useQuery).toHaveBeenLastCalledWith({
       ...DEFAULT_FILTER,
@@ -142,7 +142,7 @@ describe("ActivitiesTable day-grouping reconciliation", () => {
       refetch,
     });
     render(<ActivitiesTable />);
-    fireEvent.click(screen.getByRole("button", { name: "Duration" }));
+    fireEvent.click(screen.getByRole("button", { name: "Duração" }));
     expect(screen.queryAllByRole("heading")).toHaveLength(0);
     expect(screen.getByText("Call Jane")).toBeInTheDocument();
     expect(screen.getByText("Call Bob")).toBeInTheDocument();
