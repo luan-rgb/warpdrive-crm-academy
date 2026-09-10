@@ -20,12 +20,12 @@ describe("ComposerHeader", () => {
   it("links settings to /settings/email, calls onClose, and has no Automation control", () => {
     const onClose = vi.fn();
     render(<ComposerHeader onClose={onClose} />);
-    expect(screen.getByRole("link", { name: /settings/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /configurações/i })).toHaveAttribute(
       "href",
       "/settings/email",
     );
     expect(screen.queryByText(/automation/i)).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /close/i }));
+    fireEvent.click(screen.getByRole("button", { name: /fechar/i }));
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -33,16 +33,16 @@ describe("ComposerHeader", () => {
     // ThreadPane renders the composer without onClose; a visible Close that no-ops is a dead
     // affordance. The Settings cog (a plain link) is still valid in that context.
     render(<ComposerHeader />);
-    expect(screen.getByRole("link", { name: /settings/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /close/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /configurações/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /fechar/i })).not.toBeInTheDocument();
   });
 
   it("puts the From address on the same row as the settings and close controls", () => {
     render(<ComposerHeader fromAddress="me@x.com" onClose={vi.fn()} />);
-    const row = screen.getByText("From").parentElement;
+    const row = screen.getByText("De").parentElement;
     expect(row).not.toBeNull();
     expect(screen.getByText("me@x.com")).toBeInTheDocument();
-    expect(row).toContainElement(screen.getByRole("link", { name: /settings/i }));
-    expect(row).toContainElement(screen.getByRole("button", { name: /close/i }));
+    expect(row).toContainElement(screen.getByRole("link", { name: /configurações/i }));
+    expect(row).toContainElement(screen.getByRole("button", { name: /fechar/i }));
   });
 });

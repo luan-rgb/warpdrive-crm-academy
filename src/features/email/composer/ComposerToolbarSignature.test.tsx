@@ -47,11 +47,11 @@ import { Composer } from "./Composer";
 
 // The signature control must live in the toolbar row (next to the template / insert-field
 // controls), not just be present somewhere in the composer, so assertions are scoped to that row.
-// Anchor on "Insert field" and walk up to the row that also holds the Signature trigger.
+// Anchor on "Inserir campo" and walk up to the row that also holds the Signature trigger.
 function getToolbarRow(): HTMLElement {
-  const insertField = screen.getByRole("button", { name: /insert field/i });
+  const insertField = screen.getByRole("button", { name: /inserir campo/i });
   let el: HTMLElement | null = insertField.parentElement;
-  while (el !== null && within(el).queryByRole("button", { name: /^signature$/i }) === null) {
+  while (el !== null && within(el).queryByRole("button", { name: /^assinatura$/i }) === null) {
     el = el.parentElement;
   }
   return el as HTMLElement;
@@ -62,7 +62,7 @@ describe("Composer toolbar signature picker (Task 4)", () => {
     signaturesData = [];
     render(<Composer accountId="a1" context={{ kind: "inbox" }} />);
     const toolbarRow = getToolbarRow();
-    expect(within(toolbarRow).getByRole("button", { name: /^signature$/i })).toBeInTheDocument();
+    expect(within(toolbarRow).getByRole("button", { name: /^assinatura$/i })).toBeInTheDocument();
   });
 
   it("selecting a signature from a non-empty list in the toolbar applies it", async () => {
@@ -70,12 +70,12 @@ describe("Composer toolbar signature picker (Task 4)", () => {
     const user = userEvent.setup();
     render(<Composer accountId="a1" context={{ kind: "inbox" }} />);
     const toolbarRow = getToolbarRow();
-    const trigger = within(toolbarRow).getByRole("button", { name: /^signature$/i });
+    const trigger = within(toolbarRow).getByRole("button", { name: /^assinatura$/i });
     // The current-signature hint moved from a native title= to the Tooltip label.
     await user.hover(trigger);
-    expect(await screen.findByRole("tooltip")).toHaveTextContent("Signature: None");
+    expect(await screen.findByRole("tooltip")).toHaveTextContent("Assinatura: Nenhuma");
 
-    // unhover does NOT close this tooltip in jsdom: the stale "Signature: None" node survives until
+    // unhover does NOT close this tooltip in jsdom: the stale "Assinatura: Nenhuma" node survives until
     // opening the menu tears it down. So nothing between here and the menu click may assume the
     // tooltip is gone, and the final assertion below must tolerate an extra node.
     await user.unhover(trigger);
@@ -92,7 +92,9 @@ describe("Composer toolbar signature picker (Task 4)", () => {
     // getAllByRole + waitFor, not a single findByRole: assert that the hint has settled on the new
     // label, rather than on whichever node the first query happens to return.
     await waitFor(() =>
-      expect(screen.getAllByRole("tooltip").map((t) => t.textContent)).toContain("Signature: Work"),
+      expect(screen.getAllByRole("tooltip").map((t) => t.textContent)).toContain(
+        "Assinatura: Work",
+      ),
     );
   });
 });

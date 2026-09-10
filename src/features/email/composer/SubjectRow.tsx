@@ -9,7 +9,7 @@ export function SubjectRow({ value, onChange }: SubjectRowProps): React.ReactNod
   return (
     <input
       type="text"
-      placeholder="Subject"
+      placeholder="Assunto"
       className="w-full border-b border-border px-2 py-1 text-sm transition-colors placeholder:text-muted-foreground focus:border-ring focus:outline-none"
       value={value}
       onChange={(e) => onChange(e.target.value)}

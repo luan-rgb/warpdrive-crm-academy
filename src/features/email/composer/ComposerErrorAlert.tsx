@@ -17,7 +17,7 @@ export function ComposerErrorAlert({ error, onDismiss }: ComposerErrorAlertProps
       <span>{error}</span>
       <button
         type="button"
-        aria-label="Dismiss error"
+        aria-label="Descartar erro"
         onClick={onDismiss}
         className="shrink-0 font-medium hover:opacity-70"
       >

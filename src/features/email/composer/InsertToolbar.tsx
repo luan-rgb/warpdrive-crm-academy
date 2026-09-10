@@ -18,10 +18,10 @@ import { SaveAsTemplateDialog } from "./SaveAsTemplateDialog";
 // merge-token catalog TemplateDraftEditor.tsx uses: literal {{token}} placeholders that the
 // send path resolves per-recipient (mergeContext.ts + applyMergeFields).
 // Entity category from the token prefix (person./deal./org.), drives the Insert-field tabs.
-const TOKEN_CATEGORY: Record<string, "Person" | "Deal" | "Organization"> = {
-  person: "Person",
-  deal: "Deal",
-  org: "Organization",
+const TOKEN_CATEGORY: Record<string, "Pessoa" | "Negócio" | "Organização"> = {
+  person: "Pessoa",
+  deal: "Negócio",
+  org: "Organização",
 };
 const MERGE_TOKEN_ITEMS = MERGE_TOKEN_FIELDS.map((f) => ({
   label: f.label,
@@ -29,7 +29,7 @@ const MERGE_TOKEN_ITEMS = MERGE_TOKEN_FIELDS.map((f) => ({
   category: TOKEN_CATEGORY[f.token.split(".")[0] ?? ""],
 }));
 
-const CHOOSE_TEMPLATE_LABEL = "Choose template";
+const CHOOSE_TEMPLATE_LABEL = "Escolher modelo";
 
 interface InsertToolbarProps {
   onSubjectChange: (subject: string) => void;
@@ -111,13 +111,13 @@ export function InsertToolbar({
                 }}
                 className="flex w-full items-center gap-1.5 rounded px-2 py-1.5 text-left text-xs text-primary hover:bg-accent"
               >
-                <span aria-hidden="true">+</span> Save draft as a template
+                <span aria-hidden="true">+</span> Salvar rascunho como modelo
               </button>
               <Link
                 href="/settings/email"
                 className="flex w-full items-center gap-1.5 rounded px-2 py-1.5 text-xs text-muted-foreground hover:bg-accent"
               >
-                Manage templates
+                Gerenciar modelos
               </Link>
             </>
           )}

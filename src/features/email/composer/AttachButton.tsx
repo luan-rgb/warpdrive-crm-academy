@@ -111,7 +111,7 @@ export function AttachButton({
       <Tip label="Attach file">
         <button
           type="button"
-          aria-label="Attach file"
+          aria-label="Anexar arquivo"
           onClick={() => inputRef.current?.click()}
           className="p-1 rounded hover:bg-accent text-muted-foreground"
         >

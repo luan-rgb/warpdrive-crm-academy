@@ -15,20 +15,20 @@ import { VisibilityControl } from "./VisibilityControl";
 describe("VisibilityControl", () => {
   it("shows the shared label when value is shared", () => {
     render(<VisibilityControl value="shared" onChange={vi.fn()} />);
-    expect(screen.getByText("Visible to everyone")).toBeInTheDocument();
+    expect(screen.getByText("Visível para todos")).toBeInTheDocument();
   });
 
   it("shows the private label when value is private", () => {
     render(<VisibilityControl value="private" onChange={vi.fn()} />);
-    expect(screen.getByText("Private to you")).toBeInTheDocument();
+    expect(screen.getByText("Privado para você")).toBeInTheDocument();
   });
 
   it("is interactive: opens a menu and reports selecting Private", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<VisibilityControl value="shared" onChange={onChange} />);
-    await user.click(screen.getByRole("button", { name: /visibility/i }));
-    await user.click(screen.getByRole("menuitem", { name: /private/i }));
+    await user.click(screen.getByRole("button", { name: /visibilidade/i }));
+    await user.click(screen.getByRole("menuitem", { name: /privado/i }));
     expect(onChange).toHaveBeenCalledWith("private");
   });
 
@@ -36,8 +36,8 @@ describe("VisibilityControl", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<VisibilityControl value="private" onChange={onChange} />);
-    await user.click(screen.getByRole("button", { name: /visibility/i }));
-    await user.click(screen.getByRole("menuitem", { name: /everyone|shared/i }));
+    await user.click(screen.getByRole("button", { name: /visibilidade/i }));
+    await user.click(screen.getByRole("menuitem", { name: /todos|compartilhado/i }));
     expect(onChange).toHaveBeenCalledWith("shared");
   });
 
@@ -45,7 +45,7 @@ describe("VisibilityControl", () => {
   // must draw its hover surface from the shared token rather than a copy that can drift.
   it("draws its hover surface from the shared inline-control token", () => {
     render(<VisibilityControl value="shared" onChange={vi.fn()} />);
-    expect(screen.getByRole("button", { name: /visibility/i })).toHaveClass(
+    expect(screen.getByRole("button", { name: /visibilidade/i })).toHaveClass(
       ...INLINE_CONTROL_SURFACE.split(" "),
     );
   });

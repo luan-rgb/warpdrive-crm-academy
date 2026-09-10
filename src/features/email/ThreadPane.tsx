@@ -102,7 +102,7 @@ export function ThreadPane({
       <header className="px-4 py-3 border-b border-border">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-base font-semibold text-foreground text-balance">
-            {inboxThread.subject ?? "(no subject)"}
+            {inboxThread.subject ?? "(sem assunto)"}
           </h1>
           <div className="flex shrink-0 items-center gap-2">
             {markUnreadError !== null && (

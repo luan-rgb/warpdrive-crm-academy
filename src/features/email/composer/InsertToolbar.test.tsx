@@ -23,7 +23,7 @@ afterEach(cleanup);
 
 // Opens the template combobox by its trigger label, then clicks the option by its text.
 function pickTemplate(optionText: string): void {
-  fireEvent.click(screen.getByLabelText(/choose template/i));
+  fireEvent.click(screen.getByLabelText(/escolher modelo/i));
   fireEvent.click(screen.getByRole("option", { name: optionText }));
 }
 
@@ -80,7 +80,7 @@ describe("InsertToolbar - Choose template", () => {
   it("renders a Choose template label with template options", () => {
     getTemplateMock.mockReturnValue({ data: undefined });
     render(<InsertToolbar onSubjectChange={vi.fn()} onBodyChange={vi.fn()} />);
-    const trigger = screen.getByLabelText(/choose template/i);
+    const trigger = screen.getByLabelText(/escolher modelo/i);
     expect(trigger).toBeInTheDocument();
     // The combobox only mounts its option list once opened.
     fireEvent.click(trigger);
@@ -99,20 +99,20 @@ describe("InsertToolbar - Choose template", () => {
         bodyHtml="<p>x</p>"
       />,
     );
-    await user.click(screen.getByLabelText(/choose template/i));
-    expect(screen.getByRole("link", { name: /manage templates/i })).toHaveAttribute(
+    await user.click(screen.getByLabelText(/escolher modelo/i));
+    expect(screen.getByRole("link", { name: /gerenciar modelos/i })).toHaveAttribute(
       "href",
       "/settings/email",
     );
     // Clicking "Save draft as a template" opens the (stubbed) save dialog.
-    await user.click(screen.getByRole("button", { name: /save draft as a template/i }));
+    await user.click(screen.getByRole("button", { name: /salvar rascunho como modelo/i }));
     expect(screen.getByTestId("save-template-dialog")).toBeInTheDocument();
   });
 
   it("filters templates by the combobox search box (PD parity)", () => {
     getTemplateMock.mockReturnValue({ data: undefined });
     render(<InsertToolbar onSubjectChange={vi.fn()} onBodyChange={vi.fn()} />);
-    fireEvent.click(screen.getByLabelText(/choose template/i));
+    fireEvent.click(screen.getByLabelText(/escolher modelo/i));
     fireEvent.change(screen.getByPlaceholderText(/search/i), { target: { value: "follow" } });
     expect(screen.getByRole("option", { name: /follow up/i })).toBeInTheDocument();
     expect(screen.queryByRole("option", { name: /welcome/i })).toBeNull();
@@ -208,7 +208,7 @@ describe("InsertToolbar - Insert field", () => {
         onInsertField={onInsert}
       />,
     );
-    expect(screen.getByRole("button", { name: /insert field/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /inserir campo/i })).toBeInTheDocument();
   });
 
   // Task 2 (inbox compose parity): the inbox composer used to get an empty item list here
@@ -228,10 +228,10 @@ describe("InsertToolbar - Insert field", () => {
       />,
     );
 
-    const trigger = screen.getByRole("button", { name: /insert field/i });
+    const trigger = screen.getByRole("button", { name: /inserir campo/i });
     await user.click(trigger);
 
-    const firstNameOption = await screen.findByRole("option", { name: /first name/i });
+    const firstNameOption = await screen.findByRole("option", { name: /^nome$/i });
     await user.click(firstNameOption);
 
     expect(onInsert).toHaveBeenCalledWith("{{person.first_name}}");
@@ -248,10 +248,10 @@ describe("InsertToolbar - Insert field", () => {
       <InsertToolbar onSubjectChange={vi.fn()} onBodyChange={vi.fn()} onInsertField={onInsert} />,
     );
 
-    const trigger = screen.getByRole("button", { name: /insert field/i });
+    const trigger = screen.getByRole("button", { name: /inserir campo/i });
     await user.click(trigger);
 
-    const firstNameOption = await screen.findByRole("option", { name: /first name/i });
+    const firstNameOption = await screen.findByRole("option", { name: /^nome$/i });
     await user.click(firstNameOption);
 
     expect(onInsert).toHaveBeenCalledWith("{{person.first_name}}");
@@ -271,10 +271,10 @@ describe("InsertToolbar - Insert field", () => {
     );
 
     // Open the shadcn DropdownMenu (Radix opens on pointerdown, so drive with userEvent).
-    await user.click(screen.getByRole("button", { name: /insert field/i }));
+    await user.click(screen.getByRole("button", { name: /inserir campo/i }));
 
     // The menu items should appear; click "Deal title"
-    const dealTitleOption = await screen.findByRole("option", { name: /deal title/i });
+    const dealTitleOption = await screen.findByRole("option", { name: /título do negócio/i });
     await user.click(dealTitleOption);
 
     expect(onInsert).toHaveBeenCalledWith("Acme Deal");

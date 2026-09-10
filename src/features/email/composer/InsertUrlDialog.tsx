@@ -19,20 +19,20 @@ const IMAGE_ALLOWED_SCHEMES = /^(https?:|data:image\/)/i;
 
 const COPY = {
   link: {
-    title: "Insert link",
-    description: "Add an HTTP, HTTPS, or email link.",
-    label: "Link URL",
+    title: "Inserir link",
+    description: "Adicione um link HTTP, HTTPS ou de e-mail.",
+    label: "URL do link",
     placeholder: "https://example.com…",
-    action: "Insert link",
-    error: "Enter an HTTP, HTTPS, or mailto URL.",
+    action: "Inserir link",
+    error: "Informe uma URL HTTP, HTTPS ou mailto.",
   },
   image: {
-    title: "Insert image",
-    description: "Add an HTTP, HTTPS, or data image URL.",
-    label: "Image URL",
+    title: "Inserir imagem",
+    description: "Adicione uma URL de imagem HTTP, HTTPS ou data.",
+    label: "URL da imagem",
     placeholder: "https://example.com/image.png…",
-    action: "Insert image",
-    error: "Enter an HTTP, HTTPS, or data image URL.",
+    action: "Inserir imagem",
+    error: "Informe uma URL de imagem HTTP, HTTPS ou data.",
   },
 } as const;
 
@@ -104,7 +104,7 @@ export function InsertUrlDialog({
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Cancelar</Button>
             </DialogClose>
             <Button type="submit">{copy.action}</Button>
           </DialogFooter>

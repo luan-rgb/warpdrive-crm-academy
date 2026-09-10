@@ -44,7 +44,7 @@ export function InboxFolderRail({
   const { folder: activeFolder, composeActive } = deriveActive(pathname, searchParams);
   const unreadCount = trpc.email.inbox.unreadCount.useQuery().data ?? 0;
   return (
-    <nav aria-label="Mail folders" className="flex w-60 shrink-0 flex-col gap-1 border-r p-3">
+    <nav aria-label="Pastas de e-mail" className="flex w-60 shrink-0 flex-col gap-1 border-r p-3">
       {/* A disabled Link has no real-world meaning (it would still be clickable), so the
           no-mailbox state renders a genuinely inert disabled button instead of a navigable
           link; only the enabled state navigates to the full-pane compose route. */}

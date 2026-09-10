@@ -40,7 +40,7 @@ import { AttachButton } from "./AttachButton";
 describe("AttachButton", () => {
   it("renders a paperclip button", () => {
     render(<AttachButton entityType="deal" entityId="deal-1" onAttached={vi.fn()} />);
-    expect(screen.getByRole("button", { name: /attach file/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /anexar arquivo/i })).toBeInTheDocument();
   });
 
   it("selecting a file calls requestUpload, POSTs to presigned URL, calls confirmUpload, and fires onAttached", async () => {

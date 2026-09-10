@@ -14,28 +14,28 @@ describe("AddActivityToggle", () => {
   it("renders a toggle button with an info tooltip container", () => {
     render(<AddActivityToggle checked={false} onChange={vi.fn()} />);
     // The toggle should be present as a checkbox
-    const toggle = screen.getByRole("checkbox", { name: /add as activity/i });
+    const toggle = screen.getByRole("checkbox", { name: /adicionar como atividade/i });
     expect(toggle).toBeInTheDocument();
     expect(toggle).not.toBeChecked();
   });
 
   it("reflects checked state when true", () => {
     render(<AddActivityToggle checked={true} onChange={vi.fn()} />);
-    const toggle = screen.getByRole("checkbox", { name: /add as activity/i });
+    const toggle = screen.getByRole("checkbox", { name: /adicionar como atividade/i });
     expect(toggle).toBeChecked();
   });
 
   it("calls onChange with the new value when clicked", () => {
     const onChange = vi.fn();
     render(<AddActivityToggle checked={false} onChange={onChange} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     expect(onChange).toHaveBeenCalledWith(true);
   });
 
   it("renders an info tooltip element", () => {
     render(<AddActivityToggle checked={false} onChange={vi.fn()} />);
     // Info tooltip should be present (a title attribute or aria-label on an info icon)
-    const infoEl = screen.getByLabelText(/activity will be logged/i);
+    const infoEl = screen.getByLabelText(/a atividade será registrada/i);
     expect(infoEl).toBeInTheDocument();
   });
 
@@ -45,9 +45,9 @@ describe("AddActivityToggle", () => {
   // duplicate/ambiguous naming.
   it("(item 7) checkbox is named by its design-system aria-label with visible text alongside", () => {
     render(<AddActivityToggle checked={false} onChange={vi.fn()} />);
-    const checkboxes = screen.getAllByRole("checkbox", { name: /add as activity/i });
+    const checkboxes = screen.getAllByRole("checkbox", { name: /adicionar como atividade/i });
     expect(checkboxes).toHaveLength(1);
-    expect(screen.getByText(/add as activity/i)).toBeInTheDocument();
+    expect(screen.getByText(/adicionar como atividade/i)).toBeInTheDocument();
   });
 
   // Reported: "add as activity should act the same way as visible to everyone on hover". The
@@ -63,7 +63,9 @@ describe("AddActivityToggle", () => {
 
   it("carries the same inline hover surface as the visibility control", () => {
     render(<AddActivityToggle checked={false} onChange={vi.fn()} />);
-    const wrapper = screen.getByRole("checkbox", { name: /add as activity/i }).parentElement;
+    const wrapper = screen.getByRole("checkbox", {
+      name: /adicionar como atividade/i,
+    }).parentElement;
     expect(wrapper).toHaveClass(...INLINE_CONTROL_SURFACE.split(" "));
   });
 
@@ -71,7 +73,7 @@ describe("AddActivityToggle", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<AddActivityToggle checked={false} onChange={onChange} />);
-    await user.click(screen.getByLabelText(/activity will be logged/i));
+    await user.click(screen.getByLabelText(/a atividade será registrada/i));
     expect(onChange).not.toHaveBeenCalled();
   });
 });

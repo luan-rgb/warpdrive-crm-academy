@@ -35,7 +35,7 @@ export function DraftsList({
         <li key={d.id} className="flex items-start justify-between gap-2 p-3">
           <button type="button" onClick={() => onResume(d)} className="min-w-0 flex-1 text-left">
             <p className="truncate text-sm font-medium">
-              {d.subject !== null && d.subject !== "" ? d.subject : "(no subject)"}
+              {d.subject !== null && d.subject !== "" ? d.subject : "(sem assunto)"}
             </p>
             <p className="truncate text-xs text-muted-foreground">{d.toEmails.join(", ")}</p>
             <p className="text-xs text-muted-foreground tabular-nums">

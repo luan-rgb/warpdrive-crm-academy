@@ -99,7 +99,7 @@ it("re-derives the highlight on navigation without remounting the nav element", 
   pathname = "/inbox";
   searchParamsStr = "folder=inbox";
   const { rerender } = render(<InboxFolderRail newEmailEnabled={true} />);
-  const navBefore = screen.getByRole("navigation", { name: "Mail folders" });
+  const navBefore = screen.getByRole("navigation", { name: "Pastas de e-mail" });
   expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
 
   // Simulate a client navigation into the reader: the persistent layout keeps the rail mounted,
@@ -107,7 +107,7 @@ it("re-derives the highlight on navigation without remounting the nav element", 
   pathname = "/inbox/thread-xyz";
   searchParamsStr = "";
   rerender(<InboxFolderRail newEmailEnabled={true} />);
-  const navAfter = screen.getByRole("navigation", { name: "Mail folders" });
+  const navAfter = screen.getByRole("navigation", { name: "Pastas de e-mail" });
   expect(navAfter).toBe(navBefore);
   expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
 });

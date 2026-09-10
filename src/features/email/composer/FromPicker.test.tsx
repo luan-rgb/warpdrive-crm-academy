@@ -10,7 +10,7 @@ import { FromPicker } from "./FromPicker";
 describe("FromPicker", () => {
   it("renders the From label and the mailbox address", () => {
     render(<FromPicker address="me@x.com" />);
-    expect(screen.getByText("From")).toBeInTheDocument();
+    expect(screen.getByText("De")).toBeInTheDocument();
     expect(screen.getByText("me@x.com")).toBeInTheDocument();
   });
 

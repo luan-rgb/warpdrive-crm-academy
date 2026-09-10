@@ -14,7 +14,7 @@ const MailLabelPicker = dynamic(async () => (await import("./MailLabelPicker")).
 
 // Local label: adding to src/constants/inboxStrings.ts is out of this unit's file scope, so the
 // pencil affordance carries its accessible name here.
-const EDIT_LABELS_LABEL = "Edit labels";
+const EDIT_LABELS_LABEL = "Editar etiquetas";
 
 interface ThreadLabelChipsProps {
   labels: string[];

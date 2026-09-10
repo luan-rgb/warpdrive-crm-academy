@@ -77,7 +77,7 @@ export function EmailTimelineCard({
       <div className="flex items-start justify-between gap-2 p-3">
         <div className="min-w-0">
           <h3 className="truncate text-sm font-semibold text-foreground">
-            {message.subject ?? "(no subject)"}
+            {message.subject ?? "(sem assunto)"}
           </h3>
           <p className="mt-0.5 truncate text-xs text-muted-foreground">
             {/* No Gmail Date header: mergeEmailItems orders such a message by createdAt, so date
@@ -94,7 +94,7 @@ export function EmailTimelineCard({
               </span>
             )}
             {message.hasAttachment && (
-              <Paperclip className="ml-1 inline h-3 w-3" aria-label="Has attachment" />
+              <Paperclip className="ml-1 inline h-3 w-3" aria-label="Tem anexo" />
             )}
           </p>
           {!expanded && message.snippet !== null && message.snippet !== "" && (

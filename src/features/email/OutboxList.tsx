@@ -8,10 +8,10 @@ import { readCsrfToken } from "@/utils/csrfCookie";
 import { cancelOutboxAction } from "./folderActions";
 
 function statusLabel(status: string, scheduledAt: string | null): string {
-  if (scheduledAt !== null) return `Scheduled ${new Date(scheduledAt).toLocaleString()}`;
-  if (status === "needs_review") return "Needs review";
-  if (status === "sending") return "Sending";
-  return "Queued to send";
+  if (scheduledAt !== null) return `Agendado para ${new Date(scheduledAt).toLocaleString()}`;
+  if (status === "needs_review") return "Requer revisão";
+  if (status === "sending") return "Enviando";
+  return "Na fila para envio";
 }
 
 // A pending or future-scheduled row is cancelable (unsent + unclaimed). A row a worker has
@@ -37,14 +37,14 @@ export function OutboxList(): React.ReactNode {
   }
 
   if (items.length === 0) {
-    return <div className="p-4 text-sm text-muted-foreground">Nothing queued to send.</div>;
+    return <div className="p-4 text-sm text-muted-foreground">Nada na fila para envio.</div>;
   }
   return (
     <ul className="divide-y">
       {items.map((it) => (
         <li key={it.id} className="flex items-start justify-between gap-2 p-3">
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium">{it.subject ?? "(no subject)"}</p>
+            <p className="truncate text-sm font-medium">{it.subject ?? "(sem assunto)"}</p>
             <p className="truncate text-xs text-muted-foreground">{it.to.join(", ")}</p>
             <p className="text-xs text-muted-foreground tabular-nums">
               {statusLabel(it.status, it.scheduledAt)}
@@ -58,7 +58,7 @@ export function OutboxList(): React.ReactNode {
               onClick={() => void cancel(it.id)}
               className={ROW_ACTION_BUTTON}
             >
-              Cancel
+              Cancelar
             </button>
           ) : null}
         </li>

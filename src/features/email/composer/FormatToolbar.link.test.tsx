@@ -82,8 +82,8 @@ async function mountEditor(
 async function insertLink(url: string): Promise<void> {
   const user = userEvent.setup();
   await user.click(screen.getByRole("button", { name: /^link$/i }));
-  await user.type(screen.getByLabelText(/link url/i), url);
-  await user.click(screen.getByRole("button", { name: /insert link/i }));
+  await user.type(screen.getByLabelText(/url do link/i), url);
+  await user.click(screen.getByRole("button", { name: /inserir link/i }));
 }
 
 describe("FormatToolbar link insertion (real editor)", () => {

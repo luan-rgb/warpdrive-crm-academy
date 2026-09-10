@@ -79,7 +79,7 @@ describe("ThreadPane reader-header privacy", () => {
   it("shows the privacy toggle when the user owns the mailbox (canCompose)", () => {
     threadData.canCompose = true;
     render(<ThreadPane threadId="t1" trackingBadge={null} />);
-    expect(screen.getByRole("button", { name: /private conversation/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /conversa privada/i })).toBeInTheDocument();
   });
 
   it("hides the privacy toggle on a thread the user cannot compose to", () => {
@@ -93,8 +93,8 @@ describe("ThreadPane reader-header privacy", () => {
     const user = userEvent.setup();
     threadData.canCompose = true;
     render(<ThreadPane threadId="t1" trackingBadge={null} />);
-    await user.click(screen.getByRole("button", { name: /private conversation/i }));
-    await user.click(screen.getByRole("menuitem", { name: /shared/i }));
+    await user.click(screen.getByRole("button", { name: /conversa privada/i }));
+    await user.click(screen.getByRole("menuitem", { name: /compartilhado/i }));
     expect(setThreadVisibilityMock).toHaveBeenCalledWith("csrf", {
       threadId: "t1",
       visibility: "shared",

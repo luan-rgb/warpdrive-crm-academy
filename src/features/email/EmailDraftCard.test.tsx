@@ -47,7 +47,7 @@ describe("EmailDraftCard", () => {
       <EmailDraftCard draft={draft({ subject: "" })} onResume={vi.fn()} onChanged={vi.fn()} />,
     );
 
-    expect(screen.getByText("(no subject)")).toBeInTheDocument();
+    expect(screen.getByText("(sem assunto)")).toBeInTheDocument();
   });
 
   it("hands the draft back on Continue so the composer can resume it", async () => {

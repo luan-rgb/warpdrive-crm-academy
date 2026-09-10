@@ -107,7 +107,7 @@ describe("Composer (deal context)", () => {
 
   it("renders Subject as a divider row without boxed border styling", () => {
     render(<Composer accountId="a1" context={{ kind: "inbox" }} />);
-    const subjectInput = screen.getByPlaceholderText("Subject");
+    const subjectInput = screen.getByPlaceholderText("Assunto");
     expect(subjectInput).toBeInTheDocument();
     // Must use divider styling, not a boxed input.
     // Split on whitespace to check individual class tokens:
@@ -215,7 +215,7 @@ describe("Composer error banner", () => {
     expect(screen.queryByText(/failed to send/i, { selector: "p" })).not.toBeInTheDocument();
 
     // Dismiss the banner.
-    fireEvent.click(screen.getByRole("button", { name: /dismiss error/i }));
+    fireEvent.click(screen.getByRole("button", { name: /descartar erro/i }));
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 });

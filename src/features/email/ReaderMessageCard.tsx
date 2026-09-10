@@ -45,7 +45,7 @@ export function ReaderMessageCard({
               <span className="ml-1.5 text-muted-foreground">{message.fromEmail}</span>
             )}
             {message.direction === "outbound" && (
-              <span className="ml-1 rounded bg-accent px-1 text-accent-foreground">Sent</span>
+              <span className="ml-1 rounded bg-accent px-1 text-accent-foreground">Enviado</span>
             )}
           </span>
         </span>

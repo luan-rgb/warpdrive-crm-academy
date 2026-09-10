@@ -107,7 +107,7 @@ export function FormatToolbarControls({
   return (
     <div
       role="toolbar"
-      aria-label="Text formatting"
+      aria-label="Formatação de texto"
       className="flex flex-wrap items-center gap-0.5 border-b border-border px-2 py-1"
     >
       <ToolButton label="Undo" icon={Undo2} onClick={actions.undo} />

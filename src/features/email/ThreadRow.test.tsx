@@ -120,10 +120,10 @@ it("renders a colored chip for each of the thread's labels", () => {
 
 it("shows the privacy toggle only to the mailbox owner", () => {
   const { rerender } = render(<ThreadRow {...props} thread={{ ...thread, isOwner: true }} />);
-  expect(screen.getByRole("button", { name: "Private conversation" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Conversa privada" })).toBeInTheDocument();
 
   rerender(<ThreadRow {...props} thread={{ ...thread, isOwner: false }} />);
-  expect(screen.queryByRole("button", { name: "Private conversation" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Conversa privada" })).not.toBeInTheDocument();
 });
 
 it("shows an attachment indicator only when the thread has an attachment", () => {

@@ -64,14 +64,14 @@ it("renders each chip uppercase (A15)", () => {
 describe("ThreadLabelChips editor behind a pencil (B5)", () => {
   it("shows no pencil affordance when read-only (no onLabelsChange)", () => {
     render(<ThreadLabelChips labels={["important"]} />);
-    expect(screen.queryByRole("button", { name: /edit labels/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /editar etiquetas/i })).not.toBeInTheDocument();
   });
 
   it("renders a pencil trigger that reveals the editor only after activation", async () => {
     render(<ThreadLabelChips labels={["important"]} onLabelsChange={() => {}} />);
     // The editor (the "+ Add label" picker) is hidden until the pencil is clicked.
     expect(screen.queryByRole("button", { name: "+ Adicionar etiqueta" })).not.toBeInTheDocument();
-    const pencil = screen.getByRole("button", { name: /edit labels/i });
+    const pencil = screen.getByRole("button", { name: /editar etiquetas/i });
     fireEvent.click(pencil);
     // MailLabelPicker is code-split (next/dynamic), so it arrives a tick after the click.
     expect(await screen.findByRole("button", { name: "+ Adicionar etiqueta" })).toBeInTheDocument();

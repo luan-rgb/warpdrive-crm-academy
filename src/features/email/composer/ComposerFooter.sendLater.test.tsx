@@ -161,7 +161,7 @@ describe("ComposerFooter Send later (Phase 7)", () => {
     fireEvent.click(screen.getByRole("button", { name: /^agendar$/i }));
     expect(onSendLater).not.toHaveBeenCalled();
     // Inline validation message, not an alert banner.
-    expect(await screen.findByText(/in the future/i)).toBeInTheDocument();
+    expect(await screen.findByText(/no futuro/i)).toBeInTheDocument();
   });
 
   it("datetime-local picker has a min attribute set to the current local time", async () => {

@@ -83,7 +83,7 @@ describe("Composer – prefill from reader Reply/Reply all/Forward", () => {
     );
 
     expect(screen.getByText("ann@acme.com")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Subject")).toHaveValue("Re: Proposal");
+    expect(screen.getByPlaceholderText("Assunto")).toHaveValue("Re: Proposal");
     // RichTextBody renders the seeded html into the editable region. It is loaded via
     // next/dynamic, so it lands a tick after the surrounding composer chrome.
     expect(await screen.findByText("quoted reply body")).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe("Composer – prefill from reader Reply/Reply all/Forward", () => {
 
     expect(screen.getByText("draft@x.com")).toBeInTheDocument();
     expect(screen.queryByText("prefill@x.com")).not.toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Subject")).toHaveValue("Draft subject");
+    expect(screen.getByPlaceholderText("Assunto")).toHaveValue("Draft subject");
     // The editor arrives via next/dynamic, one tick after the composer chrome.
     expect(await screen.findByText("draft body")).toBeInTheDocument();
     expect(screen.queryByText("prefill body")).not.toBeInTheDocument();

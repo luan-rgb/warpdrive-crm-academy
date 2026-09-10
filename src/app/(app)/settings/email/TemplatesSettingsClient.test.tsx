@@ -116,8 +116,8 @@ describe("TemplatesSettingsClient", () => {
     const user = userEvent.setup();
     render(<TemplatesSettingsClient templates={[]} canShare={true} />);
     await user.click(screen.getByRole("button", { name: "Novo modelo" }));
-    await user.click(screen.getByRole("button", { name: "Insert field" }));
-    await user.click(screen.getByRole("option", { name: "First name" }));
+    await user.click(screen.getByRole("button", { name: "Inserir campo" }));
+    await user.click(screen.getByRole("option", { name: "Nome" }));
     await waitFor(() =>
       expect(screen.getByTestId("inserted")).toHaveTextContent("{{person.first_name}}"),
     );

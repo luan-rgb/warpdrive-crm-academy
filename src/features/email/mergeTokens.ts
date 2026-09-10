@@ -8,13 +8,13 @@ export interface MergeTokenField {
 }
 
 export const MERGE_TOKEN_FIELDS: readonly MergeTokenField[] = [
-  { label: "First name", token: "person.first_name" },
-  { label: "Last name", token: "person.last_name" },
-  { label: "Full name", token: "person.name" },
-  { label: "Contact email", token: "person.email" },
-  { label: "Deal title", token: "deal.title" },
-  { label: "Deal value", token: "deal.value" },
-  { label: "Organization name", token: "org.name" },
+  { label: "Nome", token: "person.first_name" },
+  { label: "Sobrenome", token: "person.last_name" },
+  { label: "Nome completo", token: "person.name" },
+  { label: "E-mail do contato", token: "person.email" },
+  { label: "Título do negócio", token: "deal.title" },
+  { label: "Valor do negócio", token: "deal.value" },
+  { label: "Nome da organização", token: "org.name" },
 ];
 
 // Wrap a token as the {{token}} placeholder inserted into template text.

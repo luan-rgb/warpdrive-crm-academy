@@ -6,26 +6,27 @@
 export const ATTACH_MAX_FILE_BYTES = 26_214_400;
 
 export const COMPOSER_STRINGS = {
-  addAsActivityLabel: "Add as activity",
-  addAsActivityTooltip: "Activity will be logged against this deal when the email is sent",
+  addAsActivityLabel: "Adicionar como atividade",
+  addAsActivityTooltip: "A atividade será registrada neste negócio quando o e-mail for enviado",
   // Compose visibility (C1): "shared" reads as visible-to-everyone, "private" as private-to-you.
   // visibilityLabel is the shared/default wording; visibilityPickerLabel is the trigger aria-label.
-  visibilityLabel: "Visible to everyone",
-  visibilityPrivateLabel: "Private to you",
-  visibilityPickerLabel: "Email visibility",
-  defaultActivitySubject: "Email sent",
+  visibilityLabel: "Visível para todos",
+  visibilityPrivateLabel: "Privado para você",
+  visibilityPickerLabel: "Visibilidade do e-mail",
+  defaultActivitySubject: "E-mail enviado",
   // System key for the email activity type (matches seed data in activityTypes.ts).
   emailActivityTypeKey: "email",
   // Inline validation shown when the Send-later time is not strictly in the future.
-  scheduledPastMessage: "Choose a time in the future",
+  scheduledPastMessage: "Escolha um horário no futuro",
   // Shown when the send never returned a Result. The deadline is on our view of the action, not
   // on Gmail, so the mail may well have gone out: this must not assert that the send failed.
-  sendUnconfirmed: "We could not confirm the send. Check the thread before trying again.",
+  sendUnconfirmed:
+    "Não foi possível confirmar o envio. Verifique a conversa antes de tentar novamente.",
   // Compose header controls (email-tab): Settings cog link + Close.
-  headerSettingsLabel: "Email settings",
-  headerCloseLabel: "Close",
+  headerSettingsLabel: "Configurações de e-mail",
+  headerCloseLabel: "Fechar",
   // Toolbar signature picker.
-  signaturePickerLabel: "Signature",
-  signatureNoneLabel: "None",
-  signatureTitle: (name: string): string => `Signature: ${name}`,
+  signaturePickerLabel: "Assinatura",
+  signatureNoneLabel: "Nenhuma",
+  signatureTitle: (name: string): string => `Assinatura: ${name}`,
 } as const;

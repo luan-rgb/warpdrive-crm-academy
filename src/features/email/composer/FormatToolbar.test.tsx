@@ -88,8 +88,8 @@ describe("FormatToolbar – editor command wiring", () => {
     await renderToolbar();
     await userEvent.click(screen.getByRole("button", { name: /^link$/i }));
     expect(promptSpy).not.toHaveBeenCalled();
-    expect(screen.getByRole("dialog", { name: "Insert link" })).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: "Link URL" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Inserir link" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "URL do link" })).toBeInTheDocument();
     promptSpy.mockRestore();
   });
 
@@ -168,16 +168,22 @@ describe("FormatToolbar – editor command wiring", () => {
   it("Link dialog calls setLink for a safe URL", async () => {
     const { runSpy } = await renderToolbar();
     await userEvent.click(screen.getByRole("button", { name: /^link$/i }));
-    await userEvent.type(screen.getByRole("textbox", { name: "Link URL" }), "https://example.com");
-    await userEvent.click(screen.getByRole("button", { name: "Insert link" }));
+    await userEvent.type(
+      screen.getByRole("textbox", { name: "URL do link" }),
+      "https://example.com",
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Inserir link" }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Link dialog still reaches the editor when the selection is collapsed", async () => {
     const { runSpy } = await renderToolbar(/* selectionEmpty= */ true);
     await userEvent.click(screen.getByRole("button", { name: /^link$/i }));
-    await userEvent.type(screen.getByRole("textbox", { name: "Link URL" }), "https://example.com");
-    await userEvent.click(screen.getByRole("button", { name: "Insert link" }));
+    await userEvent.type(
+      screen.getByRole("textbox", { name: "URL do link" }),
+      "https://example.com",
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Inserir link" }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -185,10 +191,10 @@ describe("FormatToolbar – editor command wiring", () => {
     const { runSpy } = await renderToolbar();
     await userEvent.click(screen.getByRole("button", { name: /^image$/i }));
     await userEvent.type(
-      screen.getByRole("textbox", { name: "Image URL" }),
+      screen.getByRole("textbox", { name: "URL da imagem" }),
       "https://example.com/img.png",
     );
-    await userEvent.click(screen.getByRole("button", { name: "Insert image" }));
+    await userEvent.click(screen.getByRole("button", { name: "Inserir imagem" }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 });
@@ -205,20 +211,20 @@ describe("FormatToolbar – URL security (Fix 2)", () => {
   ])("Link dialog rejects %s", async (url) => {
     const { runSpy } = await renderToolbar();
     await userEvent.click(screen.getByRole("button", { name: /^link$/i }));
-    await userEvent.type(screen.getByRole("textbox", { name: "Link URL" }), url);
-    await userEvent.click(screen.getByRole("button", { name: "Insert link" }));
+    await userEvent.type(screen.getByRole("textbox", { name: "URL do link" }), url);
+    await userEvent.click(screen.getByRole("button", { name: "Inserir link" }));
     expect(runSpy).not.toHaveBeenCalled();
-    expect(screen.getByRole("alert")).toHaveTextContent("HTTP, HTTPS, or mailto");
+    expect(screen.getByRole("alert")).toHaveTextContent("HTTP, HTTPS ou mailto");
   });
 
   it("Link dialog allows mailto: URL", async () => {
     const { runSpy } = await renderToolbar();
     await userEvent.click(screen.getByRole("button", { name: /^link$/i }));
     await userEvent.type(
-      screen.getByRole("textbox", { name: "Link URL" }),
+      screen.getByRole("textbox", { name: "URL do link" }),
       "mailto:alice@example.com",
     );
-    await userEvent.click(screen.getByRole("button", { name: "Insert link" }));
+    await userEvent.click(screen.getByRole("button", { name: "Inserir link" }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -228,20 +234,20 @@ describe("FormatToolbar – URL security (Fix 2)", () => {
   ])("Image dialog rejects %s", async (url) => {
     const { runSpy } = await renderToolbar();
     await userEvent.click(screen.getByRole("button", { name: /^image$/i }));
-    await userEvent.type(screen.getByRole("textbox", { name: "Image URL" }), url);
-    await userEvent.click(screen.getByRole("button", { name: "Insert image" }));
+    await userEvent.type(screen.getByRole("textbox", { name: "URL da imagem" }), url);
+    await userEvent.click(screen.getByRole("button", { name: "Inserir imagem" }));
     expect(runSpy).not.toHaveBeenCalled();
-    expect(screen.getByRole("alert")).toHaveTextContent("HTTP, HTTPS, or data image");
+    expect(screen.getByRole("alert")).toHaveTextContent("HTTP, HTTPS ou data");
   });
 
   it("Image dialog allows data:image/ URL", async () => {
     const { runSpy } = await renderToolbar();
     await userEvent.click(screen.getByRole("button", { name: /^image$/i }));
     await userEvent.type(
-      screen.getByRole("textbox", { name: "Image URL" }),
+      screen.getByRole("textbox", { name: "URL da imagem" }),
       "data:image/png;base64,abc",
     );
-    await userEvent.click(screen.getByRole("button", { name: "Insert image" }));
+    await userEvent.click(screen.getByRole("button", { name: "Inserir imagem" }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 });

@@ -196,7 +196,7 @@ describe("ThreadList", () => {
     render(<ThreadList folder="inbox" />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
 
-    const bulkBar = screen.getByRole("toolbar", { name: "Bulk actions" });
+    const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     fireEvent.click(within(bulkBar).getByRole("button", { name: "Mark read" }));
 
     await vi.waitFor(() => expect(markReadMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
@@ -209,7 +209,7 @@ describe("ThreadList", () => {
     render(<ThreadList folder="inbox" />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
 
-    const bulkBar = screen.getByRole("toolbar", { name: "Bulk actions" });
+    const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     fireEvent.click(within(bulkBar).getByRole("button", { name: "Mark unread" }));
 
     await vi.waitFor(() => expect(markUnreadMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
@@ -219,7 +219,7 @@ describe("ThreadList", () => {
     render(<ThreadList folder="inbox" />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
 
-    const bulkBar = screen.getByRole("toolbar", { name: "Bulk actions" });
+    const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     fireEvent.click(within(bulkBar).getByRole("button", { name: "Archive" }));
 
     await vi.waitFor(() => expect(archiveMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
@@ -232,14 +232,14 @@ describe("ThreadList", () => {
     render(<ThreadList folder="linked" threads={[inboxRow]} />);
     expect(screen.queryByRole("checkbox", { name: "Select all threads" })).toBeNull();
     expect(screen.queryByRole("checkbox", { name: "Select Renewal" })).toBeNull();
-    expect(screen.queryByRole("toolbar", { name: "Bulk actions" })).toBeNull();
+    expect(screen.queryByRole("toolbar", { name: "Ações em massa" })).toBeNull();
   });
 
   it("hides the bulk archive button but keeps mark read/unread for the sent folder", () => {
     render(<ThreadList folder="sent" threads={[inboxRow]} />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
 
-    const bulkBar = screen.getByRole("toolbar", { name: "Bulk actions" });
+    const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     expect(within(bulkBar).queryByRole("button", { name: /archive/i })).toBeNull();
     expect(within(bulkBar).getByRole("button", { name: "Mark read" })).toBeInTheDocument();
     expect(within(bulkBar).getByRole("button", { name: "Mark unread" })).toBeInTheDocument();
@@ -256,7 +256,7 @@ describe("ThreadList", () => {
     render(<ThreadList folder="inbox" />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
 
-    const bulkBar = screen.getByRole("toolbar", { name: "Bulk actions" });
+    const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     const markReadButton = within(bulkBar).getByRole("button", { name: "Mark read" });
     fireEvent.click(markReadButton);
 
@@ -284,7 +284,7 @@ describe("ThreadList", () => {
     render(<ThreadList folder="inbox" />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select all threads" }));
 
-    const bulkBar = screen.getByRole("toolbar", { name: "Bulk actions" });
+    const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     fireEvent.click(within(bulkBar).getByRole("button", { name: "Mark read" }));
 
     const alert = await screen.findByRole("alert");

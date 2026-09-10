@@ -68,14 +68,14 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
 
   it("toggle is present for inbox context (no deal)", () => {
     render(<Composer accountId="a1" />);
-    expect(screen.getByRole("checkbox", { name: /add as activity/i })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: /adicionar como atividade/i })).toBeInTheDocument();
   });
 
   it("toggle is present for deal context", () => {
     render(
       <Composer accountId="a1" context={{ kind: "deal", dealId: "d1", defaultTo: "x@x.com" }} />,
     );
-    expect(screen.getByRole("checkbox", { name: /add as activity/i })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: /adicionar como atividade/i })).toBeInTheDocument();
   });
 
   it("with toggle ON, successful send calls createActivityAction with the deal id", async () => {
@@ -86,14 +86,14 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(createActivityMock).toHaveBeenCalledTimes(1));
 
     const [inputArg] = createActivityMock.mock.calls[0] as [{ dealId: string; subject: string }];
     expect(inputArg.dealId).toBe("deal-42");
-    expect(inputArg.subject).toMatch(/email sent/i);
+    expect(inputArg.subject).toMatch(/e-mail enviado/i);
   });
 
   it("with toggle ON in inbox context, successful send creates a standalone activity (dealId/personId/orgId null)", async () => {
@@ -106,7 +106,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     fireEvent.change(input, { target: { value: "a@b.com" } });
     fireEvent.keyDown(input, { key: "Enter" });
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(createActivityMock).toHaveBeenCalledTimes(1));
@@ -156,7 +156,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(onSent).toHaveBeenCalledTimes(1));
@@ -168,16 +168,16 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
       <Composer accountId="a1" context={{ kind: "deal", dealId: "d1", defaultTo: "x@x.com" }} />,
     );
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
-    expect(screen.getByRole("checkbox", { name: /add as activity/i })).toBeChecked();
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
+    expect(screen.getByRole("checkbox", { name: /adicionar como atividade/i })).toBeChecked();
 
     fireEvent.click(screen.getByRole("button", { name: /descartar/i }));
-    expect(screen.getByRole("checkbox", { name: /add as activity/i })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /adicionar como atividade/i })).not.toBeChecked();
   });
 
   // Item 5: positive test that a TYPED subject is forwarded to createActivityAction.
   // The existing happy-path test never types a subject, so it only exercises the
-  // default fallback ("Email sent"). This test catches regressions that ignore the
+  // default fallback ("E-mail enviado"). This test catches regressions that ignore the
   // typed subject (e.g., reading subject after resetDraft clears it).
   it("(item 5) typed subject is forwarded to createActivityAction, not the default fallback", async () => {
     const onSent = vi.fn();
@@ -190,16 +190,16 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
     );
 
     // Type a custom subject before sending.
-    const subjectInput = screen.getByPlaceholderText("Subject");
+    const subjectInput = screen.getByPlaceholderText("Assunto");
     fireEvent.change(subjectInput, { target: { value: "Q2 Partnership Proposal" } });
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(createActivityMock).toHaveBeenCalledTimes(1));
 
     const [inputArg] = createActivityMock.mock.calls[0] as [{ subject: string }];
-    // Must be the typed subject, NOT the default fallback "Email sent".
+    // Must be the typed subject, NOT the default fallback "E-mail enviado".
     expect(inputArg.subject).toBe("Q2 Partnership Proposal");
   });
 
@@ -219,7 +219,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     await waitFor(() => expect(onSent).toHaveBeenCalledTimes(1));
@@ -251,7 +251,7 @@ describe("Composer – add-as-activity toggle (Phase 5)", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
 
     // onSent must fire even though createActivity hasn't resolved yet.

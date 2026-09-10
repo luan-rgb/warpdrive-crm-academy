@@ -41,7 +41,7 @@ export function EmailDraftCard({
   }
 
   const recipients = draft.toEmails.join(", ");
-  const subject = draft.subject !== null && draft.subject !== "" ? draft.subject : "(no subject)";
+  const subject = draft.subject !== null && draft.subject !== "" ? draft.subject : "(sem assunto)";
 
   return (
     <article className="rounded-md border border-dashed border-border bg-card">
@@ -80,7 +80,7 @@ export function EmailDraftCard({
       <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
-        title="Discard this draft?"
+        title="Descartar este rascunho?"
         description="The draft and everything written in it are deleted. This cannot be undone."
         confirmLabel="Discard draft"
         destructive

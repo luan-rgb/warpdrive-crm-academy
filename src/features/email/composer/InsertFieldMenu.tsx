@@ -21,7 +21,7 @@ export interface InsertFieldItem {
 interface InsertFieldMenuProps {
   items: InsertFieldItem[];
   onInsert: (value: string) => void;
-  // Trigger label; defaults to "Insert field" (Pipedrive parity copy).
+  // Trigger label; defaults to "Inserir campo" (Pipedrive parity copy).
   label?: string;
   // When provided (deal context with live-resolved values), shows PD's "Update autofilled values".
   onRefresh?: () => void;
@@ -35,7 +35,7 @@ const CATEGORY_TAB =
 export function InsertFieldMenu({
   items,
   onInsert,
-  label = "Insert field",
+  label = "Inserir campo",
   onRefresh,
 }: InsertFieldMenuProps): React.ReactNode {
   const [open, setOpen] = useState(false);
@@ -58,14 +58,14 @@ export function InsertFieldMenu({
       <PopoverContent align="start" className="w-60 p-0">
         <Command>
           <CommandInput
-            placeholder="Search fields..."
+            placeholder="Buscar campos..."
             className="w-full border-b px-2.5 py-2 text-sm outline-none"
           />
           {categories.length > 1 && (
             <Tabs value={tab ?? ALL_TAB} onValueChange={(v) => setTab(v === ALL_TAB ? null : v)}>
               <TabsList className="flex-wrap gap-1 border-b px-1 py-1">
                 <TabsTrigger value={ALL_TAB} className={CATEGORY_TAB}>
-                  All
+                  Todos
                 </TabsTrigger>
                 {categories.map((c) => (
                   <TabsTrigger key={c} value={c} className={CATEGORY_TAB}>
@@ -77,7 +77,7 @@ export function InsertFieldMenu({
           )}
           <CommandList className="max-h-56 overflow-y-auto p-1">
             <CommandEmpty className="px-2 py-3 text-sm text-muted-foreground">
-              No match.
+              Nenhum resultado.
             </CommandEmpty>
             <CommandGroup>
               {shown.map((item) => (
@@ -103,7 +103,7 @@ export function InsertFieldMenu({
               onClick={() => onRefresh()}
               className="flex w-full items-center gap-1.5 rounded px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-accent"
             >
-              <span aria-hidden="true">↻</span> Update autofilled values
+              <span aria-hidden="true">↻</span> Atualizar valores preenchidos
             </button>
           </div>
         )}

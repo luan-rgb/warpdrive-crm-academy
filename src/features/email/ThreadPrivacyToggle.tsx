@@ -47,7 +47,7 @@ export function ThreadPrivacyToggle({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={isPrivate ? "Private conversation" : "Shared conversation"}
+        aria-label={isPrivate ? "Conversa privada" : "Conversa compartilhada"}
         disabled={busy}
         onClick={(e) => e.stopPropagation()}
         onPointerDown={(e) => e.stopPropagation()}
@@ -56,8 +56,8 @@ export function ThreadPrivacyToggle({
         <LockGlyph open={!isPrivate} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-40" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenuItem onSelect={() => void set("private")}>Private</DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => void set("shared")}>Shared</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void set("private")}>Privado</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void set("shared")}>Compartilhado</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

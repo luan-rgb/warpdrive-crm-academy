@@ -10,7 +10,7 @@ interface FromPickerProps {
 export function FromPicker({ address }: FromPickerProps): React.ReactNode {
   return (
     <>
-      <span className="w-12 shrink-0 text-xs font-medium text-muted-foreground">From</span>
+      <span className="w-12 shrink-0 text-xs font-medium text-muted-foreground">De</span>
       <span className="text-xs text-foreground">{address}</span>
     </>
   );

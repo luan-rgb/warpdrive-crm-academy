@@ -23,7 +23,7 @@ interface SaveAsTemplateDialogProps {
   subject: string;
   bodyHtml: string;
   // Controlled mode: when `open`/`onOpenChange` are supplied (e.g. opened from the template
-  // dropdown footer), the default "Save as template" trigger button is omitted.
+  // dropdown footer), the default "Salvar como modelo" trigger button is omitted.
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
@@ -71,23 +71,23 @@ export function SaveAsTemplateDialog({
       {!controlled && (
         <DialogTrigger asChild>
           <Button type="button" variant="outline" size="sm">
-            Save as template
+            Salvar como modelo
           </Button>
         </DialogTrigger>
       )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Save as template</DialogTitle>
+          <DialogTitle>Salvar como modelo</DialogTitle>
         </DialogHeader>
         <Input
-          aria-label="Template name"
-          placeholder="Template name"
+          aria-label="Nome do modelo"
+          placeholder="Nome do modelo"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <DialogFooter>
           <Button type="button" disabled={!canSave} onClick={() => void save()}>
-            Save
+            Salvar
           </Button>
         </DialogFooter>
       </DialogContent>

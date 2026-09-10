@@ -41,8 +41,8 @@ import { SaveAsTemplateDialog } from "./SaveAsTemplateDialog";
 async function openAndName(name: string): Promise<ReturnType<typeof userEvent.setup>> {
   const user = userEvent.setup();
   render(<SaveAsTemplateDialog subject="Hi there" bodyHtml="<p>Body</p>" />);
-  await user.click(screen.getByRole("button", { name: /save as template/i }));
-  await user.type(await screen.findByLabelText(/template name/i), name);
+  await user.click(screen.getByRole("button", { name: /salvar como modelo/i }));
+  await user.type(await screen.findByLabelText(/nome do modelo/i), name);
   return user;
 }
 
@@ -50,17 +50,17 @@ describe("SaveAsTemplateDialog", () => {
   it("disables Save until a non-whitespace name is entered", async () => {
     const user = userEvent.setup();
     render(<SaveAsTemplateDialog subject="Hi" bodyHtml="<p>b</p>" />);
-    await user.click(screen.getByRole("button", { name: /save as template/i }));
-    const saveButton = screen.getByRole("button", { name: /^save$/i });
+    await user.click(screen.getByRole("button", { name: /salvar como modelo/i }));
+    const saveButton = screen.getByRole("button", { name: /^salvar$/i });
     expect(saveButton).toBeDisabled();
-    await user.type(await screen.findByLabelText(/template name/i), "   ");
+    await user.type(await screen.findByLabelText(/nome do modelo/i), "   ");
     expect(saveButton).toBeDisabled();
   });
 
   it("creates a PRIVATE template and closes on success", async () => {
     createTemplateMock.mockResolvedValue({ ok: true, value: { id: "t1" } });
     const user = await openAndName("Kickoff");
-    await user.click(screen.getByRole("button", { name: /^save$/i }));
+    await user.click(screen.getByRole("button", { name: /^salvar$/i }));
 
     await waitFor(() => {
       expect(createTemplateMock).toHaveBeenCalledWith("tok", {
@@ -78,7 +78,7 @@ describe("SaveAsTemplateDialog", () => {
   it("reports the error id and keeps the dialog open on failure", async () => {
     createTemplateMock.mockResolvedValue({ ok: false, error: { id: "E_GMAIL_010" } });
     const user = await openAndName("Kickoff");
-    await user.click(screen.getByRole("button", { name: /^save$/i }));
+    await user.click(screen.getByRole("button", { name: /^salvar$/i }));
 
     await waitFor(() => expect(reportErrorMock).toHaveBeenCalledWith("E_GMAIL_010"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();

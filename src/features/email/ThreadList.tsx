@@ -193,7 +193,7 @@ export function ThreadList({
       {canSelectInFolder(folder) && selection.count > 0 && (
         <div className="border-b px-3 py-2">
           <BulkActionBar count={selection.count} onClear={selection.clear}>
-            <div role="toolbar" aria-label="Bulk actions" className="flex flex-wrap gap-2">
+            <div role="toolbar" aria-label="Ações em massa" className="flex flex-wrap gap-2">
               {canArchiveInFolder(folder) && (
                 <button
                   type="button"

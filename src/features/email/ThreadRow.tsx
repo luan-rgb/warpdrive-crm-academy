@@ -97,7 +97,7 @@ export function ThreadRow({
   onArchiveDone,
   onVisibilityChanged,
 }: ThreadRowProps): React.ReactNode {
-  const subject = thread.subject ?? "(no subject)";
+  const subject = thread.subject ?? "(sem assunto)";
   const weight = thread.unread ? "font-semibold" : "font-normal";
   // Pipedrive-style single-line row: sender column, then subject + inline snippet, then the date
   // on the right (archive appears on hover). No persistent reading pane; the row opens the thread.

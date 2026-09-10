@@ -5,19 +5,19 @@
 
 // Named constants for each field label - no magic strings in call sites.
 export const INSERT_FIELD_LABELS = {
-  DEAL_TITLE: "Deal title",
-  DEAL_VALUE: "Deal value",
-  FIRST_NAME: "First name",
-  LAST_NAME: "Last name",
-  CONTACT_EMAIL: "Contact email",
-  ORG_NAME: "Organization name",
+  DEAL_TITLE: "Título do negócio",
+  DEAL_VALUE: "Valor do negócio",
+  FIRST_NAME: "Nome",
+  LAST_NAME: "Sobrenome",
+  CONTACT_EMAIL: "E-mail do contato",
+  ORG_NAME: "Nome da organização",
 } as const;
 
 export interface InsertFieldEntry {
   label: string;
   value: string;
   // Entity the field belongs to, drives the Insert-field category tabs (PD parity).
-  category?: "Person" | "Deal" | "Organization";
+  category?: "Pessoa" | "Negócio" | "Organização";
 }
 
 // Extended deal context that carries resolved person/org values for the insert menu.
@@ -45,12 +45,12 @@ export function insertFields(context: InsertFieldContext): InsertFieldEntry[] {
   if (context.kind === "inbox") return [];
 
   const candidates: Array<[string, string | undefined, InsertFieldEntry["category"]]> = [
-    [INSERT_FIELD_LABELS.DEAL_TITLE, context.dealTitle, "Deal"],
-    [INSERT_FIELD_LABELS.DEAL_VALUE, context.dealValue, "Deal"],
-    [INSERT_FIELD_LABELS.FIRST_NAME, context.personFirstName, "Person"],
-    [INSERT_FIELD_LABELS.LAST_NAME, context.personLastName, "Person"],
-    [INSERT_FIELD_LABELS.CONTACT_EMAIL, context.personEmail, "Person"],
-    [INSERT_FIELD_LABELS.ORG_NAME, context.orgName, "Organization"],
+    [INSERT_FIELD_LABELS.DEAL_TITLE, context.dealTitle, "Negócio"],
+    [INSERT_FIELD_LABELS.DEAL_VALUE, context.dealValue, "Negócio"],
+    [INSERT_FIELD_LABELS.FIRST_NAME, context.personFirstName, "Pessoa"],
+    [INSERT_FIELD_LABELS.LAST_NAME, context.personLastName, "Pessoa"],
+    [INSERT_FIELD_LABELS.CONTACT_EMAIL, context.personEmail, "Pessoa"],
+    [INSERT_FIELD_LABELS.ORG_NAME, context.orgName, "Organização"],
   ];
 
   return candidates

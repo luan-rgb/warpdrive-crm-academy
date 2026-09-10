@@ -104,7 +104,7 @@ describe("Composer scheduled send: activity creation (fix #3)", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /add as activity/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /adicionar como atividade/i }));
     fireEvent.click(screen.getByRole("button", { name: /enviar mais tarde/i }));
     const picker = await screen.findByTestId("scheduled-at-picker");
     fireEvent.change(picker, { target: { value: toLocalInput(new Date(Date.now() + 3_600_000)) } });

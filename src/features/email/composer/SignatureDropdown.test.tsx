@@ -12,8 +12,8 @@ describe("SignatureDropdown", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<SignatureDropdown signatures={[]} value="" onChange={onChange} />);
-    await user.click(screen.getByRole("button", { name: /signature/i }));
-    await user.click(screen.getByRole("menuitem", { name: "None" }));
+    await user.click(screen.getByRole("button", { name: /assinatura/i }));
+    await user.click(screen.getByRole("menuitem", { name: "Nenhuma" }));
     expect(onChange).toHaveBeenCalledWith("");
   });
 
@@ -23,7 +23,7 @@ describe("SignatureDropdown", () => {
     render(
       <SignatureDropdown signatures={[{ id: "s1", name: "Work" }]} value="" onChange={onChange} />,
     );
-    await user.click(screen.getByRole("button", { name: /signature/i }));
+    await user.click(screen.getByRole("button", { name: /assinatura/i }));
     await user.click(screen.getByRole("menuitem", { name: "Work" }));
     expect(onChange).toHaveBeenCalledWith("s1");
   });
@@ -33,7 +33,7 @@ describe("SignatureDropdown", () => {
     render(
       <SignatureDropdown signatures={[{ id: "s1", name: "Work" }]} value="" onChange={vi.fn()} />,
     );
-    await user.click(screen.getByRole("button", { name: /signature/i }));
+    await user.click(screen.getByRole("button", { name: /assinatura/i }));
     expect(screen.getByRole("menu")).toBeInTheDocument();
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
