@@ -10,30 +10,30 @@ export interface DealActionErrorContent {
 }
 
 const GENERIC: DealActionErrorContent = {
-  title: "Couldn't save your change",
-  body: "Something went wrong. Please refresh and try again.",
+  title: "Não foi possível salvar sua alteração",
+  body: "Algo deu errado. Atualize a página e tente novamente.",
 };
 
 const CONTENT: Record<string, DealActionErrorContent> = {
   [ERROR_IDS.PERM_DENIED]: {
-    title: "You don't have permission",
-    body: "Only the deal owner (or an admin) can make this change. Ask the owner to update it or to hand over the deal.",
+    title: "Você não tem permissão",
+    body: "Somente o dono do negócio (ou um admin) pode fazer essa alteração. Peça ao dono para atualizar ou transferir o negócio.",
   },
   [ERROR_IDS.DEAL_PRECONDITION]: {
-    title: "This deal changed elsewhere",
-    body: "This deal changed while you were editing. We've reloaded it, please try your change again.",
+    title: "Este negócio mudou em outro lugar",
+    body: "Este negócio mudou enquanto você editava. Recarregamos os dados, tente sua alteração novamente.",
   },
   [ERROR_IDS.DEAL_NOT_FOUND]: {
-    title: "Deal not available",
-    body: "This deal is no longer available to you. It may have been deleted or its visibility changed.",
+    title: "Negócio indisponível",
+    body: "Este negócio não está mais disponível para você. Ele pode ter sido excluído ou sua visibilidade alterada.",
   },
   [ERROR_IDS.AUTH_SESSION_DEAD]: {
-    title: "Your session expired",
-    body: "Please sign in again to continue.",
+    title: "Sua sessão expirou",
+    body: "Faça login novamente para continuar.",
   },
   E_AUTH_CSRF: {
-    title: "Your session expired",
-    body: "Please refresh the page and try again.",
+    title: "Sua sessão expirou",
+    body: "Atualize a página e tente novamente.",
   },
 };
 

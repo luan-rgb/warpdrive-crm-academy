@@ -74,7 +74,7 @@ describe("OrgSummaryEditPanel", () => {
 
   it("renders '+ Add' placeholders for a null address", () => {
     render(<OrgSummaryEditPanel org={{ id: "o1", name: "Acme Inc", address: null }} />);
-    expect(screen.getAllByText("+ Add").length).toBeGreaterThanOrEqual(4);
+    expect(screen.getAllByText("+ Adicionar").length).toBeGreaterThanOrEqual(4);
   });
 
   it("calls onSaved instead of router.refresh when provided", async () => {
@@ -95,7 +95,7 @@ describe("OrgSummaryEditPanel", () => {
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
-    expect(await screen.findByText(/couldn.t save/i)).toBeInTheDocument();
+    expect(await screen.findByText(/não foi possível salvar/i)).toBeInTheDocument();
   });
 
   // CONTACTS-20 / INLINE-EDIT-13: a failed save must NOT trigger router.refresh(), which would
@@ -107,7 +107,7 @@ describe("OrgSummaryEditPanel", () => {
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
-    expect(await screen.findByText(/couldn.t save/i)).toBeInTheDocument();
+    expect(await screen.findByText(/não foi possível salvar/i)).toBeInTheDocument();
     expect(refresh).not.toHaveBeenCalled();
   });
 });

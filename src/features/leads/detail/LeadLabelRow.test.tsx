@@ -80,5 +80,5 @@ it("surfaces the shared error dialog when a label edit is denied (no silent reve
   await user.click(await screen.findByRole("menuitemcheckbox", { name: /hot/i }));
 
   const dialog = await screen.findByRole("dialog");
-  expect(dialog).toHaveTextContent(/permission/i);
+  expect(dialog).toHaveTextContent(/permissão/i);
 });

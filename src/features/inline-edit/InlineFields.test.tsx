@@ -84,12 +84,12 @@ describe("InlineTextField (PD mechanism)", () => {
     fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
     fireEvent.change(screen.getByLabelText("Value"), { target: { value: "20" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
-    expect(await screen.findByText(/couldn.t save/i)).toBeInTheDocument();
+    expect(await screen.findByText(/não foi possível salvar/i)).toBeInTheDocument();
   });
 
   it("empty value renders the blue prompt and clicking it opens the editor directly", () => {
-    render(<InlineTextField label="Website" value="" onSave={vi.fn()} placeholder="+ Add" />);
-    const prompt = screen.getByRole("button", { name: "+ Add" });
+    render(<InlineTextField label="Website" value="" onSave={vi.fn()} placeholder="+ Adicionar" />);
+    const prompt = screen.getByRole("button", { name: "+ Adicionar" });
     expect(prompt).toHaveClass("text-link");
     fireEvent.click(prompt);
     expect(screen.getByLabelText("Website")).toBeInTheDocument();

@@ -18,7 +18,7 @@ interface InlineSelectFieldProps {
   renderValue?: (value: string) => React.ReactNode;
 }
 
-const DEFAULT_PLACEHOLDER = "+ Add";
+const DEFAULT_PLACEHOLDER = "+ Adicionar";
 
 // PD-mechanism select field. Verified live (source-channel field): PD selects do NOT autosave
 // on pick; the option lands in the editor's draft and the dirty-gated Save footer commits it,

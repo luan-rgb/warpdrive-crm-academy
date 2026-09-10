@@ -43,8 +43,8 @@ it("opens a permission-denied dialog when a denied action reports it", async () 
   await user.click(screen.getByRole("button", { name: "go" }));
 
   const dialog = await screen.findByRole("dialog");
-  expect(dialog).toHaveTextContent(/permission/i);
-  expect(dialog).toHaveTextContent(/owner/i);
+  expect(dialog).toHaveTextContent(/permissão/i);
+  expect(dialog).toHaveTextContent(/dono/i);
 });
 
 it("dismisses the dialog on close", async () => {
@@ -72,7 +72,7 @@ it("reloads the deal when a stale compare-and-swap is reported, so the retry the
   await user.click(screen.getByRole("button", { name: "go" }));
 
   const dialog = await screen.findByRole("dialog");
-  expect(dialog).toHaveTextContent(/changed elsewhere/i);
+  expect(dialog).toHaveTextContent(/mudou em outro lugar/i);
   await waitFor(() => expect(refresh).toHaveBeenCalled());
 });
 

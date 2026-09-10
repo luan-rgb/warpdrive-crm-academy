@@ -43,7 +43,7 @@ it("opens a permission dialog when a denied action reports it", async () => {
   );
   await user.click(screen.getByRole("button", { name: "go" }));
   const dialog = await screen.findByRole("dialog");
-  expect(dialog).toHaveTextContent(/permission/i);
+  expect(dialog).toHaveTextContent(/permissão/i);
 });
 
 it("falls back to generic copy for an unmapped error id", async () => {
@@ -55,7 +55,7 @@ it("falls back to generic copy for an unmapped error id", async () => {
   );
   await user.click(screen.getByRole("button", { name: "go" }));
   const dialog = await screen.findByRole("dialog");
-  expect(dialog).toHaveTextContent(/went wrong|try again/i);
+  expect(dialog).toHaveTextContent(/deu errado|tente novamente/i);
 });
 
 it("dismisses the dialog on close", async () => {

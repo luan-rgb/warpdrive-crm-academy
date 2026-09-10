@@ -188,7 +188,7 @@ describe("LeadsInbox", () => {
     });
     // A total failure must read as an error, not a silent no-op: the selection stays and the
     // list is not refetched as if the batch had succeeded.
-    expect(await screen.findByRole("alert")).toHaveTextContent(/permission/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/permissão/i);
     expect(screen.getByText("1 selected")).toBeInTheDocument();
     expect(refetch).not.toHaveBeenCalled();
   });

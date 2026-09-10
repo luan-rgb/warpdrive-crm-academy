@@ -4,18 +4,18 @@ import { convertErrorMessage } from "./convertErrorMessage";
 
 describe("convertErrorMessage", () => {
   it("maps permission denied", () => {
-    expect(convertErrorMessage(ERROR_IDS.PERM_DENIED)).toMatch(/permission/i);
+    expect(convertErrorMessage(ERROR_IDS.PERM_DENIED)).toMatch(/permissão/i);
   });
 
   it("maps already-converted", () => {
-    expect(convertErrorMessage(ERROR_IDS.LEAD_ALREADY_CONVERTED)).toMatch(/already/i);
+    expect(convertErrorMessage(ERROR_IDS.LEAD_ALREADY_CONVERTED)).toMatch(/já/i);
   });
 
   it("maps the stale-CAS conflict (surfaced as LEAD_NOT_FOUND)", () => {
-    expect(convertErrorMessage(ERROR_IDS.LEAD_NOT_FOUND)).toMatch(/changed|refresh/i);
+    expect(convertErrorMessage(ERROR_IDS.LEAD_NOT_FOUND)).toMatch(/mudou|atualizando/i);
   });
 
   it("falls back for unknown ids", () => {
-    expect(convertErrorMessage("E_WHATEVER")).toMatch(/could not convert/i);
+    expect(convertErrorMessage("E_WHATEVER")).toMatch(/não foi possível converter/i);
   });
 });

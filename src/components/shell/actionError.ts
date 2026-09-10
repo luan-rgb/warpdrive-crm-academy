@@ -11,38 +11,38 @@ export interface ActionErrorContent {
 }
 
 const GENERIC: ActionErrorContent = {
-  title: "Couldn't complete that action",
-  body: "Something went wrong and your change wasn't saved. Please refresh and try again.",
+  title: "Não foi possível concluir essa ação",
+  body: "Algo deu errado e sua alteração não foi salva. Atualize a página e tente novamente.",
 };
 
 const CONTENT: Record<string, ActionErrorContent> = {
   [ERROR_IDS.PERM_DENIED]: {
-    title: "You don't have permission",
-    body: "You're not allowed to make this change. Ask an admin if you think this is a mistake.",
+    title: "Você não tem permissão",
+    body: "Você não tem permissão para fazer essa alteração. Peça a um admin se achar que isso é um engano.",
   },
   [ERROR_IDS.AUTH_SESSION_DEAD]: {
-    title: "Your session expired",
-    body: "Please sign in again to continue.",
+    title: "Sua sessão expirou",
+    body: "Faça login novamente para continuar.",
   },
   E_AUTH_CSRF: {
-    title: "Your session expired",
-    body: "Please refresh the page and try again.",
+    title: "Sua sessão expirou",
+    body: "Atualize a página e tente novamente.",
   },
   // Both convert outcomes are states the user can act on, so they never get the generic
   // "refresh and try again" copy: refreshing fixes neither.
   [ERROR_IDS.LEAD_CONVERT_NO_PIPELINE]: {
-    title: "No pipeline to convert into",
-    body: "Create a pipeline in Settings, then convert this lead again.",
+    title: "Nenhum funil para converter",
+    body: "Crie um funil em Configurações e depois converta este lead novamente.",
   },
   [ERROR_IDS.LEAD_ALREADY_CONVERTED]: {
-    title: "This lead is already converted",
-    body: "It already has a deal. Refresh the page to see the current state.",
+    title: "Este lead já foi convertido",
+    body: "Ele já tem um negócio. Atualize a página para ver o estado atual.",
   },
   // The server rejected the filter's shape, so refreshing changes nothing: the user has to fix a
   // condition before the save can succeed.
   [ERROR_IDS.DEAL_FILTER_INVALID]: {
-    title: "One of these conditions isn't valid",
-    body: "Check each condition's value: a number field needs a number, and a date field needs a date.",
+    title: "Uma dessas condições não é válida",
+    body: "Verifique o valor de cada condição: um campo numérico precisa de um número, e um campo de data precisa de uma data.",
   },
 };
 

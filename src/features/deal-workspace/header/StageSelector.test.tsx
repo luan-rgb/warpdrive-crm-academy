@@ -104,7 +104,7 @@ it("surfaces the shared error dialog when the stage change is denied (no silent 
   );
   fireEvent.click(screen.getByRole("option", { name: /Won/ }));
   const dialog = await screen.findByRole("dialog");
-  expect(dialog).toHaveTextContent(/permission/i);
+  expect(dialog).toHaveTextContent(/permissão/i);
 });
 
 it("makes the current stage pop out of the row: slightly larger and raised above neighbours", () => {

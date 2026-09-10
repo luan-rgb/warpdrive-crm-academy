@@ -126,7 +126,7 @@ it("renders an empty custom field with the same dash and hover-pencil mechanism 
     within(row as HTMLElement).getByRole("button", { name: "Edit linkedin" }),
   ).toBeInTheDocument();
   expect(
-    within(row as HTMLElement).queryByRole("button", { name: "+ Add" }),
+    within(row as HTMLElement).queryByRole("button", { name: "+ Adicionar" }),
   ).not.toBeInTheDocument();
 });
 

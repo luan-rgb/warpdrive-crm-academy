@@ -18,7 +18,7 @@ interface PanelLead {
   ownerId: string;
   // The DB-joined owner name (getLeadById), present regardless of the owner's is_active status.
   // Used as a fallback so a deactivated owner (absent from `owners`, the assignable-users list)
-  // still renders their real name instead of the "+ Add" placeholder.
+  // still renders their real name instead of the "+ Adicionar" placeholder.
   ownerName: string | null;
   expectedCloseDate: string | null;
 }
@@ -89,26 +89,26 @@ export function LeadSummaryEditPanel({
 
   return (
     <>
-      <FieldRow label="Value" empty={value === null}>
+      <FieldRow label="Valor" empty={value === null}>
         <InlineTextField
-          label="Value"
+          label="Valor"
           value={value !== null ? String(value) : ""}
           onSave={(v) => save({ value: v.trim() === "" ? null : Number(v) })}
-          placeholder="+ Add value"
+          placeholder="+ Adicionar valor"
         />
       </FieldRow>
-      <FieldRow label="Owner">
+      <FieldRow label="Dono">
         <InlineSelectField
-          label="Owner"
+          label="Dono"
           value={lead.ownerId}
           options={ownerOptions}
           onSave={(v) => save({ ownerId: v })}
           renderValue={ownerBadgeFor}
         />
       </FieldRow>
-      <FieldRow label="Expected close" empty={lead.expectedCloseDate === null}>
+      <FieldRow label="Data prevista de fechamento" empty={lead.expectedCloseDate === null}>
         <InlineDateField
-          label="Expected close"
+          label="Data prevista de fechamento"
           value={lead.expectedCloseDate}
           onSave={(v) => save({ expectedCloseDate: v })}
         />

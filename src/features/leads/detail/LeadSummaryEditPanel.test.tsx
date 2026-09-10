@@ -48,8 +48,8 @@ const owners = [
 describe("LeadSummaryEditPanel", () => {
   it("saves an edited Value with the CAS expectedUpdatedAt and the CSRF token", async () => {
     render(<LeadSummaryEditPanel lead={lead} owners={owners} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
-    const input = screen.getByLabelText("Value");
+    fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+    const input = screen.getByLabelText("Valor");
     fireEvent.change(input, { target: { value: "250" } });
     fireEvent.keyDown(input, { key: "Enter" });
 
@@ -73,7 +73,7 @@ describe("LeadSummaryEditPanel", () => {
     expect(screen.getByRole("img", { name: "Sam Jones" })).toBeInTheDocument();
   });
 
-  it("shows the real owner name (not the '+ Add' placeholder) when the current owner is missing from the assignable-users list (deactivated owner)", () => {
+  it("shows the real owner name (not the '+ Adicionar' placeholder) when the current owner is missing from the assignable-users list (deactivated owner)", () => {
     const deactivatedOwnerLead = { ...lead, ownerId: "u9", ownerName: "Dana Deactivated" };
     // owners (trpc.identity.assignableUsers) filters is_active = true, so a deactivated owner
     // never appears here even though the lead still has a real, non-null owner.
@@ -81,13 +81,13 @@ describe("LeadSummaryEditPanel", () => {
 
     expect(screen.getByText("Dana Deactivated")).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Dana Deactivated" })).toBeInTheDocument();
-    expect(screen.queryByText("+ Add")).not.toBeInTheDocument();
+    expect(screen.queryByText("+ Adicionar")).not.toBeInTheDocument();
   });
 
   it("saves Owner via the select's dirty-gated Save with the CAS expectedUpdatedAt", async () => {
     render(<LeadSummaryEditPanel lead={lead} owners={owners} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Owner" }));
-    fireEvent.click(screen.getByLabelText("Owner"));
+    fireEvent.click(screen.getByRole("button", { name: "Edit Dono" }));
+    fireEvent.click(screen.getByLabelText("Dono"));
     fireEvent.click(screen.getByText("Ada Lovelace"));
     expect(updateLeadAction).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -105,7 +105,7 @@ describe("LeadSummaryEditPanel", () => {
     render(
       <LeadSummaryEditPanel lead={{ ...lead, expectedCloseDate: "2026-07-04" }} owners={owners} />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Edit Expected close" }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit Data prevista de fechamento" }));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
     expect(updateLeadAction).not.toHaveBeenCalled();
@@ -123,9 +123,9 @@ describe("LeadSummaryEditPanel", () => {
   it("calls the onSaved callback instead of router.refresh when provided", async () => {
     const onSaved = vi.fn();
     render(<LeadSummaryEditPanel lead={lead} owners={owners} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
-    fireEvent.change(screen.getByLabelText("Value"), { target: { value: "300" } });
-    fireEvent.keyDown(screen.getByLabelText("Value"), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+    fireEvent.change(screen.getByLabelText("Valor"), { target: { value: "300" } });
+    fireEvent.keyDown(screen.getByLabelText("Valor"), { key: "Enter" });
 
     await vi.waitFor(() => expect(onSaved).toHaveBeenCalled());
     expect(refresh).not.toHaveBeenCalled();
@@ -134,11 +134,11 @@ describe("LeadSummaryEditPanel", () => {
   it("resyncs via router.refresh even when the save fails (stale CAS)", async () => {
     updateLeadAction.mockResolvedValueOnce({ ok: false, error: { id: "E_LEAD_007" } });
     render(<LeadSummaryEditPanel lead={lead} owners={owners} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
-    fireEvent.change(screen.getByLabelText("Value"), { target: { value: "300" } });
-    fireEvent.keyDown(screen.getByLabelText("Value"), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+    fireEvent.change(screen.getByLabelText("Valor"), { target: { value: "300" } });
+    fireEvent.keyDown(screen.getByLabelText("Valor"), { key: "Enter" });
 
     await vi.waitFor(() => expect(refresh).toHaveBeenCalled());
-    expect(await screen.findByText(/couldn.t save/i)).toBeInTheDocument();
+    expect(await screen.findByText(/não foi possível salvar/i)).toBeInTheDocument();
   });
 });

@@ -77,7 +77,7 @@ describe("InviteUserForm error mapping (IDENTITY-02)", () => {
 
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent(/já está cadastrado/i);
-    expect(alert).not.toHaveTextContent(/something went wrong/i);
+    expect(alert).not.toHaveTextContent(/algo deu errado/i);
   });
 
   it("renders the permission message for PERM_DENIED", async () => {

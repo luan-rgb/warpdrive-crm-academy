@@ -103,7 +103,7 @@ describe("OrgFirmographicsPanel", () => {
         onSaved={vi.fn()}
       />,
     );
-    expect(screen.getAllByText("+ Add").length).toBeGreaterThanOrEqual(3);
+    expect(screen.getAllByText("+ Adicionar").length).toBeGreaterThanOrEqual(3);
   });
 
   it("renders the '+ Add' placeholder, not the literal 'undefined', when employeeCount is missing entirely", () => {
@@ -126,6 +126,6 @@ describe("OrgFirmographicsPanel", () => {
     fireEvent.change(screen.getByLabelText("Setor"), { target: { value: "Fintech" } });
     fireEvent.keyDown(screen.getByLabelText("Setor"), { key: "Enter" });
 
-    expect(await screen.findByText(/couldn.t save/i)).toBeInTheDocument();
+    expect(await screen.findByText(/não foi possível salvar/i)).toBeInTheDocument();
   });
 });

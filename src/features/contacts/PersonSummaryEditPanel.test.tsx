@@ -175,7 +175,7 @@ describe("PersonSummaryEditPanel", () => {
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
     // E_PERM_001 (contact.edit denied) reads as a permission message, not a bare "Couldn't save".
-    expect(await screen.findByText(/permission/i)).toBeInTheDocument();
+    expect(await screen.findByText(/permissão/i)).toBeInTheDocument();
   });
 
   // CONTACTS-20 / INLINE-EDIT-13 (mirrors OrgSummaryEditPanel): a failed save must NOT trigger
@@ -188,7 +188,7 @@ describe("PersonSummaryEditPanel", () => {
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Smith" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
-    expect(await screen.findByText(/permission/i)).toBeInTheDocument();
+    expect(await screen.findByText(/permissão/i)).toBeInTheDocument();
     expect(refresh).not.toHaveBeenCalled();
   });
 
@@ -200,7 +200,7 @@ describe("PersonSummaryEditPanel", () => {
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Smith" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
-    expect(await screen.findByText(/permission/i)).toBeInTheDocument();
+    expect(await screen.findByText(/permissão/i)).toBeInTheDocument();
     expect(onSaved).not.toHaveBeenCalled();
   });
 });

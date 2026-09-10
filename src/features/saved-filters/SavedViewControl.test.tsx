@@ -140,7 +140,7 @@ describe("SavedViewControl", () => {
     await user.type(screen.getByLabelText("Nome da visualização"), "Shared people");
     await user.click(screen.getByRole("button", { name: "Salvar" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/permission/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/permissão/i);
     expect(onSelectView).not.toHaveBeenCalled();
   });
 

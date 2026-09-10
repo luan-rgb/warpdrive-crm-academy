@@ -74,7 +74,7 @@ it("a filled-in field stays visible even while the funnel is hiding empties", ()
   expect(screen.queryByText("Sobrenome")).not.toBeInTheDocument();
 });
 
-// Regression: a committed write was reported as "Couldn't save" because save() coupled the
+// Regression: a committed write was reported as "Não foi possível salvar" because save() coupled the
 // (successful) action result to router.refresh(); when refresh throws, the whole save promise
 // rejected and the footer showed a failure banner on a record that actually persisted.
 it("does NOT report a failure when the write succeeded but router.refresh throws", async () => {
@@ -146,8 +146,8 @@ it("surfaces a permission-specific message when the edit is denied (E_PERM_001)"
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   const alert = await screen.findByRole("alert");
-  expect(alert).toHaveTextContent(/permission/i);
-  expect(alert).not.toHaveTextContent("Couldn't save");
+  expect(alert).toHaveTextContent(/permissão/i);
+  expect(alert).not.toHaveTextContent("Não foi possível salvar");
   // The editor stays open on failure so the draft is not lost.
   expect(screen.getByLabelText("editor-firstName")).toBeInTheDocument();
 });

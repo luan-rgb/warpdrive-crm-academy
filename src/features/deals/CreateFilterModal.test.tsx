@@ -98,7 +98,7 @@ describe("CreateFilterModal", () => {
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
-      expect(screen.getByText("One of these conditions isn't valid")).toBeInTheDocument(),
+      expect(screen.getByText("Uma dessas condições não é válida")).toBeInTheDocument(),
     );
     expect(screen.queryByText(/E_DEAL_008/)).toBeNull();
     expect(onSave).not.toHaveBeenCalled();

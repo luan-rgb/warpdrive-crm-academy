@@ -5,18 +5,18 @@ import { dealActionErrorContent } from "./dealActionError";
 describe("dealActionErrorContent", () => {
   it("explains a permission denial as an ownership problem", () => {
     const { title, body } = dealActionErrorContent(ERROR_IDS.PERM_DENIED);
-    expect(title).toMatch(/permission/i);
-    expect(body).toMatch(/owner/i);
+    expect(title).toMatch(/permissão/i);
+    expect(body).toMatch(/dono/i);
   });
 
   it("explains a stale compare-and-swap as a concurrent change", () => {
     const { body } = dealActionErrorContent(ERROR_IDS.DEAL_PRECONDITION);
-    expect(body).toMatch(/changed/i);
+    expect(body).toMatch(/mudou/i);
   });
 
   it("explains a dead session as needing re-auth", () => {
     const { body } = dealActionErrorContent(ERROR_IDS.AUTH_SESSION_DEAD);
-    expect(body).toMatch(/sign in|session/i);
+    expect(body).toMatch(/login|sessão/i);
   });
 
   it("falls back to a generic message for an unknown id", () => {
