@@ -182,16 +182,16 @@ describe("ActivityCard", () => {
   it("opens the overflow menu and marks done from it", async () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} />);
-    await user.click(screen.getByRole("button", { name: /more actions/i }));
-    await user.click(screen.getByRole("menuitem", { name: /mark as done/i }));
+    await user.click(screen.getByRole("button", { name: /mais ações/i }));
+    await user.click(screen.getByRole("menuitem", { name: /marcar como concluída/i }));
     await waitFor(() => expect(completeActivityAction).toHaveBeenCalledTimes(1));
   });
 
   it("reopens via the overflow menu's Reopen item (sends done:false)", async () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity({ done: true })} at={AT} />);
-    await user.click(screen.getByRole("button", { name: /more actions/i }));
-    await user.click(screen.getByRole("menuitem", { name: /reopen/i }));
+    await user.click(screen.getByRole("button", { name: /mais ações/i }));
+    await user.click(screen.getByRole("menuitem", { name: /reabrir/i }));
     await waitFor(() => expect(completeActivityAction).toHaveBeenCalledTimes(1));
     expect(completeActivityAction.mock.calls[0]?.[0]).toMatchObject({ id: "a1", done: false });
   });

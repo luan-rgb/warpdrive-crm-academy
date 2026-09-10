@@ -135,9 +135,9 @@ export function InvoicesPanel({
         onOpenChange={(open) => {
           if (!open) setPendingDelete(null);
         }}
-        title="Delete invoice"
-        description="This permanently deletes the invoice and its line items. This cannot be undone."
-        confirmLabel="Delete"
+        title="Excluir fatura"
+        description="Isso exclui permanentemente a fatura e seus itens. Essa ação não pode ser desfeita."
+        confirmLabel="Excluir"
         destructive
         onConfirm={() => void confirmDelete()}
       />

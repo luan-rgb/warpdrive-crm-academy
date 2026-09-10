@@ -90,7 +90,7 @@ describe("LeadSummaryEditPanel", () => {
     fireEvent.click(screen.getByLabelText("Owner"));
     fireEvent.click(screen.getByText("Ada Lovelace"));
     expect(updateLeadAction).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(updateLeadAction).toHaveBeenCalled());
     const [payload] = updateLeadAction.mock.calls[0] as unknown as [
@@ -109,7 +109,7 @@ describe("LeadSummaryEditPanel", () => {
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
     expect(updateLeadAction).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(updateLeadAction).toHaveBeenCalled());
     const [payload] = updateLeadAction.mock.calls[0] as unknown as [

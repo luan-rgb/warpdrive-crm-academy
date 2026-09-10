@@ -65,7 +65,7 @@ it("submits an end date for a multi-day activity", async () => {
   // visible day-of-month text (mirrors the DatePicker component test). findByText: the calendar
   // is a next/dynamic chunk that loads on open.
   fireEvent.click(await screen.findByText("15"));
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const payload = lastPayload();
@@ -91,7 +91,7 @@ it("clears a removed link in the submitted payload", async () => {
   expect(screen.getByLabelText("Remove organization link")).toBeInTheDocument();
 
   fireEvent.click(screen.getByLabelText("Remove organization link"));
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const payload = lastPayload();
@@ -116,7 +116,7 @@ it("re-adds a removed link via the Add link combobox", async () => {
   // The removed org is now offered by the Add link affordance.
   fireEvent.click(screen.getByLabelText("Add link"));
   fireEvent.click(screen.getByRole("option", { name: "Acme Org" }));
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   expect(lastPayload().orgId).toBe("o1");
@@ -128,7 +128,7 @@ it("includes a generated video call link in the submitted payload", async () => 
   // Video call is a PD-style disclosure link ("Video call"); open it, then generate the link.
   fireEvent.click(screen.getByRole("button", { name: "Video call" }));
   fireEvent.click(screen.getByRole("button", { name: /video call link/i }));
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const url = lastPayload().videoCallUrl;

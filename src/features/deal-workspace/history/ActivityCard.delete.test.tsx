@@ -68,8 +68,8 @@ function makeActivity(over: Partial<CalendarActivity> = {}): CalendarActivity {
 
 // Opens the "..." overflow and picks Delete, returning the confirmation it raises.
 async function openDeleteConfirm(user: ReturnType<typeof userEvent.setup>): Promise<HTMLElement> {
-  await user.click(screen.getByRole("button", { name: /more actions/i }));
-  await user.click(screen.getByRole("menuitem", { name: "Delete" }));
+  await user.click(screen.getByRole("button", { name: /mais ações/i }));
+  await user.click(screen.getByRole("menuitem", { name: "Excluir" }));
   return await screen.findByRole("alertdialog");
 }
 
@@ -77,8 +77,8 @@ describe("ActivityCard delete", () => {
   it("offers Delete in the More actions menu, styled as destructive", async () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} />);
-    await user.click(screen.getByRole("button", { name: /more actions/i }));
-    const item = screen.getByRole("menuitem", { name: "Delete" });
+    await user.click(screen.getByRole("button", { name: /mais ações/i }));
+    const item = screen.getByRole("menuitem", { name: "Excluir" });
     expect(item).toBeInTheDocument();
     expect(item.className).toMatch(/text-destructive/);
   });
@@ -88,7 +88,7 @@ describe("ActivityCard delete", () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} />);
     const dialog = await openDeleteConfirm(user);
-    expect(within(dialog).getByText(/delete activity/i)).toBeInTheDocument();
+    expect(within(dialog).getByText(/excluir atividade/i)).toBeInTheDocument();
     expect(nativeConfirm).not.toHaveBeenCalled();
     expect(deleteActivityAction).not.toHaveBeenCalled();
   });
@@ -98,7 +98,7 @@ describe("ActivityCard delete", () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={onChanged} />);
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(deleteActivityAction).toHaveBeenCalledWith({ id: "a1" }, "csrf"));
     await waitFor(() => expect(onChanged).toHaveBeenCalled());
   });
@@ -113,7 +113,7 @@ describe("ActivityCard delete", () => {
       />,
     );
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(setData).toHaveBeenCalledTimes(3));
     const dealCall = setData.mock.calls.find(
       (c) => (c[0] as { entityType?: string }).entityType === "deal",
@@ -127,7 +127,7 @@ describe("ActivityCard delete", () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={vi.fn()} />);
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalledTimes(1));
   });
 
@@ -139,7 +139,7 @@ describe("ActivityCard delete", () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={vi.fn()} />);
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
     expect(invalidateDayLoad).not.toHaveBeenCalled();
   });
@@ -149,7 +149,7 @@ describe("ActivityCard delete", () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={onChanged} />);
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
     await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
     expect(deleteActivityAction).not.toHaveBeenCalled();
     expect(onChanged).not.toHaveBeenCalled();
@@ -165,7 +165,7 @@ describe("ActivityCard delete", () => {
     const user = userEvent.setup();
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={onChanged} />);
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
     expect(onChanged).not.toHaveBeenCalled();
     expect(setData).not.toHaveBeenCalled();

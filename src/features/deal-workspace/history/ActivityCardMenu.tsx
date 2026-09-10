@@ -30,22 +30,24 @@ export function ActivityCardMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="More actions"
+        aria-label="Mais ações"
         // Pseudo-element extends the 24px control to a ~40px hit target without changing layout.
         className="relative rounded p-1 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:bg-accent hover:text-foreground"
       >
         <Ellipsis aria-hidden="true" className="h-4 w-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" aria-label="More actions" className="min-w-40">
+      <DropdownMenuContent align="end" aria-label="Mais ações" className="min-w-40">
         {onEdit !== undefined && (
-          <DropdownMenuItem onSelect={() => onEdit()}>Edit</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => onEdit()}>Editar</DropdownMenuItem>
         )}
-        <DropdownMenuItem onSelect={onToggle}>{done ? "Reopen" : "Mark as done"}</DropdownMenuItem>
+        <DropdownMenuItem onSelect={onToggle}>
+          {done ? "Reabrir" : "Marcar como concluída"}
+        </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => setConfirmingDelete(true)}
           className="text-destructive focus:text-destructive"
         >
-          Delete
+          Excluir
         </DropdownMenuItem>
       </DropdownMenuContent>
 
@@ -54,9 +56,9 @@ export function ActivityCardMenu({
       <ConfirmDialog
         open={confirmingDelete}
         onOpenChange={setConfirmingDelete}
-        title="Delete activity?"
-        description="This cannot be undone."
-        confirmLabel="Delete"
+        title="Excluir atividade?"
+        description="Essa ação não pode ser desfeita."
+        confirmLabel="Excluir"
         destructive
         pending={busy}
         onConfirm={onDelete}

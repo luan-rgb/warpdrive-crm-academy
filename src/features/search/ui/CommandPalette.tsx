@@ -219,7 +219,7 @@ export function CommandPalette() {
             // Suppress the native type=search clear "x": the Dialog already renders a close X, so
             // the browser's clear button made two X's cluster at the top-right (keep one).
             className="w-full bg-transparent text-sm outline-none [&::-webkit-search-cancel-button]:appearance-none"
-            aria-label="Search"
+            aria-label="Buscar"
           />
         </div>
         <div className="max-h-96 overflow-y-auto">

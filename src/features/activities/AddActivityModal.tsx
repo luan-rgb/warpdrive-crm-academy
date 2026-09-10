@@ -231,7 +231,7 @@ export function AddActivityModal({
             disabled={pending || (dueRequired && due === "")}
             className="rounded-md bg-action px-4 py-1.5 text-sm font-medium text-action-foreground transition-transform hover:opacity-90 active:not-disabled:scale-[0.96] disabled:opacity-50"
           >
-            {pending ? "Saving..." : "Save"}
+            {pending ? "Salvando..." : "Salvar"}
           </button>
         </div>
       </DialogContent>

@@ -61,15 +61,15 @@ export function AutomationsClient({
         onEdit={(id) => router.push(`/settings/automations/${id}`)}
         onDelete={(id) => setPendingDelete(id)}
       />
-      <Button onClick={() => router.push("/settings/automations/new")}>+ Automation</Button>
+      <Button onClick={() => router.push("/settings/automations/new")}>+ Automação</Button>
       <ConfirmDialog
         open={pendingDelete !== null}
         onOpenChange={(open) => {
           if (!open) setPendingDelete(null);
         }}
-        title="Delete automation"
-        description="This permanently deletes the automation rule. This cannot be undone."
-        confirmLabel="Delete"
+        title="Excluir automação"
+        description="Isso exclui permanentemente a regra de automação. Essa ação não pode ser desfeita."
+        confirmLabel="Excluir"
         destructive
         onConfirm={() => void confirmDelete()}
       />

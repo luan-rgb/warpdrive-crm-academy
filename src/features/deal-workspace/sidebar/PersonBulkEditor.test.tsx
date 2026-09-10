@@ -36,7 +36,7 @@ it("opens every stored email at once, not just the primary", () => {
 it("saves the whole email array when a non-primary address changes", async () => {
   const save = renderEditor();
   fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "pat@home.ca" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(save).toHaveBeenCalled());
   expect((save.mock.calls as unknown as unknown[][])[0]?.[0]).toEqual({
@@ -50,7 +50,7 @@ it("saves the whole email array when a non-primary address changes", async () =>
 it("sends nothing for contact points the user did not touch", async () => {
   const save = renderEditor();
   fireEvent.change(screen.getByLabelText("First name"), { target: { value: "Patrick" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(save).toHaveBeenCalled());
   expect((save.mock.calls as unknown as unknown[][])[0]?.[0]).toEqual({ firstName: "Patrick" });
@@ -66,7 +66,7 @@ it("locks the contact rows while the bulk save is in flight", async () => {
   );
   renderEditor(save);
   fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "pat@home.ca" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(screen.getByLabelText("Email 2")).toBeDisabled());
   release();

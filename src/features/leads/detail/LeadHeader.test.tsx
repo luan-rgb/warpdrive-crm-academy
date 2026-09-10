@@ -97,7 +97,7 @@ describe("LeadHeader PD lead-drawer parity", () => {
     const input = screen.getByRole("textbox", { name: "Edit lead title" });
     await user.clear(input);
     await user.type(input, "Acme enterprise lead");
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() =>
       expect(updateLeadAction).toHaveBeenCalledWith(
@@ -121,7 +121,7 @@ describe("LeadHeader PD lead-drawer parity", () => {
     const input = screen.getByRole("textbox", { name: "Edit lead title" });
     await user.clear(input);
     await user.type(input, "Do not save");
-    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    await user.click(screen.getByRole("button", { name: "Cancelar" }));
 
     expect(updateLeadAction).not.toHaveBeenCalled();
     expect(screen.getByRole("heading", { name: "Acme lead" })).toBeInTheDocument();
@@ -139,7 +139,7 @@ describe("LeadHeader error surfacing", () => {
     const input = screen.getByRole("textbox", { name: "Edit lead title" });
     await user.clear(input);
     await user.type(input, "Conflicting update");
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_LEAD_007"));
     expect(refresh).not.toHaveBeenCalled();

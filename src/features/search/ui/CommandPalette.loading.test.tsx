@@ -28,7 +28,7 @@ beforeEach(() => {
 function typeQuery(text: string): void {
   render(<CommandPalette />);
   fireEvent(window, new Event(OPEN_SEARCH_EVENT));
-  fireEvent.change(screen.getByRole("searchbox", { name: "Search" }), { target: { value: text } });
+  fireEvent.change(screen.getByRole("searchbox", { name: "Buscar" }), { target: { value: text } });
   act(() => {
     vi.advanceTimersByTime(200);
   });

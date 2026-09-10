@@ -23,10 +23,10 @@ describe("DealFilterBuilder", () => {
   it("applies a typed condition as a deal filter definition", () => {
     const onApply = vi.fn();
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={onApply} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     // Default first field is Title, whose first operator is "contains" (TEXT_OPS order).
     expect(onApply).toHaveBeenCalledWith({
@@ -38,7 +38,7 @@ describe("DealFilterBuilder", () => {
   // Deals used to hide the selector and hardcode AND, so "any of these" was unreachable.
   it("offers the all/any combinator once there is more than one condition", () => {
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     expect(screen.queryByLabelText("Match combinator")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
@@ -48,14 +48,14 @@ describe("DealFilterBuilder", () => {
   it("applies the chosen combinator with the conditions", () => {
     const onApply = vi.fn();
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={onApply} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
     fireEvent.change(screen.getByLabelText("Condition 2 value"), { target: { value: "corp" } });
     fireEvent.click(screen.getByLabelText("Match combinator"));
     fireEvent.click(screen.getByRole("option", { name: "any condition" }));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     expect(onApply).toHaveBeenCalledWith({
       combinator: "or",
@@ -68,7 +68,7 @@ describe("DealFilterBuilder", () => {
 
   it("offers the whole deal catalog, Organization and Label included", () => {
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.click(screen.getByLabelText("Condition 1 field"));
     for (const label of [
@@ -86,7 +86,7 @@ describe("DealFilterBuilder", () => {
 
   it("offers the merged label catalog as the value options for a Label condition", () => {
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.click(screen.getByLabelText("Condition 1 field"));
     fireEvent.click(screen.getByRole("option", { name: "Label" }));
@@ -98,14 +98,14 @@ describe("DealFilterBuilder", () => {
   it("compiles two picked labels into one is-any-of condition", () => {
     const onApply = vi.fn();
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={onApply} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.click(screen.getByLabelText("Condition 1 field"));
     fireEvent.click(screen.getByRole("option", { name: "Label" }));
     fireEvent.click(screen.getByLabelText("Condition 1 value"));
     fireEvent.click(screen.getByRole("option", { name: /^Hot$/ }));
     fireEvent.click(screen.getByRole("option", { name: /^Cold$/ }));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     expect(onApply).toHaveBeenCalledWith({
       combinator: "and",
@@ -116,19 +116,19 @@ describe("DealFilterBuilder", () => {
   it("does not compile a label condition with nothing picked", () => {
     const onApply = vi.fn();
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={onApply} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.click(screen.getByLabelText("Condition 1 field"));
     fireEvent.click(screen.getByRole("option", { name: "Label" }));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     expect(onApply).toHaveBeenCalledWith(null);
   });
 
   it("clears the applied definition", () => {
     const onApply = vi.fn();
     render(<DealFilterBuilder stages={STAGES} activeCount={1} onApply={onApply} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
-    fireEvent.click(screen.getByRole("button", { name: "Clear" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
+    fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
     expect(onApply).toHaveBeenCalledWith(null);
   });
 
@@ -149,7 +149,7 @@ describe("DealFilterBuilder", () => {
         }}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
     expect(screen.getByLabelText<HTMLInputElement>("Condition 1 value").value).toBe("acme");
     expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
@@ -157,7 +157,7 @@ describe("DealFilterBuilder", () => {
 
   it("opens blank when nothing is applied", () => {
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.queryAllByLabelText(/Condition \d+ field/)).toHaveLength(0);
   });
 });

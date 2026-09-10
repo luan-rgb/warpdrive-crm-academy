@@ -71,11 +71,11 @@ it("toggle + prev/next/today render as links carrying the right params", () => {
     "href",
     "/activities/calendar?view=week&d=2026-06-15",
   );
-  expect(screen.getByRole("link", { name: /previous/i })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: /anterior/i })).toHaveAttribute(
     "href",
     "/activities/calendar?view=month&d=2026-05-15",
   );
-  expect(screen.getByRole("link", { name: /next/i })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: /próximo/i })).toHaveAttribute(
     "href",
     "/activities/calendar?view=month&d=2026-07-15",
   );

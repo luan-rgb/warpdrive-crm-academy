@@ -157,7 +157,7 @@ describe("BoardFilterControl menu split", () => {
 
     await openBuilder(user);
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
-    await user.click(screen.getByRole("button", { name: "Apply" }));
+    await user.click(screen.getByRole("button", { name: "Aplicar" }));
 
     expect(onApplyDefinition).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -176,7 +176,7 @@ describe("BoardFilterControl menu split", () => {
     renderControl("f1", { onSelectFilter, onApplyDefinition });
 
     await openBuilder(user, /Editar filtro/);
-    await user.click(screen.getByRole("button", { name: "Apply" }));
+    await user.click(screen.getByRole("button", { name: "Aplicar" }));
 
     expect(onApplyDefinition).toHaveBeenCalled();
     expect(onSelectFilter).toHaveBeenCalledWith(null);
@@ -187,9 +187,9 @@ describe("BoardFilterControl menu split", () => {
 async function confirmDelete(user: ReturnType<typeof userEvent.setup>): Promise<void> {
   // The trigger names the applied filter ("Filter: Acme or Corp"), so match its prefix.
   await user.click(screen.getByRole("button", { name: /^Filtro/ }));
-  await user.click(screen.getByRole("menuitem", { name: "Delete Acme or Corp" }));
+  await user.click(screen.getByRole("menuitem", { name: "Excluir Acme or Corp" }));
   const dialog = await screen.findByRole("alertdialog");
-  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
 }
 
 describe("BoardFilterControl delete", () => {

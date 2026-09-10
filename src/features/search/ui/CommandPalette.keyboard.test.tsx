@@ -50,7 +50,7 @@ beforeEach(() => {
 function openAndSearch(query: string) {
   render(<CommandPalette />);
   fireEvent(window, new Event(OPEN_SEARCH_EVENT));
-  const input = screen.getByRole("searchbox", { name: "Search" });
+  const input = screen.getByRole("searchbox", { name: "Buscar" });
   fireEvent.change(input, { target: { value: query } });
   act(() => {
     vi.advanceTimersByTime(200);

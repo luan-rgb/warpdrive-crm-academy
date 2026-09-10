@@ -132,7 +132,7 @@ describe("PersonSummaryEditPanel", () => {
     fireEvent.click(screen.getByLabelText("Organização"));
     fireEvent.click(screen.getByText("Globex"));
     expect(updatePersonAction).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
     const [payload] = updatePersonAction.mock.calls[0] as unknown as [

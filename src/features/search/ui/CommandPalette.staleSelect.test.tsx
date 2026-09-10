@@ -34,7 +34,7 @@ const ACME = {
 function open(): HTMLElement {
   render(<CommandPalette />);
   fireEvent(window, new Event(OPEN_SEARCH_EVENT));
-  return screen.getByRole("searchbox", { name: "Search" });
+  return screen.getByRole("searchbox", { name: "Buscar" });
 }
 
 function type(input: HTMLElement, text: string, settleDebounce: boolean): void {

@@ -161,7 +161,7 @@ describe("CommandPalette", () => {
     render(<CommandPalette />);
     fireEvent(window, new Event(OPEN_SEARCH_EVENT));
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search" }), {
+    fireEvent.change(screen.getByRole("searchbox", { name: "Buscar" }), {
       target: { value: "Zephyr" },
     });
     act(() => {

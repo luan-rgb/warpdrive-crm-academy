@@ -109,9 +109,9 @@ it("the Person section pencil opens every field at once and saves them in one ac
     />,
   );
 
-  const personSection = within(screen.getByRole("region", { name: "Person" }));
+  const personSection = within(screen.getByRole("region", { name: "Pessoa" }));
   // The header pencil enters section bulk-edit rather than the old reveal-empties no-op.
-  fireEvent.click(personSection.getByRole("button", { name: "Edit Person section" }));
+  fireEvent.click(personSection.getByRole("button", { name: "Editar seção Pessoa" }));
 
   // All editable Person fields are open simultaneously (First name + Last name inputs both present).
   const firstName = personSection.getByLabelText("First name");
@@ -120,7 +120,7 @@ it("the Person section pencil opens every field at once and saves them in one ac
   fireEvent.change(lastName, { target: { value: "Stone" } });
 
   // A single Save commits the whole section in one call carrying only the changed fields.
-  fireEvent.click(personSection.getByRole("button", { name: "Save" }));
+  fireEvent.click(personSection.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(updatePersonAction).toHaveBeenCalledTimes(1));
   expect(updatePersonAction).toHaveBeenCalledWith(
@@ -139,12 +139,12 @@ it("the Organization section pencil bulk-edits firmographics in one action call"
     />,
   );
 
-  const orgSection = within(screen.getByRole("region", { name: "Organization" }));
-  fireEvent.click(orgSection.getByRole("button", { name: "Edit Organization section" }));
+  const orgSection = within(screen.getByRole("region", { name: "Organização" }));
+  fireEvent.click(orgSection.getByRole("button", { name: "Editar seção Organização" }));
 
   fireEvent.change(orgSection.getByLabelText("Website"), { target: { value: "orgone.com" } });
   fireEvent.change(orgSection.getByLabelText("Industry"), { target: { value: "Retail" } });
-  fireEvent.click(orgSection.getByRole("button", { name: "Save" }));
+  fireEvent.click(orgSection.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(updateOrgAction).toHaveBeenCalledTimes(1));
   expect(updateOrgAction).toHaveBeenCalledWith(
@@ -163,11 +163,11 @@ it("inline-edits deal custom fields from inside the Organization section", async
     />,
   );
 
-  const organization = within(screen.getByRole("region", { name: "Organization" }));
+  const organization = within(screen.getByRole("region", { name: "Organização" }));
   expect(screen.queryByRole("region", { name: "Details" })).not.toBeInTheDocument();
   fireEvent.click(organization.getAllByRole("button", { name: "Edit Industry" }).at(-1)!);
   fireEvent.change(organization.getByLabelText("Industry"), { target: { value: "Finance" } });
-  fireEvent.click(organization.getByRole("button", { name: "Save" }));
+  fireEvent.click(organization.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalledTimes(1));
   expect(updateDealAction).toHaveBeenCalledWith(
@@ -190,11 +190,11 @@ it("the Source section pencil bulk-edits channel + channel id in one action call
     />,
   );
 
-  const sourceSection = within(screen.getByRole("region", { name: "Source" }));
-  fireEvent.click(sourceSection.getByRole("button", { name: "Edit Source section" }));
+  const sourceSection = within(screen.getByRole("region", { name: "Origem" }));
+  fireEvent.click(sourceSection.getByRole("button", { name: "Editar seção Origem" }));
 
   fireEvent.change(sourceSection.getByLabelText("Channel ID"), { target: { value: "EXT-9" } });
-  fireEvent.click(sourceSection.getByRole("button", { name: "Save" }));
+  fireEvent.click(sourceSection.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalledTimes(1));
   expect(updateDealAction).toHaveBeenCalledWith(

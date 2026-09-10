@@ -121,19 +121,19 @@ describe("OrgDetailClient", () => {
     expect(
       within(screen.getByRole("banner")).queryByRole("button", { name: /^edit$/i }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Edit Organization section/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /editar seção organização/i })).toBeInTheDocument();
   });
 
   it("renders one shared Organization section instead of separate Summary and Details cards", () => {
     render(<OrgDetailClient org={org as never} defs={[]} canMerge={true} baseCurrency="USD" />);
-    expect(screen.getByRole("region", { name: "Organization" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Organização" })).toBeInTheDocument();
     expect(screen.queryByRole("region", { name: "Resumo" })).not.toBeInTheDocument();
     expect(screen.queryByRole("region", { name: "Detalhes" })).not.toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Organizações relacionadas" })).toBeInTheDocument();
     const stats = within(screen.getByRole("region", { name: "Estatísticas" }));
     expect(stats.getByText("Negócios em aberto")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Organization options/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Edit Organization section/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /opções de organização/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /editar seção organização/i })).toBeInTheDocument();
   });
 
   it("renders People and Deals in the sidebar and opens the main panel on Activity", () => {
@@ -151,7 +151,7 @@ describe("OrgDetailClient", () => {
       "href",
       "/deals/d1",
     );
-    expect(deals.getByLabelText("Deal status: Open")).toBeInTheDocument();
+    expect(deals.getByLabelText("Status do negócio: Aberto")).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "Pessoas" })).not.toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "Negócios" })).not.toBeInTheDocument();
     const mainTabList = screen.getAllByRole("tablist").find((tabList) => {
@@ -175,7 +175,7 @@ describe("OrgDetailClient", () => {
     render(<OrgDetailClient org={org as never} defs={[]} canMerge={true} baseCurrency="USD" />);
     fireEvent.click(screen.getByRole("button", { name: "Edit Name" }));
     fireEvent.change(screen.getByLabelText("editor-name"), { target: { value: "Acme Corp" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(updateOrgAction).toHaveBeenCalled());
     expect(updateOrgAction).toHaveBeenCalledWith(
@@ -201,7 +201,7 @@ describe("OrgDetailClient composer seam", () => {
 
     fireEvent.click(compose.getByRole("button", { name: "Click here to add an activity..." }));
     fireEvent.change(compose.getByLabelText("Subject"), { target: { value: "Check in" } });
-    fireEvent.click(compose.getByRole("button", { name: "Save" }));
+    fireEvent.click(compose.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
     const [payload] = createActivityAction.mock.calls[0] as unknown as [

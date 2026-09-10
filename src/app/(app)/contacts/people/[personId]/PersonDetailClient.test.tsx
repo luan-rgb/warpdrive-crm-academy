@@ -155,7 +155,7 @@ describe("PersonDetailClient", () => {
       "href",
       "/deals/d1",
     );
-    expect(dealsSection.getByLabelText("Deal status: Won")).toBeInTheDocument();
+    expect(dealsSection.getByLabelText("Status do negócio: Ganho")).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "Negócios" })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Foco" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Histórico" })).toBeInTheDocument();
@@ -177,11 +177,11 @@ describe("PersonDetailClient", () => {
         baseCurrency="USD"
       />,
     );
-    const personSection = within(screen.getByRole("region", { name: "Person" }));
+    const personSection = within(screen.getByRole("region", { name: "Pessoa" }));
     expect(personSection.getByText("First name")).toBeInTheDocument();
     expect(personSection.getByText("Last name")).toBeInTheDocument();
-    expect(personSection.getByRole("button", { name: /Person options/i })).toBeInTheDocument();
-    fireEvent.click(personSection.getByRole("button", { name: /Edit Person section/i }));
+    expect(personSection.getByRole("button", { name: /opções de pessoa/i })).toBeInTheDocument();
+    fireEvent.click(personSection.getByRole("button", { name: /editar seção pessoa/i }));
     expect(personSection.getByLabelText("First name")).toHaveValue("Jane");
     expect(personSection.getByLabelText("Last name")).toHaveValue("Roe");
   });
@@ -215,7 +215,7 @@ describe("PersonDetailClient", () => {
     expect(
       within(screen.getByRole("banner")).queryByRole("button", { name: /^edit$/i }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Edit Person section/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /editar seção pessoa/i })).toBeInTheDocument();
   });
 });
 
@@ -251,7 +251,7 @@ describe("PersonDetailClient composer + inline person section", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: "Click here to add an activity..." }));
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Intro call" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
     const [payload] = createActivityAction.mock.calls[0] as unknown as [
@@ -278,7 +278,7 @@ describe("PersonDetailClient composer + inline person section", () => {
     fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
     const input = screen.getByLabelText("editor-firstName");
     fireEvent.change(input, { target: { value: "Janet" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
     expect(updatePersonAction).toHaveBeenCalledWith({ id: "pe1", firstName: "Janet" }, "tok");

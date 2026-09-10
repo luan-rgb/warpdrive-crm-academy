@@ -186,9 +186,9 @@ it("edits the value ONLY via the pencil, with a dirty-gated Save footer (PD mech
 
   fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
   const input = screen.getByLabelText<HTMLInputElement>("Value");
-  expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   fireEvent.change(input, { target: { value: "61000" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalled());
   const [payload] = updateDealAction.mock.calls[0] as unknown as [Record<string, unknown>];
   expect(payload.value).toBe(61000);
@@ -202,7 +202,7 @@ it("value editor: blur does not commit and Cancel discards (PD: only Cancel/Save
   fireEvent.blur(input);
   expect(screen.getByLabelText("Value")).toBeInTheDocument();
   expect(updateDealAction).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+  fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
   expect(updateDealAction).not.toHaveBeenCalled();
   expect(screen.getByText("$58,000")).toBeInTheDocument();
 });
@@ -214,7 +214,7 @@ it("close date: prompt click opens the editor; picking a day needs Save to commi
   // the calendar is a next/dynamic chunk that loads on open.
   fireEvent.click(await screen.findByText("15"));
   expect(updateDealAction).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalled());
   const [payload] = updateDealAction.mock.calls[0] as unknown as [Record<string, unknown>];
   expect(String(payload.expectedCloseDate)).toMatch(/^\d{4}-\d{2}-15$/);

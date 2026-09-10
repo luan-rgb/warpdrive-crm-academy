@@ -70,7 +70,7 @@ it("submits subject + assembled dueAt + done, without the 09:00 hardcode", async
   fireEvent.change(screen.getByLabelText("Start time"), { target: { value: "14:00" } });
   fireEvent.blur(screen.getByLabelText("Start time"));
   fireEvent.click(screen.getByLabelText("Mark as done"));
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const [payload] = createActivityAction.mock.calls[0] as unknown as [
@@ -98,7 +98,7 @@ it("maps Owner to assigneeId (a user) and Participants to guestPersonIds (person
   fireEvent.click(ownerOptions[1] as HTMLElement);
   // Participants options come from contacts.listPeopleForOrg (persons): pick "Ann" (p1).
   pickParticipant(/Ann/);
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const [payload] = createActivityAction.mock.calls[0] as unknown as [
@@ -166,7 +166,7 @@ it("pre-selects the deal's contact person so it is submitted as a participant by
   );
   fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
   // No participant interaction: the deal's person should carry through untouched.
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const [payload] = createActivityAction.mock.calls[0] as unknown as [
@@ -180,7 +180,7 @@ it("defaults the start date to today so a saved activity is never dateless (and 
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
   fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
   // Deliberately not touching "Start date": today's default should carry through.
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const [payload] = createActivityAction.mock.calls[0] as unknown as [
@@ -195,7 +195,7 @@ it("blocks save and shows an error when the start date is cleared", async () => 
   fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
   fireEvent.click(screen.getByLabelText("Start date"));
   fireEvent.click(screen.getByRole("button", { name: "Clear" }));
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   expect(await screen.findByRole("alert")).toHaveTextContent("Date is required");
   expect(createActivityAction).not.toHaveBeenCalled();
@@ -204,7 +204,7 @@ it("blocks save and shows an error when the start date is cleared", async () => 
 it("resets the Subject field after a successful save", async () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
   fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   // Post-reset, the field goes back to the same prefilled state as a fresh composer
@@ -225,7 +225,7 @@ it("still requires a subject when anchored to a lead instead of a deal", () => {
   // The field is prefilled from the type by default; simulate the user clearing it
   // to actually exercise the required-subject validation.
   fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   expect(screen.getByRole("alert")).toHaveTextContent("Subject is required");
   expect(createActivityAction).not.toHaveBeenCalled();
 });
@@ -259,7 +259,7 @@ it("sends leadId (and a null dealId) when anchored to a lead", async () => {
     />,
   );
   fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Qualify" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   const [payload] = createActivityAction.mock.calls[0] as unknown as [

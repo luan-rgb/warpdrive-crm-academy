@@ -100,7 +100,7 @@ it("uses the shared Pipedrive field tokens (small, medium, right-aligned label)"
   // Shared FieldRow token unified in the A3 sidebar pass: 12px / medium (500) / right-aligned,
   // matching the deal + person + org sidebars that render the same component.
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={null} />);
-  const label = screen.getByText("Channel ID");
+  const label = screen.getByText("ID do canal");
   expect(label.className).toContain("text-xs");
   expect(label.className).toContain("font-medium");
   expect(label.className).toContain("text-right");
@@ -112,26 +112,26 @@ it("gives each section a kebab options menu but no misleading edit pencil", () =
   // duplicate of the funnel toggle) while its label implied a section edit mode, so it read as a
   // dead control. Editing is via clicking a field inline or the header Edit button.
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={null} />);
-  const summary = within(screen.getByRole("region", { name: "Summary" }));
+  const summary = within(screen.getByRole("region", { name: "Resumo" }));
   expect(summary.queryByRole("button", { name: /Edit Summary section/i })).not.toBeInTheDocument();
-  expect(summary.getByRole("button", { name: /Summary options/i })).toBeInTheDocument();
+  expect(summary.getByRole("button", { name: /opções de resumo/i })).toBeInTheDocument();
 });
 
 it("the Source section's hide-empty-fields funnel hides blank Channel ID row", () => {
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={null} />);
-  const sourceSection = within(screen.getByRole("region", { name: "Source" }));
-  expect(sourceSection.getByText("Channel ID")).toBeInTheDocument();
+  const sourceSection = within(screen.getByRole("region", { name: "Origem" }));
+  expect(sourceSection.getByText("ID do canal")).toBeInTheDocument();
   fireEvent.click(sourceSection.getByRole("button", { name: "Hide empty fields" }));
-  expect(sourceSection.queryByText("Channel ID")).not.toBeInTheDocument();
+  expect(sourceSection.queryByText("ID do canal")).not.toBeInTheDocument();
   // Origin is never value-less; it always stays.
-  expect(sourceSection.getByText("Origin")).toBeInTheDocument();
+  expect(sourceSection.getByText("Procedência")).toBeInTheDocument();
 });
 
 it("renders the linked person's contact fields (email) via the shared Person block", () => {
   // Parity with Pipedrive's lead sidebar: the Person section surfaces the linked person's
   // email/phone, not just the name, by reusing the deal sidebar's PersonBlock.
   render(<LeadSidebar lead={baseLead} owners={[]} person={basePerson} org={null} />);
-  const personSection = within(screen.getByRole("region", { name: "Person" }));
+  const personSection = within(screen.getByRole("region", { name: "Pessoa" }));
   expect(personSection.getByText("Jane Roe")).toBeInTheDocument();
   expect(personSection.getByText("Email")).toBeInTheDocument();
   expect(personSection.getByText("jane@acme.com")).toBeInTheDocument();
@@ -139,27 +139,27 @@ it("renders the linked person's contact fields (email) via the shared Person blo
 
 it("uses the complete deal Person section and its section-wide edit action", () => {
   render(<LeadSidebar lead={baseLead} owners={[]} person={basePerson} org={null} />);
-  const personSection = within(screen.getByRole("region", { name: "Person" }));
+  const personSection = within(screen.getByRole("region", { name: "Pessoa" }));
   expect(personSection.getByText("First name")).toBeInTheDocument();
   expect(personSection.getByText("Last name")).toBeInTheDocument();
   expect(personSection.getByText("Name")).toBeInTheDocument();
-  fireEvent.click(personSection.getByRole("button", { name: "Edit Person section" }));
+  fireEvent.click(personSection.getByRole("button", { name: "Editar seção Pessoa" }));
   expect(personSection.getByLabelText("First name")).toHaveValue("Jane");
   expect(personSection.getByLabelText("Last name")).toHaveValue("Roe");
-  expect(personSection.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
-  expect(personSection.getByRole("button", { name: "Save" })).toBeInTheDocument();
+  expect(personSection.getByRole("button", { name: "Cancelar" })).toBeInTheDocument();
+  expect(personSection.getByRole("button", { name: "Salvar" })).toBeInTheDocument();
 });
 
 it("no Person section when the lead has no linked (or a soft-deleted) person", () => {
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={null} />);
-  expect(screen.queryByRole("region", { name: "Person" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("region", { name: "Pessoa" })).not.toBeInTheDocument();
 });
 
 it("renders the linked org's website and firmographics via the shared Org block", () => {
   // The reported gap: PD shows the org's Website (and other firmographics) on the lead page; we
   // only showed Name. Reusing the deal sidebar's OrgBlock brings full parity.
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={baseOrg} />);
-  const orgSection = within(screen.getByRole("region", { name: "Organization" }));
+  const orgSection = within(screen.getByRole("region", { name: "Organização" }));
   expect(orgSection.getByText("Acme Corp")).toBeInTheDocument();
   expect(orgSection.getByText("Website")).toBeInTheDocument();
   expect(orgSection.getByText("http://www.acme.com")).toBeInTheDocument();
@@ -177,7 +177,7 @@ it("honors hidden built-in org fields (Settings > Data fields)", () => {
       hiddenOrgFields={new Set(["domain"])}
     />,
   );
-  const orgSection = within(screen.getByRole("region", { name: "Organization" }));
+  const orgSection = within(screen.getByRole("region", { name: "Organização" }));
   expect(orgSection.queryByText("Website")).not.toBeInTheDocument();
   // A non-hidden firmographic still renders.
   expect(orgSection.getByText("Industry")).toBeInTheDocument();

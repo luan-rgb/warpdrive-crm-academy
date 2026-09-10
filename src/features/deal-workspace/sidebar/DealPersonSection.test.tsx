@@ -74,7 +74,7 @@ function renderSection(
 describe("DealPersonSection with no linked person", () => {
   it("still renders the Person panel, so an enabled section never silently disappears", () => {
     renderSection();
-    expect(screen.getByText("Person")).toBeInTheDocument();
+    expect(screen.getByText("Pessoa")).toBeInTheDocument();
   });
 
   it("shows the same field rows a linked person would, with empty values", () => {
@@ -93,7 +93,7 @@ describe("DealPersonSection with no linked person", () => {
 
   it("opens the editor from the section pencil", async () => {
     const { onStartBulk } = renderSection();
-    await userEvent.click(screen.getByRole("button", { name: /edit person/i }));
+    await userEvent.click(screen.getByRole("button", { name: /editar seção pessoa/i }));
     expect(onStartBulk).toHaveBeenCalledTimes(1);
   });
 

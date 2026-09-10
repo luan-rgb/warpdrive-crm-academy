@@ -70,10 +70,10 @@ describe("DealListClient inline filter", () => {
     renderClient();
 
     // Apply "Title contains acme" via the inline builder (default field=title, first op=contains).
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     await waitFor(() =>
       expect(listQueryMock).toHaveBeenCalledWith(
@@ -94,11 +94,11 @@ describe("DealListClient inline filter", () => {
     listQueryMock.mockResolvedValue({ rows: [], total: 0, totalValue: "0" });
     renderClient();
 
-    const filterTrigger = (): HTMLElement => screen.getByRole("button", { name: "Filter" });
+    const filterTrigger = (): HTMLElement => screen.getByRole("button", { name: "Filtro" });
     fireEvent.click(filterTrigger());
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     await waitFor(() => expect(screen.queryByLabelText("Condition 1 value")).toBeNull());
 
@@ -117,14 +117,14 @@ describe("DealListClient inline filter", () => {
     listQueryMock.mockResolvedValue({ rows: [], total: 0, totalValue: "0" });
     renderClient();
 
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
-    await waitFor(() => expect(screen.getByLabelText("Filter")).toHaveTextContent("1"));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
+    await waitFor(() => expect(screen.getByLabelText("Filtro")).toHaveTextContent("1"));
 
     fireEvent.click(screen.getByRole("button", { name: "menu-clear-filter" }));
 
-    expect(screen.getByLabelText("Filter")).not.toHaveTextContent("1");
+    expect(screen.getByLabelText("Filtro")).not.toHaveTextContent("1");
   });
 });

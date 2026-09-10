@@ -70,10 +70,10 @@ describe("LeadsInbox empty states", () => {
     listQuery.mockReturnValue({ data: { rows: [], total: 0 }, refetch });
     render(<LeadsInbox />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "zzz" } });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     const empty = screen.getByRole("status");
     expect(empty).toHaveTextContent(STRINGS.leads.emptyFilteredTitle);

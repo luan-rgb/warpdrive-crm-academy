@@ -147,7 +147,7 @@ it("does not close another record's dialog when a slow apply lands", async () =>
 
   const view = render(<Harness entityId={CLOSED} />);
   await user.click(screen.getByRole("button", { name: BUTTON }));
-  await user.click(await screen.findByRole("button", { name: /Apply/ }));
+  await user.click(await screen.findByRole("button", { name: /Aplicar/ }));
 
   enrichRecordAction.mockResolvedValue({ ok: true, value: runFor(SHOWING, "Live title") });
   view.rerender(<Harness entityId={SHOWING} />);

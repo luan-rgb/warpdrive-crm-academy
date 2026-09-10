@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/Button";
 import type { UserStatusFilter } from "./userStatus";
 
 const TABS: { key: UserStatusFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "active", label: "Active" },
-  { key: "invited", label: "Invited" },
-  { key: "deactivated", label: "Deactivated" },
+  { key: "all", label: "Todos" },
+  { key: "active", label: "Ativos" },
+  { key: "invited", label: "Convidados" },
+  { key: "deactivated", label: "Desativados" },
 ];
 
 // Status filter tabs for the Manage users table (S-U3).

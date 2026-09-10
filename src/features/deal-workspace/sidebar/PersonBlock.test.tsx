@@ -85,7 +85,7 @@ it("does NOT report a failure when the write succeeded but router.refresh throws
 
   fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Mira" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
   // The action committed (ok:true), so no error banner and the editor closes normally.
@@ -143,7 +143,7 @@ it("surfaces a permission-specific message when the edit is denied (E_PERM_001)"
 
   fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Mira" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   const alert = await screen.findByRole("alert");
   expect(alert).toHaveTextContent(/permission/i);
@@ -216,7 +216,7 @@ it("edits a non-primary email and saves the whole array", async () => {
   render(<PersonBlock person={multiPointPerson} />);
   fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
   fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "pat@home.ca" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
   expect(callArg(0)).toEqual({
@@ -238,7 +238,7 @@ it("adds a second email without dropping the first", async () => {
   fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
   fireEvent.click(screen.getByRole("button", { name: "+ Add email" }));
   fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "two@acme.com" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
   expect(callArg(0)).toEqual({
@@ -254,7 +254,7 @@ it("promotes a non-primary email so the derived primary_email follows it", async
   render(<PersonBlock person={multiPointPerson} />);
   fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
   fireEvent.click(screen.getByRole("radio", { name: "Make email 2 primary" }));
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
   const emails = (callArg(0) as { emails: ContactPoint[] }).emails;

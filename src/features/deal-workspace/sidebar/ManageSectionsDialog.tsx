@@ -64,7 +64,7 @@ function SectionRow({
     >
       <button
         type="button"
-        aria-label={`Reorder ${name}`}
+        aria-label={`Reordenar ${name}`}
         className="cursor-grab text-muted-foreground"
         {...attributes}
         {...listeners}
@@ -75,26 +75,26 @@ function SectionRow({
         checked={section.visible}
         disabled={locked}
         onCheckedChange={() => onToggle(section.id)}
-        label={locked ? `${name} (always shown)` : `Show ${name}`}
+        label={locked ? `${name} (sempre exibida)` : `Mostrar ${name}`}
       />
       <span className="min-w-0 flex-1 text-sm">{name}</span>
       <button
         type="button"
-        aria-label={`Move ${name} up`}
+        aria-label={`Mover ${name} para cima`}
         disabled={index === 0}
         onClick={() => onMove(section.id, -1)}
         className="rounded px-2 py-1 text-xs text-muted-foreground hover:bg-muted disabled:opacity-40"
       >
-        Up
+        Para cima
       </button>
       <button
         type="button"
-        aria-label={`Move ${name} down`}
+        aria-label={`Mover ${name} para baixo`}
         disabled={index === count - 1}
         onClick={() => onMove(section.id, 1)}
         className="rounded px-2 py-1 text-xs text-muted-foreground hover:bg-muted disabled:opacity-40"
       >
-        Down
+        Para baixo
       </button>
     </div>
   );

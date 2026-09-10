@@ -29,13 +29,13 @@ it("renders a pencil, exact Organization menu items, handlers, and Fill the gaps
     />,
   );
 
-  await user.click(screen.getByRole("button", { name: "Edit Organization section" }));
+  await user.click(screen.getByRole("button", { name: "Editar seção Organização" }));
   expect(onEdit).toHaveBeenCalledTimes(1);
 
-  await user.click(screen.getByRole("button", { name: "Fill the gaps" }));
+  await user.click(screen.getByRole("button", { name: "Preencher lacunas" }));
   expect(onFillGaps).toHaveBeenCalledTimes(1);
 
-  const trigger = screen.getByRole("button", { name: "Organization options" });
+  const trigger = screen.getByRole("button", { name: "Opções de Organização" });
   expect(trigger).toHaveAttribute("aria-haspopup", "menu");
   await user.click(trigger);
   expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toEqual([

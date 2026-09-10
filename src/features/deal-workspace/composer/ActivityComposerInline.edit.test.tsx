@@ -101,7 +101,7 @@ it("saves via editActivityAction (not create) with the activity id and edited fi
     />,
   );
   fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Renamed sync" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(editActivityAction).toHaveBeenCalled());
   expect(createActivityAction).not.toHaveBeenCalled();

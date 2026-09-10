@@ -12,17 +12,17 @@ describe("InlineEditFooter (PD ActionFooter)", () => {
     const onSave = vi.fn();
     render(<InlineEditFooter onCancel={onCancel} onSave={onSave} saveDisabled={false} />);
     const buttons = screen.getAllByRole("button");
-    expect(buttons.map((b) => b.textContent)).toEqual(["Cancel", "Save"]);
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(buttons.map((b) => b.textContent)).toEqual(["Cancelar", "Salvar"]);
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(onCancel).toHaveBeenCalledTimes(1);
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(onSave).toHaveBeenCalledTimes(1);
   });
 
   it("disables Save (aria-disabled, no commit) until the draft is dirty", () => {
     const onSave = vi.fn();
     render(<InlineEditFooter onCancel={vi.fn()} onSave={onSave} saveDisabled={true} />);
-    const save = screen.getByRole("button", { name: "Save" });
+    const save = screen.getByRole("button", { name: "Salvar" });
     expect(save).toBeDisabled();
     expect(save).toHaveAttribute("aria-disabled", "true");
     fireEvent.click(save);
@@ -33,7 +33,7 @@ describe("InlineEditFooter (PD ActionFooter)", () => {
     render(
       <InlineEditFooter onCancel={vi.fn()} onSave={vi.fn()} saveDisabled={false} pending={true} />,
     );
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Cancelar" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   });
 });

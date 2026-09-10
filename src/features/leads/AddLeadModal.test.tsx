@@ -77,7 +77,7 @@ describe("AddLeadModal", () => {
     render(<AddLeadModal onClose={vi.fn()} onCreated={onCreated} />);
     fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "New lead" } });
     expect(screen.getByText(`8/${TITLE_MAX_LEN}`)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createLeadAction).toHaveBeenCalledWith(
         expect.objectContaining({ title: "New lead", sourceOrigin: "manually_created" }),
@@ -106,7 +106,7 @@ describe("AddLeadModal", () => {
       target: { value: "New Contact" },
     });
     fireEvent.change(screen.getByLabelText("Role"), { target: { value: "Buyer" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() =>
       expect(createPersonAction).toHaveBeenCalledWith(
@@ -123,7 +123,7 @@ describe("AddLeadModal", () => {
     fireEvent.click(screen.getByLabelText("Data prevista de fechamento"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createLeadAction).toHaveBeenCalledWith(
         expect.objectContaining({ expectedCloseDate: expect.stringMatching(/-15$/) }),
@@ -135,7 +135,7 @@ describe("AddLeadModal", () => {
 
   it("blocks an empty-title submit with an inline error", async () => {
     render(<AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(/title/i);
     expect(createLeadAction).not.toHaveBeenCalled();
   });
@@ -146,7 +146,7 @@ describe("AddLeadModal", () => {
     fireEvent.blur(screen.getByLabelText("Organização"));
     // The org autofills the title; clear it so the lead is invalid (blank title) again.
     fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(/title/i);
     expect(createOrgAction).not.toHaveBeenCalled();
     expect(createPersonAction).not.toHaveBeenCalled();
@@ -185,7 +185,7 @@ describe("AddLeadModal", () => {
       </InterfacePrefsProvider>,
     );
     fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "Big lead" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/leads/l1"));
   });
 });

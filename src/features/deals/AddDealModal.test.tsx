@@ -134,7 +134,7 @@ describe("AddDealModal", () => {
     const { onCreated } = renderModal();
     fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
     expect(screen.getByText(`8/${TITLE_MAX_LEN}`)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createDealAction).toHaveBeenCalledWith(
         expect.objectContaining({ title: "Big deal", pipelineId: PIPE, stageId: STAGE_A }),
@@ -160,12 +160,12 @@ describe("AddDealModal", () => {
     });
     renderModal();
     fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Account tier é obrigatório");
     expect(createDealAction).not.toHaveBeenCalled();
 
     fireEvent.change(screen.getByLabelText("Account tier"), { target: { value: "Enterprise" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createDealAction).toHaveBeenCalledWith(
         expect.objectContaining({ customFields: { account_tier: "Enterprise" } }),
@@ -193,7 +193,7 @@ describe("AddDealModal", () => {
       </InterfacePrefsProvider>,
     );
     fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/deals/d1"));
   });
 
@@ -218,7 +218,7 @@ describe("AddDealModal", () => {
       </InterfacePrefsProvider>,
     );
     fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "Big deal" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(onCreated).toHaveBeenCalledWith("d1", "Big deal"));
     expect(routerPush).not.toHaveBeenCalled();
   });
@@ -229,7 +229,7 @@ describe("AddDealModal", () => {
     fireEvent.click(screen.getByLabelText("Data prevista de fechamento"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createDealAction).toHaveBeenCalledWith(
         expect.objectContaining({ expectedCloseDate: expect.stringMatching(/-15$/) }),
@@ -241,7 +241,7 @@ describe("AddDealModal", () => {
 
   it("blocks submit with an inline error when the title is empty", async () => {
     renderModal();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(/título/i);
     expect(createDealAction).not.toHaveBeenCalled();
   });
@@ -253,7 +253,7 @@ describe("AddDealModal", () => {
     fireEvent.blur(screen.getByLabelText("Organização"));
     // The org autofills the title; clear it so the deal is invalid (blank title) again.
     fireEvent.change(screen.getByLabelText("Título do negócio"), { target: { value: "" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(/título/i);
     expect(createOrgAction).not.toHaveBeenCalled();
     expect(createPersonAction).not.toHaveBeenCalled();
@@ -285,7 +285,7 @@ describe("AddDealModal", () => {
       target: { value: "Test User" },
     });
     fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Acme Corp" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(createPersonAction).toHaveBeenCalledTimes(1));
     // The created org's id ("onew") must be threaded into the person create so they are linked.

@@ -183,15 +183,15 @@ async function openDeleteConfirm(
   user: ReturnType<typeof userEvent.setup>,
   name = "Big deals",
 ): Promise<HTMLElement> {
-  await user.click(screen.getByRole("menuitem", { name: `Delete ${name}` }));
+  await user.click(screen.getByRole("menuitem", { name: `Excluir ${name}` }));
   return await screen.findByRole("alertdialog");
 }
 
 describe("BoardFilterMenu delete", () => {
   it("offers delete on an owned filter and not on someone else's shared one", async () => {
     await openMenu({ savedFilters: [own, shared], onDeleteFilter: vi.fn() });
-    expect(screen.getByRole("menuitem", { name: "Delete Big deals" })).toBeInTheDocument();
-    expect(screen.queryByRole("menuitem", { name: "Delete Team deals" })).toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Excluir Big deals" })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Excluir Team deals" })).toBeNull();
   });
 
   it("offers no delete at all when the menu has no delete handler", async () => {
@@ -219,7 +219,7 @@ describe("BoardFilterMenu delete", () => {
     const user = await openMenu({ savedFilters: [own], onDeleteFilter });
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
 
     expect(onDeleteFilter).toHaveBeenCalledWith("f1");
   });
@@ -229,7 +229,7 @@ describe("BoardFilterMenu delete", () => {
     const user = await openMenu({ savedFilters: [own], onDeleteFilter });
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
 
     await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
     expect(onDeleteFilter).not.toHaveBeenCalled();
@@ -241,7 +241,7 @@ describe("BoardFilterMenu delete", () => {
     const user = await openMenu({ savedFilters: [own], onDeleteFilter: vi.fn() });
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
 
     await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
     expect(screen.getByRole("menuitem", { name: "Big deals" })).toBeInTheDocument();

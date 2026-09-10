@@ -129,9 +129,9 @@ export function DealActionsMenu({
         onOpenChange={(o) => {
           if (!o) setFlow(null);
         }}
-        title="Delete this deal?"
-        description="This cannot be undone. The deal and its activity are removed for everyone."
-        confirmLabel="Delete"
+        title="Excluir este negócio?"
+        description="Essa ação não pode ser desfeita. O negócio e suas atividades são removidos para todos."
+        confirmLabel="Excluir"
         destructive
         pending={pending}
         onConfirm={() => void remove()}

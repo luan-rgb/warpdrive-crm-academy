@@ -41,7 +41,7 @@ import { DetailsBlock } from "./DetailsBlock";
 
 afterEach(cleanup);
 
-const EMPTY_HINT = "No custom fields yet. Add them with Customize fields.";
+const EMPTY_HINT = "Ainda não há campos personalizados. Adicione-os em Personalizar campos.";
 
 function def(): CustomFieldDef {
   return { id: "f1", type: "text", name: "Industry", key: "industry" } as CustomFieldDef;
@@ -58,8 +58,8 @@ describe("DetailsBlock empty state", () => {
   it("shows a hint and NO Save/Cancel when bulk-editing a section with no custom fields", () => {
     render(<DetailsBlock {...base} customFieldDefs={[]} bulkEditing onExitBulk={() => {}} />);
     expect(screen.getByText(EMPTY_HINT)).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Save" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "Cancel" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Salvar" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Cancelar" })).toBeNull();
   });
 
   it("shows a hint (not a blank box) in read mode when there are no custom fields", () => {

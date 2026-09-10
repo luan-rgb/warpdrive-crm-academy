@@ -39,12 +39,12 @@ export function PersonSection({
 }): React.ReactNode {
   return (
     <CollapsibleSection
-      title="Person"
+      title="Pessoa"
       headerActions={() => (
         <EnrichButton entityType="person" entityId={person.id} entityName={person.name}>
           {(fill) => (
             <SectionHeaderMenu
-              sectionLabel="Person"
+              sectionLabel="Pessoa"
               onEdit={onStartBulk}
               menuItems={menuItems}
               {...fill}

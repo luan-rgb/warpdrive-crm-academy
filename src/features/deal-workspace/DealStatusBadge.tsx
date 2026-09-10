@@ -6,15 +6,18 @@ const STATUS_PRESENTATION: Record<
   DealStatus,
   { label: string; variant: NonNullable<BadgeProps["variant"]> }
 > = {
-  open: { label: "Open", variant: "secondary" },
-  won: { label: "Won", variant: "success" },
-  lost: { label: "Lost", variant: "destructive" },
+  open: { label: "Aberto", variant: "secondary" },
+  won: { label: "Ganho", variant: "success" },
+  lost: { label: "Perdido", variant: "destructive" },
 };
 
 export function DealStatusBadge({ status }: { status: DealStatus }): React.ReactNode {
   const presentation = STATUS_PRESENTATION[status];
   return (
-    <Badge variant={presentation.variant} aria-label={`Deal status: ${presentation.label}`}>
+    <Badge
+      variant={presentation.variant}
+      aria-label={`Status do negócio: ${presentation.label}`}
+    >
       {presentation.label}
     </Badge>
   );

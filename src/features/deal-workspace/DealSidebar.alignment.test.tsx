@@ -128,14 +128,14 @@ it("renders Summary as PD's action list (no field-label column), other sections 
 
   // Summary is an action list now (PD parity): no "Value"/"Owner" label tokens, the value
   // renders as formatted currency, and no FieldRow grid exists inside the section.
-  const summary = within(screen.getByRole("region", { name: "Summary" }));
+  const summary = within(screen.getByRole("region", { name: "Resumo" }));
   expect(summary.queryByText("Value")).not.toBeInTheDocument();
   expect(summary.queryByText("Owner")).not.toBeInTheDocument();
   expect(summary.getByText("$1,000")).toBeInTheDocument();
   expect(summary.queryAllByTestId("field-row")).toHaveLength(0);
   // Every other section keeps the right-aligned label default.
-  expectLabelAlign("Organization", "Deal segment", "right");
-  expectLabelAlign("Person", "Name", "right");
+  expectLabelAlign("Organização", "Deal segment", "right");
+  expectLabelAlign("Pessoa", "Name", "right");
 });
 
 it("renders representative sidebar values through the shared left-aligned FieldRow", () => {
@@ -148,8 +148,8 @@ it("renders representative sidebar values through the shared left-aligned FieldR
     />,
   );
 
-  expectSharedLeftValue("Organization", "Deal segment");
-  expectSharedLeftValue("Organization", "Name");
-  expectSharedLeftValue("Person", "Name");
-  expectSharedLeftValue("Source", "Channel");
+  expectSharedLeftValue("Organização", "Deal segment");
+  expectSharedLeftValue("Organização", "Name");
+  expectSharedLeftValue("Pessoa", "Name");
+  expectSharedLeftValue("Origem", "Channel");
 });

@@ -192,7 +192,7 @@ describe("CreateFilterModal", () => {
     const onPreview = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} onPreview={onPreview} />);
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+    fireEvent.click(screen.getByRole("button", { name: "Visualizar" }));
     expect(onPreview).toHaveBeenCalledTimes(1);
     expect(onPreview.mock.calls[0]![0]).toEqual({
       combinator: "and",
@@ -207,7 +207,7 @@ describe("CreateFilterModal", () => {
     const onClose = vi.fn();
     render(<CreateFilterModal onClose={onClose} onSave={() => {}} onApply={onApply} />);
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     expect(onApply).toHaveBeenCalledTimes(1);
     expect(onApply.mock.calls[0]![0]).toEqual({
       combinator: "and",

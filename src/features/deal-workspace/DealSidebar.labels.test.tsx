@@ -75,7 +75,7 @@ afterEach(cleanup);
 
 // Open the Summary section's "Add labels" picker (not the Person/Organization ones).
 function openSummaryLabels(): HTMLElement {
-  return within(screen.getByRole("region", { name: "Summary" })).getByRole("button", {
+  return within(screen.getByRole("region", { name: "Resumo" })).getByRole("button", {
     name: /add labels/i,
   });
 }

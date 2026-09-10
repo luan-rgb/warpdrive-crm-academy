@@ -92,7 +92,7 @@ it("edits the Address as a composite of subfields, saving a merged address objec
   fireEvent.click(screen.getByRole("button", { name: "Edit Address" }));
   fireEvent.change(screen.getByLabelText("City"), { target: { value: "Portland" } });
   fireEvent.change(screen.getByLabelText("Postal code"), { target: { value: "97201" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() =>
     expect(updateOrgAction).toHaveBeenCalledWith(

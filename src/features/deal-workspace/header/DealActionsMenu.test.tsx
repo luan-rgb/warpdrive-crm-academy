@@ -138,7 +138,7 @@ it("Delete deal raises an in-app confirm dialog, not a native browser confirm", 
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  expect(within(dialog).getByText("Delete this deal?")).toBeTruthy();
+  expect(within(dialog).getByText("Excluir este negócio?")).toBeTruthy();
   expect(nativeConfirm).not.toHaveBeenCalled();
   expect(deleteDealAction).not.toHaveBeenCalled();
 });
@@ -147,7 +147,7 @@ it("confirming the dialog calls deleteDealAction and returns to the pipeline", a
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
   await waitFor(() =>
     expect(deleteDealAction).toHaveBeenCalledWith(
       { dealId: "d1", expectedUpdatedAt: props.expectedUpdatedAt },
@@ -168,7 +168,7 @@ it("dismisses the drawer instead of pushing when the deal is open as a slide-ove
     </DetailDrawerCloseContext.Provider>,
   );
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
   await waitFor(() => expect(close).toHaveBeenCalled());
   expect(push).not.toHaveBeenCalled();
 });
@@ -177,7 +177,7 @@ it("cancelling the dialog closes it without deleting", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+  await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
   await waitFor(() => expect(screen.queryByRole("alertdialog")).toBeNull());
   expect(deleteDealAction).not.toHaveBeenCalled();
 });
@@ -215,7 +215,7 @@ it("surfaces the error when Delete is denied (no silent swallow)", async () => {
   const user = userEvent.setup();
   render(<DealActionsMenu {...props} />);
   const dialog = await openDeleteConfirm(user);
-  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+  await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(push).not.toHaveBeenCalled();
 });

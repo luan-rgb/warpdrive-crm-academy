@@ -88,7 +88,7 @@ describe("DealList bulk stage move", () => {
     render(<DealList {...baseProps(onBulkStage)} />);
 
     selectAllAndPick("Proposal");
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
 
     expect(onBulkStage).not.toHaveBeenCalled();
     expect(screen.getByText("3 selecionados")).toBeInTheDocument();

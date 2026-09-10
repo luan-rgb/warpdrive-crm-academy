@@ -41,7 +41,7 @@ describe("InlineOrgField", () => {
     fireEvent.click(screen.getByRole("button", { name: "Edit Organization" }));
     expect(screen.getByLabelText("Organization")).toBeInTheDocument();
     // Dirty-gated: nothing chosen yet, so Save is disabled (PD: no autosave).
-    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   });
 
   it("offers an 'Add organization' prompt for a deal with no org, opening the editor", () => {
@@ -55,7 +55,7 @@ describe("InlineOrgField", () => {
     fireEvent.click(screen.getByRole("button", { name: "Edit Organization" }));
     fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Union" } });
     fireEvent.mouseDown(screen.getByRole("button", { name: "Union Dynamics" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(updateDealAction).toHaveBeenCalled());
     const [payload] = updateDealAction.mock.calls[0] as unknown as [Record<string, unknown>];
     expect(payload.orgId).toBe("o2");
@@ -69,7 +69,7 @@ describe("InlineOrgField", () => {
     fireEvent.mouseDown(
       screen.getByRole("button", { name: /Add 'Brand New Co' as new organization/ }),
     );
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(createOrgAction).toHaveBeenCalled());
     const [createInput] = createOrgAction.mock.calls[0] as unknown as [Record<string, unknown>];
     expect(createInput.name).toBe("Brand New Co");
@@ -83,7 +83,7 @@ describe("InlineOrgField", () => {
     fireEvent.click(screen.getByRole("button", { name: "Edit Organization" }));
     fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Union" } });
     fireEvent.mouseDown(screen.getByRole("button", { name: "Union Dynamics" }));
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(updateDealAction).not.toHaveBeenCalled();
     expect(createOrgAction).not.toHaveBeenCalled();
     // Back to the view state (link visible again).

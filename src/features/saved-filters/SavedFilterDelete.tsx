@@ -23,7 +23,7 @@ export function DeleteSavedFilterItem({
 }): React.ReactNode {
   return (
     <DropdownMenuItem
-      aria-label={`Delete ${target.name}`}
+      aria-label={`Excluir ${target.name}`}
       onSelect={(e) => {
         e.preventDefault();
         onRequest(target);
@@ -49,15 +49,16 @@ export function DeleteSavedFilterConfirm({
   onConfirm: (id: string) => void;
 }): React.ReactNode {
   if (pending === null) return null;
+  const nounLabel = noun === "filter" ? "filtro" : "visualização";
   // A shared row is deleted outright, so it goes for everyone who could see it.
-  const scope = pending.isShared ? ", for everyone it is shared with" : "";
+  const scope = pending.isShared ? ", para todos com quem foi compartilhado" : "";
   return (
     <ConfirmDialog
       open
       onOpenChange={onOpenChange}
-      title={`Delete ${noun}?`}
-      description={`"${pending.name}" will be deleted${scope}. This cannot be undone.`}
-      confirmLabel="Delete"
+      title={`Excluir ${nounLabel}?`}
+      description={`"${pending.name}" será excluído${scope}. Essa ação não pode ser desfeita.`}
+      confirmLabel="Excluir"
       destructive
       onConfirm={() => onConfirm(pending.id)}
     />

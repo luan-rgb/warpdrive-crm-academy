@@ -40,12 +40,12 @@ export function OrganizationSection({
 }): React.ReactNode {
   return (
     <CollapsibleSection
-      title="Organization"
+      title="Organização"
       headerActions={() => (
         <EnrichButton entityType="organization" entityId={org.id} entityName={org.name}>
           {(fill) => (
             <SectionHeaderMenu
-              sectionLabel="Organization"
+              sectionLabel="Organização"
               onEdit={onStartBulk}
               menuItems={menuItems}
               {...fill}

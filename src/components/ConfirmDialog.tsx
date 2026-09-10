@@ -38,7 +38,7 @@ export function ConfirmDialog({
   title,
   description,
   confirmLabel,
-  cancelLabel = "Cancel",
+  cancelLabel = "Cancelar",
   destructive = false,
   onConfirm,
   pending = false,

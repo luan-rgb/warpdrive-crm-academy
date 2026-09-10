@@ -53,7 +53,7 @@ export function ComposerFooter({
           disabled={pending}
           className="rounded-md bg-action px-4 py-1.5 font-medium text-action-foreground transition-[opacity,scale] duration-150 ease-out hover:opacity-90 active:not-disabled:scale-[0.96] disabled:opacity-50"
         >
-          {pending ? "Saving..." : "Save"}
+          {pending ? "Salvando..." : "Salvar"}
         </button>
         <button
           type="button"

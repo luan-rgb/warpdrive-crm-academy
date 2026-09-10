@@ -91,7 +91,7 @@ it("inline-edits a text custom field through the deal update action (customField
   fireEvent.click(screen.getByRole("button", { name: "Edit Notes" }));
   expect(screen.getByLabelText("Notes")).toHaveFocus();
   fireEvent.change(screen.getByLabelText("Notes"), { target: { value: "world" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() =>
     expect(updateDealAction).toHaveBeenCalledWith(
@@ -118,7 +118,7 @@ it("renders an empty custom field with the same dash and hover-pencil mechanism 
     />,
   );
 
-  const organization = within(screen.getByRole("region", { name: "Organization" }));
+  const organization = within(screen.getByRole("region", { name: "Organização" }));
   const row = organization.getByText("linkedin").closest('[data-testid="field-row"]');
   expect(row).not.toBeNull();
   expect(within(row as HTMLElement).getByText("-")).toBeInTheDocument();
@@ -139,7 +139,7 @@ it("does not render a Probability row in the Organization section", () => {
       baseCurrency="USD"
     />,
   );
-  const organization = within(screen.getByRole("region", { name: "Organization" }));
+  const organization = within(screen.getByRole("region", { name: "Organização" }));
   expect(organization.queryByText("Probability")).not.toBeInTheDocument();
   expect(screen.queryByRole("region", { name: "Details" })).not.toBeInTheDocument();
 });
@@ -157,7 +157,7 @@ it("the Organization section's hide-empty-fields funnel hides a blank deal custo
       baseCurrency="USD"
     />,
   );
-  const organization = within(screen.getByRole("region", { name: "Organization" }));
+  const organization = within(screen.getByRole("region", { name: "Organização" }));
   expect(organization.getByText("Notes")).toBeInTheDocument();
   expect(organization.getByText("Budget")).toBeInTheDocument();
   fireEvent.click(organization.getByRole("button", { name: "Hide empty fields" }));

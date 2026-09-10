@@ -27,14 +27,20 @@ interface Props {
 }
 
 const C = {
-  name: "Name",
+  name: "Nome",
   email: "Email",
-  role: "Role",
-  active: "Active",
-  actions: "Actions",
+  role: "Função",
+  active: "Ativo",
+  actions: "Ações",
 } as const;
 
-const V = { admin: "Admin", regular: "Regular", yes: "Yes", no: "No", invited: "Invited" } as const;
+const V = {
+  admin: "Admin",
+  regular: "Padrão",
+  yes: "Sim",
+  no: "Não",
+  invited: "Convidado",
+} as const;
 
 export function UsersClient({ rows }: Props): React.ReactElement {
   const router = useRouter();

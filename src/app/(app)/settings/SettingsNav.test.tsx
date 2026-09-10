@@ -53,7 +53,7 @@ describe("SettingsNav", () => {
   // so the MANAGE flag alone must not surface a link into that denial page.
   it("shows Enrichment to a real admin", () => {
     render(<SettingsNav isAdmin={true} canManageCompany={true} canImport={false} />);
-    expect(screen.getByRole("link", { name: /Enrichment/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Enriquecimento/ })).toHaveAttribute(
       "href",
       "/settings/enrichment",
     );

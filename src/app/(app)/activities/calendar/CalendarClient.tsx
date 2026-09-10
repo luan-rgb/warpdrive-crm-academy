@@ -62,7 +62,7 @@ export function CalendarClient({
         </div>
         <div className="flex items-center gap-1">
           <Link
-            aria-label="Previous"
+            aria-label="Anterior"
             href={calendarHref(view, prevIso)}
             className="px-2 py-1 text-sm rounded border border-border hover:bg-accent/60"
           >
@@ -72,10 +72,10 @@ export function CalendarClient({
             href={calendarHref(view, todayIso)}
             className="px-2 py-1 text-sm rounded border border-border hover:bg-accent/60"
           >
-            Today
+            Hoje
           </Link>
           <Link
-            aria-label="Next"
+            aria-label="Próximo"
             href={calendarHref(view, nextIso)}
             className="px-2 py-1 text-sm rounded border border-border hover:bg-accent/60"
           >

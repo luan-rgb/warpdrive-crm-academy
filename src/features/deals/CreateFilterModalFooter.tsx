@@ -36,14 +36,14 @@ export function CreateFilterModalFooter({
           className={`inline-flex items-center gap-1.5 ${BTN}`}
         >
           <Eye aria-hidden="true" className="h-4 w-4" />
-          Preview
+          Visualizar
         </button>
       ) : (
         <span />
       )}
       <div className="flex gap-2">
         <button type="button" onClick={onCancel} className={BTN}>
-          Cancel
+          Cancelar
         </button>
         {onApply !== undefined ? (
           <button
@@ -52,7 +52,7 @@ export function CreateFilterModalFooter({
             onClick={onApply}
             className={`font-medium ${BTN}`}
           >
-            Apply
+            Aplicar
           </button>
         ) : null}
         <button

@@ -34,13 +34,13 @@ it("reorders, hides a section, and saves the sidebar section preferences", async
     />,
   );
 
-  expect(screen.getByText("Summary")).toBeInTheDocument();
-  expect(screen.getByText("Source")).toBeInTheDocument();
-  expect(screen.queryByText("Details")).not.toBeInTheDocument();
+  expect(screen.getByText("Resumo")).toBeInTheDocument();
+  expect(screen.getByText("Origem")).toBeInTheDocument();
+  expect(screen.queryByText("Detalhes")).not.toBeInTheDocument();
 
-  await user.click(screen.getByRole("button", { name: "Move Source up" }));
-  await user.click(screen.getByRole("checkbox", { name: "Show Source" }));
-  await user.click(screen.getByRole("button", { name: "Save" }));
+  await user.click(screen.getByRole("button", { name: "Mover Origem para cima" }));
+  await user.click(screen.getByRole("checkbox", { name: "Mostrar Origem" }));
+  await user.click(screen.getByRole("button", { name: "Salvar" }));
 
   // Default order is summary, products, invoices, source, ...: moving Source up swaps it with
   // the item directly above it (invoices), not with summary or products.
@@ -72,7 +72,7 @@ it("surfaces the error when saving sections is denied (no silent swallow)", asyn
       onSaved={onSaved}
     />,
   );
-  await user.click(screen.getByRole("button", { name: "Save" }));
+  await user.click(screen.getByRole("button", { name: "Salvar" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(onSaved).not.toHaveBeenCalled();
   expect(onOpenChange).not.toHaveBeenCalled();

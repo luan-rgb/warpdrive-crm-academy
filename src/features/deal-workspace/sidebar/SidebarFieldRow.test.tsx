@@ -34,9 +34,9 @@ it("dirty-gates Save, then Save calls onSave with the draft and exits", async ()
     />,
   );
   fireEvent.click(screen.getByRole("button", { name: "Edit Website" }));
-  expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   fireEvent.change(screen.getByLabelText("editor"), { target: { value: "acme.com" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() => expect(onSave).toHaveBeenCalledWith("acme.com"));
   await vi.waitFor(() => expect(screen.queryByLabelText("editor")).not.toBeInTheDocument());
 });
@@ -45,7 +45,7 @@ it("Cancel discards without calling onSave", () => {
   const onSave = vi.fn(() => Promise.resolve({ ok: true }));
   render(<SidebarFieldRow label="Website" value="-" renderEditor={textEditor} onSave={onSave} />);
   fireEvent.click(screen.getByRole("button", { name: "Edit Website" }));
-  fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+  fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
   expect(onSave).not.toHaveBeenCalled();
   expect(screen.queryByLabelText("editor")).not.toBeInTheDocument();
 });
@@ -55,7 +55,7 @@ it("keeps the editor open and shows an error when save fails", async () => {
   render(<SidebarFieldRow label="Website" value="-" renderEditor={textEditor} onSave={onSave} />);
   fireEvent.click(screen.getByRole("button", { name: "Edit Website" }));
   fireEvent.change(screen.getByLabelText("editor"), { target: { value: "acme.com" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   expect(await screen.findByRole("alert")).toBeInTheDocument();
   expect(screen.getByLabelText("editor")).toBeInTheDocument();
 });

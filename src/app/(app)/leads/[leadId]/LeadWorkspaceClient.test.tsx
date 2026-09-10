@@ -221,7 +221,7 @@ describe("LeadWorkspaceClient", () => {
     // a tab expands its editor directly.
     fireEvent.click(screen.getByRole("tab", { name: "Activity" }));
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Intro call" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() =>
       expect(createActivityAction).toHaveBeenCalledWith(

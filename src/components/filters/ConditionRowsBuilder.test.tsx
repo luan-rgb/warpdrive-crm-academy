@@ -24,10 +24,10 @@ describe("ConditionRowsBuilder", () => {
         onClear={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "1000" } });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     // Emits the raw row (default field = first field, default op = its first op) plus combinator.
     expect(onApply).toHaveBeenCalledWith([{ field: "value", op: "gt", value: "1000" }], "and");
@@ -59,7 +59,7 @@ describe("ConditionRowsBuilder", () => {
         onClear={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     expect(container.querySelector('input[type="date"]')).toBeNull();
     expect(document.querySelector('input[type="date"]')).toBeNull();
@@ -77,8 +77,8 @@ describe("ConditionRowsBuilder", () => {
         onClear={onClear}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
-    fireEvent.click(screen.getByRole("button", { name: "Clear" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
+    fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
     expect(onClear).toHaveBeenCalledTimes(1);
   });
 });

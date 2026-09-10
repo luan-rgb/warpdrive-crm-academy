@@ -11,22 +11,27 @@ describe("UserStatusTabs", () => {
   it("renders the filters as a named toggle-button group", () => {
     render(<UserStatusTabs value="all" onChange={() => {}} />);
     expect(screen.getByRole("group", { name: "Filtro de status do usuário" })).toBeInTheDocument();
-    for (const name of ["All", "Active", "Invited", "Deactivated"]) {
+    for (const name of ["Todos", "Ativos", "Convidados", "Desativados"]) {
       expect(screen.getByRole("button", { name })).toBeInTheDocument();
     }
   });
 
   it("marks the active filter pressed without dangling tab-panel references", () => {
     render(<UserStatusTabs value="invited" onChange={() => {}} />);
-    expect(screen.getByRole("button", { name: "Invited" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Active" })).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getByRole("button", { name: "Invited" })).not.toHaveAttribute("aria-controls");
+    expect(screen.getByRole("button", { name: "Convidados" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getByRole("button", { name: "Ativos" })).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByRole("button", { name: "Convidados" })).not.toHaveAttribute(
+      "aria-controls",
+    );
   });
 
   it("reports the clicked status", async () => {
     const onChange = vi.fn();
     render(<UserStatusTabs value="all" onChange={onChange} />);
-    await userEvent.click(screen.getByRole("button", { name: "Deactivated" }));
+    await userEvent.click(screen.getByRole("button", { name: "Desativados" }));
     expect(onChange).toHaveBeenCalledWith("deactivated");
   });
 });

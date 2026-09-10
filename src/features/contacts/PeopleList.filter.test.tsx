@@ -44,7 +44,7 @@ const ROWS = [
 ];
 
 function openFilter(): void {
-  fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+  fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
 }
 
 function addRow(index: number, value: string): void {
@@ -62,7 +62,7 @@ describe("PeopleList filter round trip", () => {
     addRow(2, "globex");
     fireEvent.click(screen.getByLabelText("Match combinator"));
     fireEvent.click(screen.getByRole("option", { name: "any condition" }));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     await vi.waitFor(() =>
       expect(listPeopleQuery).toHaveBeenCalledWith(

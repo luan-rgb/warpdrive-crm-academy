@@ -50,7 +50,7 @@ function openLabelRow(config: ContactFilterConfig, fieldLabels: Record<string, s
       onApply={onApply}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+  fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
   fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
   fireEvent.click(screen.getByLabelText("Condition 1 field"));
   fireEvent.click(screen.getByRole("option", { name: "Label" }));
@@ -86,7 +86,7 @@ describe("ContactFilterBuilder label condition", () => {
     fireEvent.click(screen.getByLabelText("Condition 1 value"));
     fireEvent.click(screen.getByRole("option", { name: "Hot" }));
     fireEvent.click(screen.getByRole("option", { name: "high priority" }));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     expect(onApply).toHaveBeenCalledWith({
       combinator: "and",
       conditions: [{ field: "labels", op: "eq", value: ["Hot", "high priority"] }],
@@ -95,7 +95,7 @@ describe("ContactFilterBuilder label condition", () => {
 
   it("does not compile a label condition with nothing picked", () => {
     const onApply = openLabelRow(PERSON_FILTER_CONFIG, PERSON_FILTER_LABELS);
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     expect(onApply).toHaveBeenCalledWith(null);
   });
 
@@ -115,7 +115,7 @@ describe("ContactFilterBuilder label condition", () => {
         onApply={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.getByLabelText("Condition 1 value")).toHaveValue("acme");
     expect(screen.getByLabelText("Condition 2 value")).toHaveValue("globex");
     expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
@@ -130,7 +130,7 @@ describe("ContactFilterBuilder label condition", () => {
         onApply={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.click(screen.getByLabelText("Condition 1 field"));
     fireEvent.click(screen.getByRole("option", { name: "Employees" }));

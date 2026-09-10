@@ -89,9 +89,9 @@ it("renders Summary, Person, and Organization when nothing is hidden", () => {
       baseCurrency="USD"
     />,
   );
-  expect(screen.getByText("Summary")).toBeInTheDocument();
-  expect(screen.getByText("Person")).toBeInTheDocument();
-  expect(screen.getByText("Organization")).toBeInTheDocument();
+  expect(screen.getByText("Resumo")).toBeInTheDocument();
+  expect(screen.getByText("Pessoa")).toBeInTheDocument();
+  expect(screen.getByText("Organização")).toBeInTheDocument();
 });
 
 it("opens every section by default (section content is visible without a click)", () => {
@@ -118,9 +118,9 @@ it("omits the Summary section when summary is hidden", () => {
       baseCurrency="USD"
     />,
   );
-  expect(screen.queryByText("Summary")).not.toBeInTheDocument();
+  expect(screen.queryByText("Resumo")).not.toBeInTheDocument();
   // Source/Overview have no block id and always render.
-  expect(screen.getByText("Source")).toBeInTheDocument();
+  expect(screen.getByText("Origem")).toBeInTheDocument();
 });
 
 it("omits Person and Organization when both are hidden", () => {
@@ -132,8 +132,8 @@ it("omits Person and Organization when both are hidden", () => {
       baseCurrency="USD"
     />,
   );
-  expect(screen.queryByText("Person")).not.toBeInTheDocument();
-  expect(screen.queryByText("Organization")).not.toBeInTheDocument();
+  expect(screen.queryByText("Pessoa")).not.toBeInTheDocument();
+  expect(screen.queryByText("Organização")).not.toBeInTheDocument();
 });
 
 it("renders org firmographics and saves an edit via updateOrgAction", async () => {
@@ -150,7 +150,7 @@ it("renders org firmographics and saves an edit via updateOrgAction", async () =
   expect(screen.getByText("Website")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Edit Website" }));
   fireEvent.change(screen.getByLabelText("editor-website"), { target: { value: "new.com" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() =>
     expect(updateOrgAction).toHaveBeenCalledWith(
       expect.objectContaining({ domain: "new.com" }),
@@ -172,7 +172,7 @@ it("renders first/last name and saves via updatePersonAction", async () => {
   expect(screen.getByText("First name")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Maria" } });
-  fireEvent.click(screen.getByRole("button", { name: "Save" }));
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() =>
     expect(updatePersonAction).toHaveBeenCalledWith(
       expect.objectContaining({ firstName: "Maria" }),
@@ -191,7 +191,7 @@ it("renders the Participants section (person links + View All) only when partici
       baseCurrency="USD"
     />,
   );
-  expect(screen.queryByRole("region", { name: "Participants" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("region", { name: "Participantes" })).not.toBeInTheDocument();
   unmount();
 
   participantRows.push({
@@ -214,7 +214,7 @@ it("renders the Participants section (person links + View All) only when partici
         baseCurrency="USD"
       />,
     );
-    const section = screen.getByRole("region", { name: "Participants" });
+    const section = screen.getByRole("region", { name: "Participantes" });
     expect(section).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Gale Guest" })).toHaveAttribute(
       "href",
@@ -248,6 +248,6 @@ it("renders deal custom fields inside Organization instead of a Details section"
     <DealSidebar workspace={workspace} now={new Date()} isHidden={showAll} baseCurrency="USD" />,
   );
   expect(screen.queryByRole("region", { name: "Details" })).not.toBeInTheDocument();
-  const organization = within(screen.getByRole("region", { name: "Organization" }));
+  const organization = within(screen.getByRole("region", { name: "Organização" }));
   expect(organization.getAllByText("Industry")).toHaveLength(2);
 });

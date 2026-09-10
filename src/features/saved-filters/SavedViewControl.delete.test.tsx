@@ -72,7 +72,7 @@ async function openDeleteConfirm(
   name = "Acme people",
 ): Promise<HTMLElement> {
   await user.click(screen.getByRole("button", { name: "Saved views" }));
-  await user.click(screen.getByRole("menuitem", { name: `Delete ${name}` }));
+  await user.click(screen.getByRole("menuitem", { name: `Excluir ${name}` }));
   return await screen.findByRole("alertdialog");
 }
 
@@ -84,8 +84,8 @@ describe("SavedViewControl delete", () => {
 
     await user.click(screen.getByRole("button", { name: "Saved views" }));
 
-    expect(screen.getByRole("menuitem", { name: "Delete Acme people" })).toBeInTheDocument();
-    expect(screen.queryByRole("menuitem", { name: "Delete Team view" })).toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Excluir Acme people" })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Excluir Team view" })).toBeNull();
   });
 
   it("names the view in the confirmation and deletes nothing until it is confirmed", async () => {
@@ -108,7 +108,7 @@ describe("SavedViewControl delete", () => {
     renderControl(null);
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
 
     await waitFor(() => expect(removeSavedFilterAction).toHaveBeenCalledWith("v1", "csrf"));
     await waitFor(() => expect(invalidate).toHaveBeenCalledWith({ targetEntity: "person" }));
@@ -120,7 +120,7 @@ describe("SavedViewControl delete", () => {
     const onSelectView = renderControl("v1");
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
 
     await waitFor(() => expect(onSelectView).toHaveBeenCalledWith(null));
   });
@@ -131,7 +131,7 @@ describe("SavedViewControl delete", () => {
     const onSelectView = renderControl("v9");
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
 
     await waitFor(() => expect(removeSavedFilterAction).toHaveBeenCalled());
     expect(onSelectView).not.toHaveBeenCalled();
@@ -144,7 +144,7 @@ describe("SavedViewControl delete", () => {
     const onSelectView = renderControl("v1");
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir" }));
 
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
     expect(onSelectView).not.toHaveBeenCalled();
@@ -156,7 +156,7 @@ describe("SavedViewControl delete", () => {
     renderControl(null);
 
     const dialog = await openDeleteConfirm(user);
-    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
 
     await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
     expect(removeSavedFilterAction).not.toHaveBeenCalled();

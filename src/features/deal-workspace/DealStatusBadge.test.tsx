@@ -6,11 +6,11 @@ import { DealStatusBadge } from "./DealStatusBadge";
 
 describe("DealStatusBadge", () => {
   it.each([
-    ["open", "Open"],
-    ["won", "Won"],
-    ["lost", "Lost"],
+    ["open", "Aberto"],
+    ["won", "Ganho"],
+    ["lost", "Perdido"],
   ] as const)("renders the %s deal state", (status, label) => {
     render(<DealStatusBadge status={status} />);
-    expect(screen.getByLabelText(`Deal status: ${label}`)).toHaveTextContent(label);
+    expect(screen.getByLabelText(`Status do negócio: ${label}`)).toHaveTextContent(label);
   });
 });

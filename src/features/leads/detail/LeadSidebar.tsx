@@ -67,8 +67,8 @@ export function LeadSidebar({
   return (
     <aside className="min-w-0 space-y-2">
       <CollapsibleSection
-        title="Summary"
-        headerActions={sectionHeaderActions("Summary", fieldsItem("deal"))}
+        title={STRINGS.dealSidebar.sections.summary}
+        headerActions={sectionHeaderActions(STRINGS.dealSidebar.sections.summary, fieldsItem("deal"))}
       >
         <LeadSummaryEditPanel
           lead={{
@@ -81,7 +81,7 @@ export function LeadSidebar({
           }}
           owners={owners}
         />
-        <FieldRow label="Labels">
+        <FieldRow label="Etiquetas">
           <LeadLabelRow
             leadId={lead.id}
             expectedUpdatedAt={new Date(lead.updatedAt).toISOString()}
@@ -91,14 +91,14 @@ export function LeadSidebar({
       </CollapsibleSection>
 
       <CollapsibleSection
-        title="Source"
-        headerActions={sectionHeaderActions("Source", fieldsItem("deal"))}
+        title={STRINGS.dealSidebar.sections.source}
+        headerActions={sectionHeaderActions(STRINGS.dealSidebar.sections.source, fieldsItem("deal"))}
       >
-        <FieldRow label="Origin">{lead.sourceOrigin.replace(/_/g, " ")}</FieldRow>
-        <FieldRow label="Channel" empty={lead.sourceChannel === null}>
+        <FieldRow label="Procedência">{lead.sourceOrigin.replace(/_/g, " ")}</FieldRow>
+        <FieldRow label="Canal" empty={lead.sourceChannel === null}>
           {channelName}
         </FieldRow>
-        <FieldRow label="Channel ID" empty={lead.sourceChannelId === null}>
+        <FieldRow label="ID do canal" empty={lead.sourceChannelId === null}>
           {lead.sourceChannelId ?? "-"}
         </FieldRow>
       </CollapsibleSection>
@@ -132,10 +132,10 @@ export function LeadSidebar({
       )}
 
       <CollapsibleSection
-        title="Overview"
-        headerActions={sectionHeaderActions("Overview", fieldsItem("deal"))}
+        title={STRINGS.dealSidebar.sections.overview}
+        headerActions={sectionHeaderActions(STRINGS.dealSidebar.sections.overview, fieldsItem("deal"))}
       >
-        <FieldRow label="Created">{lead.createdAt.toLocaleDateString()}</FieldRow>
+        <FieldRow label="Criado em">{lead.createdAt.toLocaleDateString()}</FieldRow>
       </CollapsibleSection>
     </aside>
   );

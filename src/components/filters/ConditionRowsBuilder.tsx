@@ -81,11 +81,11 @@ export function ConditionRowsBuilder({
   return (
     <Popover open={open} onOpenChange={openChange}>
       <PopoverTrigger
-        aria-label="Filter"
+        aria-label="Filtro"
         className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
       >
         <Filter aria-hidden="true" className="h-4 w-4" />
-        Filter
+        Filtro
         {activeCount > 0 ? (
           <span className="ml-0.5 rounded-full bg-primary px-1.5 text-xs text-primary-foreground tabular-nums">
             {activeCount}
@@ -109,14 +109,14 @@ export function ConditionRowsBuilder({
             onClick={clear}
             className="rounded-md px-3 py-1 text-sm text-muted-foreground hover:text-foreground"
           >
-            Clear
+            Limpar
           </button>
           <button
             type="button"
             onClick={apply}
             className="rounded-md bg-action px-3 py-1 text-sm text-action-foreground active:scale-[0.96] transition-transform"
           >
-            Apply
+            Aplicar
           </button>
         </div>
       </PopoverContent>

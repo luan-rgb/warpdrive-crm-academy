@@ -60,7 +60,7 @@ export function EntityCreateDialogShell({
             Cancel
           </Button>
           <Button type="button" size="sm" disabled={pending || submitDisabled} onClick={onSubmit}>
-            {pending ? "Saving..." : "Save"}
+            {pending ? "Salvando..." : "Salvar"}
           </Button>
         </div>
       </DialogContent>

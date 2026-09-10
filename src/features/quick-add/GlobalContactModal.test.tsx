@@ -94,7 +94,7 @@ describe("GlobalContactModal open-details-after-create", () => {
       }),
     );
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Jane Roe" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/contacts/people/p1"));
     expect(routerRefresh).not.toHaveBeenCalled();
   });
@@ -106,14 +106,14 @@ describe("GlobalContactModal open-details-after-create", () => {
       }),
     );
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Acme Inc" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/contacts/orgs/o1"));
   });
 
   it("just refreshes when the flag is off (default)", async () => {
     render(<GlobalContactModal kind="person" onClose={noop} onCreated={noop} />);
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Jane Roe" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(routerRefresh).toHaveBeenCalled());
     expect(routerPush).not.toHaveBeenCalled();
   });
@@ -143,7 +143,7 @@ describe("GlobalContactModal person (rich create, M1)", () => {
     render(<GlobalContactModal kind="person" onClose={noop} onCreated={noop} />);
     expect(screen.getByRole("heading", { name: "Add person" })).toBeInTheDocument();
     expect(screen.getByRole("dialog")).toHaveClass("max-w-3xl", "p-0");
-    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeInTheDocument();
   });
 
   it("offers Organization, Phone, and Email at create time, not name-only", () => {
@@ -159,7 +159,7 @@ describe("GlobalContactModal person (rich create, M1)", () => {
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Jane Roe" } });
     fireEvent.click(screen.getByRole("button", { name: "+ Add phone" }));
     fireEvent.change(screen.getByLabelText("Phone 1"), { target: { value: "555-0100" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createPersonAction).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "Jane Roe",
@@ -203,12 +203,12 @@ describe("GlobalContactModal person (rich create, M1)", () => {
 
     expect(screen.getByLabelText("Seniority")).toBeInTheDocument();
     expect(screen.queryByLabelText("Internal only")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Seniority is required");
     expect(createPersonAction).not.toHaveBeenCalled();
 
     fireEvent.change(screen.getByLabelText("Seniority"), { target: { value: "Director" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createPersonAction).toHaveBeenCalledWith(
         expect.objectContaining({ customFields: { seniority: "Director" } }),
@@ -229,7 +229,7 @@ describe("GlobalContactModal organization (rich create, M1)", () => {
     render(<GlobalContactModal kind="org" onClose={noop} onCreated={noop} />);
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Acme Inc" } });
     fireEvent.change(screen.getByLabelText("Street"), { target: { value: "1 Main St" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createOrgAction).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "Acme Inc",

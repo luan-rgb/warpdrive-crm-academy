@@ -45,7 +45,7 @@ describe("QuickAddContact", () => {
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Jane Roe" } });
     expect(screen.getByRole("heading", { name: "Add person" })).toBeInTheDocument();
     expect(screen.getByRole("dialog")).toHaveClass("max-w-3xl", "p-0");
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createPerson).toHaveBeenCalledWith(expect.objectContaining({ name: "Jane Roe" }));
   });
 
@@ -54,14 +54,14 @@ describe("QuickAddContact", () => {
     fireEvent.click(screen.getByRole("button", { name: "+ Organização" }));
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Acme Inc" } });
     expect(screen.getByRole("heading", { name: "Add organization" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createOrg).toHaveBeenCalledWith(expect.objectContaining({ name: "Acme Inc" }));
   });
 
   it("does not submit an empty name", () => {
     render(<QuickAddContact kind="person" />);
     fireEvent.click(screen.getByRole("button", { name: "+ Pessoa" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createPerson).not.toHaveBeenCalled();
   });
 });

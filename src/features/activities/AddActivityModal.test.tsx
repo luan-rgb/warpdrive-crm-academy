@@ -82,7 +82,7 @@ describe("AddActivityModal", () => {
     fireEvent.click(meeting);
     expect(meeting).toHaveAttribute("aria-pressed", "true");
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Follow up" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createActivityAction).toHaveBeenCalledWith(
         expect.objectContaining({ typeId: "t2" }),
@@ -95,7 +95,7 @@ describe("AddActivityModal", () => {
     const onCreated = vi.fn();
     render(<AddActivityModal onClose={vi.fn()} onCreated={onCreated} />);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Follow up" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createActivityAction).toHaveBeenCalledWith(
         expect.objectContaining({ typeId: "t1", subject: "Follow up" }),
@@ -111,7 +111,7 @@ describe("AddActivityModal", () => {
     fireEvent.click(screen.getByLabelText("Due date"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("10"));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createActivityAction).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -128,20 +128,20 @@ describe("AddActivityModal", () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} leadId="lead-1" />);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Log a call" } });
     // With a leadId and no date, Save is disabled: clicking it must not create the activity.
-    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await new Promise((r) => setTimeout(r, 0));
     expect(createActivityAction).not.toHaveBeenCalled();
     // Non-lead callers stay unblocked with no date (GlobalAddMenu, ActivitiesTable).
     cleanup();
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "No date ok" } });
-    expect(screen.getByRole("button", { name: "Save" })).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: "Salvar" })).not.toBeDisabled();
   });
 
   it("blocks an empty subject with an inline error", async () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(/subject/i);
     expect(createActivityAction).not.toHaveBeenCalled();
   });
@@ -169,7 +169,7 @@ describe("AddActivityModal", () => {
     fireEvent.click(screen.getByText("15"));
     fireEvent.change(screen.getByLabelText("Start time"), { target: { value: "14:30" } });
     fireEvent.blur(screen.getByLabelText("Start time"));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(createActivityAction).toHaveBeenCalled());
     const [payload] = createActivityAction.mock.calls[0] as unknown as [
       Record<string, unknown>,
@@ -182,7 +182,7 @@ describe("AddActivityModal", () => {
   it("invalidates the day load after a successful create", async () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Call Ann" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
   });
 
@@ -190,7 +190,7 @@ describe("AddActivityModal", () => {
     const invalidation = holdInvalidation();
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Call Ann" } });
-    const save = screen.getByRole("button", { name: "Save" });
+    const save = screen.getByRole("button", { name: "Salvar" });
     fireEvent.click(save);
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
     fireEvent.click(save);
@@ -207,7 +207,7 @@ describe("AddActivityModal", () => {
     } as never);
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Call Ann" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(invalidateDayLoad).not.toHaveBeenCalled();
   });

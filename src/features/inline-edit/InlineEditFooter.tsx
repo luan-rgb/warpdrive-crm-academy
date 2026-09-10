@@ -31,7 +31,7 @@ export function InlineEditFooter({
         disabled={pending}
         className="h-6 rounded px-2 text-xs"
       >
-        Cancel
+        Cancelar
       </Button>
       <Button
         size="sm"
@@ -40,7 +40,7 @@ export function InlineEditFooter({
         aria-disabled={disabled}
         className="h-6 rounded bg-save px-2 text-xs text-white disabled:bg-save-muted disabled:opacity-100"
       >
-        Save
+        Salvar
       </Button>
     </div>
   );

@@ -34,7 +34,7 @@ function openLabelRow() {
   render(
     <LeadFilterBuilder users={[{ id: "u1", name: "Ann" }]} activeCount={0} onApply={onApply} />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+  fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
   fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
   fireEvent.click(screen.getByLabelText("Condition 1 field"));
   fireEvent.click(screen.getByRole("option", { name: "Label" }));
@@ -72,7 +72,7 @@ describe("LeadFilterBuilder label condition", () => {
     fireEvent.click(screen.getByLabelText("Condition 1 value"));
     fireEvent.click(screen.getByRole("option", { name: "Hot" }));
     fireEvent.click(screen.getByRole("option", { name: "high priority" }));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     expect(onApply).toHaveBeenCalledWith({
       combinator: "and",
       conditions: [{ field: "labels", op: "eq", value: ["Hot", "high priority"] }],
@@ -94,7 +94,7 @@ describe("LeadFilterBuilder label condition", () => {
         onApply={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Filter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.getByLabelText("Condition 1 value")).toHaveValue("acme");
     expect(screen.getByLabelText("Condition 2 value")).toHaveValue("web");
     expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
@@ -102,7 +102,7 @@ describe("LeadFilterBuilder label condition", () => {
 
   it("does not compile a label condition with nothing picked", () => {
     const onApply = openLabelRow();
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     expect(onApply).toHaveBeenCalledWith(null);
   });
 });

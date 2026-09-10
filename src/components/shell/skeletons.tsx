@@ -37,7 +37,7 @@ function RowsSkeleton({ rows = 8 }: { rows?: number }): React.ReactNode {
 // <Suspense> fallback on list pages whose static heading renders immediately while the rows stream.
 export function ListSectionSkeleton(): React.ReactNode {
   return (
-    <div className="flex flex-col gap-4" role="status" aria-busy="true" aria-label="Loading">
+    <div className="flex flex-col gap-4" role="status" aria-busy="true" aria-label="Carregando">
       {/* Toolbar row (filter / view controls) above the table. */}
       <div className="flex items-center gap-2">
         <Skeleton className="h-8 w-20" />
@@ -50,7 +50,7 @@ export function ListSectionSkeleton(): React.ReactNode {
 
 export function ListPageSkeleton(): React.ReactNode {
   return (
-    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Loading">
+    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Carregando">
       <HeadingSkeleton />
       <ListSectionSkeleton />
     </main>
@@ -59,7 +59,7 @@ export function ListPageSkeleton(): React.ReactNode {
 
 export function BoardSkeleton(): React.ReactNode {
   return (
-    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Loading">
+    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Carregando">
       <HeadingSkeleton />
       <div className="flex gap-3 overflow-hidden">
         {Array.from({ length: 5 }, (_, col) => (
@@ -79,7 +79,7 @@ export function BoardSkeleton(): React.ReactNode {
 
 export function DetailPageSkeleton(): React.ReactNode {
   return (
-    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Loading">
+    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Carregando">
       <HeadingSkeleton />
       <div className="flex flex-col gap-4 lg:flex-row">
         {/* Left sidebar (record fields / firmographics). */}
@@ -108,7 +108,7 @@ export function DetailDrawerSkeleton({
   header?: React.ReactNode;
 } = {}): React.ReactNode {
   return (
-    <div className="flex flex-col gap-4" role="status" aria-busy="true" aria-label="Loading">
+    <div className="flex flex-col gap-4" role="status" aria-busy="true" aria-label="Carregando">
       {header ?? <Skeleton className="h-7 w-64" />}
       <div className="flex flex-col gap-4 lg:flex-row">
         <div className="flex w-full flex-col gap-3 lg:w-72">
@@ -126,7 +126,7 @@ export function DetailDrawerSkeleton({
 
 export function InboxSkeleton(): React.ReactNode {
   return (
-    <main className="flex h-full flex-col gap-4" aria-busy="true" aria-label="Loading">
+    <main className="flex h-full flex-col gap-4" aria-busy="true" aria-label="Carregando">
       <HeadingSkeleton action={false} />
       <div className="flex flex-1 gap-4">
         {/* Thread list column. */}
@@ -248,7 +248,7 @@ export function EngagementGridSkeleton({ lanes = 6 }: { lanes?: number } = {}): 
 
 export function DashboardSkeleton(): React.ReactNode {
   return (
-    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Loading">
+    <main className="flex flex-col gap-4" aria-busy="true" aria-label="Carregando">
       <HeadingSkeleton action={false} />
       {/* Stat tiles row. */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

@@ -116,8 +116,8 @@ it("surfaces the error and does not refresh when unlinking the organization is d
       baseCurrency="USD"
     />,
   );
-  await user.click(screen.getByRole("button", { name: "Organization options" }));
-  await user.click(screen.getByRole("menuitem", { name: "Unlink this organization" }));
+  await user.click(screen.getByRole("button", { name: "Opções de Organização" }));
+  await user.click(screen.getByRole("menuitem", { name: "Desvincular esta organização" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(refresh).not.toHaveBeenCalled();
 });

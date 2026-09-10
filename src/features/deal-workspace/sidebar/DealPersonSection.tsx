@@ -77,9 +77,9 @@ export function DealPersonSection({
 
   return (
     <CollapsibleSection
-      title="Person"
+      title="Pessoa"
       headerActions={() => (
-        <SectionHeaderMenu sectionLabel="Person" onEdit={onStartBulk} menuItems={menuItems} />
+        <SectionHeaderMenu sectionLabel="Pessoa" onEdit={onStartBulk} menuItems={menuItems} />
       )}
     >
       {bulkEditing ? (
