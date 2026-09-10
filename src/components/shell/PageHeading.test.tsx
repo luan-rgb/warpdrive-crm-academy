@@ -35,7 +35,7 @@ describe("PageHeading", () => {
       "/contacts/people",
     );
     // The last crumb is the current page: marked for assistive tech, not a link.
-    const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
+    const nav = screen.getByRole("navigation", { name: "Navegação estrutural" });
     const current = nav.querySelector('[aria-current="page"]');
     expect(current?.textContent).toBe("People");
     expect(screen.queryByRole("link", { name: "People" })).toBeNull();
@@ -43,6 +43,6 @@ describe("PageHeading", () => {
 
   it("omits the breadcrumb nav when no crumbs are given", () => {
     render(<PageHeading title="Solo" />);
-    expect(screen.queryByRole("navigation", { name: "Breadcrumb" })).toBeNull();
+    expect(screen.queryByRole("navigation", { name: "Navegação estrutural" })).toBeNull();
   });
 });

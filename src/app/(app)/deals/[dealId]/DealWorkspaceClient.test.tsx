@@ -154,7 +154,7 @@ describe("DealWorkspaceClient", () => {
     expect(current).toBeTruthy();
     // Scoped to the stage listbox: the activity composer (now mounted for real on the Activity
     // tab) has its own unrelated "Start time to End time" separator text elsewhere on the page.
-    const stageBar = screen.getByRole("listbox", { name: "Stage" });
+    const stageBar = screen.getByRole("listbox", { name: "Etapa" });
     expect(within(stageBar).queryByText("to")).not.toBeInTheDocument();
   });
 });
@@ -217,7 +217,7 @@ describe("DealWorkspaceClient block gating", () => {
       />,
     );
     expect(container.querySelector('section[aria-label="compose"]')).toBeNull();
-    expect(screen.getByRole("heading", { name: "History" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Histórico" })).toBeInTheDocument();
   });
 
   it("hides the WorkspaceTabs history when the timeline block is hidden", () => {
@@ -228,7 +228,7 @@ describe("DealWorkspaceClient block gating", () => {
         initialHiddenBlocks={["timeline"]}
       />,
     );
-    expect(screen.queryByRole("heading", { name: "History" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Histórico" })).not.toBeInTheDocument();
     expect(container.querySelector('section[aria-label="compose"]')).not.toBeNull();
   });
 
@@ -241,6 +241,6 @@ describe("DealWorkspaceClient block gating", () => {
       />,
     );
     expect(container.querySelector('section[aria-label="compose"]')).not.toBeNull();
-    expect(screen.getByRole("heading", { name: "History" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Histórico" })).toBeInTheDocument();
   });
 });

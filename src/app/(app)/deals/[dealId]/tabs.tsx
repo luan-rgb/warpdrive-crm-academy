@@ -152,7 +152,7 @@ export function WorkspaceTabs({
       )}
 
       <section aria-label="focus">
-        <SectionHeading>Focus</SectionHeading>
+        <SectionHeading>Foco</SectionHeading>
         <HistoryFeed
           items={focus}
           emptyLabel="Nothing needs your attention"
@@ -167,7 +167,7 @@ export function WorkspaceTabs({
       </section>
 
       <section aria-label="history">
-        <SectionHeading>History</SectionHeading>
+        <SectionHeading>Histórico</SectionHeading>
         <HistoryTypeTabs
           tab={tab}
           onTab={onTab}

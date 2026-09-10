@@ -15,7 +15,7 @@ export default async function InterceptedDealPage({
   const { dealId } = await params;
   return (
     <DetailDrawer
-      title="Deal details"
+      title="Detalhes do negócio"
       contentClassName="w-full sm:w-[96vw] md:w-[92vw] lg:w-[88vw] xl:w-[84vw] max-w-[1600px]"
     >
       <Suspense fallback={<DetailDrawerPreviewSkeleton recordId={dealId} />}>

@@ -35,7 +35,7 @@ export function ParticipantsSection({
       headerActions={() => (
         <button
           type="button"
-          aria-label="Add participant"
+          aria-label="Adicionar participante"
           onClick={() => setOpen(true)}
           className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
         >
@@ -61,12 +61,12 @@ export function ParticipantsSection({
         onClick={() => setOpen(true)}
         className="mt-1 rounded-md border px-2.5 py-1 text-sm transition-[background-color,scale] duration-150 ease-out hover:bg-accent active:scale-[0.96]"
       >
-        View All
+        Ver todos
       </button>
       <ParticipantsDialog
         open={open}
         onOpenChange={setOpen}
-        title={orgName ?? "this deal"}
+        title={orgName ?? "este negócio"}
         data={data}
       />
     </CollapsibleSection>

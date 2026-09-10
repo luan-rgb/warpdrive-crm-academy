@@ -55,7 +55,7 @@ it("commits the toggled label set through updateLeadAction", async () => {
     </ActionErrorProvider>,
   );
 
-  await user.click(screen.getByRole("button", { name: /add labels/i }));
+  await user.click(screen.getByRole("button", { name: /adicionar etiquetas/i }));
   await user.click(await screen.findByRole("menuitemcheckbox", { name: /hot/i }));
 
   expect(updateLeadAction).toHaveBeenCalledWith(
@@ -76,7 +76,7 @@ it("surfaces the shared error dialog when a label edit is denied (no silent reve
     </ActionErrorProvider>,
   );
 
-  await user.click(screen.getByRole("button", { name: /add labels/i }));
+  await user.click(screen.getByRole("button", { name: /adicionar etiquetas/i }));
   await user.click(await screen.findByRole("menuitemcheckbox", { name: /hot/i }));
 
   const dialog = await screen.findByRole("dialog");

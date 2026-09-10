@@ -157,18 +157,18 @@ export function ActivityCard({
               <Link
                 href={`/contacts/people/${activity.personId}`}
                 className="text-primary hover:underline"
-                aria-label="Linked person"
+                aria-label="Pessoa vinculada"
               >
-                · {activity.personName ?? "Person"}
+                · {activity.personName ?? "Pessoa"}
               </Link>
             ) : null}
             {activity.orgId !== null ? (
               <Link
                 href={`/contacts/orgs/${activity.orgId}`}
                 className="text-primary hover:underline"
-                aria-label="Linked organization"
+                aria-label="Organização vinculada"
               >
-                · {activity.orgName ?? "Organization"}
+                · {activity.orgName ?? "Organização"}
               </Link>
             ) : null}
           </p>

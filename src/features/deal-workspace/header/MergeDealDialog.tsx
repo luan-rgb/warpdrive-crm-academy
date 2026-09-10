@@ -75,25 +75,26 @@ export function MergeDealDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Merge deals</DialogTitle>
+          <DialogTitle>Mesclar negócios</DialogTitle>
           <DialogDescription>
-            Pick a deal to merge into this one. Its activities, notes, emails, participants, and
-            followers move here, and the other deal is deleted. This cannot be undone.
+            Escolha um negócio para mesclar com este. As atividades, notas, emails, participantes e
+            seguidores dele são movidos para cá, e o outro negócio é excluído. Essa ação não pode
+            ser desfeita.
           </DialogDescription>
         </DialogHeader>
         <Combobox
           value={sourceId}
           onChange={setSourceId}
           options={options}
-          ariaLabel="Deal to merge in"
-          placeholder="Select a deal"
+          ariaLabel="Negócio a mesclar"
+          placeholder="Selecione um negócio"
         />
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={pending}>
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={() => void confirm()} disabled={pending || sourceId === ""}>
-            Merge
+            Mesclar
           </Button>
         </DialogFooter>
       </DialogContent>

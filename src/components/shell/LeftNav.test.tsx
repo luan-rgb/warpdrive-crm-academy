@@ -49,7 +49,7 @@ describe("LeftNav", () => {
 
   test("renders all primary destinations as links with a navigation landmark", () => {
     render(<LeftNav />);
-    expect(screen.getByRole("navigation", { name: "Primary" })).toBeTruthy();
+    expect(screen.getByRole("navigation", { name: "Navegação principal" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Pipeline" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Configurações" })).toBeTruthy();
   });
@@ -84,7 +84,7 @@ describe("LeftNav", () => {
     render(<LeftNav />);
     expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
     expect(screen.getByText("Pipeline").className).not.toContain("sr-only");
-    expect(screen.getByRole("navigation", { name: "Primary" }).className).toMatch(/w-56\b/);
+    expect(screen.getByRole("navigation", { name: "Navegação principal" }).className).toMatch(/w-56\b/);
   });
 
   test("defaults to the collapsed rail on a small screen (no stored preference)", () => {
@@ -92,7 +92,7 @@ describe("LeftNav", () => {
     render(<LeftNav />);
     expect(screen.getByRole("button", { name: "Expand sidebar" })).not.toBeNull();
     expect(screen.getByText("Pipeline").className).toContain("sr-only");
-    expect(screen.getByRole("navigation", { name: "Primary" }).className).toMatch(/w-16\b/);
+    expect(screen.getByRole("navigation", { name: "Navegação principal" }).className).toMatch(/w-16\b/);
   });
 
   test("collapses to icons and expands to full labels via a toggle button", () => {
@@ -136,7 +136,7 @@ describe("LeftNav", () => {
   test("is a narrow, dark, icon-only rail (Pipedrive) with visually hidden labels when collapsed", () => {
     setViewport(false);
     const { container } = render(<LeftNav />);
-    const nav = screen.getByRole("navigation", { name: "Primary" });
+    const nav = screen.getByRole("navigation", { name: "Navegação principal" });
     // Narrow fixed-width rail, not a wide labelled sidebar.
     expect(nav.className).toMatch(/w-16\b/);
     // Dark rail surface.

@@ -23,7 +23,7 @@ export default async function EditAutomationPage({
 
   return (
     <SettingsPage>
-      <SettingsHeading title="Edit automation" />
+      <SettingsHeading title="Editar automação" />
       <AutomationWizard initialRule={result.value} />
     </SettingsPage>
   );

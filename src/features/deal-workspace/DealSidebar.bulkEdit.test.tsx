@@ -193,7 +193,7 @@ it("the Source section pencil bulk-edits channel + channel id in one action call
   const sourceSection = within(screen.getByRole("region", { name: "Origem" }));
   fireEvent.click(sourceSection.getByRole("button", { name: "Editar seção Origem" }));
 
-  fireEvent.change(sourceSection.getByLabelText("Channel ID"), { target: { value: "EXT-9" } });
+  fireEvent.change(sourceSection.getByLabelText("ID do canal"), { target: { value: "EXT-9" } });
   fireEvent.click(sourceSection.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalledTimes(1));

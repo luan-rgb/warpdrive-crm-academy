@@ -128,7 +128,7 @@ it("shows no Owner or Probability rows (PD keeps those out of Summary)", () => {
 
 it("offers the Add-labels dropdown trigger, and renders active chips when set", () => {
   const { unmount } = renderList();
-  expect(screen.getByRole("button", { name: /add labels/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /adicionar etiquetas/i })).toBeInTheDocument();
   expect(screen.queryByText("Hot")).not.toBeInTheDocument();
   unmount();
 
@@ -141,7 +141,7 @@ it("offers the Add-labels dropdown trigger, and renders active chips when set", 
 it("toggles a label through the catalog dropdown picker via updateDealAction", async () => {
   const user = userEvent.setup();
   renderList();
-  await user.click(screen.getByRole("button", { name: /add labels/i }));
+  await user.click(screen.getByRole("button", { name: /adicionar etiquetas/i }));
   await user.click(await screen.findByRole("menuitemcheckbox", { name: /Hot/ }));
   await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalled());
   const [payload] = updateDealAction.mock.calls[0] as unknown as [Record<string, unknown>];
@@ -167,11 +167,11 @@ it("shows the participant count-link (PD parity) and opens the participants tabl
     "href",
     "/contacts/people/p2",
   );
-  fireEvent.click(screen.getByRole("button", { name: "Remove Ann Guest" }));
+  fireEvent.click(screen.getByRole("button", { name: "Remover Ann Guest" }));
   await vi.waitFor(() => expect(removeParticipantAction).toHaveBeenCalled());
 
   // Candidates offered exclude existing participants; adding calls the action.
-  fireEvent.click(screen.getByLabelText("Link participant"));
+  fireEvent.click(screen.getByLabelText("Vincular participante"));
   fireEvent.click(screen.getByRole("option", { name: "Bob Free" }));
   await vi.waitFor(() => expect(addParticipantAction).toHaveBeenCalled());
   const [payload] = addParticipantAction.mock.calls[0] as unknown as [Record<string, unknown>];

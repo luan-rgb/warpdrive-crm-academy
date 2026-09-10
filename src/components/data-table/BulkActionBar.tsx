@@ -21,7 +21,7 @@ export function BulkActionBar({
       <Button
         variant="ghost"
         size="sm"
-        aria-label="Clear selection"
+        aria-label="Limpar seleção"
         onClick={onClear}
         className="ml-auto text-muted-foreground hover:text-foreground"
       >

@@ -35,7 +35,7 @@ export function ConditionValue({
         ariaLabel={ariaLabel}
         values={rowValueList(value)}
         onChange={onChange}
-        placeholder="Select"
+        placeholder="Selecionar"
         options={input.options}
       />
     );
@@ -46,7 +46,7 @@ export function ConditionValue({
         ariaLabel={ariaLabel}
         value={singleRowValue(value)}
         onChange={onChange}
-        placeholder="Select"
+        placeholder="Selecionar"
         options={input.options}
       />
     );
@@ -58,7 +58,7 @@ export function ConditionValue({
         ariaLabel={ariaLabel}
         value={text === "" ? null : text}
         onChange={(v) => onChange(v ?? "")}
-        placeholder="Value"
+        placeholder="Valor"
         triggerClassName="w-full rounded-md border px-2 py-1 text-left text-sm hover:bg-accent"
       />
     );
@@ -70,7 +70,7 @@ export function ConditionValue({
       value={singleRowValue(value)}
       onChange={(e) => onChange(e.currentTarget.value)}
       className="w-full px-2 py-1"
-      placeholder="Value"
+      placeholder="Valor"
     />
   );
 }

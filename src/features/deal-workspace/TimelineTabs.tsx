@@ -10,8 +10,8 @@ interface TimelineTabsProps {
 }
 
 const VIEWS: { key: TimelineView; label: string }[] = [
-  { key: "focus", label: "Focus" },
-  { key: "history", label: "History" },
+  { key: "focus", label: "Foco" },
+  { key: "history", label: "Histórico" },
 ];
 
 // Focus vs History switch (Pipedrive parity): Focus surfaces what still needs
@@ -20,7 +20,7 @@ const VIEWS: { key: TimelineView; label: string }[] = [
 export function TimelineTabs({ view, onView, children }: TimelineTabsProps): React.ReactNode {
   return (
     <Tabs value={view} onValueChange={(v) => onView(v as TimelineView)}>
-      <TabsList aria-label="Timeline view" className="mb-3 gap-1">
+      <TabsList aria-label="Visão da linha do tempo" className="mb-3 gap-1">
         {VIEWS.map((v) => (
           <TabsTrigger key={v.key} value={v.key} className={PILL_TAB}>
             {v.label}

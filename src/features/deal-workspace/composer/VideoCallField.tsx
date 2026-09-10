@@ -28,7 +28,7 @@ export function VideoCallField({ value, onChange }: Props): React.ReactNode {
         className="inline-flex w-fit items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-sm text-muted-foreground transition-transform hover:text-foreground active:scale-[0.96]"
       >
         <Video className="h-4 w-4" />
-        Add video call link
+        Adicionar link de videochamada
       </button>
     );
   }
@@ -40,7 +40,7 @@ export function VideoCallField({ value, onChange }: Props): React.ReactNode {
       </a>
       <button
         type="button"
-        aria-label="Remove video call link"
+        aria-label="Remover link de videochamada"
         onClick={() => onChange("")}
         className="rounded text-muted-foreground hover:text-foreground"
       >

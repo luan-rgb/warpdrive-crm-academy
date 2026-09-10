@@ -10,7 +10,7 @@ export function SearchTrigger() {
     <Button
       variant="outline"
       static
-      aria-label="Open search"
+      aria-label="Abrir busca"
       onClick={() => window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT))}
       className="w-full max-w-md justify-start truncate bg-background text-left font-normal text-muted-foreground"
     >

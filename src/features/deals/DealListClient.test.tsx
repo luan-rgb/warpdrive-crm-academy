@@ -127,7 +127,7 @@ describe("DealListClient footer count", () => {
     // A distinct, unambiguous "filtered" indicator makes clear this is not the whole pipeline.
     const indicator = screen.getByLabelText("filtered count");
     expect(indicator).toHaveTextContent("1");
-    expect(indicator.textContent?.toLowerCase()).toContain("filtered");
+    expect(indicator.textContent?.toLowerCase()).toContain("filtrado");
     // The misleading whole-pipeline denominator (500) must NOT appear: the filtered subset count and
     // the server total are computed over different bases, so "1 of 500" is meaningless.
     expect(indicator).not.toHaveTextContent("500");

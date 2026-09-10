@@ -73,8 +73,8 @@ const emails: LeadTimelineEmail[] = [];
 describe("LeadTimeline", () => {
   it("defaults to History with the Focus/History switch and type-filter tabs both visible", () => {
     render(<LeadTimeline items={makeItems(makeActivity())} emails={emails} />);
-    expect(screen.getByRole("tab", { name: "Focus" })).toHaveAttribute("aria-selected", "false");
-    expect(screen.getByRole("tab", { name: "History" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: "Foco" })).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByRole("tab", { name: "Histórico" })).toHaveAttribute("aria-selected", "true");
     expect(screen.getByRole("tab", { name: "All" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Activities" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Notes" })).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe("LeadTimeline", () => {
 
   it("Focus view shows only the open activity and hides the type-filter row", async () => {
     render(<LeadTimeline items={makeItems(makeActivity({ done: false }))} emails={emails} />);
-    await userEvent.click(screen.getByRole("tab", { name: "Focus" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Foco" }));
 
     expect(screen.getByText("Follow-up call")).toBeInTheDocument();
     expect(screen.queryByText("Called them")).not.toBeInTheDocument();
@@ -93,7 +93,7 @@ describe("LeadTimeline", () => {
 
   it("Focus view shows the empty label when there are no open activities", async () => {
     render(<LeadTimeline items={makeItems(makeActivity({ done: true }))} emails={emails} />);
-    await userEvent.click(screen.getByRole("tab", { name: "Focus" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Foco" }));
     expect(screen.getByText("Nothing needs your attention")).toBeInTheDocument();
   });
 
@@ -106,8 +106,8 @@ describe("LeadTimeline", () => {
 
   it("returning to History restores the type-filter tabs and the full log", async () => {
     render(<LeadTimeline items={makeItems(makeActivity({ done: true }))} emails={emails} />);
-    await userEvent.click(screen.getByRole("tab", { name: "Focus" }));
-    await userEvent.click(screen.getByRole("tab", { name: "History" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Foco" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Histórico" }));
 
     expect(screen.getByRole("tab", { name: "Notes" })).toBeInTheDocument();
     expect(screen.getByText("Called them")).toBeInTheDocument();

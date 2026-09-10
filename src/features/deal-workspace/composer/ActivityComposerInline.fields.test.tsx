@@ -127,7 +127,7 @@ it("includes a generated video call link in the submitted payload", async () => 
   fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Sync" } });
   // Video call is a PD-style disclosure link ("Video call"); open it, then generate the link.
   fireEvent.click(screen.getByRole("button", { name: "Videochamada" }));
-  fireEvent.click(screen.getByRole("button", { name: /video call link/i }));
+  fireEvent.click(screen.getByRole("button", { name: /link de videochamada/i }));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());

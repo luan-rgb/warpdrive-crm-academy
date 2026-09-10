@@ -181,7 +181,7 @@ export function PersonLinkEditor({
         defs={customFieldDefs}
         values={values}
         onChange={(key, value) => setValues((current) => ({ ...current, [key]: value }))}
-        title="Person fields"
+        title="Campos da pessoa"
       />
 
       {matches.length > 0 && (

@@ -42,7 +42,7 @@ export function CalendarClient({
   return (
     // Not <main>: the app shell already owns that landmark, and a second one inside it hides the
     // shell's from assistive tech instead of adding anything.
-    <section aria-label="Calendar" className="p-4">
+    <section aria-label="Calendário" className="p-4">
       <header className="flex items-center gap-3 mb-4">
         <div className="flex gap-1 rounded-md border border-border p-0.5">
           <Link

@@ -62,11 +62,11 @@ describe("ActivityCard", () => {
     render(<ActivityCard activity={makeActivity()} at={AT} />);
     expect(screen.getByText("Discovery call")).toBeInTheDocument();
     expect(screen.getByText(/Nick Sawinyh/)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /person/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /pessoa/i })).toHaveAttribute(
       "href",
       "/contacts/people/p1",
     );
-    expect(screen.getByRole("link", { name: /organization/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /organização/i })).toHaveAttribute(
       "href",
       "/contacts/orgs/o1",
     );
@@ -85,27 +85,27 @@ describe("ActivityCard", () => {
         at={AT}
       />,
     );
-    const personLink = screen.getByRole("link", { name: /linked person/i });
+    const personLink = screen.getByRole("link", { name: /pessoa vinculada/i });
     expect(personLink).toHaveTextContent("Ada Lovelace");
-    expect(personLink).not.toHaveTextContent("Person");
+    expect(personLink).not.toHaveTextContent("Pessoa");
     expect(personLink).toHaveAttribute("href", "/contacts/people/p1");
-    const orgLink = screen.getByRole("link", { name: /linked organization/i });
+    const orgLink = screen.getByRole("link", { name: /organização vinculada/i });
     expect(orgLink).toHaveTextContent("Analytical Ltd");
     expect(orgLink).toHaveAttribute("href", "/contacts/orgs/o1");
   });
 
   it("falls back to a generic label (no crash) when a linked record has no name", () => {
     render(<ActivityCard activity={makeActivity({ personName: null, orgName: null })} at={AT} />);
-    expect(screen.getByRole("link", { name: /linked person/i })).toHaveTextContent("Person");
-    expect(screen.getByRole("link", { name: /linked organization/i })).toHaveTextContent(
-      "Organization",
+    expect(screen.getByRole("link", { name: /pessoa vinculada/i })).toHaveTextContent("Pessoa");
+    expect(screen.getByRole("link", { name: /organização vinculada/i })).toHaveTextContent(
+      "Organização",
     );
   });
 
   it("omits the person and organization links when absent", () => {
     render(<ActivityCard activity={makeActivity({ personId: null, orgId: null })} at={AT} />);
-    expect(screen.queryByRole("link", { name: /person/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /organization/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /pessoa/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /organização/i })).not.toBeInTheDocument();
   });
 
   it("renders without crashing when ownerName is undefined (not just null)", () => {

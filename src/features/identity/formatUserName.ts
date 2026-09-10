@@ -1,4 +1,4 @@
-const UNASSIGNED_LABEL = "Unassigned";
+const UNASSIGNED_LABEL = "Não atribuído";
 const EMAIL_SEPARATOR = "@";
 const LOCAL_PART_SEPARATOR_PATTERN = /[._+-]+/;
 

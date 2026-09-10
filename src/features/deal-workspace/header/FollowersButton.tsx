@@ -47,15 +47,15 @@ export function FollowersButton({
     <DropdownMenu>
       <DropdownMenuTrigger className={`${ICON_BUTTON} gap-1.5 text-sm`}>
         <Users aria-hidden="true" className="h-4 w-4" />
-        <span className="tabular-nums">{count}</span> {count === 1 ? "follower" : "followers"}
+        <span className="tabular-nums">{count}</span> {count === 1 ? "seguidor" : "seguidores"}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" aria-label="Followers" className="min-w-52">
+      <DropdownMenuContent align="end" aria-label="Seguidores" className="min-w-52">
         <DropdownMenuItem disabled={pending} onSelect={() => void toggle()} className="font-medium">
-          {isFollowedBySelf ? "Following" : "Follow"}
+          {isFollowedBySelf ? "Seguindo" : "Seguir"}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {count === 0 ? (
-          <p className="px-2 py-1.5 text-sm text-muted-foreground">No followers yet</p>
+          <p className="px-2 py-1.5 text-sm text-muted-foreground">Ainda não há seguidores</p>
         ) : (
           followers.map((f) => (
             <div key={f.id} className="flex items-center gap-2 px-2 py-1.5 text-sm">

@@ -14,8 +14,8 @@ describe("TimelineTabs", () => {
         <p>content</p>
       </TimelineTabs>,
     );
-    expect(screen.getByRole("tab", { name: "Focus" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "History" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Foco" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Histórico" })).toBeInTheDocument();
   });
 
   it("marks the active view as aria-selected", () => {
@@ -24,8 +24,8 @@ describe("TimelineTabs", () => {
         <p>content</p>
       </TimelineTabs>,
     );
-    expect(screen.getByRole("tab", { name: "History" })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByRole("tab", { name: "Focus" })).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByRole("tab", { name: "Histórico" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: "Foco" })).toHaveAttribute("aria-selected", "false");
   });
 
   it("calls onView with 'focus' when the Focus tab is clicked", async () => {
@@ -35,7 +35,7 @@ describe("TimelineTabs", () => {
         <p>content</p>
       </TimelineTabs>,
     );
-    await userEvent.click(screen.getByRole("tab", { name: "Focus" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Foco" }));
     expect(onView).toHaveBeenCalledWith("focus");
   });
 
@@ -46,7 +46,7 @@ describe("TimelineTabs", () => {
         <p>content</p>
       </TimelineTabs>,
     );
-    await userEvent.click(screen.getByRole("tab", { name: "History" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Histórico" }));
     expect(onView).toHaveBeenCalledWith("history");
   });
 

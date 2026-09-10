@@ -15,7 +15,7 @@ export default async function ActivityListPage(): Promise<React.ReactNode> {
     redirect("/login");
   }
   return (
-    <main aria-label="Activities" className="h-full">
+    <main aria-label="Atividades" className="h-full">
       <ActivitiesTable />
     </main>
   );

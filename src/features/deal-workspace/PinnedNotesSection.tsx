@@ -16,7 +16,7 @@ export function PinnedNotesSection({
 
   return (
     <section aria-label="pinned">
-      <SectionHeading>Pinned</SectionHeading>
+      <SectionHeading>Fixadas</SectionHeading>
       <HistoryFeed items={items} emptyLabel="" onNoteChanged={onNoteChanged} />
     </section>
   );

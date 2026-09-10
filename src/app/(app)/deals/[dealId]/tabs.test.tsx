@@ -118,8 +118,8 @@ it("shows Focus and History at once with no toggle", () => {
     />,
   );
   // Both section headings render together (stacked, not toggled).
-  expect(screen.getByRole("heading", { name: /Focus/ })).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: /History/ })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /Foco/ })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /Histórico/ })).toBeInTheDocument();
   // The History Email sub-tab is reachable immediately (no Focus/History toggle to click first).
   expect(screen.getByRole("tab", { name: /Email/ })).toBeInTheDocument();
   // The old Focus/History toggle tablist is gone.

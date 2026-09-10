@@ -18,7 +18,7 @@ describe("BulkActionBar", () => {
     );
     expect(screen.getByText("3 selected")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Clear selection" }));
+    fireEvent.click(screen.getByRole("button", { name: "Limpar seleção" }));
     expect(onClear).toHaveBeenCalledOnce();
   });
 });

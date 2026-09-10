@@ -15,7 +15,7 @@ export default async function InterceptedLeadPage({
   const { leadId } = await params;
   return (
     <DetailDrawer
-      title="Lead details"
+      title="Detalhes do lead"
       contentClassName="w-full sm:w-[94vw] md:w-[85vw] lg:w-[80vw] xl:w-[75vw] max-w-[1280px]"
     >
       <Suspense fallback={<DetailDrawerPreviewSkeleton recordId={leadId} />}>

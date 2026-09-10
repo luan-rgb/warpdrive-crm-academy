@@ -28,13 +28,13 @@ export function ParticipantsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Participants ({title})</DialogTitle>
+          <DialogTitle>Participantes ({title})</DialogTitle>
         </DialogHeader>
 
         <div className="w-64">
           <Combobox
-            ariaLabel="Link participant"
-            placeholder="Link participant"
+            ariaLabel="Vincular participante"
+            placeholder="Vincular participante"
             value=""
             onChange={(id) => void add(id)}
             options={options}
@@ -45,14 +45,14 @@ export function ParticipantsDialog({
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b text-left text-xs text-muted-foreground">
-                <th className="py-2 pr-3 font-medium">Name</th>
-                <th className="py-2 pr-3 font-medium">Organization</th>
+                <th className="py-2 pr-3 font-medium">Nome</th>
+                <th className="py-2 pr-3 font-medium">Organização</th>
                 <th className="py-2 pr-3 font-medium">Email</th>
-                <th className="py-2 pr-3 font-medium">Phone</th>
-                <th className="py-2 pr-3 font-medium">Closed deals</th>
-                <th className="py-2 pr-3 font-medium">Open deals</th>
-                <th className="py-2 pr-3 font-medium">Next activity date</th>
-                <th className="py-2 pr-3 font-medium">Owner</th>
+                <th className="py-2 pr-3 font-medium">Telefone</th>
+                <th className="py-2 pr-3 font-medium">Negócios fechados</th>
+                <th className="py-2 pr-3 font-medium">Negócios em aberto</th>
+                <th className="py-2 pr-3 font-medium">Próxima atividade</th>
+                <th className="py-2 pr-3 font-medium">Dono</th>
                 <th className="py-2" />
               </tr>
             </thead>
@@ -88,7 +88,7 @@ export function ParticipantsDialog({
                   <td className="py-2 text-right">
                     <button
                       type="button"
-                      aria-label={`Remove ${p.name}`}
+                      aria-label={`Remover ${p.name}`}
                       onClick={() => void remove(p.personId)}
                       className="rounded p-1 text-muted-foreground hover:text-destructive"
                     >
@@ -100,7 +100,7 @@ export function ParticipantsDialog({
               {participants.length === 0 && (
                 <tr>
                   <td colSpan={9} className="py-4 text-center text-muted-foreground">
-                    No participants yet.
+                    Ainda não há participantes.
                   </td>
                 </tr>
               )}

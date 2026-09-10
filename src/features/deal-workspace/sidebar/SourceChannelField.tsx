@@ -43,9 +43,9 @@ export function SourceChannelField({ dealId, updatedAt, sourceChannel }: SourceC
   }
 
   return (
-    <FieldRow label="Channel">
+    <FieldRow label="Canal">
       <InlineSelectField
-        label="Channel"
+        label="Canal"
         value={channelValue}
         options={SOURCE_CHANNEL_OPTIONS}
         onSave={save}

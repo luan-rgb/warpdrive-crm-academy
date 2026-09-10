@@ -13,7 +13,7 @@ export default async function InterceptedOrgPage({
 }): Promise<React.ReactNode> {
   const { orgId } = await params;
   return (
-    <DetailDrawer title="Organization details">
+    <DetailDrawer title="Detalhes da organização">
       <Suspense fallback={<DetailDrawerPreviewSkeleton recordId={orgId} />}>
         <OrgDetailView orgId={orgId} />
       </Suspense>

@@ -60,20 +60,20 @@ export function OwnerBlock({
       <Avatar name={name} src={owner?.avatarUrl ?? null} />
       <div className="min-w-0 leading-tight">
         <p className="truncate text-sm font-medium text-foreground">{name}</p>
-        <p className="text-xs text-muted-foreground">Owner</p>
+        <p className="text-xs text-muted-foreground">Dono</p>
       </div>
       {canChangeOwner && (
         <DropdownMenu>
           <DropdownMenuTrigger
-            aria-label="Change owner"
+            aria-label="Alterar dono"
             disabled={pending}
             className="relative rounded p-0.5 text-muted-foreground transition-[color,scale] duration-150 ease-out after:absolute after:-inset-2 after:content-[''] hover:text-foreground active:not-disabled:scale-[0.96] disabled:opacity-50"
           >
             <ChevronDown aria-hidden="true" className="h-4 w-4" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" aria-label="Assign owner" className="min-w-44">
+          <DropdownMenuContent align="end" aria-label="Atribuir dono" className="min-w-44">
             {assignableUsers.length === 0 ? (
-              <p className="px-2 py-1.5 text-sm text-muted-foreground">No assignable users</p>
+              <p className="px-2 py-1.5 text-sm text-muted-foreground">Nenhum usuário disponível</p>
             ) : (
               assignableUsers.map((u) => (
                 <DropdownMenuItem key={u.id} onSelect={() => void reassign(u.id)}>

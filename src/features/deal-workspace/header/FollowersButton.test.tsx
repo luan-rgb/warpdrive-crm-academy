@@ -26,13 +26,13 @@ it("renders the follower count", () => {
   render(<FollowersButton dealId="d1" followers={followers} isFollowedBySelf={false} />);
   // The count and label sit in separate nodes inside the trigger, so match on the button's
   // accessible name rather than a single text node.
-  expect(screen.getByRole("button", { name: /2 followers/ })).toBeTruthy();
+  expect(screen.getByRole("button", { name: /2 seguidores/ })).toBeTruthy();
 });
 
 it("opening the menu shows follower names", async () => {
   const user = userEvent.setup();
   render(<FollowersButton dealId="d1" followers={followers} isFollowedBySelf={false} />);
-  await user.click(screen.getByRole("button", { name: /followers/ }));
+  await user.click(screen.getByRole("button", { name: /seguidores/ }));
   expect(screen.getByText("Ada Lovelace")).toBeTruthy();
   expect(screen.getByText("Alan Turing")).toBeTruthy();
 });
@@ -40,8 +40,8 @@ it("opening the menu shows follower names", async () => {
 it("toggles follow via followDealAction when not yet following", async () => {
   const user = userEvent.setup();
   render(<FollowersButton dealId="d1" followers={followers} isFollowedBySelf={false} />);
-  await user.click(screen.getByRole("button", { name: /followers/ }));
-  await user.click(screen.getByRole("menuitem", { name: "Follow" }));
+  await user.click(screen.getByRole("button", { name: /seguidores/ }));
+  await user.click(screen.getByRole("menuitem", { name: "Seguir" }));
   expect(followDealAction).toHaveBeenCalledWith({ dealId: "d1" }, "csrf");
   expect(unfollowDealAction).not.toHaveBeenCalled();
 });
@@ -49,8 +49,8 @@ it("toggles follow via followDealAction when not yet following", async () => {
 it("toggles unfollow via unfollowDealAction when already following", async () => {
   const user = userEvent.setup();
   render(<FollowersButton dealId="d1" followers={followers} isFollowedBySelf={true} />);
-  await user.click(screen.getByRole("button", { name: /followers/ }));
-  await user.click(screen.getByRole("menuitem", { name: "Following" }));
+  await user.click(screen.getByRole("button", { name: /seguidores/ }));
+  await user.click(screen.getByRole("menuitem", { name: "Seguindo" }));
   expect(unfollowDealAction).toHaveBeenCalledWith({ dealId: "d1" }, "csrf");
   expect(followDealAction).not.toHaveBeenCalled();
 });

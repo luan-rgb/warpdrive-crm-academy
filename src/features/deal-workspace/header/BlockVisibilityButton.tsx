@@ -23,10 +23,10 @@ export function BlockVisibilityButton({
 }: BlockVisibilityButtonProps): React.ReactNode {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger aria-label="Toggle detail blocks" className={ICON_BUTTON}>
+      <DropdownMenuTrigger aria-label="Alternar blocos de detalhes" className={ICON_BUTTON}>
         <Eye aria-hidden="true" className="h-4 w-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" aria-label="Detail blocks" className="min-w-44">
+      <DropdownMenuContent align="end" aria-label="Blocos de detalhes" className="min-w-44">
         {DEAL_BLOCKS.map((b) => (
           <DropdownMenuCheckboxItem
             key={b.id}

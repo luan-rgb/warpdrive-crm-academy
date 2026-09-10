@@ -35,13 +35,13 @@ it("submits a rule with the selected trigger, one action, and a name", async () 
   const { default: userEvent } = await import("@testing-library/user-event");
   const user = userEvent.setup();
 
-  screen.getByLabelText("Automation name").focus();
-  await user.type(screen.getByLabelText("Automation name"), "My Rule");
+  screen.getByLabelText("Nome da automação").focus();
+  await user.type(screen.getByLabelText("Nome da automação"), "My Rule");
 
   // Save stays disabled with zero actions (finding 5), so add one before saving.
-  await user.click(screen.getByRole("button", { name: "+ Send notification" }));
+  await user.click(screen.getByRole("button", { name: "+ Enviar notificação" }));
 
-  screen.getByRole("button", { name: "Save" }).click();
+  screen.getByRole("button", { name: "Salvar" }).click();
 
   await waitFor(() => expect(createAutomationRuleAction).toHaveBeenCalled());
   const [input] = createAutomationRuleAction.mock.calls[0] as unknown as [Record<string, unknown>];

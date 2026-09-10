@@ -65,7 +65,7 @@ it("confirming merges the picked source into this deal and refreshes", async () 
   const user = userEvent.setup();
   render(<MergeDealDialog {...props} />);
   await user.click(screen.getByRole("button", { name: "pick-source" }));
-  await user.click(screen.getByRole("button", { name: "Merge" }));
+  await user.click(screen.getByRole("button", { name: "Mesclar" }));
   await waitFor(() =>
     expect(mergeDealsAction).toHaveBeenCalledWith(
       expect.objectContaining({ targetDealId: "d1", sourceDealId: "d2" }),
@@ -83,7 +83,7 @@ it("surfaces the error and does not refresh when the merge is denied", async () 
   const user = userEvent.setup();
   render(<MergeDealDialog {...props} />);
   await user.click(screen.getByRole("button", { name: "pick-source" }));
-  await user.click(screen.getByRole("button", { name: "Merge" }));
+  await user.click(screen.getByRole("button", { name: "Mesclar" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(refresh).not.toHaveBeenCalled();
 });

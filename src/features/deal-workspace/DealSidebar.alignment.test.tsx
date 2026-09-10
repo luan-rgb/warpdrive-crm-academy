@@ -151,5 +151,5 @@ it("renders representative sidebar values through the shared left-aligned FieldR
   expectSharedLeftValue("Organização", "Deal segment");
   expectSharedLeftValue("Organização", "Name");
   expectSharedLeftValue("Pessoa", "Name");
-  expectSharedLeftValue("Origem", "Channel");
+  expectSharedLeftValue("Origem", "Canal");
 });

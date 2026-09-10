@@ -11,5 +11,5 @@ afterEach(cleanup);
 // height and never wrap their label, so without truncation the text paints past the border.
 it("truncates its placeholder instead of letting it escape the control", () => {
   render(<SearchTrigger />);
-  expect(screen.getByRole("button", { name: "Open search" })).toHaveClass("truncate");
+  expect(screen.getByRole("button", { name: "Abrir busca" })).toHaveClass("truncate");
 });

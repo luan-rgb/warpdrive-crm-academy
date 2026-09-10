@@ -24,7 +24,7 @@ export function PageHeading({
   return (
     <div className="mb-4">
       {crumbs !== undefined && crumbs.length > 0 ? (
-        <nav aria-label="Breadcrumb" className="mb-1">
+        <nav aria-label="Navegação estrutural" className="mb-1">
           <ol className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
             {crumbs.map((crumb, i) => {
               const isLast = i === crumbs.length - 1;

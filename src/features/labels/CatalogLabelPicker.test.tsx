@@ -26,7 +26,7 @@ import { CatalogLabelPicker } from "./CatalogLabelPicker";
 
 async function openMenu(): Promise<void> {
   const user = userEvent.setup();
-  await user.click(screen.getByRole("button", { name: /add labels/i }));
+  await user.click(screen.getByRole("button", { name: /adicionar etiquetas/i }));
 }
 
 describe("CatalogLabelPicker", () => {
@@ -62,14 +62,14 @@ describe("CatalogLabelPicker", () => {
     queryData = [];
     render(<CatalogLabelPicker target="deal" value={[]} onChange={() => {}} />);
     await openMenu();
-    expect(screen.getByText(/no labels yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/ainda não há etiquetas/i)).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: /create new label/i })).toBeInTheDocument();
     queryData = catalog;
   });
 
   it("gives the dashed trigger the token border instead of a fixed gray", () => {
     render(<CatalogLabelPicker target="person" value={[]} onChange={() => {}} />);
-    const trigger = screen.getByRole("button", { name: /add labels/i });
+    const trigger = screen.getByRole("button", { name: /adicionar etiquetas/i });
     expect(trigger).toHaveClass("border-dashed", "hover:border-muted-foreground");
     expect(trigger.className).not.toMatch(/-gray-/);
   });

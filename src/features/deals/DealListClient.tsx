@@ -259,7 +259,7 @@ export function DealListClient({
           aria-label="filtered count"
           className="px-1 py-2 text-sm text-muted-foreground"
         >
-          Showing {footer.total} filtered {footer.total === 1 ? "deal" : "deals"}
+          Exibindo {footer.total} {footer.total === 1 ? "negócio filtrado" : "negócios filtrados"}
         </p>
       ) : null}
       <DealList

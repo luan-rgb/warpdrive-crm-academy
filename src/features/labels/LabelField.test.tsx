@@ -19,7 +19,7 @@ describe("LabelField", () => {
   it("renders a chip per applied label plus the catalog dropdown trigger", () => {
     render(<LabelField target="deal" value={["Enterprise"]} onChange={() => {}} />);
     expect(screen.getByText("Enterprise")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /add labels/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /adicionar etiquetas/i })).toBeInTheDocument();
     // An unselected catalog label is not shown as a chip (only in the dropdown once opened).
     expect(screen.queryByText("Hot")).not.toBeInTheDocument();
   });

@@ -130,11 +130,11 @@ it("opens a centered Mark as Lost dialog and submits a free-text comment when no
   fireEvent.click(lostBtn);
   // Pipedrive parity: the flow is a centered modal, not an inline row.
   const dialog = await screen.findByRole("dialog");
-  expect(dialog).toHaveTextContent("Mark as Lost");
-  fireEvent.change(screen.getByLabelText("Comments (optional)"), {
+  expect(dialog).toHaveTextContent("Marcar como perdido");
+  fireEvent.change(screen.getByLabelText("Comentários (opcional)"), {
     target: { value: "Went with a competitor" },
   });
-  fireEvent.click(screen.getByRole("button", { name: "Mark as lost" }));
+  fireEvent.click(screen.getByRole("button", { name: "Marcar como perdido" }));
   await waitFor(() => expect(markLostAction).toHaveBeenCalledTimes(1));
   expect(markLostAction.mock.calls[0]?.[0]).toMatchObject({
     dealId: "d1",
@@ -154,12 +154,12 @@ it("sends the preset reason and the comment together (they coexist, Pipedrive pa
   );
   fireEvent.click(screen.getByRole("button", { name: "Lost" }));
   await screen.findByRole("dialog");
-  fireEvent.click(screen.getByLabelText("Lost reason"));
+  fireEvent.click(screen.getByLabelText("Motivo da perda"));
   fireEvent.click(screen.getByText("Too expensive"));
-  fireEvent.change(screen.getByLabelText("Comments (optional)"), {
+  fireEvent.change(screen.getByLabelText("Comentários (opcional)"), {
     target: { value: "Budget cut mid-quarter" },
   });
-  fireEvent.click(screen.getByRole("button", { name: "Mark as lost" }));
+  fireEvent.click(screen.getByRole("button", { name: "Marcar como perdido" }));
   await waitFor(() => expect(markLostAction).toHaveBeenCalledTimes(1));
   expect(markLostAction.mock.calls[0]?.[0]).toEqual({
     dealId: "d1",
@@ -178,7 +178,7 @@ it("submits a no-reason Lost when both the preset and comment are left empty", a
     />,
   );
   fireEvent.click(screen.getByRole("button", { name: "Lost" }));
-  fireEvent.click(await screen.findByRole("button", { name: "Mark as lost" }));
+  fireEvent.click(await screen.findByRole("button", { name: "Marcar como perdido" }));
   await waitFor(() => expect(markLostAction).toHaveBeenCalledTimes(1));
   expect(markLostAction.mock.calls[0]?.[0]).toEqual({
     dealId: "d1",
@@ -252,7 +252,7 @@ it("surfaces the error when Lost is denied (no silent swallow)", async () => {
   } as never);
   render(<DealCloseActions {...props} />);
   fireEvent.click(screen.getByRole("button", { name: "Lost" }));
-  fireEvent.click(await screen.findByRole("button", { name: "Mark as lost" }));
+  fireEvent.click(await screen.findByRole("button", { name: "Marcar como perdido" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
 });
 

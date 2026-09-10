@@ -50,14 +50,14 @@ describe("ContactLabelsControl", () => {
 
   it("offers an Add labels affordance", () => {
     render(<ContactLabelsControl entityType="person" entityId="p1" labels={[]} />);
-    expect(screen.getByRole("button", { name: /add labels/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /adicionar etiquetas/i })).toBeInTheDocument();
   });
 
   it("commits the toggled label set through updatePersonAction", async () => {
     const user = userEvent.setup();
     render(<ContactLabelsControl entityType="person" entityId="p1" labels={[]} />);
 
-    await user.click(screen.getByRole("button", { name: /add labels/i }));
+    await user.click(screen.getByRole("button", { name: /adicionar etiquetas/i }));
     await user.click(await screen.findByRole("menuitemcheckbox", { name: /hot/i }));
 
     expect(updatePersonAction).toHaveBeenCalledWith({ id: "p1", labels: ["Hot"] }, "csrf");
@@ -75,7 +75,7 @@ describe("ContactLabelsControl", () => {
       </ActionErrorProvider>,
     );
 
-    await user.click(screen.getByRole("button", { name: /add labels/i }));
+    await user.click(screen.getByRole("button", { name: /adicionar etiquetas/i }));
     await user.click(await screen.findByRole("menuitemcheckbox", { name: /hot/i }));
 
     const dialog = await screen.findByRole("dialog");

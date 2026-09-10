@@ -47,11 +47,11 @@ export function CatalogLabelPicker({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full border border-dashed px-2 py-0.5 text-xs text-muted-foreground hover:border-muted-foreground hover:text-foreground">
-        + Add labels
+        + Adicionar etiquetas
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" aria-label="Labels" className="min-w-52">
+      <DropdownMenuContent align="start" aria-label="Etiquetas" className="min-w-52">
         {catalog.length === 0 ? (
-          <DropdownMenuItem disabled>No labels yet</DropdownMenuItem>
+          <DropdownMenuItem disabled>Ainda não há etiquetas</DropdownMenuItem>
         ) : (
           catalog.map((label) => (
             <DropdownMenuCheckboxItem

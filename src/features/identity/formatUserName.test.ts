@@ -8,8 +8,8 @@ describe("formatUserName", () => {
   });
 
   it("returns Unassigned for blank names", () => {
-    expect(formatUserName("")).toBe("Unassigned");
-    expect(formatUserName("   ")).toBe("Unassigned");
+    expect(formatUserName("")).toBe("Não atribuído");
+    expect(formatUserName("   ")).toBe("Não atribuído");
   });
 
   it("humanizes an email-shaped name into its local part", () => {

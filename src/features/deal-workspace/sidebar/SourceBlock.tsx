@@ -17,7 +17,7 @@ import { SourceChannelField } from "./SourceChannelField";
 import { SourceChannelIdField } from "./SourceChannelIdField";
 
 const CHANNEL_OPTIONS = [
-  { value: "", label: "None" },
+  { value: "", label: "Nenhum" },
   ...Object.entries(SOURCE_CHANNELS).map(([value, channel]) => ({ value, label: channel.name })),
 ];
 
@@ -123,16 +123,16 @@ function SourceBulkEditor({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-0.5 text-muted-foreground text-xs">
-        <span>Channel</span>
+        <span>Canal</span>
         <Select
-          ariaLabel="Channel"
+          ariaLabel="Canal"
           value={channel}
           onChange={setChannel}
           options={CHANNEL_OPTIONS}
         />
       </div>
       <BulkEditRow
-        label="Channel ID"
+        label="ID do canal"
         value={channelId}
         onChange={setChannelId}
         disabled={pending}

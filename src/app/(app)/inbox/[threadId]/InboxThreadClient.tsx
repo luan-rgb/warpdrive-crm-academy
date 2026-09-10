@@ -26,7 +26,7 @@ export function InboxThreadClient({
   });
 
   return (
-    <main aria-label="Thread" className="h-full">
+    <main aria-label="Conversa" className="h-full">
       <ThreadPane threadId={threadId} trackingBadge={trackingBadge} initialThread={initialThread} />
     </main>
   );

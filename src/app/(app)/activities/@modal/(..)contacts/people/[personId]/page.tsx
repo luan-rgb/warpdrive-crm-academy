@@ -14,7 +14,7 @@ export default async function InterceptedPersonPage({
 }): Promise<React.ReactNode> {
   const { personId } = await params;
   return (
-    <DetailDrawer title="Contact details">
+    <DetailDrawer title="Detalhes do contato">
       <Suspense fallback={<DetailDrawerPreviewSkeleton recordId={personId} />}>
         <PersonDetailView personId={personId} />
       </Suspense>

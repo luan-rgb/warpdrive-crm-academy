@@ -78,7 +78,7 @@ export function MonthView({
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: static calendar grid, not a data <table>
-    <div role="grid" aria-label="Month" className="flex flex-col gap-1">
+    <div role="grid" aria-label="Mês" className="flex flex-col gap-1">
       {/* biome-ignore lint/a11y/useSemanticElements: header row of the calendar grid */}
       {/* biome-ignore lint/a11y/useFocusableInteractive: static read-only calendar grid */}
       <div role="row" className="grid grid-cols-7 gap-1">

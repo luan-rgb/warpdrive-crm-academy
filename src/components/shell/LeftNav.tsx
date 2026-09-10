@@ -133,7 +133,7 @@ export function LeftNav({ initialExpanded = false }: LeftNavProps = {}): React.R
 
   return (
     <nav
-      aria-label="Primary"
+      aria-label="Navegação principal"
       className={cn(
         "flex shrink-0 flex-col gap-1 bg-slate-900 py-3 text-slate-300 transition-[width]",
         expanded ? "w-56 items-stretch px-3" : "w-16 items-center",

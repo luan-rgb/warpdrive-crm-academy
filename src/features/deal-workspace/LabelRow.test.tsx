@@ -58,7 +58,7 @@ it("surfaces the shared error dialog when a label edit is denied (no silent reve
     </DealActionErrorProvider>,
   );
 
-  await user.click(screen.getByRole("button", { name: /add labels/i }));
+  await user.click(screen.getByRole("button", { name: /adicionar etiquetas/i }));
   // Toggle the "Hot" catalog label in the dropdown picker.
   await user.click(await screen.findByRole("menuitemcheckbox", { name: /hot/i }));
 

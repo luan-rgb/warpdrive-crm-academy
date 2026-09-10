@@ -70,7 +70,7 @@ export function StageSelector({
   return (
     <div
       role="listbox"
-      aria-label="Stage"
+      aria-label="Etapa"
       // overflow-visible (not hidden) so the current segment can scale up and sit proud of the row.
       className="flex min-w-0 items-stretch rounded-md"
     >
@@ -104,7 +104,7 @@ export function StageSelector({
               {/* C3 (Pipedrive parity): day-count at 12px (PD shows day-counts only; warpdrive keeps
                 the stage name above it as an extra affordance). */}
               <span className="text-xs tabular-nums opacity-80">
-                {chip.days} {chip.days === 1 ? "day" : "days"}
+                {chip.days} {chip.days === 1 ? "dia" : "dias"}
               </span>
             </button>
           </Tip>

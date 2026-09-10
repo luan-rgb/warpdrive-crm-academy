@@ -37,7 +37,7 @@ const props = {
 it("renders the owner avatar, name, and Owner caption", () => {
   render(<OwnerBlock {...props} />);
   expect(screen.getByText("Ada Lovelace")).toBeTruthy();
-  expect(screen.getByText("Owner")).toBeTruthy();
+  expect(screen.getByText("Dono")).toBeTruthy();
   expect(screen.getByRole("img", { name: "Ada Lovelace" })).toBeTruthy();
 });
 
@@ -51,18 +51,18 @@ it("humanizes an email-shaped owner name instead of rendering the raw email", ()
 
 it("falls back to Unassigned (not an empty name) when the owner name is empty", () => {
   render(<OwnerBlock {...props} owner={{ id: "u9", name: "", avatarUrl: null }} />);
-  expect(screen.getByText("Unassigned")).toBeTruthy();
+  expect(screen.getByText("Não atribuído")).toBeTruthy();
 });
 
 it("hides the reassignment trigger when the actor cannot change owner", () => {
   render(<OwnerBlock {...props} canChangeOwner={false} />);
-  expect(screen.queryByRole("button", { name: "Change owner" })).toBeNull();
+  expect(screen.queryByRole("button", { name: "Alterar dono" })).toBeNull();
 });
 
 it("selecting a different user calls changeOwnerAction", async () => {
   const user = userEvent.setup();
   render(<OwnerBlock {...props} />);
-  await user.click(screen.getByRole("button", { name: "Change owner" }));
+  await user.click(screen.getByRole("button", { name: "Alterar dono" }));
   await user.click(screen.getByRole("menuitem", { name: "Alan Turing" }));
   expect(changeOwnerAction).toHaveBeenCalledWith(
     { dealId: "d1", ownerId: "u2", expectedUpdatedAt: props.expectedUpdatedAt },
@@ -77,7 +77,7 @@ it("surfaces the shared error when the reassignment is denied (no silent swallow
   } as never);
   const user = userEvent.setup();
   render(<OwnerBlock {...props} />);
-  await user.click(screen.getByRole("button", { name: "Change owner" }));
+  await user.click(screen.getByRole("button", { name: "Alterar dono" }));
   await user.click(screen.getByRole("menuitem", { name: "Alan Turing" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
 });

@@ -60,7 +60,7 @@ it("clicking the current stage is a no-op", () => {
 it("shows a 12px day-count on each chevron segment (C3 PD parity) while keeping the stage name", () => {
   render(<StageSelector {...props} />);
   // PD shows day-counts at 12px (not WD's old 10px). The current stage has spent 3 days.
-  const dayCount = screen.getByText(/^3\s+days$/);
+  const dayCount = screen.getByText(/^3\s+dias$/);
   expect(dayCount.className).toContain("text-xs");
   expect(dayCount.className).not.toContain("text-[10px]");
   // The stage-name affordance stays available (warpdrive keeps names; PD drops them).

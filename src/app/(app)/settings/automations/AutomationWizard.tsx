@@ -24,17 +24,17 @@ import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
 
 const TRIGGER_LABEL: Record<AutomationTrigger, string> = {
-  deal_created: "Deal created",
-  deal_stage_changed: "Deal stage changed",
-  deal_status_changed: "Deal won or lost",
-  deal_field_changed: "Deal field changed",
+  deal_created: "Negócio criado",
+  deal_stage_changed: "Etapa do negócio alterada",
+  deal_status_changed: "Negócio ganho ou perdido",
+  deal_field_changed: "Campo do negócio alterado",
 };
 
 const ACTION_LABEL: Record<AutomationActionType, string> = {
-  create_activity: "Create activity",
-  send_notification: "Send notification",
-  send_email: "Send email",
-  update_field: "Update field",
+  create_activity: "Criar atividade",
+  send_notification: "Enviar notificação",
+  send_email: "Enviar email",
+  update_field: "Atualizar campo",
 };
 
 interface DraftAction {
@@ -114,8 +114,8 @@ export function AutomationWizard({
       setPending(false);
       setError(
         r.error.id === "E_AUTOMATION_003"
-          ? "Add at least one action before saving."
-          : "Could not save the automation.",
+          ? "Adicione ao menos uma ação antes de salvar."
+          : "Não foi possível salvar a automação.",
       );
       return;
     }
@@ -131,7 +131,7 @@ export function AutomationWizard({
       );
       setPending(false);
       if (!activeResult.ok) {
-        setError("Automation saved, but the active toggle could not be updated.");
+        setError("Automação salva, mas não foi possível atualizar o status ativo.");
         return;
       }
     } else {
@@ -150,9 +150,9 @@ export function AutomationWizard({
       )}
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Trigger</h3>
+        <h3 className="text-sm font-medium">Gatilho</h3>
         <Select
-          ariaLabel="Trigger"
+          ariaLabel="Gatilho"
           value={trigger}
           onChange={(v) => {
             setTrigger(v as AutomationTrigger);
@@ -166,15 +166,15 @@ export function AutomationWizard({
             value={(triggerConfig.toStatus ?? "") as string}
             onChange={(v) => setTriggerConfig({ toStatus: v })}
             options={[
-              { value: "won", label: "Won" },
-              { value: "lost", label: "Lost" },
+              { value: "won", label: "Ganho" },
+              { value: "lost", label: "Perdido" },
             ]}
           />
         )}
         {trigger === "deal_field_changed" && (
           <Input
-            aria-label="Field key"
-            placeholder="e.g. title"
+            aria-label="Chave do campo"
+            placeholder="ex.: title"
             value={(triggerConfig.fieldKey ?? "") as string}
             onChange={(e) => setTriggerConfig({ fieldKey: e.target.value })}
           />
@@ -188,33 +188,33 @@ export function AutomationWizard({
           value={pipelineId}
           onChange={setPipelineId}
           options={[
-            { value: "", label: "All pipelines" },
+            { value: "", label: "Todos os pipelines" },
             ...pipelines.map((p) => ({ value: p.id, label: p.name })),
           ]}
         />
       </div>
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Actions</h3>
+        <h3 className="text-sm font-medium">Ações</h3>
         {actions.map((action, i) => (
           <div key={action.key} className="rounded border p-3 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{ACTION_LABEL[action.actionType]}</span>
               <Button variant="ghost" onClick={() => removeAction(i)}>
-                Remove
+                Remover
               </Button>
             </div>
             {action.actionType === "create_activity" && (
               <>
                 <Select
-                  ariaLabel="Activity type"
+                  ariaLabel="Tipo de atividade"
                   value={(action.config.activityTypeId ?? "") as string}
                   onChange={(v) => updateActionConfig(i, { ...action.config, activityTypeId: v })}
                   options={activityTypes.map((t) => ({ value: t.id, label: t.name }))}
                 />
                 <Input
-                  aria-label="Subject"
-                  placeholder="Subject"
+                  aria-label="Assunto"
+                  placeholder="Assunto"
                   value={(action.config.subject ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, subject: e.target.value })
@@ -224,8 +224,8 @@ export function AutomationWizard({
             )}
             {action.actionType === "send_notification" && (
               <Textarea
-                aria-label="Notification message"
-                placeholder="Message (use {{deal.title}}, {{deal.value}}, {{deal.owner}})"
+                aria-label="Mensagem da notificação"
+                placeholder="Mensagem (use {{deal.title}}, {{deal.value}}, {{deal.owner}})"
                 value={(action.config.messageTemplate ?? "") as string}
                 onChange={(e) =>
                   updateActionConfig(i, { ...action.config, messageTemplate: e.target.value })
@@ -235,16 +235,16 @@ export function AutomationWizard({
             {action.actionType === "send_email" && (
               <>
                 <Input
-                  aria-label="Email subject"
-                  placeholder="Subject"
+                  aria-label="Assunto do email"
+                  placeholder="Assunto"
                   value={(action.config.subjectTemplate ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, subjectTemplate: e.target.value })
                   }
                 />
                 <Textarea
-                  aria-label="Email body"
-                  placeholder="Body"
+                  aria-label="Corpo do email"
+                  placeholder="Corpo"
                   value={(action.config.bodyTemplate ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, bodyTemplate: e.target.value })
@@ -255,7 +255,7 @@ export function AutomationWizard({
             {action.actionType === "update_field" && (
               <>
                 <Input
-                  aria-label="Field key"
+                  aria-label="Chave do campo"
                   placeholder="title"
                   value={(action.config.fieldKey ?? "") as string}
                   onChange={(e) =>
@@ -263,8 +263,8 @@ export function AutomationWizard({
                   }
                 />
                 <Input
-                  aria-label="New value"
-                  placeholder="Value"
+                  aria-label="Novo valor"
+                  placeholder="Valor"
                   value={(action.config.value ?? "") as string}
                   onChange={(e) =>
                     updateActionConfig(i, { ...action.config, value: e.target.value })
@@ -284,29 +284,29 @@ export function AutomationWizard({
       </div>
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Name</h3>
+        <h3 className="text-sm font-medium">Nome</h3>
         <Input
-          aria-label="Automation name"
-          placeholder="Name"
+          aria-label="Nome da automação"
+          placeholder="Nome"
           maxLength={120}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <Textarea
-          aria-label="Description"
-          placeholder="Description (optional)"
+          aria-label="Descrição"
+          placeholder="Descrição (opcional)"
           maxLength={200}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <Switch checked={isActive} onCheckedChange={setIsActive} label="Active" />
+        <Switch checked={isActive} onCheckedChange={setIsActive} label="Ativa" />
       </div>
 
       <Button
         onClick={() => void save()}
         disabled={pending || name.trim() === "" || actions.length === 0}
       >
-        Save
+        Salvar
       </Button>
     </div>
   );

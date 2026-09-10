@@ -86,8 +86,8 @@ it("inline-edits the Source Channel row through the deal update action", async (
     />,
   );
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit Channel" }));
-  fireEvent.click(screen.getByLabelText("Channel"));
+  fireEvent.click(screen.getByRole("button", { name: "Edit Canal" }));
+  fireEvent.click(screen.getByLabelText("Canal"));
   fireEvent.click(screen.getByText("Inbound"));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -116,8 +116,8 @@ it("inline-edits the Channel ID row through the deal update action", async () =>
     />,
   );
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit Channel ID" }));
-  fireEvent.change(screen.getByLabelText("Channel ID"), { target: { value: "EXT-2" } });
+  fireEvent.click(screen.getByRole("button", { name: "Edit ID do canal" }));
+  fireEvent.change(screen.getByLabelText("ID do canal"), { target: { value: "EXT-2" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() =>

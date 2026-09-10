@@ -104,7 +104,7 @@ it("opens every section by default (section content is visible without a click)"
     />,
   );
   // Source content (defaults to collapsed before this change).
-  expect(screen.getByText("Channel ID")).toBeInTheDocument();
+  expect(screen.getByText("ID do canal")).toBeInTheDocument();
   // Overview content (also defaulted collapsed).
   expect(screen.getByText("Deal age")).toBeInTheDocument();
 });
@@ -220,7 +220,7 @@ it("renders the Participants section (person links + View All) only when partici
       "href",
       "/contacts/people/p9",
     );
-    expect(screen.getByRole("button", { name: "View All" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ver todos" })).toBeInTheDocument();
   } finally {
     participantRows.length = 0;
   }

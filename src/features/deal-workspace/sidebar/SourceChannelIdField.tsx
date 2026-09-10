@@ -35,8 +35,8 @@ export function SourceChannelIdField({
   }
 
   return (
-    <FieldRow label="Channel ID" empty={sourceChannelId === null}>
-      <InlineTextField label="Channel ID" value={sourceChannelId ?? ""} onSave={save} />
+    <FieldRow label="ID do canal" empty={sourceChannelId === null}>
+      <InlineTextField label="ID do canal" value={sourceChannelId ?? ""} onSave={save} />
     </FieldRow>
   );
 }

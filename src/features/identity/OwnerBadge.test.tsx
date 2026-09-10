@@ -26,7 +26,7 @@ describe("OwnerBadge", () => {
   it("renders Unassigned for a null owner", () => {
     render(<OwnerBadge name={null} />);
 
-    expect(screen.getByText("Unassigned")).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "Unassigned" })).toBeInTheDocument();
+    expect(screen.getByText("Não atribuído")).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Não atribuído" })).toBeInTheDocument();
   });
 });

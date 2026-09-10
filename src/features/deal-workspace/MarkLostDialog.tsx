@@ -15,7 +15,7 @@ import { useDealActionError } from "@/features/deal-workspace/DealActionErrorPro
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { markLostAction } from "./actions";
 
-const NO_PRESET_REASON_LABEL = "No preset reason";
+const NO_PRESET_REASON_LABEL = "Sem motivo predefinido";
 const COMMENT_ID = "mark-lost-comment";
 
 export interface MarkLostDialogProps {
@@ -77,14 +77,14 @@ export function MarkLostDialog({
     <Dialog open={open} onOpenChange={change}>
       <DialogContent className="max-w-md" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>Mark as Lost</DialogTitle>
+          <DialogTitle>Marcar como perdido</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
           {lostReasonOptions.length > 0 && (
             <div className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium">Lost reason</span>
+              <span className="text-sm font-medium">Motivo da perda</span>
               <Combobox
-                ariaLabel="Lost reason"
+                ariaLabel="Motivo da perda"
                 value={reasonId}
                 onChange={setReasonId}
                 placeholder={NO_PRESET_REASON_LABEL}
@@ -97,7 +97,7 @@ export function MarkLostDialog({
           )}
           <div className="flex flex-col gap-1.5">
             <label htmlFor={COMMENT_ID} className="text-sm font-medium">
-              Comments (optional)
+              Comentários (opcional)
             </label>
             <Textarea
               id={COMMENT_ID}
@@ -106,20 +106,20 @@ export function MarkLostDialog({
             />
           </div>
           <p className="text-sm text-muted-foreground">
-            Manage lost reasons on the{" "}
+            Gerencie os motivos de perda na{" "}
             <a
               href="/settings/company/lost-reasons"
               className="text-primary underline underline-offset-2 hover:opacity-90"
             >
-              company settings page
+              página de configurações da empresa
             </a>
             .
           </p>
           <div className="flex items-start gap-2 rounded-md border bg-muted/40 p-3 text-sm text-muted-foreground">
             <GraduationCap className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             <span>
-              Providing a lost reason can help you better understand trends or circumstances when
-              you look back on your deal history.
+              Informar um motivo de perda ajuda a entender tendências ou circunstâncias ao revisar
+              o histórico dos seus negócios.
             </span>
           </div>
         </div>
@@ -129,7 +129,7 @@ export function MarkLostDialog({
             onClick={() => change(false)}
             className="rounded-md border px-3 py-1.5 text-sm hover:bg-accent"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             type="button"
@@ -137,7 +137,7 @@ export function MarkLostDialog({
             onClick={() => void submit()}
             className="rounded-md bg-destructive px-3 py-1.5 text-sm font-medium text-destructive-foreground transition-[opacity,scale] duration-150 ease-out hover:opacity-90 active:not-disabled:scale-[0.96] disabled:opacity-50"
           >
-            Mark as lost
+            Marcar como perdido
           </button>
         </DialogFooter>
       </DialogContent>
