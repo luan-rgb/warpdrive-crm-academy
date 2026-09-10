@@ -46,21 +46,21 @@ describe("LeadFilters label menu", () => {
   it("offers catalog labels", async () => {
     const user = userEvent.setup();
     renderOwner(owner);
-    await user.click(screen.getByRole("button", { name: "Label filter" }));
+    await user.click(screen.getByRole("button", { name: "Filtro de etiqueta" }));
     expect(screen.getByRole("checkbox", { name: "Hot" })).toBeInTheDocument();
   });
 
   it("offers a label that records carry but the catalog is missing", async () => {
     const user = userEvent.setup();
     renderOwner(owner);
-    await user.click(screen.getByRole("button", { name: "Label filter" }));
+    await user.click(screen.getByRole("button", { name: "Filtro de etiqueta" }));
     expect(screen.getByRole("checkbox", { name: "high priority" })).toBeInTheDocument();
   });
 
   it("does not offer the same label twice when it is both catalogued and applied", async () => {
     const user = userEvent.setup();
     renderOwner(owner);
-    await user.click(screen.getByRole("button", { name: "Label filter" }));
+    await user.click(screen.getByRole("button", { name: "Filtro de etiqueta" }));
     expect(screen.getAllByRole("checkbox", { name: "Hot" })).toHaveLength(1);
   });
 });
@@ -74,7 +74,7 @@ describe("LeadFilters owner menu (server-mode only)", () => {
   it("lists every assignable user, not just names on the page", async () => {
     const user = userEvent.setup();
     renderOwner({ users, selected: [], onChange: () => {} });
-    await user.click(screen.getByRole("button", { name: "Owner filter" }));
+    await user.click(screen.getByRole("button", { name: "Filtro de responsável" }));
     expect(screen.getByText("Ada")).toBeInTheDocument();
     expect(screen.getByText("Ben")).toBeInTheDocument();
   });
@@ -83,13 +83,13 @@ describe("LeadFilters owner menu (server-mode only)", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     renderOwner({ users, selected: [], onChange });
-    await user.click(screen.getByRole("button", { name: "Owner filter" }));
+    await user.click(screen.getByRole("button", { name: "Filtro de responsável" }));
     await user.click(screen.getByRole("checkbox", { name: "Ada" }));
     expect(onChange).toHaveBeenCalledWith(["u1"]);
   });
 
   it("summarizes the trigger label by count", () => {
     renderOwner({ users, selected: ["u1", "u2"], onChange: () => {} });
-    expect(screen.getByText("2 owners")).toBeInTheDocument();
+    expect(screen.getByText("2 responsáveis")).toBeInTheDocument();
   });
 });

@@ -63,7 +63,7 @@ import { AddLeadModal } from "./AddLeadModal";
 describe("AddLeadModal", () => {
   it("renders the two-column layout without pipeline/stage fields", () => {
     render(<AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    expect(screen.getByRole("dialog", { name: "Add lead" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Adicionar lead" })).toBeInTheDocument();
     expect(screen.getByLabelText("Pessoa de contato")).toBeInTheDocument();
     expect(screen.getByLabelText("Título do lead")).toBeInTheDocument();
     expect(screen.getByLabelText("Phone 1")).toBeInTheDocument();

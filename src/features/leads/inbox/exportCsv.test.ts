@@ -24,7 +24,7 @@ const row: LeadRow = {
 describe("leadRowsToCsv", () => {
   it("emits a header row from the visible columns", () => {
     const csv = leadRowsToCsv([], cols, "USD");
-    expect(csv).toBe("Title,Labels,Owner");
+    expect(csv).toBe("Título,Etiquetas,Responsável");
   });
 
   it("quotes fields containing a comma and joins the stored label names", () => {

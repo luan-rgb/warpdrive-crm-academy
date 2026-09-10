@@ -72,7 +72,7 @@ export function LeadsActionBar(props: LeadsActionBarProps): React.ReactNode {
       <div className="inline-flex overflow-hidden rounded-md border">
         <ToggleIcon
           active={filter === "inbox"}
-          label="Inbox"
+          label="Caixa de entrada"
           onClick={() => onFilter("inbox")}
           rounded="rounded-l-md"
         >
@@ -80,7 +80,7 @@ export function LeadsActionBar(props: LeadsActionBarProps): React.ReactNode {
         </ToggleIcon>
         <ToggleIcon
           active={filter === "archived"}
-          label="Archive"
+          label="Arquivados"
           onClick={() => onFilter("archived")}
           rounded="rounded-r-md border-l"
         >
@@ -114,7 +114,7 @@ export function LeadsActionBar(props: LeadsActionBarProps): React.ReactNode {
           onReorder={props.onReorderColumn}
         />
         <PopMenu
-          triggerLabel="More actions"
+          triggerLabel="Mais ações"
           triggerClassName="rounded-md border p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
           align="right"
           trigger={<Ellipsis aria-hidden="true" className="h-4 w-4" />}

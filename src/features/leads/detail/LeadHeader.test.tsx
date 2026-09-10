@@ -79,7 +79,7 @@ describe("LeadHeader PD lead-drawer parity", () => {
 
   it("styles Convert to deal as a positive/success action (PD's green convert button)", () => {
     render(<LeadHeader lead={LEAD} />);
-    const btn = screen.getByRole("button", { name: "Convert to deal" });
+    const btn = screen.getByRole("button", { name: "Converter em negócio" });
     expect(btn.className).toContain("bg-success");
     expect(btn.className).not.toContain("bg-primary");
   });
@@ -150,7 +150,7 @@ describe("LeadHeader error surfacing", () => {
     vi.mocked(convertLeadAction).mockResolvedValue({ ok: false, error: { id: "E_PERM_001" } });
     render(<LeadHeader lead={LEAD} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Convert to deal" }));
+    await userEvent.click(screen.getByRole("button", { name: "Converter em negócio" }));
 
     await waitFor(() => expect(convertLeadAction).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
@@ -162,7 +162,7 @@ describe("LeadHeader error surfacing", () => {
     vi.mocked(archiveLeadAction).mockResolvedValue({ ok: false, error: { id: "E_PERM_001" } });
     render(<LeadHeader lead={LEAD} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Archive" }));
+    await userEvent.click(screen.getByRole("button", { name: "Arquivar" }));
 
     await waitFor(() => expect(archiveLeadAction).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));

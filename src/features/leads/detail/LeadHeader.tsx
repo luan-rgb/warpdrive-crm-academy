@@ -112,7 +112,7 @@ export function LeadHeader({ lead }: { lead: LeadDetail }): React.ReactNode {
                 {label.name}
               </span>
             ))}
-            {archived && <span className="rounded bg-muted px-2 py-0.5 text-xs">Archived</span>}
+            {archived && <span className="rounded bg-muted px-2 py-0.5 text-xs">Arquivado</span>}
           </div>
         </div>
 
@@ -126,7 +126,7 @@ export function LeadHeader({ lead }: { lead: LeadDetail }): React.ReactNode {
             }}
             className="rounded-md bg-success px-3 py-1.5 text-sm font-medium text-success-foreground transition-[opacity,scale] duration-150 ease-out hover:opacity-90 active:scale-[0.96] disabled:opacity-50 motion-reduce:transition-opacity"
           >
-            {converted ? "Converted" : "Convert to deal"}
+            {converted ? "Convertido" : "Converter em negócio"}
           </button>
           <button
             type="button"
@@ -134,7 +134,7 @@ export function LeadHeader({ lead }: { lead: LeadDetail }): React.ReactNode {
             onClick={() => void toggleArchive()}
             className="rounded-md border px-3 py-1.5 text-sm transition-[background-color,opacity,scale] duration-150 ease-out hover:bg-accent active:scale-[0.96] disabled:opacity-50 motion-reduce:transition-[background-color,opacity]"
           >
-            {archived ? "Restore" : "Archive"}
+            {archived ? "Restaurar" : "Arquivar"}
           </button>
           <PopMenu
             triggerLabel="More lead actions"

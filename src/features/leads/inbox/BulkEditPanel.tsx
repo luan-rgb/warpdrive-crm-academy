@@ -60,7 +60,7 @@ export function BulkEditPanel({
   return (
     <BulkActionBar count={count} onClear={onClear}>
       {assignableUsers.length > 0 && (
-        <Menu label="Change owner">
+        <Menu label="Alterar responsável">
           {(close) =>
             assignableUsers.map((u) => (
               <button
@@ -80,7 +80,7 @@ export function BulkEditPanel({
         </Menu>
       )}
 
-      <Menu label="Set label">
+      <Menu label="Definir etiqueta">
         {(close) => (
           <>
             {labelNames.map((name) => (
@@ -119,12 +119,12 @@ export function BulkEditPanel({
           disabled={converting}
           className={`${BTN} disabled:opacity-50`}
         >
-          {converting ? "Converting..." : "Convert to deal"}
+          {converting ? "Convertendo..." : "Converter em negócio"}
         </button>
       )}
 
       <button type="button" onClick={() => onApply({ archived: !archived })} className={BTN}>
-        {archived ? "Restore" : "Archive"}
+        {archived ? "Restaurar" : "Arquivar"}
       </button>
       <button
         type="button"

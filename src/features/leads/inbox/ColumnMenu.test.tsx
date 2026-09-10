@@ -8,7 +8,7 @@ import { ColumnMenu } from "./ColumnMenu";
 afterEach(cleanup);
 
 async function open(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(screen.getByRole("button", { name: "Customize columns" }));
+  await user.click(screen.getByRole("button", { name: "Personalizar colunas" }));
 }
 
 describe("ColumnMenu", () => {
@@ -25,10 +25,12 @@ describe("ColumnMenu", () => {
     await open(user);
     // The draggable list loads via next/dynamic on first open. Await it BEFORE asserting the
     // pinned column has no handle, otherwise that absence would hold vacuously.
-    expect(await screen.findByRole("button", { name: "Reorder Owner" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Reorder Value" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("button", { name: "Reordenar Responsável" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reordenar Valor" })).toBeInTheDocument();
     // Title is pinned: no reorder handle.
-    expect(screen.queryByRole("button", { name: "Reorder Title" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Reordenar Título" })).toBeNull();
   });
 
   it("disables the pinned Title checkbox and checks visible columns", async () => {
@@ -36,7 +38,7 @@ describe("ColumnMenu", () => {
     render(<ColumnMenu {...props} />);
     await open(user);
     // Pinned Title lives in the dynamically loaded list.
-    const title = await screen.findByRole("checkbox", { name: "Title" });
+    const title = await screen.findByRole("checkbox", { name: "Título" });
     expect(title).toBeDisabled();
     expect(title).toBeChecked();
   });
@@ -46,8 +48,8 @@ describe("ColumnMenu", () => {
     render(<ColumnMenu {...props} />);
     await open(user);
     // "Labels" is not in order -> hidden, unchecked, and has no reorder handle.
-    const labels = screen.getByRole("checkbox", { name: "Labels" });
+    const labels = screen.getByRole("checkbox", { name: "Etiquetas" });
     expect(labels).not.toBeChecked();
-    expect(screen.queryByRole("button", { name: "Reorder Labels" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Reordenar Etiquetas" })).toBeNull();
   });
 });

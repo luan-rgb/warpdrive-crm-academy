@@ -42,13 +42,13 @@ export function AddLeadButton({
         </button>
         <DropdownMenu>
           <DropdownMenuTrigger
-            aria-label="Add lead options"
+            aria-label="Opções de adicionar lead"
             className="rounded-r-md border-l border-action-foreground/20 bg-action px-1.5 py-1.5 text-action-foreground transition-[opacity,scale] duration-150 ease-out hover:opacity-90 active:scale-[0.96] motion-reduce:transition-opacity"
           >
             <ChevronDown aria-hidden="true" className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-40">
-            <DropdownMenuItem onSelect={() => setOpen(true)}>New lead</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => setOpen(true)}>Novo lead</DropdownMenuItem>
             {canImport && (
               <DropdownMenuItem asChild>
                 <Link href="/settings/import/new">{STRINGS.settings.importer.importLeads}</Link>

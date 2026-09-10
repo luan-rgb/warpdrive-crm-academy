@@ -39,7 +39,7 @@ export function SortableColumnItem({
       ) : (
         <button
           type="button"
-          aria-label={`Reorder ${col.header}`}
+          aria-label={`Reordenar ${col.header}`}
           className="cursor-grab text-muted-foreground"
           {...attributes}
           {...listeners}

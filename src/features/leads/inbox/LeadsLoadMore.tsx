@@ -10,7 +10,7 @@ export function LeadsLoadMore({ onClick }: { onClick: () => void }): React.React
         onClick={onClick}
         className="rounded-md border px-4 py-1.5 text-sm font-medium transition-[background-color,scale] duration-150 ease-out hover:bg-accent active:scale-[0.96] motion-reduce:transition-colors"
       >
-        Load more
+        Carregar mais
       </button>
     </div>
   );

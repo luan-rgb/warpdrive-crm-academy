@@ -33,10 +33,10 @@ it("does not bubble menu open/select to the parent row's onClick", async () => {
     </div>,
   );
 
-  await user.click(screen.getByRole("button", { name: "Lead actions" }));
+  await user.click(screen.getByRole("button", { name: "Ações do lead" }));
   expect(rowClick).not.toHaveBeenCalled(); // opening the menu must not navigate the row
 
-  await user.click(screen.getByRole("menuitem", { name: "Delete" }));
+  await user.click(screen.getByRole("menuitem", { name: "Excluir" }));
   expect(onDelete).toHaveBeenCalledTimes(1);
   expect(rowClick).not.toHaveBeenCalled(); // selecting an item must not navigate the row
 });
@@ -44,7 +44,7 @@ it("does not bubble menu open/select to the parent row's onClick", async () => {
 it("hides the Change owner submenu when there are no assignable users", async () => {
   const user = userEvent.setup();
   render(<LeadRowActions {...baseProps} assignableUsers={[]} />);
-  await user.click(screen.getByRole("button", { name: "Lead actions" }));
-  expect(screen.queryByText("Change owner")).toBeNull();
-  expect(screen.getByRole("menuitem", { name: "Open" })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Ações do lead" }));
+  expect(screen.queryByText("Alterar responsável")).toBeNull();
+  expect(screen.getByRole("menuitem", { name: "Abrir" })).toBeInTheDocument();
 });

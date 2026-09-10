@@ -133,7 +133,7 @@ export function AddLeadModal({
 
   return (
     <EntityCreateModalShell
-      title="Add lead"
+      title="Adicionar lead"
       personMode={state.personMode}
       phones={state.phones}
       emails={state.emails}
@@ -141,7 +141,7 @@ export function AddLeadModal({
       onEmails={(emails) => set({ emails })}
       personCustomFields={
         <CustomFieldCreateFields
-          title="Person fields"
+          title="Campos da pessoa"
           defs={personFieldsQ.data ?? []}
           values={state.personCustomFields}
           onChange={(key, value) =>
@@ -169,7 +169,7 @@ export function AddLeadModal({
           baseCurrency={baseCurrency}
           organizationCustomFields={
             <CustomFieldCreateFields
-              title="Organization fields"
+              title="Campos da organização"
               defs={orgFieldsQ.data ?? []}
               values={state.orgCustomFields}
               onChange={(key, value) =>

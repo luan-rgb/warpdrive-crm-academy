@@ -12,31 +12,37 @@ export interface LeadColumn {
 }
 
 export const LEAD_COLUMNS: readonly LeadColumn[] = [
-  { key: "title", header: "Title", sortField: "title", pinned: true, defaultVisible: true },
+  { key: "title", header: "Título", sortField: "title", pinned: true, defaultVisible: true },
   {
     key: "nextActivity",
-    header: "Next activity",
+    header: "Próxima atividade",
     sortField: "nextActivityAt",
     pinned: false,
     defaultVisible: true,
   },
-  { key: "labels", header: "Labels", sortField: "label", pinned: false, defaultVisible: true },
+  { key: "labels", header: "Etiquetas", sortField: "label", pinned: false, defaultVisible: true },
   {
     key: "sourceOrigin",
-    header: "Source origin",
+    header: "Origem",
     sortField: "sourceOrigin",
     pinned: false,
     defaultVisible: true,
   },
-  { key: "value", header: "Value", sortField: "value", pinned: false, defaultVisible: false },
+  { key: "value", header: "Valor", sortField: "value", pinned: false, defaultVisible: false },
   {
     key: "createdAt",
-    header: "Lead created",
+    header: "Lead criado",
     sortField: "createdAt",
     pinned: false,
     defaultVisible: true,
   },
-  { key: "owner", header: "Owner", sortField: "ownerName", pinned: false, defaultVisible: true },
+  {
+    key: "owner",
+    header: "Responsável",
+    sortField: "ownerName",
+    pinned: false,
+    defaultVisible: true,
+  },
 ] as const;
 
 export const LEAD_COLUMN_KEYS = LEAD_COLUMNS.map((c) => c.key);

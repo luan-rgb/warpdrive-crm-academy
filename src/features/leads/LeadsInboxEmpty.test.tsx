@@ -84,7 +84,7 @@ describe("LeadsInbox empty states", () => {
     listQuery.mockReturnValue({ data: { rows: [], total: 0 }, refetch });
     render(<LeadsInbox />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Archive" }));
+    fireEvent.click(screen.getByRole("button", { name: "Arquivados" }));
     expect(screen.getByRole("status")).toHaveTextContent(STRINGS.leads.emptyArchivedTitle);
   });
 

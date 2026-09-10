@@ -28,7 +28,7 @@ export function ConvertLeadDialog({
     if (submitting.current) return;
     const missing = firstMissingImportantField(defs, values);
     if (missing !== null) {
-      setError(`${missing.name} is required`);
+      setError(`${missing.name} é obrigatório`);
       return;
     }
 
@@ -46,7 +46,7 @@ export function ConvertLeadDialog({
 
   return (
     <EntityCreateDialogShell
-      title="Convert to deal"
+      title="Converter em negócio"
       error={error}
       pending={pending}
       onSubmit={() => void submit()}
@@ -56,7 +56,7 @@ export function ConvertLeadDialog({
         defs={defs}
         values={values}
         onChange={(key, value) => setValues((current) => ({ ...current, [key]: value }))}
-        title="Deal fields"
+        title="Campos do negócio"
       />
     </EntityCreateDialogShell>
   );

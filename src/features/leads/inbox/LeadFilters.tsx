@@ -16,10 +16,10 @@ export interface OwnerFilter {
 }
 
 const NEXT_ACTIVITY_OPTIONS: { key: LeadNextActivityBucket; label: string }[] = [
-  { key: "overdue", label: "Overdue" },
-  { key: "today", label: "Today" },
-  { key: "week", label: "This week" },
-  { key: "none", label: "No activity" },
+  { key: "overdue", label: "Atrasada" },
+  { key: "today", label: "Hoje" },
+  { key: "week", label: "Esta semana" },
+  { key: "none", label: "Sem atividade" },
 ];
 
 const TRIGGER =
@@ -32,14 +32,18 @@ function toggle<T>(list: readonly T[], item: T): T[] {
 function OwnerMenu({ owner }: { owner: OwnerFilter }): React.ReactNode {
   const label =
     owner.selected.length === 0
-      ? "Everyone"
-      : `${owner.selected.length} owner${owner.selected.length === 1 ? "" : "s"}`;
+      ? "Todos"
+      : `${owner.selected.length} ${owner.selected.length === 1 ? "responsável" : "responsáveis"}`;
   return (
-    <PopMenu triggerLabel="Owner filter" triggerClassName={TRIGGER} trigger={<span>{label}</span>}>
+    <PopMenu
+      triggerLabel="Filtro de responsável"
+      triggerClassName={TRIGGER}
+      trigger={<span>{label}</span>}
+    >
       {() => (
         <div className="max-h-64 overflow-auto">
           <button type="button" className={POP_ITEM} onClick={() => owner.onChange([])}>
-            Everyone
+            Todos
           </button>
           {owner.users.map((u) => (
             <div key={u.id} className="flex items-center gap-2 rounded px-2 py-1.5 hover:bg-accent">
@@ -80,23 +84,23 @@ export function LeadFilters({
   // a label the user can see on screen reads as broken. Catalog order first, then the strays.
   const appliedNames = trpc.labels.appliedNames.useQuery({ target: "lead" }).data ?? [];
   const allLabels = mergeLabelOptions(catalogNames, appliedNames);
-  const labelText = labelKeys.length === 0 ? "All labels" : `${labelKeys.length} labels`;
+  const labelText = labelKeys.length === 0 ? "Todas as etiquetas" : `${labelKeys.length} etiquetas`;
   const naText =
     nextActivity === null
-      ? "Next activity"
-      : (NEXT_ACTIVITY_OPTIONS.find((o) => o.key === nextActivity)?.label ?? "Next activity");
+      ? "Próxima atividade"
+      : (NEXT_ACTIVITY_OPTIONS.find((o) => o.key === nextActivity)?.label ?? "Próxima atividade");
 
   return (
     <>
       <PopMenu
-        triggerLabel="Label filter"
+        triggerLabel="Filtro de etiqueta"
         triggerClassName={TRIGGER}
         trigger={<span>{labelText}</span>}
       >
         {() => (
           <div>
             <button type="button" className={POP_ITEM} onClick={() => onLabelKeys([])}>
-              All labels
+              Todas as etiquetas
             </button>
             {allLabels.map((name) => (
               <div
@@ -116,7 +120,7 @@ export function LeadFilters({
       </PopMenu>
 
       <PopMenu
-        triggerLabel="Next-activity filter"
+        triggerLabel="Filtro de próxima atividade"
         triggerClassName={TRIGGER}
         trigger={<span>{naText}</span>}
       >
@@ -130,7 +134,7 @@ export function LeadFilters({
                 close();
               }}
             >
-              Any time
+              Qualquer período
             </button>
             {NEXT_ACTIVITY_OPTIONS.map((o) => (
               <button

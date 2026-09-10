@@ -70,7 +70,7 @@ export function LeadsTable({
         <tr>
           <th className="w-8 px-3 py-2">
             <Checkbox
-              label="Select all leads"
+              label="Selecionar todos os leads"
               checked={allSelected}
               onCheckedChange={onToggleAll}
             />
@@ -125,7 +125,7 @@ export function LeadsTable({
                 {/* biome-ignore lint/a11y/useKeyWithClickEvents: keyboard toggling is handled by the Checkbox itself */}
                 <span onClick={(e) => e.stopPropagation()}>
                   <Checkbox
-                    label={`Select ${row.title}`}
+                    label={`Selecionar ${row.title}`}
                     checked={isSelected(row.id)}
                     onCheckedChange={() => onToggleRow(row.id)}
                   />

@@ -32,7 +32,7 @@ export function ColumnMenu({
 
   return (
     <PopMenu
-      triggerLabel="Customize columns"
+      triggerLabel="Personalizar colunas"
       triggerClassName="rounded-md border p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
       align="right"
       panelClassName="min-w-56"

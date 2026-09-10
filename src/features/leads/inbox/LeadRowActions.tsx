@@ -39,7 +39,7 @@ export function LeadRowActions({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Lead actions"
+        aria-label="Ações do lead"
         onClick={(e) => e.stopPropagation()}
         onPointerDown={(e) => e.stopPropagation()}
         className="inline-flex rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -54,13 +54,13 @@ export function LeadRowActions({
         // click would also fire the row's open-detail navigation.
         onClick={(e) => e.stopPropagation()}
       >
-        <DropdownMenuItem onSelect={onOpen}>Open</DropdownMenuItem>
+        <DropdownMenuItem onSelect={onOpen}>Abrir</DropdownMenuItem>
         <DropdownMenuItem onSelect={onConvert} disabled={converted}>
-          {converted ? "Converted" : "Convert to deal"}
+          {converted ? "Convertido" : "Converter em negócio"}
         </DropdownMenuItem>
         {assignableUsers.length > 0 && (
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Change owner</DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger>Alterar responsável</DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="max-h-56 min-w-40 overflow-auto">
               {assignableUsers.map((u) => (
                 <DropdownMenuItem key={u.id} onSelect={() => onChangeOwner(u.id)}>
@@ -71,10 +71,10 @@ export function LeadRowActions({
           </DropdownMenuSub>
         )}
         <DropdownMenuItem onSelect={onArchiveToggle}>
-          {archived ? "Restore" : "Archive"}
+          {archived ? "Restaurar" : "Arquivar"}
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={onDelete} className="text-destructive">
-          Delete
+          Excluir
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

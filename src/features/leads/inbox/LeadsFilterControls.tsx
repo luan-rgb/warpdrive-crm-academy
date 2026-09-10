@@ -25,7 +25,7 @@ export function LeadsFilterControls({
     <>
       <SavedViewControl
         targetEntity="lead"
-        allLabel="All leads"
+        allLabel="Todos os leads"
         currentDefinition={condition}
         selectedViewId={savedViewId}
         onSelectView={(view) => {

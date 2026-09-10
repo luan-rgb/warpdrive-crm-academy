@@ -84,23 +84,23 @@ describe("LeadsInbox", () => {
   it("renders the default table columns and a lead row with its label chip", () => {
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
-    // Scope header assertions to the table (some labels, e.g. "Next activity", also name a filter).
+    // Scope header assertions to the table (some labels, e.g. "Próxima atividade", also name a filter).
     const table = within(screen.getByRole("table"));
     for (const col of [
-      "Title",
-      "Next activity",
-      "Labels",
-      "Source origin",
-      "Lead created",
-      "Owner",
+      "Título",
+      "Próxima atividade",
+      "Etiquetas",
+      "Origem",
+      "Lead criado",
+      "Responsável",
     ]) {
       expect(table.getByText(col)).toBeInTheDocument();
     }
     expect(screen.getByText("Acme lead")).toBeInTheDocument();
     expect(screen.getAllByText("Hot").some((el) => el.tagName === "SPAN")).toBe(true);
     // Inbox/Archive toggle moved into the action-bar icon group.
-    expect(screen.getByRole("button", { name: "Inbox" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Archive" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Caixa de entrada" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Arquivados" })).toBeInTheDocument();
   });
 
   it("shows an empty state when there are no leads", () => {
@@ -138,19 +138,19 @@ describe("LeadsInbox", () => {
     expect(screen.getByText("Lead A0")).toBeInTheDocument();
     expect(screen.queryByText("Lead B0")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /load more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /carregar mais/i }));
 
     // Second page is appended (first-page rows remain visible).
     expect(await screen.findByText("Lead B0")).toBeInTheDocument();
     expect(screen.getByText("Lead A0")).toBeInTheDocument();
     // All 3 of 3 loaded: the affordance disappears.
-    expect(screen.queryByRole("button", { name: /load more/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /carregar mais/i })).not.toBeInTheDocument();
   });
 
   it("reveals the bulk-edit panel after selecting a row", () => {
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme lead" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme lead" }));
     expect(screen.getByText("1 selected")).toBeInTheDocument();
   });
 
@@ -162,8 +162,8 @@ describe("LeadsInbox", () => {
     });
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme lead" }));
-    fireEvent.click(screen.getByRole("button", { name: "Convert to deal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme lead" }));
+    fireEvent.click(screen.getByRole("button", { name: "Converter em negócio" }));
     await waitFor(() => {
       expect(bulkConvertLeadsAction).toHaveBeenCalledWith(
         { ids: ["l1"], customFields: {} },
@@ -180,8 +180,8 @@ describe("LeadsInbox", () => {
     });
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme lead" }));
-    fireEvent.click(screen.getByRole("button", { name: "Convert to deal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme lead" }));
+    fireEvent.click(screen.getByRole("button", { name: "Converter em negócio" }));
 
     await waitFor(() => {
       expect(bulkConvertLeadsAction).toHaveBeenCalledTimes(1);
@@ -201,7 +201,7 @@ describe("LeadsInbox", () => {
     });
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme lead" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme lead" }));
     fireEvent.click(screen.getByRole("button", { name: "Delete" }));
 
     await waitFor(() => {
@@ -219,8 +219,8 @@ describe("LeadsInbox", () => {
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
 
-    await user.click(screen.getByRole("button", { name: "Lead actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Archive" }));
+    await user.click(screen.getByRole("button", { name: "Ações do lead" }));
+    await user.click(screen.getByRole("menuitem", { name: "Arquivar" }));
 
     await waitFor(() => {
       expect(archiveLeadAction).toHaveBeenCalledTimes(1);
@@ -276,8 +276,8 @@ describe("LeadsInbox", () => {
     );
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme lead" }));
-    const button = screen.getByRole("button", { name: "Convert to deal" });
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme lead" }));
+    const button = screen.getByRole("button", { name: "Converter em negócio" });
     fireEvent.click(button);
     fireEvent.click(button);
 

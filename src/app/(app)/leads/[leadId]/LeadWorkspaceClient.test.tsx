@@ -183,8 +183,8 @@ describe("LeadWorkspaceClient", () => {
     expect(screen.getByText("Acme lead")).toBeInTheDocument();
     expect(screen.getByText("Jane Roe")).toBeInTheDocument();
     expect(screen.getByText("Acme Inc")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Convert to deal" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Archive" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Converter em negócio" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Arquivar" })).toBeInTheDocument();
     // The compose bar's always-visible strip also has "Notes"/"Email" tabs, so assert
     // the timeline tabs exist without requiring uniqueness across the page.
     for (const tab of ["All", "Activities", "Notes", "Email"]) {
@@ -239,7 +239,7 @@ describe("LeadWorkspaceClient", () => {
 
   it("shows 'Converted' (disabled) when the lead already has a converted deal", () => {
     renderClient({ convertedDealId: "d9" });
-    const btn = screen.getByRole("button", { name: "Converted" });
+    const btn = screen.getByRole("button", { name: "Convertido" });
     expect(btn).toBeDisabled();
   });
 });
