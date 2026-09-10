@@ -28,7 +28,7 @@ it("runs the presign handshake and dispatches uploaded", async () => {
     <UploadStep state={initialWizardState()} dispatch={dispatch} busy={false} onError={() => {}} />,
   );
   const file = new File(["Name\nA"], "c.csv", { type: "text/csv" });
-  fireEvent.change(screen.getByLabelText(/csv file/i), { target: { files: [file] } });
+  fireEvent.change(screen.getByLabelText(/arquivo csv/i), { target: { files: [file] } });
   await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: "uploaded", batchId: "b1" }));
 });
 

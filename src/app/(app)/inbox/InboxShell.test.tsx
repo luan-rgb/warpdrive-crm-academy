@@ -33,7 +33,7 @@ it("wraps its children with the folder rail on the reader route", () => {
       <div data-testid="reader-content">a thread</div>
     </InboxShell>,
   );
-  expect(screen.getByRole("navigation", { name: "Mail folders" })).toBeInTheDocument();
+  expect(screen.getByRole("navigation", { name: "Pastas de e-mail" })).toBeInTheDocument();
   expect(screen.getByTestId("reader-content")).toBeInTheDocument();
 });
 
@@ -44,7 +44,7 @@ it("wraps its children with the folder rail on the compose route", () => {
       <div data-testid="compose-content">a composer</div>
     </InboxShell>,
   );
-  expect(screen.getByRole("navigation", { name: "Mail folders" })).toBeInTheDocument();
+  expect(screen.getByRole("navigation", { name: "Pastas de e-mail" })).toBeInTheDocument();
   expect(screen.getByTestId("compose-content")).toBeInTheDocument();
 });
 
@@ -55,7 +55,7 @@ it("renders content in a constrained pane to the right of the rail, not full wid
       <div data-testid="reader-content">a thread</div>
     </InboxShell>,
   );
-  const nav = screen.getByRole("navigation", { name: "Mail folders" });
+  const nav = screen.getByRole("navigation", { name: "Pastas de e-mail" });
   const contentPane = screen.getByTestId("reader-content").parentElement;
   // Rail and content share one flex row; the content pane flexes (min-w-0 flex-1) so it sits beside
   // the fixed-width rail instead of spanning the whole viewport.

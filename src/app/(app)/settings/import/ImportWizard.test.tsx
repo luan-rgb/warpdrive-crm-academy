@@ -73,12 +73,12 @@ import { ImportWizard } from "./ImportWizard";
 it("uploads via the presign handshake, then advances to the map step", async () => {
   render(<ImportWizard personDefs={[]} orgDefs={[]} dealDefs={[]} activityDefs={[]} />);
   const file = new File(["name\nJane\n"], "c.csv", { type: "text/csv" });
-  fireEvent.change(screen.getByLabelText("CSV file"), { target: { files: [file] } });
+  fireEvent.change(screen.getByLabelText("Arquivo CSV"), { target: { files: [file] } });
 
   await waitFor(() => expect(actions.requestImportUploadAction).toHaveBeenCalledOnce());
   expect(actions.confirmImportUploadAction).toHaveBeenCalledWith("b1", "csrf");
   // prepare wait sees mapping_ready and hands the server-parsed header to the map step.
-  await waitFor(() => expect(screen.getByLabelText("Maps to: name")).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByLabelText("Mapeia para: name")).toBeInTheDocument());
 });
 
 it("surfaces an error banner when the upload request fails", async () => {
@@ -88,6 +88,6 @@ it("surfaces an error banner when the upload request fails", async () => {
   });
   render(<ImportWizard personDefs={[]} orgDefs={[]} dealDefs={[]} activityDefs={[]} />);
   const file = new File(["name\nJane\n"], "c.csv", { type: "text/csv" });
-  fireEvent.change(screen.getByLabelText("CSV file"), { target: { files: [file] } });
+  fireEvent.change(screen.getByLabelText("Arquivo CSV"), { target: { files: [file] } });
   await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
 });

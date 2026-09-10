@@ -32,8 +32,8 @@ it("shows the valid/invalid summary and lists row errors", () => {
       onCommit={vi.fn()}
     />,
   );
-  expect(screen.getByText("1 valid")).toBeInTheDocument();
-  expect(screen.getByText("1 with errors")).toBeInTheDocument();
+  expect(screen.getByText("1 válidas")).toBeInTheDocument();
+  expect(screen.getByText("1 com erros")).toBeInTheDocument();
   expect(screen.getByText(/Required/)).toBeInTheDocument();
 });
 
@@ -48,7 +48,7 @@ it("commits the valid rows when clicked and disables when nothing is valid", () 
       onCommit={onCommit}
     />,
   );
-  const btn = screen.getByRole("button", { name: "Import 2 valid rows" });
+  const btn = screen.getByRole("button", { name: "Importar 2 linhas válidas" });
   fireEvent.click(btn);
   expect(onCommit).toHaveBeenCalledOnce();
   rerender(
@@ -59,5 +59,5 @@ it("commits the valid rows when clicked and disables when nothing is valid", () 
       onCommit={onCommit}
     />,
   );
-  expect(screen.getByRole("button", { name: "Import 0 valid rows" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Importar 0 linhas válidas" })).toBeDisabled();
 });

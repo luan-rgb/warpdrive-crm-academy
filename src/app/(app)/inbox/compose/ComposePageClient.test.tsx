@@ -133,7 +133,7 @@ describe("ComposePageClient", () => {
         selfActorId="actor-1"
       />,
     );
-    expect(screen.getByRole("link", { name: /back/i })).toHaveAttribute("href", "/inbox");
+    expect(screen.getByRole("link", { name: /voltar/i })).toHaveAttribute("href", "/inbox");
   });
 
   it("with no draftId: mounts the composer immediately even while drafts.list is still pending", () => {
@@ -159,7 +159,7 @@ describe("ComposePageClient", () => {
       />,
     );
     expect(screen.queryByRole("region", { name: "compose email" })).not.toBeInTheDocument();
-    expect(screen.getByText("Loading draft...")).toBeInTheDocument();
+    expect(screen.getByText("Carregando rascunho...")).toBeInTheDocument();
   });
 
   it("with a draftId: mounts a fresh composer instead of waiting forever when drafts.list errors", () => {
@@ -173,7 +173,7 @@ describe("ComposePageClient", () => {
       />,
     );
     expect(screen.getByRole("region", { name: "compose email" })).toBeInTheDocument();
-    expect(screen.queryByText("Loading draft...")).not.toBeInTheDocument();
+    expect(screen.queryByText("Carregando rascunho...")).not.toBeInTheDocument();
   });
 
   it("with a draftId: mounts the composer seeded once drafts.list resolves with the matching draft", () => {
@@ -200,7 +200,7 @@ describe("ComposePageClient", () => {
       />,
     );
     expect(screen.getByRole("region", { name: "compose email" })).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Subject")).toHaveValue("Resumed subject");
-    expect(screen.queryByText("Loading draft...")).not.toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Assunto")).toHaveValue("Resumed subject");
+    expect(screen.queryByText("Carregando rascunho...")).not.toBeInTheDocument();
   });
 });

@@ -78,12 +78,12 @@ describe("composeScope mappings", () => {
     expect(labels.length).toBeGreaterThan(0);
     expect(labels).toEqual(
       expect.arrayContaining([
-        "Deal title",
-        "Deal value",
-        "First name",
-        "Last name",
-        "Contact email",
-        "Organization name",
+        "Título do negócio",
+        "Valor do negócio",
+        "Nome",
+        "Sobrenome",
+        "E-mail do contato",
+        "Nome da organização",
       ]),
     );
   });

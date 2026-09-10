@@ -59,7 +59,7 @@ describe("person timeline email", () => {
     render(<ContactTimelinePanel entityType="person" entityId="p1" />);
     await userEvent.click(screen.getByRole("tab", { name: "E-mail" }));
 
-    expect(screen.getByText("Loading emails...")).toBeInTheDocument();
+    expect(screen.getByText("Carregando e-mails...")).toBeInTheDocument();
     expect(screen.queryByText(/Nenhum e-mail vinculado/i)).not.toBeInTheDocument();
   });
 
@@ -69,7 +69,7 @@ describe("person timeline email", () => {
     render(<ContactTimelinePanel entityType="person" entityId="p1" />);
     await userEvent.click(screen.getByRole("tab", { name: "E-mail" }));
 
-    expect(screen.getByText("Couldn't load emails. Please try again.")).toBeInTheDocument();
+    expect(screen.getByText("Não foi possível carregar os e-mails. Tente novamente.")).toBeInTheDocument();
     expect(screen.queryByText(/Nenhum e-mail vinculado/i)).not.toBeInTheDocument();
   });
 

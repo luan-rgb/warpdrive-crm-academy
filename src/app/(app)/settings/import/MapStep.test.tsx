@@ -56,29 +56,29 @@ function chooseSelect(label: string, option: string): void {
 
 it("keeps Continue disabled until a column maps to Name", () => {
   render(<Harness onContinue={vi.fn()} />);
-  expect(screen.getByRole("button", { name: "Continue" })).toBeDisabled();
-  chooseSelect("Maps to: Full Name", "Person[Name] *");
-  expect(screen.getByRole("button", { name: "Continue" })).toBeEnabled();
+  expect(screen.getByRole("button", { name: "Continuar" })).toBeDisabled();
+  chooseSelect("Mapeia para: Full Name", "Person[Name] *");
+  expect(screen.getByRole("button", { name: "Continuar" })).toBeEnabled();
 });
 
 // Person > Name and Organization > Name both read "Name", so two collapsed pickers on the same
 // screen looked identical while writing different records. The entity has to be on the label.
 it("names the owning entity on the collapsed picker of a mapped column", () => {
   render(<Harness onContinue={vi.fn()} />);
-  chooseSelect("Maps to: Full Name", "Person[Name] *");
-  chooseSelect("Maps to: Profile", "Organization[Name]");
-  expect(screen.getByLabelText("Maps to: Full Name")).toHaveTextContent("Person[Name] *");
-  expect(screen.getByLabelText("Maps to: Profile")).toHaveTextContent("Organization[Name]");
+  chooseSelect("Mapeia para: Full Name", "Person[Name] *");
+  chooseSelect("Mapeia para: Profile", "Organization[Name]");
+  expect(screen.getByLabelText("Mapeia para: Full Name")).toHaveTextContent("Person[Name] *");
+  expect(screen.getByLabelText("Mapeia para: Profile")).toHaveTextContent("Organization[Name]");
 });
 
 it("offers custom fields from the defs and calls onContinue", () => {
   const onContinue = vi.fn();
   render(<Harness onContinue={onContinue} />);
-  fireEvent.click(screen.getByLabelText("Maps to: Profile"));
+  fireEvent.click(screen.getByLabelText("Mapeia para: Profile"));
   expect(screen.getByRole("option", { name: "LinkedIn" })).toBeInTheDocument();
   fireEvent.click(screen.getByRole("option", { name: "LinkedIn" }));
-  chooseSelect("Maps to: Full Name", "Person[Name] *");
-  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+  chooseSelect("Mapeia para: Full Name", "Person[Name] *");
+  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(onContinue).toHaveBeenCalledOnce();
 });
 
@@ -143,14 +143,14 @@ it("maps a column to an Organization field on a lead import", () => {
   render(<LeadHarness onMapping={onMapping} />);
 
   // The picker groups fields by entity; both groups are present on a lead import.
-  fireEvent.click(screen.getByLabelText("Maps to: url"));
+  fireEvent.click(screen.getByLabelText("Mapeia para: url"));
   expect(
     screen.getByRole("option", { name: "Organization[Website / domain]" }),
   ).toBeInTheDocument();
   fireEvent.click(screen.getByRole("option", { name: "Organization[Website / domain]" }));
 
-  chooseSelect("Maps to: reporter_type", "Lead[Title] *");
-  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+  chooseSelect("Mapeia para: reporter_type", "Lead[Title] *");
+  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
 
   expect(onMapping).toHaveBeenCalledWith({
     dedupMode: "skip",
@@ -170,9 +170,9 @@ it("hides the dedup radio on a lead import, where leads always create", () => {
 it("records the row-note checkbox in the mapping options", () => {
   const onMapping = vi.fn();
   render(<LeadHarness onMapping={onMapping} />);
-  chooseSelect("Maps to: reporter_type", "Lead[Title] *");
-  fireEvent.click(screen.getByRole("checkbox", { name: "Add unmapped columns as a note" }));
-  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+  chooseSelect("Mapeia para: reporter_type", "Lead[Title] *");
+  fireEvent.click(screen.getByRole("checkbox", { name: "Adicionar colunas não mapeadas como nota" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(onMapping.mock.calls[0]?.[0]).toMatchObject({
     options: { rowNoteFromUnmapped: true },
   });
@@ -182,8 +182,8 @@ it("records the row-note checkbox in the mapping options", () => {
 // unlabeled control floating above the hint text.
 it("renders a visible label next to the row-note checkbox", () => {
   render(<LeadHarness onMapping={vi.fn()} />);
-  const box = screen.getByRole("checkbox", { name: "Add unmapped columns as a note" });
-  const visible = screen.getByText("Add unmapped columns as a note");
+  const box = screen.getByRole("checkbox", { name: "Adicionar colunas não mapeadas como nota" });
+  const visible = screen.getByText("Adicionar colunas não mapeadas como nota");
   expect(visible).toBeInTheDocument();
   expect(visible.tagName).toBe("LABEL");
   expect(visible).toHaveAttribute("for", box.id);
