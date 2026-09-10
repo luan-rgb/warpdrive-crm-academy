@@ -54,13 +54,13 @@ describe("ActivitiesFilters", () => {
         types={types}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "All" }));
+    fireEvent.click(screen.getByRole("button", { name: "Todos" }));
     expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ typeKey: null }));
   });
 
   it("a custom type slugified to 'all' does not collide with the All tab", () => {
     const onChange = vi.fn();
-    const collidingTypes = [...types, { key: "all", name: "All" }];
+    const collidingTypes = [...types, { key: "all", name: "Todos" }];
     render(
       <ActivitiesFilters
         filter={baseFilter}
@@ -69,7 +69,7 @@ describe("ActivitiesFilters", () => {
         types={collidingTypes}
       />,
     );
-    const allButtons = screen.getAllByRole("button", { name: "All" });
+    const allButtons = screen.getAllByRole("button", { name: "Todos" });
     expect(allButtons).toHaveLength(2);
 
     fireEvent.click(allButtons[1] as HTMLElement); // the custom type tab keyed "all"
@@ -84,7 +84,7 @@ describe("ActivitiesFilters", () => {
     render(
       <ActivitiesFilters filter={baseFilter} onChange={onChange} owners={owners} types={types} />,
     );
-    fireEvent.click(screen.getByLabelText("Owner"));
+    fireEvent.click(screen.getByLabelText("Dono"));
     fireEvent.click(screen.getByText("Ann"));
     expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ ownerId: "u1" }));
   });
@@ -95,7 +95,7 @@ describe("ActivitiesFilters", () => {
       <ActivitiesFilters filter={baseFilter} onChange={onChange} owners={owners} types={types} />,
     );
     fireEvent.click(screen.getByLabelText("Status"));
-    fireEvent.click(screen.getByRole("option", { name: "Completed" }));
+    fireEvent.click(screen.getByRole("option", { name: "Concluídas" }));
     expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ done: "done" }));
   });
 
@@ -104,7 +104,7 @@ describe("ActivitiesFilters", () => {
     render(
       <ActivitiesFilters filter={baseFilter} onChange={onChange} owners={owners} types={types} />,
     );
-    fireEvent.click(screen.getByLabelText("From"));
+    fireEvent.click(screen.getByLabelText("De"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
     expect(onChange).toHaveBeenLastCalledWith(
@@ -117,7 +117,7 @@ describe("ActivitiesFilters", () => {
     render(
       <ActivitiesFilters filter={baseFilter} onChange={onChange} owners={owners} types={types} />,
     );
-    fireEvent.click(screen.getByLabelText("To"));
+    fireEvent.click(screen.getByLabelText("Até"));
     fireEvent.click(screen.getByText("15"));
     expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ to: expect.any(String) }));
   });

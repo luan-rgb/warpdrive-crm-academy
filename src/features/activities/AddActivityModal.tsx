@@ -71,15 +71,15 @@ export function AddActivityModal({
 
   async function submit(): Promise<void> {
     if (subject.trim() === "") {
-      setError("Subject is required");
+      setError("O assunto é obrigatório");
       return;
     }
     if (effectiveTypeId === "") {
-      setError("Activity type unavailable");
+      setError("Tipo de atividade indisponível");
       return;
     }
     if (dueRequired && due === "") {
-      setError("Due date is required");
+      setError("A data de vencimento é obrigatória");
       return;
     }
     setPending(true);
@@ -103,7 +103,7 @@ export function AddActivityModal({
     );
     if (!r.ok) {
       setPending(false);
-      setError(`Could not create activity (${r.error.id})`);
+      setError(`Não foi possível criar a atividade (${r.error.id})`);
       return;
     }
     await invalidateDayLoad();
@@ -124,7 +124,7 @@ export function AddActivityModal({
         className="max-w-md gap-0 overflow-hidden bg-card p-0"
       >
         <DialogHeader className="border-b px-5 py-3">
-          <DialogTitle className="text-base font-semibold">Add activity</DialogTitle>
+          <DialogTitle className="text-base font-semibold">Adicionar atividade</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-3 px-5 py-4 text-sm">
@@ -132,10 +132,10 @@ export function AddActivityModal({
               field rows via ComposerFieldRow. Kept the standalone Contact person / Organization
               pickers (the Activities page has no deal/lead context to anchor to). */}
           <input
-            aria-label="Subject"
+            aria-label="Assunto"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            placeholder="Subject"
+            placeholder="Assunto"
             className="w-full rounded-md border px-3 py-2 text-display font-medium outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
           />
           <TypeIconRail types={types} value={effectiveTypeId} onChange={setTypeId} />
@@ -144,14 +144,14 @@ export function AddActivityModal({
             <div className="flex flex-wrap items-center gap-2">
               <div className="w-40">
                 <ActivityDatePicker
-                  ariaLabel="Due date"
+                  ariaLabel="Data de vencimento"
                   value={due === "" ? null : due}
-                  placeholder="Due date"
+                  placeholder="Data de vencimento"
                   onChange={(v) => setDue(v ?? "")}
                 />
               </div>
               <div className="w-28">
-                <TimePicker ariaLabel="Start time" value={startTime} onChange={setStartTime} />
+                <TimePicker ariaLabel="Horário de início" value={startTime} onChange={setStartTime} />
               </div>
             </div>
           </ComposerFieldRow>
@@ -159,12 +159,12 @@ export function AddActivityModal({
           <ComposerFieldRow icon={<CalendarClock className={ICON} />}>
             <div className="w-48">
               <Select
-                ariaLabel="Priority"
+                ariaLabel="Prioridade"
                 value={priority}
                 onChange={setPriority}
-                placeholder="No priority"
+                placeholder="Sem prioridade"
                 options={[
-                  { value: "", label: "No priority" },
+                  { value: "", label: "Sem prioridade" },
                   ...ACTIVITY_PRIORITY_KEYS.map<SelectOption>((k) => ({
                     value: k,
                     label: ACTIVITY_PRIORITIES[k].name,
@@ -176,12 +176,12 @@ export function AddActivityModal({
 
           <ComposerFieldRow icon={<User className={ICON} />}>
             <Combobox
-              ariaLabel="Contact person"
+              ariaLabel="Pessoa de contato"
               value={personId}
               onChange={setPersonId}
-              placeholder="Contact person"
+              placeholder="Pessoa de contato"
               options={[
-                { value: "", label: "None" },
+                { value: "", label: "Nenhuma" },
                 ...(peopleQ.data?.rows ?? []).map<ComboboxOption>((p) => ({
                   value: p.id,
                   label: p.name,
@@ -193,12 +193,12 @@ export function AddActivityModal({
 
           <ComposerFieldRow icon={<Building2 className={ICON} />}>
             <Combobox
-              ariaLabel="Organization"
+              ariaLabel="Organização"
               value={orgId}
               onChange={setOrgId}
-              placeholder="Organization"
+              placeholder="Organização"
               options={[
-                { value: "", label: "None" },
+                { value: "", label: "Nenhuma" },
                 ...(orgsQ.data?.rows ?? []).map<ComboboxOption>((o) => ({
                   value: o.id,
                   label: o.name,

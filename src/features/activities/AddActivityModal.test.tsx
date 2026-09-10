@@ -65,13 +65,13 @@ function holdInvalidation(): { settle: () => Promise<void> } {
 describe("AddActivityModal", () => {
   it("renders the composer type rail plus subject/priority/due fields", () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    expect(screen.getByRole("dialog", { name: "Add activity" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Adicionar atividade" })).toBeInTheDocument();
     // Type is the deal-composer TypeIconRail: one labelled button per type, not a Select.
     expect(screen.getByRole("button", { name: "Call" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Meeting" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Subject")).toBeInTheDocument();
-    expect(screen.getByLabelText("Priority")).toBeInTheDocument();
-    expect(screen.getByLabelText("Due date")).toBeInTheDocument();
+    expect(screen.getByLabelText("Assunto")).toBeInTheDocument();
+    expect(screen.getByLabelText("Prioridade")).toBeInTheDocument();
+    expect(screen.getByLabelText("Data de vencimento")).toBeInTheDocument();
   });
 
   it("selects a type from the icon rail and submits that typeId", async () => {
@@ -81,7 +81,7 @@ describe("AddActivityModal", () => {
     expect(meeting).toHaveAttribute("aria-pressed", "false");
     fireEvent.click(meeting);
     expect(meeting).toHaveAttribute("aria-pressed", "true");
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Follow up" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Follow up" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createActivityAction).toHaveBeenCalledWith(
@@ -94,7 +94,7 @@ describe("AddActivityModal", () => {
   it("submits with the default type and entered subject", async () => {
     const onCreated = vi.fn();
     render(<AddActivityModal onClose={vi.fn()} onCreated={onCreated} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Follow up" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Follow up" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(createActivityAction).toHaveBeenCalledWith(
@@ -107,8 +107,8 @@ describe("AddActivityModal", () => {
 
   it("submits with the leadId and dueAt when a date is provided (lead workspace composer)", async () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} leadId="lead-1" />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Log a call" } });
-    fireEvent.click(screen.getByLabelText("Due date"));
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Log a call" } });
+    fireEvent.click(screen.getByLabelText("Data de vencimento"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("10"));
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -126,7 +126,7 @@ describe("AddActivityModal", () => {
 
   it("blocks a lead activity with no due date (leadTimeline hides undated rows)", async () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} leadId="lead-1" />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Log a call" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Log a call" } });
     // With a leadId and no date, Save is disabled: clicking it must not create the activity.
     expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -135,14 +135,14 @@ describe("AddActivityModal", () => {
     // Non-lead callers stay unblocked with no date (GlobalAddMenu, ActivitiesTable).
     cleanup();
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "No date ok" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "No date ok" } });
     expect(screen.getByRole("button", { name: "Salvar" })).not.toBeDisabled();
   });
 
   it("blocks an empty subject with an inline error", async () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent(/subject/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/assunto/i);
     expect(createActivityAction).not.toHaveBeenCalled();
   });
 
@@ -158,17 +158,17 @@ describe("AddActivityModal", () => {
         defaultTime="14:00"
       />,
     );
-    expect(screen.getByLabelText("Due date")).toHaveTextContent("07/15/2026");
-    expect(screen.getByLabelText("Start time")).toHaveValue("14:00");
+    expect(screen.getByLabelText("Data de vencimento")).toHaveTextContent("07/15/2026");
+    expect(screen.getByLabelText("Horário de início")).toHaveValue("14:00");
   });
 
   it("sends the chosen time of day, not a hardcoded 09:00", async () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} dealId="d1" />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Call Ann" } });
-    fireEvent.click(screen.getByLabelText("Due date"));
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Call Ann" } });
+    fireEvent.click(screen.getByLabelText("Data de vencimento"));
     fireEvent.click(screen.getByText("15"));
-    fireEvent.change(screen.getByLabelText("Start time"), { target: { value: "14:30" } });
-    fireEvent.blur(screen.getByLabelText("Start time"));
+    fireEvent.change(screen.getByLabelText("Horário de início"), { target: { value: "14:30" } });
+    fireEvent.blur(screen.getByLabelText("Horário de início"));
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(createActivityAction).toHaveBeenCalled());
     const [payload] = createActivityAction.mock.calls[0] as unknown as [
@@ -181,7 +181,7 @@ describe("AddActivityModal", () => {
 
   it("invalidates the day load after a successful create", async () => {
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Call Ann" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Call Ann" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
   });
@@ -189,7 +189,7 @@ describe("AddActivityModal", () => {
   it("ignores a second Save click while the day load is still invalidating", async () => {
     const invalidation = holdInvalidation();
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Call Ann" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Call Ann" } });
     const save = screen.getByRole("button", { name: "Salvar" });
     fireEvent.click(save);
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
@@ -206,7 +206,7 @@ describe("AddActivityModal", () => {
       error: { id: "E_ACTIVITY_001" },
     } as never);
     render(<AddActivityModal onClose={vi.fn()} onCreated={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Call Ann" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Call Ann" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(invalidateDayLoad).not.toHaveBeenCalled();

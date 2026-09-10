@@ -250,7 +250,7 @@ describe("PersonDetailClient composer + inline person section", () => {
       />,
     );
     fireEvent.click(screen.getByRole("button", { name: "Click here to add an activity..." }));
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Intro call" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Intro call" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());

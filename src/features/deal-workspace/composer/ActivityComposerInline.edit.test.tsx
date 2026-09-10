@@ -86,8 +86,8 @@ it("prefills the composer from the activity being edited", () => {
       editing={editing()}
     />,
   );
-  expect(screen.getByLabelText("Subject")).toHaveValue("Existing sync");
-  expect(screen.getByLabelText("Location")).toHaveValue("HQ");
+  expect(screen.getByLabelText("Assunto")).toHaveValue("Existing sync");
+  expect(screen.getByLabelText("Local")).toHaveValue("HQ");
 });
 
 it("saves via editActivityAction (not create) with the activity id and edited fields", async () => {
@@ -100,7 +100,7 @@ it("saves via editActivityAction (not create) with the activity id and edited fi
       editing={editing()}
     />,
   );
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Renamed sync" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Renamed sync" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(editActivityAction).toHaveBeenCalled());

@@ -34,7 +34,7 @@ export function CalendarFilterBar({
         {/* Both primitives default to w-full; with no width here each claims the whole flex line
             and wraps, so two one-word pickers render full-bleed and stacked. */}
         <Combobox
-          ariaLabel="Owner"
+          ariaLabel="Dono"
           triggerClassName="w-52"
           value={filter.ownerId ?? ""}
           onChange={(v) => patch({ ownerId: v === "" ? null : v })}
@@ -52,7 +52,7 @@ export function CalendarFilterBar({
         <ActivityTypeTab
           active={filter.typeKey}
           value={null}
-          label="All"
+          label="Todos"
           onSelect={(tab) => patch({ typeKey: tab })}
         />
         {types.map((t) => (

@@ -46,5 +46,5 @@ it("loads the day load for the selected assignee, not the signed-in user", () =>
 it("falls back to the signed-in user when no assignee is selected", () => {
   renderRow("");
   expect(useQuery.mock.calls[0]?.[0].userId).toBeNull();
-  expect(screen.getByLabelText("Start date")).toBeInTheDocument();
+  expect(screen.getByLabelText("Data de início")).toBeInTheDocument();
 });

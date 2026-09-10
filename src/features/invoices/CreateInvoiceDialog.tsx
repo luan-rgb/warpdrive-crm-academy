@@ -36,9 +36,9 @@ function lineBase(quantity: string, unitPrice: string): number {
 }
 
 const TAX_MODE_LABEL: Record<InvoiceTaxMode, string> = {
-  exclusive: "Tax exclusive",
-  inclusive: "Tax inclusive",
-  none: "No tax",
+  exclusive: "Imposto à parte",
+  inclusive: "Imposto incluso",
+  none: "Sem imposto",
 };
 
 export function CreateInvoiceDialog({

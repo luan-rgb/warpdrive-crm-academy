@@ -104,14 +104,14 @@ describe("ActivitiesTable filter toolbar", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
     fireEvent.click(screen.getByRole("button", { name: "Meeting" }));
-    fireEvent.click(screen.getByRole("button", { name: "All" }));
+    fireEvent.click(screen.getByRole("button", { name: "Todos" }));
     expect(useQuery).toHaveBeenLastCalledWith(expect.objectContaining({ typeKey: null }));
   });
 
   it("choosing an owner re-queries listRows with the chosen ownerId", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
-    fireEvent.click(screen.getByLabelText("Owner"));
+    fireEvent.click(screen.getByLabelText("Dono"));
     fireEvent.click(screen.getByText("Ann Owner"));
     expect(useQuery).toHaveBeenLastCalledWith(expect.objectContaining({ ownerId: "u1" }));
   });
@@ -120,14 +120,14 @@ describe("ActivitiesTable filter toolbar", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
     fireEvent.click(screen.getByLabelText("Status"));
-    fireEvent.click(screen.getByRole("option", { name: "Completed" }));
+    fireEvent.click(screen.getByRole("option", { name: "Concluídas" }));
     expect(useQuery).toHaveBeenLastCalledWith(expect.objectContaining({ done: "done" }));
   });
 
   it("picking a From date re-queries listRows with the new from value", async () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
-    fireEvent.click(screen.getByLabelText("From"));
+    fireEvent.click(screen.getByLabelText("De"));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
     expect(useQuery).toHaveBeenLastCalledWith(

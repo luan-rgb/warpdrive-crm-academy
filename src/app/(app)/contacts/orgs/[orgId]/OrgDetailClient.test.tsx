@@ -200,7 +200,7 @@ describe("OrgDetailClient composer seam", () => {
     const compose = within(composeSection as HTMLElement);
 
     fireEvent.click(compose.getByRole("button", { name: "Click here to add an activity..." }));
-    fireEvent.change(compose.getByLabelText("Subject"), { target: { value: "Check in" } });
+    fireEvent.change(compose.getByLabelText("Assunto"), { target: { value: "Check in" } });
     fireEvent.click(compose.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());

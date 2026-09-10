@@ -14,7 +14,7 @@ import { completeActivityAction, deleteActivityAction, editActivityAction } from
 import { buildActivityPatch, type EditableActivity, isoToLocalParts } from "./activityEditPatch";
 import { useInvalidateDayLoad } from "./useInvalidateDayLoad";
 
-const NO_PRIORITY_LABEL = "No priority";
+const NO_PRIORITY_LABEL = "Sem prioridade";
 
 export type { EditableActivity } from "./activityEditPatch";
 
@@ -47,7 +47,7 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
 
   async function save(): Promise<void> {
     if (subject.trim() === "") {
-      setError("Subject is required");
+      setError("O assunto é obrigatório");
       return;
     }
     const patch = buildActivityPatch(activity, { subject, typeId, priority, date, time, location });
@@ -60,7 +60,7 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
     const r = await editActivityAction(patch, readCsrfToken());
     if (!r.ok) {
       setPending(false);
-      setError(`Could not save activity (${r.error.id})`);
+      setError(`Não foi possível salvar a atividade (${r.error.id})`);
       return;
     }
     await invalidateDayLoad();
@@ -75,7 +75,7 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
     const r = await deleteActivityAction({ id: activity.id }, readCsrfToken());
     if (!r.ok) {
       setPending(false);
-      setError(`Could not delete activity (${r.error.id})`);
+      setError(`Não foi possível excluir a atividade (${r.error.id})`);
       return;
     }
     await invalidateDayLoad();
@@ -91,7 +91,7 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
     const r = await completeActivityAction({ id: activity.id, done: next }, readCsrfToken());
     if (!r.ok) {
       setPending(false);
-      setError(`Could not update activity (${r.error.id})`);
+      setError(`Não foi possível atualizar a atividade (${r.error.id})`);
       return;
     }
     await invalidateDayLoad();
@@ -112,14 +112,14 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
         className="max-w-md gap-0 overflow-hidden bg-card p-0"
       >
         <DialogHeader className="border-b px-5 py-3">
-          <DialogTitle className="text-base font-semibold">Edit activity</DialogTitle>
+          <DialogTitle className="text-base font-semibold">Editar atividade</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-3 px-5 py-4 text-sm">
           <div className="block">
-            <span className="mb-1 block font-medium">Type</span>
+            <span className="mb-1 block font-medium">Tipo</span>
             <Select
-              ariaLabel="Activity type"
+              ariaLabel="Tipo de atividade"
               value={effectiveTypeId}
               onChange={setTypeId}
               options={types.map<SelectOption>((t) => ({
@@ -130,18 +130,18 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
             />
           </div>
           <label className="block">
-            <span className="mb-1 block font-medium">Subject</span>
+            <span className="mb-1 block font-medium">Assunto</span>
             <input
-              aria-label="Subject"
+              aria-label="Assunto"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               className={FIELD}
             />
           </label>
           <div className="block">
-            <span className="mb-1 block font-medium">Priority</span>
+            <span className="mb-1 block font-medium">Prioridade</span>
             <Select
-              ariaLabel="Priority"
+              ariaLabel="Prioridade"
               value={priority}
               onChange={setPriority}
               placeholder={NO_PRIORITY_LABEL}
@@ -155,25 +155,25 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
             />
           </div>
           <div className="block">
-            <span className="mb-1 block font-medium">Due date</span>
+            <span className="mb-1 block font-medium">Data de vencimento</span>
             <ActivityDatePicker
-              ariaLabel="Due date"
+              ariaLabel="Data de vencimento"
               value={date === "" ? null : date}
               onChange={(v) => setDate(v ?? "")}
               assigneeId={activity.assigneeId ?? null}
             />
           </div>
           <div className="block">
-            <span className="mb-1 block font-medium">Start time</span>
-            <TimePicker ariaLabel="Start time" value={time} onChange={setTime} />
+            <span className="mb-1 block font-medium">Horário de início</span>
+            <TimePicker ariaLabel="Horário de início" value={time} onChange={setTime} />
           </div>
           <label className="block">
-            <span className="mb-1 block font-medium">Location</span>
+            <span className="mb-1 block font-medium">Local</span>
             <input
-              aria-label="Location"
+              aria-label="Local"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="Add location"
+              placeholder="Adicionar local"
               className={FIELD}
             />
           </label>
@@ -196,7 +196,7 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
               disabled={pending}
               className="rounded-md border px-3 py-1.5 text-sm text-red-700 transition-transform hover:bg-red-50 active:not-disabled:scale-[0.96] disabled:opacity-50"
             >
-              Delete
+              Excluir
             </button>
             <button
               type="button"
@@ -204,7 +204,7 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
               disabled={pending}
               className="rounded-md border px-3 py-1.5 text-sm transition-transform hover:bg-accent active:not-disabled:scale-[0.96] disabled:opacity-50"
             >
-              {doneNow ? "Reopen" : "Mark as done"}
+              {doneNow ? "Reabrir" : "Marcar como concluída"}
             </button>
           </div>
           <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ export function ActivityEditModal({ activity, onClose, onSaved }: Props): React.
               onClick={onClose}
               className="rounded-md border px-3 py-1.5 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="button"

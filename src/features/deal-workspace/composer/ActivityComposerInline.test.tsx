@@ -45,7 +45,7 @@ vi.mock("@/lib/trpc-client", () => ({
       availability: { useQuery: () => ({ data: { busy: false } }) },
       dayLoad: { useQuery: () => ({ data: undefined }) },
     },
-    identity: { assignableUsers: { useQuery: () => ({ data: [{ id: "u1", name: "Me" }] }) } },
+    identity: { assignableUsers: { useQuery: () => ({ data: [{ id: "u1", name: "Eu" }] }) } },
     contacts: { listPeopleForOrg: { useQuery: () => ({ data: [{ id: "p1", name: "Ann" }] }) } },
   },
 }));
@@ -54,22 +54,22 @@ import { ActivityComposerInline } from "./ActivityComposerInline";
 
 // Opens the Participants MultiCombobox and toggles an option by its visible label.
 function pickParticipant(label: RegExp): void {
-  fireEvent.click(screen.getByLabelText("Participants"));
+  fireEvent.click(screen.getByLabelText("Participantes"));
   fireEvent.click(screen.getByRole("option", { name: label }));
 }
 
 it("focuses the Subject field as soon as the Activity composer opens", async () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  await waitFor(() => expect(screen.getByLabelText("Subject")).toHaveFocus());
+  await waitFor(() => expect(screen.getByLabelText("Assunto")).toHaveFocus());
 });
 
 it("submits subject + assembled dueAt + done, without the 09:00 hardcode", async () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Discovery" } });
   // Start date already defaults to today; only the time needs setting here.
-  fireEvent.change(screen.getByLabelText("Start time"), { target: { value: "14:00" } });
-  fireEvent.blur(screen.getByLabelText("Start time"));
-  fireEvent.click(screen.getByLabelText("Mark as done"));
+  fireEvent.change(screen.getByLabelText("Horário de início"), { target: { value: "14:00" } });
+  fireEvent.blur(screen.getByLabelText("Horário de início"));
+  fireEvent.click(screen.getByLabelText("Marcar como concluída"));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
@@ -85,15 +85,15 @@ it("submits subject + assembled dueAt + done, without the 09:00 hardcode", async
 
 it("maps Owner to assigneeId (a user) and Participants to guestPersonIds (persons)", async () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Discovery" } });
   // Owner options come from identity.assignableUsers (users): open the combobox and pick the
-  // assignable user's row (labeled "Me" in this mock, same text as the default "" row, so scope
-  // the click to the listbox and take the second "Me": the first is the default, unassigned row).
-  fireEvent.click(screen.getByLabelText("Owner"));
+  // assignable user's row (labeled "Eu" in this mock, same text as the default "" row, so scope
+  // the click to the listbox and take the second "Eu": the first is the default, unassigned row).
+  fireEvent.click(screen.getByLabelText("Dono"));
   // cmdk labels its own listbox "Suggestions"; the native Participants <select multiple> below
   // is also an (implicit) listbox, so name-scope to avoid matching both.
   const ownerOptions = within(screen.getByRole("listbox", { name: "Suggestions" })).getAllByText(
-    "Me",
+    "Eu",
   );
   fireEvent.click(ownerOptions[1] as HTMLElement);
   // Participants options come from contacts.listPeopleForOrg (persons): pick "Ann" (p1).
@@ -117,7 +117,7 @@ it("falls back to the deal's own person for participants when there is no org", 
   // The deal's person is the sole candidate and is pre-selected, so it shows as a chip.
   expect(screen.getByText("Deal contact")).toBeInTheDocument();
   // Opening the picker confirms it is the only option offered.
-  fireEvent.click(screen.getByLabelText("Participants"));
+  fireEvent.click(screen.getByLabelText("Participantes"));
   const options = screen.getAllByRole("option");
   expect(options).toHaveLength(1);
   expect(options[0]).toHaveTextContent("Deal contact");
@@ -148,7 +148,7 @@ it("offers the deal's contact person as a participant even when the deal has an 
       onCreated={vi.fn()}
     />,
   );
-  fireEvent.click(screen.getByLabelText("Participants"));
+  fireEvent.click(screen.getByLabelText("Participantes"));
   const options = screen.getAllByRole("option");
   // The org query returns Ann (p1); Mia (p9) is the deal's contact and must still appear, first.
   expect(options.map((o) => o.textContent)).toEqual(["Mia Silva", "Ann"]);
@@ -164,7 +164,7 @@ it("pre-selects the deal's contact person so it is submitted as a participant by
       onCreated={vi.fn()}
     />,
   );
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Discovery" } });
   // No participant interaction: the deal's person should carry through untouched.
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -178,7 +178,7 @@ it("pre-selects the deal's contact person so it is submitted as a participant by
 
 it("defaults the start date to today so a saved activity is never dateless (and thus invisible on the deal feed)", async () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Discovery" } });
   // Deliberately not touching "Start date": today's default should carry through.
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -192,8 +192,8 @@ it("defaults the start date to today so a saved activity is never dateless (and 
 
 it("blocks save and shows an error when the start date is cleared", async () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
-  fireEvent.click(screen.getByLabelText("Start date"));
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Discovery" } });
+  fireEvent.click(screen.getByLabelText("Data de início"));
   fireEvent.click(screen.getByRole("button", { name: "Clear" }));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -203,13 +203,13 @@ it("blocks save and shows an error when the start date is cleared", async () => 
 
 it("resets the Subject field after a successful save", async () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Discovery" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Discovery" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
   // Post-reset, the field goes back to the same prefilled state as a fresh composer
   // (the still-selected type's name), not blank.
-  await vi.waitFor(() => expect(screen.getByLabelText("Subject")).toHaveValue("Call"));
+  await vi.waitFor(() => expect(screen.getByLabelText("Assunto")).toHaveValue("Call"));
 });
 
 it("still requires a subject when anchored to a lead instead of a deal", () => {
@@ -224,7 +224,7 @@ it("still requires a subject when anchored to a lead instead of a deal", () => {
   );
   // The field is prefilled from the type by default; simulate the user clearing it
   // to actually exercise the required-subject validation.
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   expect(screen.getByRole("alert")).toHaveTextContent("Subject is required");
   expect(createActivityAction).not.toHaveBeenCalled();
@@ -232,20 +232,20 @@ it("still requires a subject when anchored to a lead instead of a deal", () => {
 
 it("prefills the subject with the selected type name", () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  expect(screen.getByLabelText<HTMLInputElement>("Subject").value).toBe("Call");
+  expect(screen.getByLabelText<HTMLInputElement>("Assunto").value).toBe("Call");
 });
 
 it("updates an untouched subject when the activity type changes", () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
   fireEvent.click(screen.getByRole("button", { name: "Meeting" }));
-  expect(screen.getByLabelText<HTMLInputElement>("Subject").value).toBe("Meeting");
+  expect(screen.getByLabelText<HTMLInputElement>("Assunto").value).toBe("Meeting");
 });
 
 it("preserves a user-edited subject when the activity type changes", () => {
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Custom subject" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Custom subject" } });
   fireEvent.click(screen.getByRole("button", { name: "Meeting" }));
-  expect(screen.getByLabelText<HTMLInputElement>("Subject").value).toBe("Custom subject");
+  expect(screen.getByLabelText<HTMLInputElement>("Assunto").value).toBe("Custom subject");
 });
 
 it("sends leadId (and a null dealId) when anchored to a lead", async () => {
@@ -258,7 +258,7 @@ it("sends leadId (and a null dealId) when anchored to a lead", async () => {
       onCreated={vi.fn()}
     />,
   );
-  fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Qualify" } });
+  fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Qualify" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());

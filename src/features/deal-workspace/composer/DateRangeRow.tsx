@@ -34,19 +34,19 @@ export function DateRangeRow({
   return (
     <div className="flex flex-wrap items-center gap-2">
       <ActivityDatePicker
-        ariaLabel="Start date"
+        ariaLabel="Data de início"
         value={startDate === "" ? null : startDate}
         onChange={(v) => onStartDate(v ?? "")}
         assigneeId={loadFor}
       />
-      <TimePicker ariaLabel="Start time" value={startTime} onChange={onStartTime} />
+      <TimePicker ariaLabel="Horário de início" value={startTime} onChange={onStartTime} />
       <span aria-hidden="true" className="text-muted-foreground">
-        to
+        até
       </span>
-      <TimePicker ariaLabel="End time" value={endTime} onChange={onEndTime} />
+      <TimePicker ariaLabel="Horário de término" value={endTime} onChange={onEndTime} />
       <ActivityDatePicker
-        ariaLabel="End date"
-        placeholder="End date"
+        ariaLabel="Data de término"
+        placeholder="Data de término"
         value={endDate === "" ? null : endDate}
         onChange={(v) => onEndDate(v ?? "")}
         assigneeId={loadFor}

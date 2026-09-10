@@ -31,7 +31,7 @@ describe("CalendarFilterBar", () => {
         types={types}
       />,
     );
-    for (const name of ["Owner", "Status"]) {
+    for (const name of ["Dono", "Status"]) {
       const trigger = screen.getByLabelText(name);
       expect(trigger).not.toHaveClass("w-full");
       expect(trigger).toHaveClass("w-52");
@@ -47,10 +47,10 @@ describe("CalendarFilterBar", () => {
         types={types}
       />,
     );
-    expect(screen.getByLabelText("Owner")).toBeInTheDocument();
+    expect(screen.getByLabelText("Dono")).toBeInTheDocument();
     expect(screen.getByLabelText("Status")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Meeting" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "All" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Todos" })).toBeInTheDocument();
   });
 
   it("selects an activity type", () => {
@@ -77,7 +77,7 @@ describe("CalendarFilterBar", () => {
         types={types}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "All" }));
+    fireEvent.click(screen.getByRole("button", { name: "Todos" }));
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ typeKey: null }));
   });
 });

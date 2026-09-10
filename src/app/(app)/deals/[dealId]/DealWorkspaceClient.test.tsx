@@ -189,7 +189,7 @@ describe("DealWorkspaceClient compose bar", () => {
     expect(
       compose.queryByRole("button", { name: "Click here to add an activity..." }),
     ).not.toBeInTheDocument();
-    expect(compose.getByLabelText("Subject")).toBeInTheDocument();
+    expect(compose.getByLabelText("Assunto")).toBeInTheDocument();
   });
 });
 

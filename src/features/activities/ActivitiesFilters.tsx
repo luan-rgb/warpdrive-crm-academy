@@ -46,7 +46,7 @@ export function ActivitiesFilters({
         {/* Both primitives default to w-full; with no width here each claims the whole flex line
             and wraps, so the pickers render full-bleed and stacked. */}
         <Combobox
-          ariaLabel="Owner"
+          ariaLabel="Dono"
           triggerClassName="w-52"
           value={filter.ownerId ?? ""}
           onChange={(v) => patch({ ownerId: v === "" ? null : v })}
@@ -60,20 +60,20 @@ export function ActivitiesFilters({
           options={DONE_FILTER_OPTIONS}
         />
         <DatePicker
-          ariaLabel="From"
+          ariaLabel="De"
           value={filter.from}
           onChange={(v) => patch({ from: v })}
-          placeholder="From"
+          placeholder="De"
         />
         <DatePicker
-          ariaLabel="To"
+          ariaLabel="Até"
           value={filter.to}
           onChange={(v) => patch({ to: v })}
-          placeholder="To"
+          placeholder="Até"
         />
       </div>
       <div className="flex flex-wrap items-center gap-1 border-b pb-2">
-        <ActivityTypeTab active={filter.typeKey} value={null} label="All" onSelect={selectType} />
+        <ActivityTypeTab active={filter.typeKey} value={null} label="Todos" onSelect={selectType} />
         {types.map((t) => (
           <ActivityTypeTab
             key={t.key}

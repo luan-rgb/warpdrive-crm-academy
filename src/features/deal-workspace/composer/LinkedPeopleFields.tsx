@@ -31,11 +31,11 @@ export function OwnerField({
 }): React.ReactNode {
   return (
     <Combobox
-      ariaLabel="Owner"
+      ariaLabel="Dono"
       value={ownerId}
       onChange={onOwner}
       options={[
-        { value: "", label: "Me" },
+        { value: "", label: "Eu" },
         ...owners.map<ComboboxOption>((u) => ({
           value: u.id,
           label: u.name,
@@ -58,11 +58,11 @@ export function GuestsField({
 }): React.ReactNode {
   return (
     <MultiCombobox
-      ariaLabel="Participants"
+      ariaLabel="Participantes"
       values={participants}
       onChange={onParticipants}
       options={participantOptions.map((p) => ({ value: p.id, label: p.name }))}
-      placeholder="Add guests"
+      placeholder="Adicionar convidados"
     />
   );
 }

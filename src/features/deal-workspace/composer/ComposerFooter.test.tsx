@@ -31,20 +31,20 @@ describe("deal-workspace ComposerFooter mark-as-done", () => {
     const user = userEvent.setup();
     const onDone = vi.fn();
     renderFooter({ onDone });
-    await user.click(screen.getByText("Mark as done"));
+    await user.click(screen.getByText("Marcar como concluída"));
     expect(onDone).toHaveBeenCalledWith(true);
   });
 
   it("carries the shared inline hover surface", () => {
     renderFooter();
-    const wrapper = screen.getByRole("checkbox", { name: "Mark as done" }).parentElement;
+    const wrapper = screen.getByRole("checkbox", { name: "Marcar como concluída" }).parentElement;
     expect(wrapper).toHaveClass("hover:bg-accent", "hover:text-foreground", "rounded-md");
     expect(INLINE_CONTROL_SURFACE).toContain("hover:bg-accent");
   });
 
   it("keeps the surrounding action bar's text size rather than shrinking to compose-bar type", () => {
     renderFooter();
-    const wrapper = screen.getByRole("checkbox", { name: "Mark as done" }).parentElement;
+    const wrapper = screen.getByRole("checkbox", { name: "Marcar como concluída" }).parentElement;
     expect(wrapper).toHaveClass("text-sm");
     expect(wrapper).not.toHaveClass("text-xs");
   });

@@ -220,7 +220,7 @@ describe("LeadWorkspaceClient", () => {
     // The lead composer defaults to Notes (PD parity), so switch to the Activity tab first; clicking
     // a tab expands its editor directly.
     fireEvent.click(screen.getByRole("tab", { name: "Activity" }));
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Intro call" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Intro call" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() =>

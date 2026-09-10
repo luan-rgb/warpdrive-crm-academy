@@ -74,7 +74,7 @@ describe("ActivityEditModal", () => {
   it("edits the subject and saves only the changed field", async () => {
     const onSaved = vi.fn();
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={onSaved} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Renamed" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Renamed" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(editActivityAction).toHaveBeenCalledWith({ id: "a1", subject: "Renamed" }, "csrf"),
@@ -85,7 +85,7 @@ describe("ActivityEditModal", () => {
   it("deletes the activity", async () => {
     const onSaved = vi.fn();
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(deleteActivityAction).toHaveBeenCalledWith({ id: "a1" }, "csrf"));
     await waitFor(() => expect(onSaved).toHaveBeenCalled());
   });
@@ -98,8 +98,8 @@ describe("ActivityEditModal", () => {
         onSaved={vi.fn()}
       />,
     );
-    expect(screen.getByRole("button", { name: "Reopen" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Reopen" }));
+    expect(screen.getByRole("button", { name: "Reabrir" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Reabrir" }));
     await waitFor(() =>
       expect(completeActivityAction).toHaveBeenCalledWith({ id: "a1", done: false }, "csrf"),
     );
@@ -113,7 +113,7 @@ describe("ActivityEditModal", () => {
     const onSaved = vi.fn();
     const onClose = vi.fn();
     render(<ActivityEditModal activity={activity} onClose={onClose} onSaved={onSaved} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Renamed" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Renamed" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("E_ACTIVITY_006"));
     expect(onSaved).not.toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe("ActivityEditModal", () => {
     const onSaved = vi.fn();
     const onClose = vi.fn();
     render(<ActivityEditModal activity={activity} onClose={onClose} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("E_ACTIVITY_006"));
     expect(onSaved).not.toHaveBeenCalled();
     expect(onClose).not.toHaveBeenCalled();
@@ -147,27 +147,27 @@ describe("ActivityEditModal", () => {
 
   it("invalidates the day load after a successful save", async () => {
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Renamed" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Renamed" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
   });
 
   it("invalidates the day load after a successful delete", async () => {
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
   });
 
   it("invalidates the day load after marking the activity done", async () => {
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Mark as done" }));
+    fireEvent.click(screen.getByRole("button", { name: "Marcar como concluída" }));
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
   });
 
   it("ignores a second Save click while the day load is still invalidating", async () => {
     const invalidation = holdInvalidation();
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Renamed" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Renamed" } });
     const save = screen.getByRole("button", { name: "Salvar" });
     fireEvent.click(save);
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
@@ -181,7 +181,7 @@ describe("ActivityEditModal", () => {
   it("ignores a second Delete click while the day load is still invalidating", async () => {
     const invalidation = holdInvalidation();
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={vi.fn()} />);
-    const remove = screen.getByRole("button", { name: "Delete" });
+    const remove = screen.getByRole("button", { name: "Excluir" });
     fireEvent.click(remove);
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
     fireEvent.click(remove);
@@ -194,7 +194,7 @@ describe("ActivityEditModal", () => {
   it("ignores a second Mark as done click while the day load is still invalidating", async () => {
     const invalidation = holdInvalidation();
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={vi.fn()} />);
-    const done = screen.getByRole("button", { name: "Mark as done" });
+    const done = screen.getByRole("button", { name: "Marcar como concluída" });
     fireEvent.click(done);
     await waitFor(() => expect(invalidateDayLoad).toHaveBeenCalled());
     fireEvent.click(done);
@@ -210,7 +210,7 @@ describe("ActivityEditModal", () => {
       error: { id: "E_ACTIVITY_006" },
     } as never);
     render(<ActivityEditModal activity={activity} onClose={vi.fn()} onSaved={vi.fn()} />);
-    fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "Renamed" } });
+    fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Renamed" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(invalidateDayLoad).not.toHaveBeenCalled();
