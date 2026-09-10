@@ -42,9 +42,9 @@ describe("OrgFirmographicsPanel", () => {
   it("saves an edited Industry via updateOrgAction and calls onSaved", async () => {
     const onSaved = vi.fn();
     render(<OrgFirmographicsPanel org={org} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Industry" }));
-    fireEvent.change(screen.getByLabelText("Industry"), { target: { value: "Fintech" } });
-    fireEvent.keyDown(screen.getByLabelText("Industry"), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Setor" }));
+    fireEvent.change(screen.getByLabelText("Setor"), { target: { value: "Fintech" } });
+    fireEvent.keyDown(screen.getByLabelText("Setor"), { key: "Enter" });
 
     await vi.waitFor(() => expect(updateOrgAction).toHaveBeenCalled());
     const [payload, csrf] = updateOrgAction.mock.calls[0] as unknown as [
@@ -58,9 +58,9 @@ describe("OrgFirmographicsPanel", () => {
 
   it("saves an edited Employees count as a number", async () => {
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Employees" }));
-    fireEvent.change(screen.getByLabelText("Employees"), { target: { value: "350" } });
-    fireEvent.keyDown(screen.getByLabelText("Employees"), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Funcionários" }));
+    fireEvent.change(screen.getByLabelText("Funcionários"), { target: { value: "350" } });
+    fireEvent.keyDown(screen.getByLabelText("Funcionários"), { key: "Enter" });
 
     await vi.waitFor(() => expect(updateOrgAction).toHaveBeenCalled());
     const [payload] = updateOrgAction.mock.calls[0] as unknown as [Record<string, unknown>, string];
@@ -69,9 +69,9 @@ describe("OrgFirmographicsPanel", () => {
 
   it("clears Employees to null when the input is emptied", async () => {
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Employees" }));
-    fireEvent.change(screen.getByLabelText("Employees"), { target: { value: "" } });
-    fireEvent.keyDown(screen.getByLabelText("Employees"), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Funcionários" }));
+    fireEvent.change(screen.getByLabelText("Funcionários"), { target: { value: "" } });
+    fireEvent.keyDown(screen.getByLabelText("Funcionários"), { key: "Enter" });
 
     await vi.waitFor(() => expect(updateOrgAction).toHaveBeenCalled());
     const [payload] = updateOrgAction.mock.calls[0] as unknown as [Record<string, unknown>, string];
@@ -80,9 +80,9 @@ describe("OrgFirmographicsPanel", () => {
 
   it("saves an edited Website/domain", async () => {
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Website" }));
-    fireEvent.change(screen.getByLabelText("Website"), { target: { value: "acme.io" } });
-    fireEvent.keyDown(screen.getByLabelText("Website"), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Site" }));
+    fireEvent.change(screen.getByLabelText("Site"), { target: { value: "acme.io" } });
+    fireEvent.keyDown(screen.getByLabelText("Site"), { key: "Enter" });
 
     await vi.waitFor(() => expect(updateOrgAction).toHaveBeenCalled());
     const [payload] = updateOrgAction.mock.calls[0] as unknown as [Record<string, unknown>, string];
@@ -122,9 +122,9 @@ describe("OrgFirmographicsPanel", () => {
   it("surfaces a save failure via an inline error", async () => {
     updateOrgAction.mockResolvedValueOnce({ ok: false, error: { id: "E_CONTACT_002" } });
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Industry" }));
-    fireEvent.change(screen.getByLabelText("Industry"), { target: { value: "Fintech" } });
-    fireEvent.keyDown(screen.getByLabelText("Industry"), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Setor" }));
+    fireEvent.change(screen.getByLabelText("Setor"), { target: { value: "Fintech" } });
+    fireEvent.keyDown(screen.getByLabelText("Setor"), { key: "Enter" });
 
     expect(await screen.findByText(/couldn.t save/i)).toBeInTheDocument();
   });

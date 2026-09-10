@@ -57,11 +57,11 @@ it("shows blank firmographic rows when the section is not hiding empties", () =>
       <OrgBlock org={blankOrg} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.getByText("Website")).toBeInTheDocument();
+  expect(screen.getByText("Site")).toBeInTheDocument();
   expect(screen.getByText("LinkedIn")).toBeInTheDocument();
-  expect(screen.getByText("Industry")).toBeInTheDocument();
-  expect(screen.getByText("Annual revenue")).toBeInTheDocument();
-  expect(screen.getByText("Number of employees")).toBeInTheDocument();
+  expect(screen.getByText("Setor")).toBeInTheDocument();
+  expect(screen.getByText("Faturamento anual")).toBeInTheDocument();
+  expect(screen.getByText("Número de funcionários")).toBeInTheDocument();
   expect(screen.getByText("Address")).toBeInTheDocument();
 });
 
@@ -71,14 +71,14 @@ it("hides blank firmographic rows when the funnel is hiding empties", () => {
       <OrgBlock org={blankOrg} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.queryByText("Website")).not.toBeInTheDocument();
+  expect(screen.queryByText("Site")).not.toBeInTheDocument();
   expect(screen.queryByText("LinkedIn")).not.toBeInTheDocument();
-  expect(screen.queryByText("Industry")).not.toBeInTheDocument();
-  expect(screen.queryByText("Annual revenue")).not.toBeInTheDocument();
-  expect(screen.queryByText("Number of employees")).not.toBeInTheDocument();
+  expect(screen.queryByText("Setor")).not.toBeInTheDocument();
+  expect(screen.queryByText("Faturamento anual")).not.toBeInTheDocument();
+  expect(screen.queryByText("Número de funcionários")).not.toBeInTheDocument();
   expect(screen.queryByText("Address")).not.toBeInTheDocument();
   // Name is never value-less; it always stays.
-  expect(screen.getByText("Name")).toBeInTheDocument();
+  expect(screen.getByText("Nome")).toBeInTheDocument();
 });
 
 it("edits the Address as a composite of subfields, saving a merged address object", async () => {
@@ -111,8 +111,8 @@ it("a filled-in field stays visible even while the funnel is hiding empties", ()
       <OrgBlock org={{ ...blankOrg, industry: "Media" }} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.getByText("Industry")).toBeInTheDocument();
-  expect(screen.queryByText("Website")).not.toBeInTheDocument();
+  expect(screen.getByText("Setor")).toBeInTheDocument();
+  expect(screen.queryByText("Site")).not.toBeInTheDocument();
 });
 
 // Built-in fields hidden in Settings > Data fields must not render here even when they hold a
@@ -127,12 +127,12 @@ it("hides a built-in firmographic row whose key is in the hidden set, keeps the 
   } as unknown as Organization;
   render(<OrgBlock org={org} hidden={new Set(["industry", "annualRevenue"])} />);
 
-  expect(screen.queryByText("Industry")).not.toBeInTheDocument();
-  expect(screen.queryByText("Annual revenue")).not.toBeInTheDocument();
+  expect(screen.queryByText("Setor")).not.toBeInTheDocument();
+  expect(screen.queryByText("Faturamento anual")).not.toBeInTheDocument();
   // Non-hidden rows still render.
-  expect(screen.getByText("Website")).toBeInTheDocument();
-  expect(screen.getByText("Number of employees")).toBeInTheDocument();
-  expect(screen.getByText("Name")).toBeInTheDocument();
+  expect(screen.getByText("Site")).toBeInTheDocument();
+  expect(screen.getByText("Número de funcionários")).toBeInTheDocument();
+  expect(screen.getByText("Nome")).toBeInTheDocument();
 });
 
 it("renders provided label chips under the section (PD's per-organization Labels row)", () => {
@@ -141,6 +141,6 @@ it("renders provided label chips under the section (PD's per-organization Labels
       <OrgBlock org={blankOrg} labels={[{ name: "Partner", classes: "bg-blue-100" }]} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.getByText("Labels")).toBeInTheDocument();
+  expect(screen.getByText("Etiquetas")).toBeInTheDocument();
   expect(screen.getByText("Partner")).toBeInTheDocument();
 });

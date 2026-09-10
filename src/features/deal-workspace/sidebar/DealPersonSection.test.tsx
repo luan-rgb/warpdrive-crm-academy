@@ -79,16 +79,16 @@ describe("DealPersonSection with no linked person", () => {
 
   it("shows the same field rows a linked person would, with empty values", () => {
     renderSection();
-    for (const label of ["Name", "First name", "Last name", "Phone", "Email"]) {
+    for (const label of ["Nome", "Primeiro nome", "Sobrenome", "Telefone", "Email"]) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
   });
 
   it("drops a name-part row hidden in Settings > Data fields", () => {
     renderSection({ hidden: new Set(["firstName", "lastName"]) });
-    expect(screen.queryByText("First name")).not.toBeInTheDocument();
-    expect(screen.queryByText("Last name")).not.toBeInTheDocument();
-    expect(screen.getByText("Name")).toBeInTheDocument();
+    expect(screen.queryByText("Primeiro nome")).not.toBeInTheDocument();
+    expect(screen.queryByText("Sobrenome")).not.toBeInTheDocument();
+    expect(screen.getByText("Nome")).toBeInTheDocument();
   });
 
   it("opens the editor from the section pencil", async () => {

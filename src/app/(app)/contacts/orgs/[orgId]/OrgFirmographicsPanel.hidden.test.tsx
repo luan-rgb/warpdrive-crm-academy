@@ -20,13 +20,13 @@ const ORG = {
 
 it("hides a built-in firmographic row when its key is hidden, keeps the rest", () => {
   render(<OrgFirmographicsPanel org={ORG} onSaved={vi.fn()} hidden={new Set(["industry"])} />);
-  expect(screen.queryByText("Industry")).toBeNull();
-  expect(screen.getByText("Website")).toBeTruthy();
-  expect(screen.getByText("Employees")).toBeTruthy();
+  expect(screen.queryByText("Setor")).toBeNull();
+  expect(screen.getByText("Site")).toBeTruthy();
+  expect(screen.getByText("Funcionários")).toBeTruthy();
 });
 
 it("shows every row when nothing is hidden", () => {
   render(<OrgFirmographicsPanel org={ORG} onSaved={vi.fn()} />);
-  expect(screen.getByText("Industry")).toBeTruthy();
+  expect(screen.getByText("Setor")).toBeTruthy();
   expect(screen.getByText("LinkedIn")).toBeTruthy();
 });

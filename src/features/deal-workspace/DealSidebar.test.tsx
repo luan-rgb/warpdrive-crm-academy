@@ -146,9 +146,9 @@ it("renders org firmographics and saves an edit via updateOrgAction", async () =
       baseCurrency="USD"
     />,
   );
-  expect(screen.getByText("Industry")).toBeInTheDocument(); // firmographic row present
-  expect(screen.getByText("Website")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Edit Website" }));
+  expect(screen.getByText("Setor")).toBeInTheDocument(); // firmographic row present
+  expect(screen.getByText("Site")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Edit Site" }));
   fireEvent.change(screen.getByLabelText("editor-website"), { target: { value: "new.com" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() =>
@@ -169,8 +169,8 @@ it("renders first/last name and saves via updatePersonAction", async () => {
       baseCurrency="USD"
     />,
   );
-  expect(screen.getByText("First name")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
+  expect(screen.getByText("Primeiro nome")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Maria" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() =>
@@ -240,7 +240,7 @@ it("does not render a standalone Details section when the deal has no custom fie
 });
 
 it("renders deal custom fields inside Organization instead of a Details section", () => {
-  const def = { id: "f1", type: "text", name: "Industry", key: "industry" };
+  const def = { id: "f1", type: "text", name: "Setor", key: "industry" };
   const workspace = { ...makeWorkspace(), customFieldDefs: [def] } as ReturnType<
     typeof makeWorkspace
   >;
@@ -249,5 +249,5 @@ it("renders deal custom fields inside Organization instead of a Details section"
   );
   expect(screen.queryByRole("region", { name: "Details" })).not.toBeInTheDocument();
   const organization = within(screen.getByRole("region", { name: "Organização" }));
-  expect(organization.getAllByText("Industry")).toHaveLength(2);
+  expect(organization.getAllByText("Setor")).toHaveLength(2);
 });

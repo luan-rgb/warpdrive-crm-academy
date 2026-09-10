@@ -102,13 +102,13 @@ it("drops the org and person built-in rows the hidden sets name, threaded to the
   );
 
   // Hidden org rows are gone, non-hidden ones remain.
-  expect(screen.queryByText("Industry")).not.toBeInTheDocument();
-  expect(screen.queryByText("Annual revenue")).not.toBeInTheDocument();
-  expect(screen.getByText("Website")).toBeInTheDocument();
-  expect(screen.getByText("Number of employees")).toBeInTheDocument();
+  expect(screen.queryByText("Setor")).not.toBeInTheDocument();
+  expect(screen.queryByText("Faturamento anual")).not.toBeInTheDocument();
+  expect(screen.getByText("Site")).toBeInTheDocument();
+  expect(screen.getByText("Número de funcionários")).toBeInTheDocument();
 
   // Hidden person row is gone, non-hidden one remains.
-  expect(screen.queryByText("Phone")).not.toBeInTheDocument();
+  expect(screen.queryByText("Telefone")).not.toBeInTheDocument();
   expect(screen.getByText("Email")).toBeInTheDocument();
 });
 
@@ -121,7 +121,7 @@ it("keeps every built-in row when nothing is hidden", () => {
       baseCurrency="USD"
     />,
   );
-  expect(screen.getByText("Industry")).toBeInTheDocument();
-  expect(screen.getByText("Annual revenue")).toBeInTheDocument();
-  expect(screen.getByText("Phone")).toBeInTheDocument();
+  expect(screen.getByText("Setor")).toBeInTheDocument();
+  expect(screen.getByText("Faturamento anual")).toBeInTheDocument();
+  expect(screen.getByText("Telefone")).toBeInTheDocument();
 });

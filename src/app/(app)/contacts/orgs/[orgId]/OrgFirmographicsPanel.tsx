@@ -54,9 +54,9 @@ export function OrgFirmographicsPanel({
   return (
     <>
       {!hidden.has("domain") && (
-        <FieldRow label="Website" empty={org.domain === null || org.domain === ""}>
+        <FieldRow label="Site" empty={org.domain === null || org.domain === ""}>
           <InlineTextField
-            label="Website"
+            label="Site"
             value={org.domain ?? ""}
             onSave={(v) => saveText("domain", v)}
           />
@@ -72,9 +72,9 @@ export function OrgFirmographicsPanel({
         </FieldRow>
       )}
       {!hidden.has("industry") && (
-        <FieldRow label="Industry" empty={org.industry === null || org.industry === ""}>
+        <FieldRow label="Setor" empty={org.industry === null || org.industry === ""}>
           <InlineTextField
-            label="Industry"
+            label="Setor"
             value={org.industry ?? ""}
             onSave={(v) => saveText("industry", v)}
           />
@@ -82,13 +82,13 @@ export function OrgFirmographicsPanel({
       )}
       {!hidden.has("annualRevenue") && (
         <FieldRow
-          label="Annual revenue"
+          label="Faturamento anual"
           empty={org.annualRevenue === null || org.annualRevenue === ""}
         >
           <InlineTextField
-            label="Annual revenue"
+            label="Faturamento anual"
             value={org.annualRevenue ?? ""}
-            placeholder="+ Add revenue"
+            placeholder="+ Adicionar faturamento"
             onSave={(v) => {
               const trimmed = v.trim();
               return save({ annualRevenue: trimmed === "" ? null : trimmed });
@@ -97,11 +97,11 @@ export function OrgFirmographicsPanel({
         </FieldRow>
       )}
       {!hidden.has("employeeCount") && (
-        <FieldRow label="Employees" empty={org.employeeCount == null}>
+        <FieldRow label="Funcionários" empty={org.employeeCount == null}>
           <InlineTextField
-            label="Employees"
+            label="Funcionários"
             value={org.employeeCount == null ? "" : String(org.employeeCount)}
-            placeholder="+ Add employees"
+            placeholder="+ Adicionar funcionários"
             onSave={(v) => {
               const trimmed = v.trim();
               return save({ employeeCount: trimmed === "" ? null : Number(trimmed) });

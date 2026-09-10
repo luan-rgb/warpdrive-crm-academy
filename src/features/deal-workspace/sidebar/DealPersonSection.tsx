@@ -17,10 +17,10 @@ const NONE: ReadonlySet<string> = new Set();
 // Mirror the rows PersonBlock renders for a linked person, honouring the same Settings > Data
 // fields hides so the empty panel does not offer a row the populated one suppresses.
 function emptyRows(hidden: ReadonlySet<string>): string[] {
-  return ["Name"]
-    .concat(hidden.has("firstName") ? [] : ["First name"])
-    .concat(hidden.has("lastName") ? [] : ["Last name"])
-    .concat(hidden.has("phones") ? [] : ["Phone"])
+  return ["Nome"]
+    .concat(hidden.has("firstName") ? [] : ["Primeiro nome"])
+    .concat(hidden.has("lastName") ? [] : ["Sobrenome"])
+    .concat(hidden.has("phones") ? [] : ["Telefone"])
     .concat(hidden.has("emails") ? [] : ["Email"]);
 }
 

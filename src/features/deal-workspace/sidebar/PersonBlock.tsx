@@ -84,7 +84,7 @@ export function PersonBlock({
   return (
     <>
       <SidebarFieldRow
-        label="Name"
+        label="Nome"
         value={
           <a href={`/contacts/people/${person.id}`} className="text-primary hover:underline">
             {person.name}
@@ -93,11 +93,11 @@ export function PersonBlock({
         readOnly
       />
       {labels !== undefined && (
-        <SidebarFieldRow label="Labels" value={<LabelChips labels={labels} />} readOnly />
+        <SidebarFieldRow label="Etiquetas" value={<LabelChips labels={labels} />} readOnly />
       )}
       {!hideNameParts && !hidden.has("firstName") && (
         <SidebarFieldRow
-          label="First name"
+          label="Primeiro nome"
           value={person.firstName ?? "-"}
           empty={person.firstName === null}
           initialDraft={person.firstName ?? ""}
@@ -110,7 +110,7 @@ export function PersonBlock({
       )}
       {!hideNameParts && !hidden.has("lastName") && (
         <SidebarFieldRow
-          label="Last name"
+          label="Sobrenome"
           value={person.lastName ?? "-"}
           empty={person.lastName === null}
           initialDraft={person.lastName ?? ""}
@@ -123,7 +123,7 @@ export function PersonBlock({
       )}
       {!hidden.has("phones") && (
         <SidebarFieldRow
-          label="Phone"
+          label="Telefone"
           value={phones.length === 0 ? "-" : <ContactPointsValue points={phones} kind="Phone" />}
           empty={phones.length === 0}
           initialDraft={serializePoints(phones)}

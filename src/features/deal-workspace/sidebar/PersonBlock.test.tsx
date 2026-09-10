@@ -44,9 +44,9 @@ it("shows blank First name/Last name/Phone/Email rows when the section is not hi
       <PersonBlock person={blankPerson} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.getByText("First name")).toBeInTheDocument();
-  expect(screen.getByText("Last name")).toBeInTheDocument();
-  expect(screen.getByText("Phone")).toBeInTheDocument();
+  expect(screen.getByText("Primeiro nome")).toBeInTheDocument();
+  expect(screen.getByText("Sobrenome")).toBeInTheDocument();
+  expect(screen.getByText("Telefone")).toBeInTheDocument();
   expect(screen.getByText("Email")).toBeInTheDocument();
 });
 
@@ -56,12 +56,12 @@ it("hides blank First name/Last name/Phone/Email rows when the funnel is hiding 
       <PersonBlock person={blankPerson} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.queryByText("First name")).not.toBeInTheDocument();
-  expect(screen.queryByText("Last name")).not.toBeInTheDocument();
-  expect(screen.queryByText("Phone")).not.toBeInTheDocument();
+  expect(screen.queryByText("Primeiro nome")).not.toBeInTheDocument();
+  expect(screen.queryByText("Sobrenome")).not.toBeInTheDocument();
+  expect(screen.queryByText("Telefone")).not.toBeInTheDocument();
   expect(screen.queryByText("Email")).not.toBeInTheDocument();
   // Name is never value-less; it always stays.
-  expect(screen.getByText("Name")).toBeInTheDocument();
+  expect(screen.getByText("Nome")).toBeInTheDocument();
 });
 
 it("a filled-in field stays visible even while the funnel is hiding empties", () => {
@@ -70,8 +70,8 @@ it("a filled-in field stays visible even while the funnel is hiding empties", ()
       <PersonBlock person={{ ...blankPerson, firstName: "Mia" }} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.getByText("First name")).toBeInTheDocument();
-  expect(screen.queryByText("Last name")).not.toBeInTheDocument();
+  expect(screen.getByText("Primeiro nome")).toBeInTheDocument();
+  expect(screen.queryByText("Sobrenome")).not.toBeInTheDocument();
 });
 
 // Regression: a committed write was reported as "Couldn't save" because save() coupled the
@@ -83,7 +83,7 @@ it("does NOT report a failure when the write succeeded but router.refresh throws
   });
   render(<PersonBlock person={{ ...blankPerson, firstName: "Mia" }} />);
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
+  fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Mira" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -121,27 +121,27 @@ it("hides the Phone/Email rows whose built-in key is in the hidden set, keeps th
   } as unknown as Person;
   render(<PersonBlock person={person} hidden={new Set(["phones"])} />);
 
-  expect(screen.queryByText("Phone")).not.toBeInTheDocument();
+  expect(screen.queryByText("Telefone")).not.toBeInTheDocument();
   // Non-hidden rows still render.
   expect(screen.getByText("Email")).toBeInTheDocument();
-  expect(screen.getByText("First name")).toBeInTheDocument();
-  expect(screen.getByText("Name")).toBeInTheDocument();
+  expect(screen.getByText("Primeiro nome")).toBeInTheDocument();
+  expect(screen.getByText("Nome")).toBeInTheDocument();
 });
 
 it("hides the name-part rows whose built-in key is in the hidden set", () => {
   const person = { ...blankPerson, firstName: "Mia", lastName: "Bauer" } as unknown as Person;
   render(<PersonBlock person={person} hidden={new Set(["firstName", "lastName"])} />);
 
-  expect(screen.queryByText("First name")).not.toBeInTheDocument();
-  expect(screen.queryByText("Last name")).not.toBeInTheDocument();
-  expect(screen.getByText("Name")).toBeInTheDocument();
+  expect(screen.queryByText("Primeiro nome")).not.toBeInTheDocument();
+  expect(screen.queryByText("Sobrenome")).not.toBeInTheDocument();
+  expect(screen.getByText("Nome")).toBeInTheDocument();
 });
 
 it("surfaces a permission-specific message when the edit is denied (E_PERM_001)", async () => {
   updatePersonAction.mockResolvedValueOnce({ ok: false, error: { id: "E_PERM_001" } });
   render(<PersonBlock person={{ ...blankPerson, firstName: "Mia" }} />);
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
+  fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Mira" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -160,10 +160,10 @@ it("hides the First name and Last name rows when hideNameParts is set (lead draw
       <PersonBlock person={{ ...blankPerson, firstName: "Mia", lastName: "Roe" }} hideNameParts />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.queryByText("First name")).not.toBeInTheDocument();
-  expect(screen.queryByText("Last name")).not.toBeInTheDocument();
+  expect(screen.queryByText("Primeiro nome")).not.toBeInTheDocument();
+  expect(screen.queryByText("Sobrenome")).not.toBeInTheDocument();
   // Name, Phone, Email still render.
-  expect(screen.getByText("Name")).toBeInTheDocument();
+  expect(screen.getByText("Nome")).toBeInTheDocument();
   expect(screen.getByText("Email")).toBeInTheDocument();
 });
 
@@ -173,7 +173,7 @@ it("renders provided label chips under the section (PD's per-person Labels row)"
       <PersonBlock person={blankPerson} labels={[{ name: "Hot", classes: "bg-red-100" }]} />
     </HideEmptyContext.Provider>,
   );
-  expect(screen.getByText("Labels")).toBeInTheDocument();
+  expect(screen.getByText("Etiquetas")).toBeInTheDocument();
   expect(screen.getByText("Hot")).toBeInTheDocument();
 });
 

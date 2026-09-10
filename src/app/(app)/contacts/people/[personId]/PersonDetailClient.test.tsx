@@ -178,8 +178,8 @@ describe("PersonDetailClient", () => {
       />,
     );
     const personSection = within(screen.getByRole("region", { name: "Pessoa" }));
-    expect(personSection.getByText("First name")).toBeInTheDocument();
-    expect(personSection.getByText("Last name")).toBeInTheDocument();
+    expect(personSection.getByText("Primeiro nome")).toBeInTheDocument();
+    expect(personSection.getByText("Sobrenome")).toBeInTheDocument();
     expect(personSection.getByRole("button", { name: /opções de pessoa/i })).toBeInTheDocument();
     fireEvent.click(personSection.getByRole("button", { name: /editar seção pessoa/i }));
     expect(personSection.getByLabelText("First name")).toHaveValue("Jane");
@@ -236,7 +236,7 @@ describe("PersonDetailClient composer + inline person section", () => {
     // The shared block repeats the linked display name from the header and exposes the same
     // editable name-part fields as the deal workspace.
     expect(screen.getAllByText("Jane Roe").length).toBeGreaterThan(0);
-    expect(screen.getByText("First name")).toBeInTheDocument();
+    expect(screen.getByText("Primeiro nome")).toBeInTheDocument();
   });
 
   it("creates an activity anchored to this person (personId set, dealId/leadId null) through the real composer, not a mocked stub", async () => {
@@ -275,7 +275,7 @@ describe("PersonDetailClient composer + inline person section", () => {
         baseCurrency="USD"
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Edit First name" }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
     const input = screen.getByLabelText("editor-firstName");
     fireEvent.change(input, { target: { value: "Janet" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));

@@ -140,9 +140,9 @@ it("renders the linked person's contact fields (email) via the shared Person blo
 it("uses the complete deal Person section and its section-wide edit action", () => {
   render(<LeadSidebar lead={baseLead} owners={[]} person={basePerson} org={null} />);
   const personSection = within(screen.getByRole("region", { name: "Pessoa" }));
-  expect(personSection.getByText("First name")).toBeInTheDocument();
-  expect(personSection.getByText("Last name")).toBeInTheDocument();
-  expect(personSection.getByText("Name")).toBeInTheDocument();
+  expect(personSection.getByText("Primeiro nome")).toBeInTheDocument();
+  expect(personSection.getByText("Sobrenome")).toBeInTheDocument();
+  expect(personSection.getByText("Nome")).toBeInTheDocument();
   fireEvent.click(personSection.getByRole("button", { name: "Editar seção Pessoa" }));
   expect(personSection.getByLabelText("First name")).toHaveValue("Jane");
   expect(personSection.getByLabelText("Last name")).toHaveValue("Roe");
@@ -161,10 +161,10 @@ it("renders the linked org's website and firmographics via the shared Org block"
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={baseOrg} />);
   const orgSection = within(screen.getByRole("region", { name: "Organização" }));
   expect(orgSection.getByText("Acme Corp")).toBeInTheDocument();
-  expect(orgSection.getByText("Website")).toBeInTheDocument();
+  expect(orgSection.getByText("Site")).toBeInTheDocument();
   expect(orgSection.getByText("http://www.acme.com")).toBeInTheDocument();
   expect(orgSection.getByText("LinkedIn")).toBeInTheDocument();
-  expect(orgSection.getByText("Industry")).toBeInTheDocument();
+  expect(orgSection.getByText("Setor")).toBeInTheDocument();
 });
 
 it("honors hidden built-in org fields (Settings > Data fields)", () => {
@@ -178,7 +178,7 @@ it("honors hidden built-in org fields (Settings > Data fields)", () => {
     />,
   );
   const orgSection = within(screen.getByRole("region", { name: "Organização" }));
-  expect(orgSection.queryByText("Website")).not.toBeInTheDocument();
+  expect(orgSection.queryByText("Site")).not.toBeInTheDocument();
   // A non-hidden firmographic still renders.
-  expect(orgSection.getByText("Industry")).toBeInTheDocument();
+  expect(orgSection.getByText("Setor")).toBeInTheDocument();
 });

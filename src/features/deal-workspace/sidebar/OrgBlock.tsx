@@ -94,7 +94,7 @@ export function OrgBlock({
   return (
     <>
       <SidebarFieldRow
-        label="Name"
+        label="Nome"
         value={
           <a href={`/contacts/orgs/${org.id}`} className="text-primary hover:underline">
             {org.name}
@@ -105,11 +105,11 @@ export function OrgBlock({
         onSave={(draft) => save({ name: draft.trim() })}
       />
       {labels !== undefined && (
-        <SidebarFieldRow label="Labels" value={<LabelChips labels={labels} />} readOnly />
+        <SidebarFieldRow label="Etiquetas" value={<LabelChips labels={labels} />} readOnly />
       )}
       {!hidden.has("domain") && (
         <SidebarFieldRow
-          label="Website"
+          label="Site"
           value={
             org.domain === null ? (
               "-"
@@ -151,7 +151,7 @@ export function OrgBlock({
       )}
       {!hidden.has("industry") && (
         <SidebarFieldRow
-          label="Industry"
+          label="Setor"
           value={org.industry ?? "-"}
           empty={org.industry === null}
           initialDraft={org.industry ?? ""}
@@ -164,7 +164,7 @@ export function OrgBlock({
       )}
       {!hidden.has("annualRevenue") && (
         <SidebarFieldRow
-          label="Annual revenue"
+          label="Faturamento anual"
           value={org.annualRevenue ?? "-"}
           empty={org.annualRevenue === null}
           initialDraft={org.annualRevenue ?? ""}
@@ -177,7 +177,7 @@ export function OrgBlock({
       )}
       {!hidden.has("employeeCount") && (
         <SidebarFieldRow
-          label="Number of employees"
+          label="Número de funcionários"
           value={org.employeeCount ?? "-"}
           empty={org.employeeCount === null}
           initialDraft={org.employeeCount === null ? "" : String(org.employeeCount)}
