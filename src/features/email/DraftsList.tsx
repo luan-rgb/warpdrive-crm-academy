@@ -48,7 +48,7 @@ export function DraftsList({
             onClick={() => void remove(d.id)}
             className={ROW_ACTION_BUTTON}
           >
-            Delete
+            Excluir
           </button>
         </li>
       ))}

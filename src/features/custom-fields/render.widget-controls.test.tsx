@@ -102,7 +102,7 @@ describe("DateControl", () => {
       />,
     );
     fireEvent.click(screen.getByLabelText("Renewal"));
-    fireEvent.click(screen.getByRole("button", { name: "Clear" }));
+    fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
     expect(onChange).toHaveBeenCalledWith("");
   });
 });

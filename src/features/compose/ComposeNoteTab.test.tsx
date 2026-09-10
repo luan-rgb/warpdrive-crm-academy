@@ -28,14 +28,14 @@ describe("ComposeNoteTab", () => {
 
   it("does not submit an empty note", () => {
     render(<ComposeNoteTab entityType="deal" entityId="d1" onNoteCreated={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     expect(createNoteAction).not.toHaveBeenCalled();
   });
 
   it("does not submit a whitespace-only note", () => {
     render(<ComposeNoteTab entityType="deal" entityId="d1" onNoteCreated={vi.fn()} />);
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "   " } });
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     expect(createNoteAction).not.toHaveBeenCalled();
   });
 
@@ -49,7 +49,7 @@ describe("ComposeNoteTab", () => {
         onCancel={onCancel}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });

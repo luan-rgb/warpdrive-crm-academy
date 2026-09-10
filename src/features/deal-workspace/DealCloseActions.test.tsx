@@ -209,7 +209,7 @@ it("with the pref enabled, Won opens a follow-up activity prompt prefilled for t
   expect(screen.getByText("Adicionar atividade")).toBeInTheDocument();
   expect(routerRefresh).not.toHaveBeenCalled();
 
-  fireEvent.click(screen.getByRole("button", { name: "Close" }));
+  fireEvent.click(screen.getByRole("button", { name: "Fechar" }));
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   expect(routerRefresh).toHaveBeenCalledTimes(1);
 });
@@ -226,12 +226,12 @@ it("with the pref disabled, Won just refreshes and shows no follow-up prompt", a
 it("shows a Reopen control on a won deal (recovery from a mis-clicked close)", () => {
   render(<DealCloseActions {...props} status="won" />);
   expect(screen.getByLabelText("Status do negócio: Ganho")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Reopen" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Reabrir" })).toBeInTheDocument();
 });
 
 it("clicking Reopen calls reopenDealAction and refreshes", async () => {
   render(<DealCloseActions {...props} status="lost" />);
-  fireEvent.click(screen.getByRole("button", { name: "Reopen" }));
+  fireEvent.click(screen.getByRole("button", { name: "Reabrir" }));
   await waitFor(() => expect(reopenDealAction).toHaveBeenCalledTimes(1));
   expect(reopenDealAction).toHaveBeenCalledWith({ dealId: "d1" }, "csrf");
   await waitFor(() => expect(routerRefresh).toHaveBeenCalledTimes(1));
@@ -262,7 +262,7 @@ it("surfaces the error when Reopen is denied (no silent swallow)", async () => {
     error: { id: "E_PERM_001" },
   } as never);
   render(<DealCloseActions {...props} status="won" />);
-  fireEvent.click(screen.getByRole("button", { name: "Reopen" }));
+  fireEvent.click(screen.getByRole("button", { name: "Reabrir" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
 });
 

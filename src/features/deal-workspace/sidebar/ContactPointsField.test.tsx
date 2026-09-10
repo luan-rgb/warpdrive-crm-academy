@@ -71,15 +71,15 @@ it("edits the second address without touching the first", () => {
 
 it("appends a blank row and removes a row", () => {
   render(<Harness initial={points} />);
-  fireEvent.click(screen.getByRole("button", { name: "+ Add email" }));
+  fireEvent.click(screen.getByRole("button", { name: "+ Adicionar email" }));
   expect(screen.getByLabelText("Email 3")).toHaveValue("");
-  fireEvent.click(screen.getByRole("button", { name: "Remove email 1" }));
+  fireEvent.click(screen.getByRole("button", { name: "Remover email 1" }));
   expect(draftPoints().map((p) => p.value)).toEqual(["pat.home@gmail.com", ""]);
 });
 
 it("promotes another address to primary", () => {
   render(<Harness initial={points} />);
-  fireEvent.click(screen.getByRole("radio", { name: "Make email 2 primary" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Tornar email 2 principal" }));
   expect(draftPoints().map((p) => p.primary)).toEqual([false, true]);
 });
 
@@ -104,7 +104,7 @@ it("locks the rows while a save is in flight", () => {
     <div>{editor({ draft: serializePoints(points), setDraft: () => {}, disabled: true })}</div>,
   );
   expect(screen.getByLabelText("Email 1")).toBeDisabled();
-  expect(screen.getByRole("button", { name: "Remove email 1" })).toBeDisabled();
-  expect(screen.getByRole("radio", { name: "Make email 2 primary" })).toBeDisabled();
-  expect(screen.getByRole("button", { name: "+ Add email" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Remover email 1" })).toBeDisabled();
+  expect(screen.getByRole("radio", { name: "Tornar email 2 principal" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "+ Adicionar email" })).toBeDisabled();
 });

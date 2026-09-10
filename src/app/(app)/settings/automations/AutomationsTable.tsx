@@ -5,10 +5,10 @@ import { Switch } from "@/components/ui/Switch";
 import type { AutomationRule } from "@/db/schema/automations";
 
 const TRIGGER_LABEL: Record<string, string> = {
-  deal_created: "Deal created",
-  deal_stage_changed: "Deal stage changed",
-  deal_status_changed: "Deal won or lost",
-  deal_field_changed: "Deal field changed",
+  deal_created: "Negócio criado",
+  deal_stage_changed: "Etapa do negócio alterada",
+  deal_status_changed: "Negócio ganho ou perdido",
+  deal_field_changed: "Campo do negócio alterado",
 };
 
 export function AutomationsTable({
@@ -23,15 +23,15 @@ export function AutomationsTable({
   onDelete: (id: string) => void;
 }): React.ReactNode {
   if (rules.length === 0) {
-    return <p className="text-sm text-muted-foreground">No automations yet.</p>;
+    return <p className="text-sm text-muted-foreground">Ainda não há automações.</p>;
   }
   return (
     <table className="w-full text-sm">
       <thead className="text-left text-xs uppercase text-muted-foreground">
         <tr>
-          <th className="py-2">Name</th>
-          <th className="py-2">Trigger</th>
-          <th className="py-2">Active</th>
+          <th className="py-2">Nome</th>
+          <th className="py-2">Gatilho</th>
+          <th className="py-2">Ativa</th>
           <th className="py-2" />
         </tr>
       </thead>
@@ -49,10 +49,10 @@ export function AutomationsTable({
             </td>
             <td className="py-2 text-right">
               <Button variant="ghost" onClick={() => onEdit(rule.id)}>
-                Edit
+                Editar
               </Button>
               <Button variant="ghost" onClick={() => onDelete(rule.id)}>
-                Delete
+                Excluir
               </Button>
             </td>
           </tr>

@@ -42,13 +42,13 @@ const base = {
 it("renders the note body and an inline pin control", () => {
   render(<NoteCard {...base} />);
   expect(screen.getByText("Called the buyer")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /pin/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /fixar/i })).toBeInTheDocument();
 });
 
 it("pins in one click", async () => {
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={() => {}} />);
-  await user.click(screen.getByRole("button", { name: /pin/i }));
+  await user.click(screen.getByRole("button", { name: /fixar/i }));
   expect(togglePin).toHaveBeenCalledWith({ noteId: "n1", pinned: true }, "csrf");
 });
 
@@ -60,7 +60,7 @@ it("edits the body via the menu", async () => {
   const box = screen.getByRole("textbox", { name: /nota/i });
   await user.clear(box);
   await user.type(box, "Edited");
-  await user.click(screen.getByRole("button", { name: /save/i }));
+  await user.click(screen.getByRole("button", { name: /salvar/i }));
   expect(updateNote).toHaveBeenCalledWith({ noteId: "n1", body: "Edited" }, "csrf");
 });
 
@@ -68,9 +68,9 @@ it("deletes after confirming", async () => {
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={() => {}} />);
   await user.click(screen.getByRole("button", { name: /mais ações/i }));
-  await user.click(screen.getByRole("menuitem", { name: /delete/i }));
+  await user.click(screen.getByRole("menuitem", { name: /excluir/i }));
   // Confirm dialog: the destructive confirm button, not the menu item.
-  await user.click(screen.getByRole("button", { name: /^delete$/i }));
+  await user.click(screen.getByRole("button", { name: /^excluir$/i }));
   expect(deleteNote).toHaveBeenCalledWith({ noteId: "n1" }, "csrf");
 });
 
@@ -81,7 +81,7 @@ it("surfaces the error and keeps editing open when saving an edit is denied", as
   render(<NoteCard {...base} onChanged={onChanged} />);
   await user.click(screen.getByRole("button", { name: /mais ações/i }));
   await user.click(screen.getByRole("menuitem", { name: /edit/i }));
-  await user.click(screen.getByRole("button", { name: /save/i }));
+  await user.click(screen.getByRole("button", { name: /salvar/i }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(onChanged).not.toHaveBeenCalled();
   // The editor stays open so the edit is not silently lost.
@@ -94,8 +94,8 @@ it("surfaces the error when deleting is denied (no silent swallow)", async () =>
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={onChanged} />);
   await user.click(screen.getByRole("button", { name: /mais ações/i }));
-  await user.click(screen.getByRole("menuitem", { name: /delete/i }));
-  await user.click(screen.getByRole("button", { name: /^delete$/i }));
+  await user.click(screen.getByRole("menuitem", { name: /excluir/i }));
+  await user.click(screen.getByRole("button", { name: /^excluir$/i }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(onChanged).not.toHaveBeenCalled();
 });
@@ -104,11 +104,11 @@ it("rolls back the pin and surfaces the error when pinning is denied", async () 
   togglePin.mockResolvedValueOnce({ ok: false as const, error: { id: "E_PERM_001" } } as never);
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={() => {}} />);
-  const pinBtn = screen.getByRole("button", { name: /pin note/i });
+  const pinBtn = screen.getByRole("button", { name: /fixar nota/i });
   await user.click(pinBtn);
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   // Optimistic pin was rolled back to the unpinned state.
-  expect(screen.getByRole("button", { name: /pin note/i })).toHaveAttribute(
+  expect(screen.getByRole("button", { name: /fixar nota/i })).toHaveAttribute(
     "aria-pressed",
     "false",
   );

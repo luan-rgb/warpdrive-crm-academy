@@ -74,5 +74,5 @@ it("stays on the collapsed activity prompt when no draft is being resumed", () =
   renderBar(null);
 
   expect(screen.queryByTestId("composer")).not.toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Click here to add an activity..." })).toBeVisible();
+  expect(screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." })).toBeVisible();
 });

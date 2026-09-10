@@ -75,9 +75,9 @@ describe("LeadTimeline", () => {
     render(<LeadTimeline items={makeItems(makeActivity())} emails={emails} />);
     expect(screen.getByRole("tab", { name: "Foco" })).toHaveAttribute("aria-selected", "false");
     expect(screen.getByRole("tab", { name: "Histórico" })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByRole("tab", { name: "All" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Activities" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Notes" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Todos" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Atividades" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Notas" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Email" })).toBeInTheDocument();
   });
 
@@ -88,7 +88,7 @@ describe("LeadTimeline", () => {
     expect(screen.getByText("Follow-up call")).toBeInTheDocument();
     expect(screen.queryByText("Called them")).not.toBeInTheDocument();
     expect(screen.queryByText("Labels: (none) → Hot")).not.toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "Notes" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Notas" })).not.toBeInTheDocument();
   });
 
   it("Focus view shows the empty label when there are no open activities", async () => {
@@ -109,7 +109,7 @@ describe("LeadTimeline", () => {
     await userEvent.click(screen.getByRole("tab", { name: "Foco" }));
     await userEvent.click(screen.getByRole("tab", { name: "Histórico" }));
 
-    expect(screen.getByRole("tab", { name: "Notes" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Notas" })).toBeInTheDocument();
     expect(screen.getByText("Called them")).toBeInTheDocument();
   });
 
@@ -141,7 +141,7 @@ describe("LeadTimeline", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "Pin note" }));
+    await userEvent.click(screen.getByRole("button", { name: "Fixar nota" }));
     await waitFor(() => expect(onNoteChanged).toHaveBeenCalledTimes(1));
   });
 });

@@ -18,7 +18,7 @@ import {
 
 export type ContactPointKind = "Email" | "Phone";
 
-const NOUN: Record<ContactPointKind, string> = { Email: "email", Phone: "phone" };
+const NOUN: Record<ContactPointKind, string> = { Email: "email", Phone: "telefone" };
 const MAX_LEN: Record<ContactPointKind, number> = {
   Email: MAX_EMAIL_LEN,
   Phone: MAX_PHONE_LEN,
@@ -112,13 +112,13 @@ export function ContactPointsEditor({
             {rows.length > 1 && (
               <RadioGroupItem
                 value={String(index)}
-                aria-label={`Make ${noun} ${index + 1} primary`}
+                aria-label={`Tornar ${noun} ${index + 1} principal`}
                 className="order-1"
               />
             )}
             <button
               type="button"
-              aria-label={`Remove ${noun} ${index + 1}`}
+              aria-label={`Remover ${noun} ${index + 1}`}
               disabled={disabled}
               onClick={() => commit(removePointAt(rows, index))}
               className="order-3 flex h-5 w-5 shrink-0 items-center justify-center rounded text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 motion-reduce:transition-none"
@@ -134,7 +134,7 @@ export function ContactPointsEditor({
         onClick={() => commit(appendPoint(rows))}
         className="self-start text-sm font-semibold text-link hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
       >
-        + Add {noun}
+        + Adicionar {noun}
       </button>
     </div>
   );

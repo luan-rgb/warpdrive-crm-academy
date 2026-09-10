@@ -113,8 +113,8 @@ describe("RecipientField", () => {
     render(<Harness />);
     const input = screen.getByRole("combobox");
     await userEvent.type(input, "a@x.com,b@x.com;");
-    expect(screen.getByRole("button", { name: "Remove a@x.com" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Remove b@x.com" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Remover a@x.com" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Remover b@x.com" })).toBeInTheDocument();
     expect(input).toHaveValue("");
   });
 
@@ -122,7 +122,7 @@ describe("RecipientField", () => {
     const onChange = vi.fn();
     render(<RecipientField label="To" values={["alice@x.com"]} onChange={onChange} />);
     expect(screen.getByText("alice@x.com")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /remove alice@x.com/i }));
+    fireEvent.click(screen.getByRole("button", { name: /remover alice@x.com/i }));
     expect(onChange).toHaveBeenCalledWith([]);
   });
 });

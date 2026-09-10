@@ -80,7 +80,7 @@ export function DealCloseActions({
           onClick={() => void reopen()}
           className="rounded-md border px-2 py-1 text-xs font-medium transition-[background-color,scale] duration-150 ease-out hover:bg-accent active:not-disabled:scale-[0.96] disabled:opacity-50"
         >
-          Reopen
+          Reabrir
         </button>
       </div>
     );

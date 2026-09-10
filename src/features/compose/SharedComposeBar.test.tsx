@@ -38,10 +38,10 @@ vi.mock("@/features/deal-workspace/composer/ActivityComposerInline", () => ({
   }) => (
     <div data-testid="activity-form">
       <button type="button" onClick={onCancel}>
-        Cancel
+        Cancelar
       </button>
       <button type="button" onClick={onCreated}>
-        Save
+        Salvar
       </button>
     </div>
   ),
@@ -90,10 +90,10 @@ function renderBar(over: Partial<Parameters<typeof SharedComposeBar>[0]> = {}): 
 describe("SharedComposeBar (Pipedrive default-state model)", () => {
   it("shows the tab strip AND the Activity prompt when collapsed (tabs are always visible)", () => {
     renderBar();
-    expect(screen.getByRole("tab", { name: "Activity" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Notes" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Atividade" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Notas" })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Click here to add an activity..." }),
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
     ).toBeInTheDocument();
     expect(screen.queryByTestId("activity-form")).not.toBeInTheDocument();
   });
@@ -101,16 +101,16 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
   it("orders Notes before Activity and selects Notes by default for lead scope (PD lead-drawer parity)", () => {
     renderBar({ scope: leadScope });
     const tabs = screen.getAllByRole("tab");
-    expect(tabs.map((t) => t.textContent)).toEqual(["Notes", "Activity"]);
+    expect(tabs.map((t) => t.textContent)).toEqual(["Notas", "Atividade"]);
     expect(tabs[0]).toHaveAttribute("aria-selected", "true");
     // The collapsed prompt is the note prompt, matching PD's "Take a note..." default state.
-    expect(screen.getByRole("button", { name: "Take a note..." })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Escreva uma nota..." })).toBeInTheDocument();
   });
 
   it("keeps Activity first and selected by default for deal scope (unchanged)", () => {
     renderBar();
     const tabs = screen.getAllByRole("tab");
-    expect(tabs[0]).toHaveTextContent("Activity");
+    expect(tabs[0]).toHaveTextContent("Atividade");
     expect(tabs[0]).toHaveAttribute("aria-selected", "true");
   });
 
@@ -121,50 +121,50 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
 
   it("expands the activity composer from the prompt, and Cancel returns to the prompt", () => {
     renderBar();
-    fireEvent.click(screen.getByRole("button", { name: "Click here to add an activity..." }));
+    fireEvent.click(screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }));
     expect(screen.getByTestId("activity-form")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(screen.queryByTestId("activity-form")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Click here to add an activity..." }),
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
     ).toBeInTheDocument();
   });
 
   it("collapses back to the Activity prompt after saving an activity", () => {
     const onActivityCreated = vi.fn();
     renderBar({ onActivityCreated });
-    fireEvent.click(screen.getByRole("button", { name: "Click here to add an activity..." }));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(onActivityCreated).toHaveBeenCalled();
     expect(screen.queryByTestId("activity-form")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Click here to add an activity..." }),
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
     ).toBeInTheDocument();
   });
 
   it("clicking the Notes tab while collapsed expands the note editor directly (PD behavior)", async () => {
     renderBar();
-    await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Notas" }));
     await waitFor(() => expect(screen.getByRole("textbox", { name: "Nota" })).toHaveFocus());
   });
 
   it("note Cancel collapses to the Notes prompt with the tab strip still visible", async () => {
     renderBar();
-    await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Notas" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(screen.queryByRole("textbox", { name: "Nota" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Take a note..." })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Notes" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("button", { name: "Escreva uma nota..." })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Notas" })).toHaveAttribute("aria-selected", "true");
   });
 
   it("flows a note through createNoteAction using the scope's entityType/entityId", async () => {
     const onNoteCreated = vi.fn();
     renderBar({ onNoteCreated });
-    await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Notas" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Nota" }), {
       target: { value: "Follow up next week" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
 
     await waitFor(() => expect(createNoteAction).toHaveBeenCalledTimes(1));
     expect(createNoteAction.mock.calls[0]?.[0]).toMatchObject({
@@ -185,9 +185,9 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
     renderBar({ emailAccountId: "acct-1" });
     await userEvent.click(screen.getByRole("tab", { name: "Email" }));
     fireEvent.click(screen.getByRole("button", { name: "Send" }));
-    expect(screen.getByRole("tab", { name: "Activity" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: "Atividade" })).toHaveAttribute("aria-selected", "true");
     expect(
-      screen.getByRole("button", { name: "Click here to add an activity..." }),
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
     ).toBeInTheDocument();
     expect(screen.queryByTestId("activity-form")).not.toBeInTheDocument();
   });
@@ -201,8 +201,8 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
 
   it("hides the Email and Files tabs for a lead scope, keeping only Activity and Notes", () => {
     renderBar({ scope: leadScope, emailAccountId: "acct-1" });
-    expect(screen.getByRole("tab", { name: "Activity" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Notes" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Atividade" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Notas" })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "Email" })).not.toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "Files" })).not.toBeInTheDocument();
   });
@@ -210,11 +210,11 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
   it("flows a lead-scoped note through createNoteAction with entityType lead", async () => {
     const onNoteCreated = vi.fn();
     renderBar({ scope: leadScope, onNoteCreated });
-    await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Notas" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Nota" }), {
       target: { value: "Qualify next" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
 
     await waitFor(() => expect(createNoteAction).toHaveBeenCalledTimes(1));
     expect(createNoteAction.mock.calls[0]?.[0]).toMatchObject({

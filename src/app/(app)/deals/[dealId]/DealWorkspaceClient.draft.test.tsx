@@ -153,7 +153,7 @@ describe("resuming a draft from the deal timeline", () => {
 
     expect(screen.queryByTestId("composer")).not.toBeInTheDocument();
 
-    await userEvent.click(screen.getAllByRole("button", { name: "Continue" })[0] as HTMLElement);
+    await userEvent.click(screen.getAllByRole("button", { name: "Continuar" })[0] as HTMLElement);
 
     expect(screen.getByTestId("composer")).toHaveTextContent("resumed:Unsent outreach");
   });

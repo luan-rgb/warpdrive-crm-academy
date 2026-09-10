@@ -202,7 +202,7 @@ describe("LeadsInbox", () => {
     listQuery.mockReturnValue({ data: { rows: [LEAD], total: 1 }, refetch });
     render(<LeadsInbox />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme lead" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
 
     await waitFor(() => {
       expect(bulkUpdateLeadsAction).toHaveBeenCalledTimes(1);

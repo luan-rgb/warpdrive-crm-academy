@@ -181,14 +181,14 @@ export function ActivitiesTable(): React.ReactNode {
             onClick={() => void bulkMarkDone()}
             className="rounded-md border px-3 py-1 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
           >
-            Mark done
+            Marcar como concluída
           </button>
           <button
             type="button"
             onClick={() => void bulkDelete()}
             className="rounded-md border px-3 py-1 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
           >
-            Delete
+            Excluir
           </button>
         </BulkActionBar>
       )}

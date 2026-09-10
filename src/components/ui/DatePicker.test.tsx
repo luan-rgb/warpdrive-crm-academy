@@ -39,7 +39,7 @@ describe("DatePicker", () => {
     const onChange = vi.fn();
     render(<DatePicker value="2026-07-04" onChange={onChange} ariaLabel="Start date" />);
     fireEvent.click(screen.getByLabelText("Start date"));
-    fireEvent.click(screen.getByRole("button", { name: "Clear" }));
+    fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
     expect(onChange).toHaveBeenCalledWith(null);
   });
 
@@ -94,7 +94,7 @@ describe("DatePicker", () => {
     );
     fireEvent.click(screen.getByLabelText("Start date"));
     expect(onOpenChange).toHaveBeenCalledWith(true);
-    fireEvent.click(await screen.findByRole("button", { name: "Clear" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Limpar" }));
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 

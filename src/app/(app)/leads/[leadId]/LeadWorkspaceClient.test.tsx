@@ -187,7 +187,7 @@ describe("LeadWorkspaceClient", () => {
     expect(screen.getByRole("button", { name: "Arquivar" })).toBeInTheDocument();
     // The compose bar's always-visible strip also has "Notes"/"Email" tabs, so assert
     // the timeline tabs exist without requiring uniqueness across the page.
-    for (const tab of ["All", "Activities", "Notes", "Email"]) {
+    for (const tab of ["Todos", "Atividades", "Notas", "Email"]) {
       expect(screen.getAllByRole("tab", { name: tab }).length).toBeGreaterThan(0);
     }
     expect(screen.getByText("First touch")).toBeInTheDocument();
@@ -202,11 +202,11 @@ describe("LeadWorkspaceClient", () => {
     // All/Activities/Notes/Email tablist, hence the compose-scoped queries). PD's lead drawer
     // defaults to Notes (its "Take a note..." prompt), so Notes is first and selected here.
     const tabs = compose.getAllByRole("tab");
-    expect(tabs.map((t) => t.textContent)).toEqual(["Notes", "Activity"]);
+    expect(tabs.map((t) => t.textContent)).toEqual(["Notas", "Atividade"]);
     expect(tabs[0]).toHaveAttribute("aria-selected", "true");
-    expect(compose.getByRole("button", { name: "Take a note..." })).toBeInTheDocument();
+    expect(compose.getByRole("button", { name: "Escreva uma nota..." })).toBeInTheDocument();
     // Collapsed: the note editor itself is not mounted yet.
-    expect(compose.queryByRole("textbox", { name: "Note" })).not.toBeInTheDocument();
+    expect(compose.queryByRole("textbox", { name: "Nota" })).not.toBeInTheDocument();
   });
 
   // MANDATORY seam test (Task 14 reviewer directive): SharedComposeBar.test.tsx mocks
@@ -219,7 +219,7 @@ describe("LeadWorkspaceClient", () => {
     renderClient();
     // The lead composer defaults to Notes (PD parity), so switch to the Activity tab first; clicking
     // a tab expands its editor directly.
-    fireEvent.click(screen.getByRole("tab", { name: "Activity" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Atividade" }));
     fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Intro call" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 

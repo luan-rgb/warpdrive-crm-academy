@@ -140,7 +140,7 @@ describe("ActivitiesTable selection and bulk actions", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Call Jane" }));
-    fireEvent.click(screen.getByRole("button", { name: "Mark done" }));
+    fireEvent.click(screen.getByRole("button", { name: "Marcar como concluída" }));
     await vi.waitFor(() => expect(complete).toHaveBeenCalledWith({ id: "a1", done: true }));
   });
 
@@ -148,7 +148,7 @@ describe("ActivitiesTable selection and bulk actions", () => {
     useQuery.mockReturnValue({ data: [row({})], refetch });
     render(<ActivitiesTable />);
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Call Jane" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
     await vi.waitFor(() => expect(deleteActivity).toHaveBeenCalledWith({ id: "a1" }));
     await vi.waitFor(() => expect(screen.queryByText(/selected/)).not.toBeInTheDocument());
   });
@@ -168,7 +168,7 @@ describe("ActivitiesTable selection and bulk actions", () => {
     render(<ActivitiesTable />);
 
     fireEvent.click(screen.getByRole("checkbox", { name: "Select all activities" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Excluir" }));
 
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent(/couldn't delete|could not delete|failed/i);

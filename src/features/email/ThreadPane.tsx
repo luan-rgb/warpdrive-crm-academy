@@ -80,7 +80,7 @@ export function ThreadPane({
   }
 
   if (data === undefined) {
-    return <div className="p-4 text-sm text-muted-foreground">Loading...</div>;
+    return <div className="p-4 text-sm text-muted-foreground">Carregando...</div>;
   }
 
   const { messages, accountId, canCompose, ownerEmail, personName, dealTitle } = data;

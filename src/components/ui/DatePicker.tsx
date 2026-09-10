@@ -126,7 +126,7 @@ export function DatePicker({
             }}
             className="h-8 text-xs text-muted-foreground hover:text-foreground"
           >
-            Clear
+            Limpar
           </Button>
         </div>
       </PopoverContent>

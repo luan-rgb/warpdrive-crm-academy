@@ -131,7 +131,7 @@ export function BulkEditPanel({
         onClick={() => onApply({ deleted: true })}
         className="rounded-md border border-destructive/40 px-2.5 py-1 text-sm text-destructive transition-[background-color,scale] duration-150 ease-out hover:bg-destructive/10 active:scale-[0.96] motion-reduce:transition-colors"
       >
-        Delete
+        Excluir
       </button>
     </BulkActionBar>
   );

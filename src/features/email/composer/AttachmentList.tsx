@@ -28,7 +28,7 @@ export function AttachmentList({ attachments, onRemove }: AttachmentListProps): 
           <span className="shrink-0 text-muted-foreground/70">{formatBytes(f.size)}</span>
           <button
             type="button"
-            aria-label={`Remove ${f.filename}`}
+            aria-label={`Remover ${f.filename}`}
             onClick={() => onRemove(f.fileId)}
             className="shrink-0 hover:text-destructive"
           >

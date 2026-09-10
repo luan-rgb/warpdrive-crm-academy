@@ -57,7 +57,7 @@ export function EntityCreateDialogShell({
 
         <div className="flex items-center justify-end gap-2 border-t px-5 py-3">
           <Button type="button" variant="outline" size="sm" onClick={onClose}>
-            Cancel
+            Cancelar
           </Button>
           <Button type="button" size="sm" disabled={pending || submitDisabled} onClick={onSubmit}>
             {pending ? "Salvando..." : "Salvar"}

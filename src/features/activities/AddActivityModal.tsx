@@ -223,7 +223,7 @@ export function AddActivityModal({
             onClick={onClose}
             className="rounded-md border px-3 py-1.5 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             type="button"

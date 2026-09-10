@@ -69,6 +69,6 @@ it("still collapses back to the activity prompt after a send", async () => {
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
 
   expect(
-    screen.getByRole("button", { name: "Click here to add an activity..." }),
+    screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
   ).toBeInTheDocument();
 });

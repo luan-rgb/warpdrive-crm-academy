@@ -110,7 +110,7 @@ describe("MultiCombobox", () => {
         ariaLabel="Participants"
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Remove Mia Silva" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remover Mia Silva" }));
     expect(onChange).toHaveBeenCalledWith(["kai"]);
   });
 });

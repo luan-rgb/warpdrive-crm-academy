@@ -116,7 +116,7 @@ export const DialogContent = forwardRef<
         className="absolute right-1 top-1 flex size-10 items-center justify-center rounded-sm opacity-70 outline-none transition-opacity duration-150 hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none"
       >
         <X className="size-5" strokeWidth={2.25} />
-        <span className="sr-only">Close</span>
+        <span className="sr-only">Fechar</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>

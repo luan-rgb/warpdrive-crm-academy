@@ -162,7 +162,7 @@ describe("CreateFilterModal", () => {
   it("closes via the X button", () => {
     const onClose = vi.fn();
     render(<CreateFilterModal onClose={onClose} onSave={() => {}} />);
-    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    fireEvent.click(screen.getByRole("button", { name: "Fechar" }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 

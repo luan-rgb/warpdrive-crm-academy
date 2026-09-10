@@ -213,7 +213,7 @@ export function PersonLinkEditor({
           onClick={onDone}
           className="rounded-md border px-2.5 py-1 text-xs hover:bg-accent disabled:opacity-50"
         >
-          Cancel
+          Cancelar
         </button>
         <button
           type="button"
@@ -221,7 +221,7 @@ export function PersonLinkEditor({
           onClick={() => void save()}
           className="rounded-md bg-primary px-2.5 py-1 text-xs text-primary-foreground hover:opacity-90 disabled:opacity-50"
         >
-          Save
+          Salvar
         </button>
       </div>
     </div>

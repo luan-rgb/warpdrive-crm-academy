@@ -231,7 +231,7 @@ describe("PersonDetailClient composer + inline person section", () => {
       />,
     );
     expect(
-      screen.getByRole("button", { name: "Click here to add an activity..." }),
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
     ).toBeInTheDocument();
     // The shared block repeats the linked display name from the header and exposes the same
     // editable name-part fields as the deal workspace.
@@ -249,7 +249,7 @@ describe("PersonDetailClient composer + inline person section", () => {
         baseCurrency="USD"
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Click here to add an activity..." }));
+    fireEvent.click(screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }));
     fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Intro call" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 

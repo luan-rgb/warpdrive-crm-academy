@@ -182,12 +182,12 @@ describe("DealWorkspaceClient compose bar", () => {
     // Pipedrive parity: the tab strip is always visible; the Activity tab starts as a
     // one-line prompt below it, and clicking the prompt expands the activity editor.
     expect(compose.getByRole("tablist")).toBeInTheDocument();
-    expect(compose.getByRole("tab", { name: "Activity" })).toHaveAttribute("aria-selected", "true");
-    const prompt = compose.getByRole("button", { name: "Click here to add an activity..." });
+    expect(compose.getByRole("tab", { name: "Atividade" })).toHaveAttribute("aria-selected", "true");
+    const prompt = compose.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." });
     fireEvent.click(prompt);
 
     expect(
-      compose.queryByRole("button", { name: "Click here to add an activity..." }),
+      compose.queryByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
     ).not.toBeInTheDocument();
     expect(compose.getByLabelText("Assunto")).toBeInTheDocument();
   });

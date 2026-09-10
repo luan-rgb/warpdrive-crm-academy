@@ -86,11 +86,11 @@ it("clears a removed link in the submitted payload", async () => {
     />,
   );
   // All three link chips are present.
-  expect(screen.getByLabelText("Remove deal link")).toBeInTheDocument();
-  expect(screen.getByLabelText("Remove person link")).toBeInTheDocument();
-  expect(screen.getByLabelText("Remove organization link")).toBeInTheDocument();
+  expect(screen.getByLabelText("Remover vínculo de negócio")).toBeInTheDocument();
+  expect(screen.getByLabelText("Remover vínculo de pessoa")).toBeInTheDocument();
+  expect(screen.getByLabelText("Remover vínculo de organização")).toBeInTheDocument();
 
-  fireEvent.click(screen.getByLabelText("Remove organization link"));
+  fireEvent.click(screen.getByLabelText("Remover vínculo de organização"));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(createActivityAction).toHaveBeenCalled());
@@ -112,9 +112,9 @@ it("re-adds a removed link via the Add link combobox", async () => {
       onCreated={vi.fn()}
     />,
   );
-  fireEvent.click(screen.getByLabelText("Remove organization link"));
+  fireEvent.click(screen.getByLabelText("Remover vínculo de organização"));
   // The removed org is now offered by the Add link affordance.
-  fireEvent.click(screen.getByLabelText("Add link"));
+  fireEvent.click(screen.getByLabelText("Adicionar vínculo"));
   fireEvent.click(screen.getByRole("option", { name: "Acme Org" }));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 

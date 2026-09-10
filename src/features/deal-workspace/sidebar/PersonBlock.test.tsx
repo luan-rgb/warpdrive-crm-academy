@@ -236,7 +236,7 @@ it("adds a second email without dropping the first", async () => {
   } as unknown as Person;
   render(<PersonBlock person={person} />);
   fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
-  fireEvent.click(screen.getByRole("button", { name: "+ Add email" }));
+  fireEvent.click(screen.getByRole("button", { name: "+ Adicionar email" }));
   fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "two@acme.com" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -253,7 +253,7 @@ it("adds a second email without dropping the first", async () => {
 it("promotes a non-primary email so the derived primary_email follows it", async () => {
   render(<PersonBlock person={multiPointPerson} />);
   fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
-  fireEvent.click(screen.getByRole("radio", { name: "Make email 2 primary" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Tornar email 2 principal" }));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());

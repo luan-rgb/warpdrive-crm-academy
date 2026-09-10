@@ -85,7 +85,7 @@ export function RecipientField({ label, values, onChange }: RecipientFieldProps)
           {v}
           <button
             type="button"
-            aria-label={`Remove ${v}`}
+            aria-label={`Remover ${v}`}
             onClick={() => removeEmail(v)}
             className="ml-0.5 hover:opacity-70"
           >

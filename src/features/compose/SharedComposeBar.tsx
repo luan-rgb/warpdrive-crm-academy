@@ -39,17 +39,17 @@ interface TabDef {
 }
 
 const ALL_TABS: TabDef[] = [
-  { id: "activity", label: "Activity", Icon: ActivityIcon },
-  { id: "notes", label: "Notes", Icon: NotesIcon },
+  { id: "activity", label: "Atividade", Icon: ActivityIcon },
+  { id: "notes", label: "Notas", Icon: NotesIcon },
   { id: "email", label: "Email", Icon: EmailIcon },
-  { id: "files", label: "Files", Icon: FilesIcon },
+  { id: "files", label: "Arquivos", Icon: FilesIcon },
 ];
 
 // Pipedrive's per-tab "default state" prompts. Only Activity and Notes collapse to a
 // prompt; Email and Files render their content directly (PD does the same).
 const PROMPTS: Partial<Record<ComposeTab, string>> = {
-  activity: "Click here to add an activity...",
-  notes: "Take a note...",
+  activity: "Clique aqui para adicionar uma atividade...",
+  notes: "Escreva uma nota...",
 };
 
 // Activity and Notes are enabled for every scope; Email and Files are scope-gated

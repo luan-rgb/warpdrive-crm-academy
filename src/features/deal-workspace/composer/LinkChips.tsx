@@ -24,12 +24,12 @@ interface Props {
 
 // The human word used in the remove-chip aria label ("Remove organization link").
 const KIND_WORD: Record<LinkKind, string> = {
-  deal: "deal",
-  person: "person",
-  org: "organization",
+  deal: "negócio",
+  person: "pessoa",
+  org: "organização",
 };
 
-const ADD_LINK_LABEL = "Add link";
+const ADD_LINK_LABEL = "Adicionar vínculo";
 
 // Entity-type glyph per link kind (Pipedrive parity: deal=$, person, org=building), shown as the
 // leading icon on each linked-entity row.
@@ -60,7 +60,7 @@ export function LinkChips({ targets, value, onChange }: Props): React.ReactNode 
           <span className="min-w-0 flex-1 truncate">{t.label}</span>
           <button
             type="button"
-            aria-label={`Remove ${KIND_WORD[t.kind]} link`}
+            aria-label={`Remover vínculo de ${KIND_WORD[t.kind]}`}
             onClick={() => onChange(t.kind, null)}
             className="shrink-0 rounded text-muted-foreground hover:text-foreground"
           >

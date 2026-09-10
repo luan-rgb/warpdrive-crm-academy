@@ -58,6 +58,6 @@ it("renders a draft row and resumes it on click", () => {
 it("reports the error id when deleting a draft is denied (no silent no-op)", async () => {
   deleteMock.mockResolvedValueOnce({ ok: false, error: { id: "E_PERM_001" } } as never);
   render(<DraftsList onResume={vi.fn()} />);
-  screen.getByRole("button", { name: "Delete" }).click();
+  screen.getByRole("button", { name: "Excluir" }).click();
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
 });

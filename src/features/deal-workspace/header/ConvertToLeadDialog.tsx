@@ -48,18 +48,18 @@ export function ConvertToLeadDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Convert to a lead</DialogTitle>
+          <DialogTitle>Converter em lead</DialogTitle>
           <DialogDescription>
-            This moves the deal to the Leads Inbox as a new lead and archives the deal. You can
-            convert the lead back to a deal later.
+            Isso move o negócio para a Caixa de leads como um novo lead e arquiva o negócio. Você
+            pode converter o lead de volta em negócio depois.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={pending}>
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={() => void confirm()} disabled={pending}>
-            Convert
+            Converter
           </Button>
         </DialogFooter>
       </DialogContent>

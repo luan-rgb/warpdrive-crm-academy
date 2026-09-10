@@ -113,7 +113,7 @@ export function NoteCard({
               }}
               className="rounded-md border px-3 py-1.5 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="button"
@@ -121,7 +121,7 @@ export function NoteCard({
               onClick={() => void save()}
               className="rounded-md bg-action px-3 py-1.5 text-sm font-medium text-action-foreground transition-transform hover:opacity-90 active:scale-[0.96] disabled:opacity-50"
             >
-              Save
+              Salvar
             </button>
           </div>
         </div>
@@ -133,7 +133,7 @@ export function NoteCard({
           </div>
           <button
             type="button"
-            aria-label={isPinned ? "Unpin note" : "Pin note"}
+            aria-label={isPinned ? "Desafixar nota" : "Fixar nota"}
             aria-pressed={isPinned}
             disabled={busy}
             onClick={() => void togglePin()}
@@ -153,12 +153,12 @@ export function NoteCard({
               <Ellipsis aria-hidden="true" className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" aria-label="Mais ações" className="min-w-40">
-              <DropdownMenuItem onSelect={() => setEditing(true)}>Edit</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setEditing(true)}>Editar</DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => setConfirmOpen(true)}
                 className="text-destructive focus:text-destructive"
               >
-                Delete
+                Excluir
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -168,8 +168,8 @@ export function NoteCard({
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete note?</DialogTitle>
-            <DialogDescription>This action cannot be undone.</DialogDescription>
+            <DialogTitle>Excluir nota?</DialogTitle>
+            <DialogDescription>Essa ação não pode ser desfeita.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
@@ -177,7 +177,7 @@ export function NoteCard({
                 type="button"
                 className="rounded-md border px-3 py-1.5 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
               >
-                Cancel
+                Cancelar
               </button>
             </DialogClose>
             <button
@@ -186,7 +186,7 @@ export function NoteCard({
               onClick={() => void confirmDelete()}
               className="rounded-md bg-destructive px-3 py-1.5 text-sm font-medium text-destructive-foreground transition-transform hover:opacity-90 active:scale-[0.96] disabled:opacity-50"
             >
-              Delete
+              Excluir
             </button>
           </DialogFooter>
         </DialogContent>

@@ -16,9 +16,9 @@ import type { LeadTimelineEmail } from "../leadTimeline";
 type Tab = "all" | "activities" | "notes" | "email";
 
 const TABS: { key: Tab; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "activities", label: "Activities" },
-  { key: "notes", label: "Notes" },
+  { key: "all", label: "Todos" },
+  { key: "activities", label: "Atividades" },
+  { key: "notes", label: "Notas" },
   { key: "email", label: "Email" },
 ];
 

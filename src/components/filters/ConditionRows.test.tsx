@@ -62,7 +62,7 @@ describe("ConditionRows", () => {
   it("clearing the date maps back to the empty string", () => {
     const { onRowsChange } = renderRows([row({ field: "closes", op: "gt", value: "2026-08-25" })]);
     fireEvent.click(screen.getByLabelText("Condition 1 value"));
-    fireEvent.click(screen.getByRole("button", { name: "Clear" }));
+    fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
     expect(onRowsChange).toHaveBeenCalledWith([expect.objectContaining({ value: "" })]);
   });
 
@@ -155,7 +155,7 @@ describe("ConditionRows", () => {
 
   it("removes the clicked row", () => {
     const { onRowsChange } = renderRows([row(), row({ id: "r2", field: "title", op: "contains" })]);
-    fireEvent.click(screen.getByRole("button", { name: "Remove condition 1" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remover condição 1" }));
     expect(onRowsChange).toHaveBeenCalledWith([expect.objectContaining({ id: "r2" })]);
   });
 

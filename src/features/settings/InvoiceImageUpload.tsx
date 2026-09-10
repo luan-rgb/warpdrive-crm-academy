@@ -127,7 +127,7 @@ export function InvoiceImageUpload({ kind, label, imageUrl }: Props): React.Reac
                 onClick={() => void remove()}
                 className="min-h-10 px-3 text-muted-foreground hover:text-foreground"
               >
-                Remove
+                Remover
               </Button>
             )}
           </div>

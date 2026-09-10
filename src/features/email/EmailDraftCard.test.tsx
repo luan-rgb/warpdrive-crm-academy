@@ -55,7 +55,7 @@ describe("EmailDraftCard", () => {
     const d = draft();
     render(<EmailDraftCard draft={d} onResume={onResume} onChanged={vi.fn()} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+    await userEvent.click(screen.getByRole("button", { name: "Continuar" }));
 
     expect(onResume).toHaveBeenCalledWith(d);
   });
@@ -64,10 +64,10 @@ describe("EmailDraftCard", () => {
     const onChanged = vi.fn();
     render(<EmailDraftCard draft={draft()} onResume={vi.fn()} onChanged={onChanged} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Discard" }));
+    await userEvent.click(screen.getByRole("button", { name: "Descartar" }));
     expect(deleteMock).not.toHaveBeenCalled();
 
-    await userEvent.click(screen.getByRole("button", { name: "Discard draft" }));
+    await userEvent.click(screen.getByRole("button", { name: "Descartar rascunho" }));
 
     expect(deleteMock).toHaveBeenCalledWith("csrf", { draftId: "d1" });
     expect(onChanged).toHaveBeenCalled();
@@ -78,7 +78,7 @@ describe("EmailDraftCard", () => {
   it("hides Continue when the surface cannot resume a draft", () => {
     render(<EmailDraftCard draft={draft()} onChanged={vi.fn()} />);
 
-    expect(screen.queryByRole("button", { name: "Continue" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Continuar" })).not.toBeInTheDocument();
     expect(screen.getByText("Outreach")).toBeInTheDocument();
   });
 });

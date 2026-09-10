@@ -128,7 +128,7 @@ export function ConditionRows({
             </div>
             <button
               type="button"
-              aria-label={`Remove condition ${i + 1}`}
+              aria-label={`Remover condição ${i + 1}`}
               onClick={() => removeRow(i)}
               className="shrink-0 rounded px-1.5 text-muted-foreground hover:text-foreground"
             >

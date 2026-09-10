@@ -54,7 +54,7 @@ export function ComposeNoteTab({
         value={body}
         onChange={(e) => setBody(e.target.value)}
         rows={3}
-        placeholder="Take a note..."
+        placeholder="Escreva uma nota..."
         className="resize-y bg-warning/10 focus-visible:border-ring/50"
       />
       <div className="mt-2 flex justify-end gap-2">
@@ -65,10 +65,10 @@ export function ComposeNoteTab({
             onCancel?.();
           }}
         >
-          Cancel
+          Cancelar
         </Button>
         <Button disabled={pending} onClick={() => void save()}>
-          Save
+          Salvar
         </Button>
       </div>
     </div>

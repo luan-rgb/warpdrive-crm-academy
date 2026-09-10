@@ -135,7 +135,7 @@ it("uses the real person name for the no-org participant fallback when provided"
   );
   // "Ann Real" now shows both as the person link chip and the pre-selected participant chip;
   // scope to the participant chip's remove control to assert the participant fallback name.
-  expect(screen.getByLabelText("Remove Ann Real")).toBeInTheDocument();
+  expect(screen.getByLabelText("Remover Ann Real")).toBeInTheDocument();
 });
 
 it("offers the deal's contact person as a participant even when the deal has an org", () => {
@@ -194,7 +194,7 @@ it("blocks save and shows an error when the start date is cleared", async () => 
   render(<ActivityComposerInline dealId="d1" personId={null} orgId="o1" onCreated={vi.fn()} />);
   fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Discovery" } });
   fireEvent.click(screen.getByLabelText("Data de início"));
-  fireEvent.click(screen.getByRole("button", { name: "Clear" }));
+  fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   expect(await screen.findByRole("alert")).toHaveTextContent("Date is required");

@@ -55,7 +55,7 @@ export function EmailDraftCard({
           </div>
           <p className="mt-0.5 truncate text-xs text-muted-foreground">
             <span className="tabular-nums">{formatTimelineEmailDate(draft.updatedAt)}</span>
-            {recipients !== "" && <span> · To: {recipients}</span>}
+            {recipients !== "" && <span> · Para: {recipients}</span>}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
@@ -65,7 +65,7 @@ export function EmailDraftCard({
               onClick={() => onResume(draft)}
               className="rounded px-2 py-1 text-xs text-muted-foreground transition-transform hover:bg-accent active:scale-[0.96]"
             >
-              Continue
+              Continuar
             </button>
           )}
           <button
@@ -73,7 +73,7 @@ export function EmailDraftCard({
             onClick={() => setConfirming(true)}
             className="rounded px-2 py-1 text-xs text-muted-foreground transition-transform hover:bg-accent active:scale-[0.96]"
           >
-            Discard
+            Descartar
           </button>
         </div>
       </div>
@@ -81,8 +81,8 @@ export function EmailDraftCard({
         open={confirming}
         onOpenChange={setConfirming}
         title="Descartar este rascunho?"
-        description="The draft and everything written in it are deleted. This cannot be undone."
-        confirmLabel="Discard draft"
+        description="O rascunho e tudo o que foi escrito nele são excluídos. Essa ação não pode ser desfeita."
+        confirmLabel="Descartar rascunho"
         destructive
         pending={pending}
         onConfirm={() => void discard()}

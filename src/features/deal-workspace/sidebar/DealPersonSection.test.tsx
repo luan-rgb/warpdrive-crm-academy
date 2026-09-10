@@ -131,7 +131,7 @@ describe("DealPersonSection with no linked person", () => {
     renderSection({ bulkEditing: true });
     await userEvent.type(screen.getByLabelText("First name"), "Dana");
     await userEvent.type(screen.getByLabelText("Last name"), "Whitfield");
-    await userEvent.click(screen.getByRole("button", { name: "Save" }));
+    await userEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(createPersonAction).toHaveBeenCalledTimes(1));
     expect(createPersonAction.mock.calls[0]?.[0]).toMatchObject({
@@ -149,7 +149,7 @@ describe("DealPersonSection with no linked person", () => {
 
   it("does not save an entirely empty draft", async () => {
     renderSection({ bulkEditing: true });
-    await userEvent.click(screen.getByRole("button", { name: "Save" }));
+    await userEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createPersonAction).not.toHaveBeenCalled();
     expect(updateDealAction).not.toHaveBeenCalled();
   });

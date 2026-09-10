@@ -41,7 +41,7 @@ const props = {
 it("confirming converts the deal and navigates to the new lead", async () => {
   const user = userEvent.setup();
   render(<ConvertToLeadDialog {...props} />);
-  await user.click(screen.getByRole("button", { name: "Convert" }));
+  await user.click(screen.getByRole("button", { name: "Converter" }));
   await waitFor(() =>
     expect(convertToLeadAction).toHaveBeenCalledWith(
       { dealId: "d1", expectedUpdatedAt: props.expectedUpdatedAt },
@@ -58,7 +58,7 @@ it("surfaces the error and does not navigate when the conversion is denied", asy
   } as never);
   const user = userEvent.setup();
   render(<ConvertToLeadDialog {...props} />);
-  await user.click(screen.getByRole("button", { name: "Convert" }));
+  await user.click(screen.getByRole("button", { name: "Converter" }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(push).not.toHaveBeenCalled();
 });

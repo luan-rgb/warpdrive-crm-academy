@@ -190,7 +190,7 @@ describe("ContactTimelinePanel", () => {
 
   it("invalidates the contact timeline after pinning a note", async () => {
     render(<ContactTimelinePanel entityType="person" entityId="pe1" />);
-    await userEvent.click(screen.getByRole("button", { name: "Pin note" }));
+    await userEvent.click(screen.getByRole("button", { name: "Fixar nota" }));
 
     await waitFor(() =>
       expect(invalidate).toHaveBeenCalledWith({ entityType: "person", entityId: "pe1" }),
