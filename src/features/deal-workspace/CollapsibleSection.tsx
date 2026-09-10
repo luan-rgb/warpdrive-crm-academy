@@ -46,7 +46,7 @@ export function CollapsibleSection({
         {showFilter && (
           <button
             type="button"
-            aria-label="Hide empty fields"
+            aria-label="Ocultar campos vazios"
             aria-pressed={hideEmpty}
             onClick={() => setHideEmpty((v) => !v)}
             className={

@@ -76,7 +76,7 @@ describe("ConditionRows", () => {
 
   it("hides the combinator selector until there is more than one row", () => {
     const { rerender } = renderRows([row()]);
-    expect(screen.queryByLabelText("Match combinator")).toBeNull();
+    expect(screen.queryByLabelText("Combinador de correspondência")).toBeNull();
     rerender(
       <ConditionRows
         fields={FIELDS}
@@ -87,12 +87,12 @@ describe("ConditionRows", () => {
         onCombinatorChange={vi.fn()}
       />,
     );
-    expect(screen.getByLabelText("Match combinator")).toBeInTheDocument();
+    expect(screen.getByLabelText("Combinador de correspondência")).toBeInTheDocument();
   });
 
   it("never shows the combinator selector when supportsCombinator is false", () => {
     renderRows([row(), row({ id: "r2" })], { supportsCombinator: false });
-    expect(screen.queryByLabelText("Match combinator")).toBeNull();
+    expect(screen.queryByLabelText("Combinador de correspondência")).toBeNull();
   });
 
   it("adds a row seeded from the first field and its first operator", () => {

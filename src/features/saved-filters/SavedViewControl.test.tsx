@@ -101,8 +101,8 @@ describe("SavedViewControl", () => {
 
     await openMenu(user);
     await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
-    await user.type(screen.getByLabelText("View name"), "Acme people");
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.type(screen.getByLabelText("Nome da visualização"), "Acme people");
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
 
     expect(createSavedFilterAction).toHaveBeenCalledWith(
       {
@@ -137,8 +137,8 @@ describe("SavedViewControl", () => {
 
     await openMenu(user);
     await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
-    await user.type(screen.getByLabelText("View name"), "Shared people");
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.type(screen.getByLabelText("Nome da visualização"), "Shared people");
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(/permission/i);
     expect(onSelectView).not.toHaveBeenCalled();
@@ -185,7 +185,7 @@ describe("SavedViewControl", () => {
     await openMenu(user);
     await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
 
-    expect(screen.getByLabelText("View name")).toHaveClass("focus-visible:ring-ring/50");
+    expect(screen.getByLabelText("Nome da visualização")).toHaveClass("focus-visible:ring-ring/50");
   });
 
   it("toggles the shared box by clicking its visible text", async () => {
@@ -194,9 +194,9 @@ describe("SavedViewControl", () => {
 
     await openMenu(user);
     await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
-    await user.click(screen.getByText("Shared with everyone"));
+    await user.click(screen.getByText("Compartilhado com todos"));
 
-    expect(screen.getByRole("checkbox", { name: "Shared with everyone" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Compartilhado com todos" })).toBeChecked();
   });
 
   it("toggles the favorite star on an owned view only", async () => {

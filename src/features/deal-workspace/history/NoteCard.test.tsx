@@ -55,9 +55,9 @@ it("pins in one click", async () => {
 it("edits the body via the menu", async () => {
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={() => {}} />);
-  await user.click(screen.getByRole("button", { name: /more actions/i }));
+  await user.click(screen.getByRole("button", { name: /mais ações/i }));
   await user.click(screen.getByRole("menuitem", { name: /edit/i }));
-  const box = screen.getByRole("textbox", { name: /note/i });
+  const box = screen.getByRole("textbox", { name: /nota/i });
   await user.clear(box);
   await user.type(box, "Edited");
   await user.click(screen.getByRole("button", { name: /save/i }));
@@ -67,7 +67,7 @@ it("edits the body via the menu", async () => {
 it("deletes after confirming", async () => {
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={() => {}} />);
-  await user.click(screen.getByRole("button", { name: /more actions/i }));
+  await user.click(screen.getByRole("button", { name: /mais ações/i }));
   await user.click(screen.getByRole("menuitem", { name: /delete/i }));
   // Confirm dialog: the destructive confirm button, not the menu item.
   await user.click(screen.getByRole("button", { name: /^delete$/i }));
@@ -79,13 +79,13 @@ it("surfaces the error and keeps editing open when saving an edit is denied", as
   const onChanged = vi.fn();
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={onChanged} />);
-  await user.click(screen.getByRole("button", { name: /more actions/i }));
+  await user.click(screen.getByRole("button", { name: /mais ações/i }));
   await user.click(screen.getByRole("menuitem", { name: /edit/i }));
   await user.click(screen.getByRole("button", { name: /save/i }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(onChanged).not.toHaveBeenCalled();
   // The editor stays open so the edit is not silently lost.
-  expect(screen.getByRole("textbox", { name: /note/i })).toBeInTheDocument();
+  expect(screen.getByRole("textbox", { name: /nota/i })).toBeInTheDocument();
 });
 
 it("surfaces the error when deleting is denied (no silent swallow)", async () => {
@@ -93,7 +93,7 @@ it("surfaces the error when deleting is denied (no silent swallow)", async () =>
   const onChanged = vi.fn();
   const user = userEvent.setup();
   render(<NoteCard {...base} onChanged={onChanged} />);
-  await user.click(screen.getByRole("button", { name: /more actions/i }));
+  await user.click(screen.getByRole("button", { name: /mais ações/i }));
   await user.click(screen.getByRole("menuitem", { name: /delete/i }));
   await user.click(screen.getByRole("button", { name: /^delete$/i }));
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));

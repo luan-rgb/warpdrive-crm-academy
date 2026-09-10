@@ -121,7 +121,7 @@ it("the Source section's hide-empty-fields funnel hides blank Channel ID row", (
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={null} />);
   const sourceSection = within(screen.getByRole("region", { name: "Origem" }));
   expect(sourceSection.getByText("ID do canal")).toBeInTheDocument();
-  fireEvent.click(sourceSection.getByRole("button", { name: "Hide empty fields" }));
+  fireEvent.click(sourceSection.getByRole("button", { name: "Ocultar campos vazios" }));
   expect(sourceSection.queryByText("ID do canal")).not.toBeInTheDocument();
   // Origin is never value-less; it always stays.
   expect(sourceSection.getByText("Procedência")).toBeInTheDocument();

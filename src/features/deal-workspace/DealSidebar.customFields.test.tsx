@@ -160,7 +160,7 @@ it("the Organization section's hide-empty-fields funnel hides a blank deal custo
   const organization = within(screen.getByRole("region", { name: "Organização" }));
   expect(organization.getByText("Notes")).toBeInTheDocument();
   expect(organization.getByText("Budget")).toBeInTheDocument();
-  fireEvent.click(organization.getByRole("button", { name: "Hide empty fields" }));
+  fireEvent.click(organization.getByRole("button", { name: "Ocultar campos vazios" }));
   expect(organization.queryByText("Notes")).not.toBeInTheDocument();
   // Budget has a real value, so it stays.
   expect(organization.getByText("Budget")).toBeInTheDocument();

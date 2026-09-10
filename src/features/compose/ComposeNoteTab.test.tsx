@@ -23,7 +23,7 @@ import { ComposeNoteTab } from "./ComposeNoteTab";
 describe("ComposeNoteTab", () => {
   it("focuses the Note field when the tab body opens", async () => {
     render(<ComposeNoteTab entityType="deal" entityId="d1" onNoteCreated={vi.fn()} />);
-    await waitFor(() => expect(screen.getByRole("textbox", { name: "Note" })).toHaveFocus());
+    await waitFor(() => expect(screen.getByRole("textbox", { name: "Nota" })).toHaveFocus());
   });
 
   it("does not submit an empty note", () => {

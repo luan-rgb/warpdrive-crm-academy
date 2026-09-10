@@ -145,14 +145,14 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
   it("clicking the Notes tab while collapsed expands the note editor directly (PD behavior)", async () => {
     renderBar();
     await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
-    await waitFor(() => expect(screen.getByRole("textbox", { name: "Note" })).toHaveFocus());
+    await waitFor(() => expect(screen.getByRole("textbox", { name: "Nota" })).toHaveFocus());
   });
 
   it("note Cancel collapses to the Notes prompt with the tab strip still visible", async () => {
     renderBar();
     await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-    expect(screen.queryByRole("textbox", { name: "Note" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("textbox", { name: "Nota" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Take a note..." })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Notes" })).toHaveAttribute("aria-selected", "true");
   });
@@ -161,7 +161,7 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
     const onNoteCreated = vi.fn();
     renderBar({ onNoteCreated });
     await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
-    fireEvent.change(screen.getByRole("textbox", { name: "Note" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Nota" }), {
       target: { value: "Follow up next week" },
     });
     fireEvent.click(screen.getByRole("button", { name: /save/i }));
@@ -211,7 +211,7 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
     const onNoteCreated = vi.fn();
     renderBar({ scope: leadScope, onNoteCreated });
     await userEvent.click(screen.getByRole("tab", { name: "Notes" }));
-    fireEvent.change(screen.getByRole("textbox", { name: "Note" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Nota" }), {
       target: { value: "Qualify next" },
     });
     fireEvent.click(screen.getByRole("button", { name: /save/i }));

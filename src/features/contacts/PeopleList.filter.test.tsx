@@ -60,8 +60,8 @@ describe("PeopleList filter round trip", () => {
     openFilter();
     addRow(1, "acme");
     addRow(2, "globex");
-    fireEvent.click(screen.getByLabelText("Match combinator"));
-    fireEvent.click(screen.getByRole("option", { name: "any condition" }));
+    fireEvent.click(screen.getByLabelText("Combinador de correspondência"));
+    fireEvent.click(screen.getByRole("option", { name: "qualquer condição" }));
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     await vi.waitFor(() =>
@@ -73,6 +73,6 @@ describe("PeopleList filter round trip", () => {
     openFilter();
     expect(screen.getByLabelText("Condition 1 value")).toHaveValue("acme");
     expect(screen.getByLabelText("Condition 2 value")).toHaveValue("globex");
-    expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 });

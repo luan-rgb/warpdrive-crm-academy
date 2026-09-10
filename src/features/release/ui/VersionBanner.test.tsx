@@ -72,7 +72,7 @@ describe("VersionBanner", () => {
   it("stores the dismissed version in localStorage when dismiss is clicked", () => {
     mockStatus({});
     render(<VersionBanner />);
-    fireEvent.click(screen.getByRole("button", { name: /dismiss/i }));
+    fireEvent.click(screen.getByRole("button", { name: /dispensar/i }));
     expect(localStorage.getItem(RELEASE_DISMISS_KEY)).toBe("v1.7.0");
   });
 
@@ -99,7 +99,7 @@ describe("VersionBanner", () => {
     });
     mockStatus({});
     render(<VersionBanner />);
-    expect(() => fireEvent.click(screen.getByRole("button", { name: /dismiss/i }))).not.toThrow();
+    expect(() => fireEvent.click(screen.getByRole("button", { name: /dispensar/i }))).not.toThrow();
     expect(screen.queryByText(/v1\.7\.0 is available/)).toBeNull();
   });
 });

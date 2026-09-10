@@ -100,7 +100,7 @@ export function DealSummaryActionList({
     <div className="text-sm">
       <ActionRow icon={<Wallet aria-hidden="true" className={ICON} />}>
         <InlineFieldShell
-          label="Value"
+          label="Valor"
           editing={editingValue}
           onStartEdit={() => {
             setDraft(deal.value !== null ? String(deal.value) : "");
@@ -110,7 +110,7 @@ export function DealSummaryActionList({
         >
           <div>
             <input
-              aria-label="Value"
+              aria-label="Valor"
               // biome-ignore lint/a11y/noAutofocus: inline edit focuses immediately on activation
               autoFocus
               inputMode="decimal"
@@ -170,20 +170,20 @@ export function DealSummaryActionList({
 
       <ActionRow icon={<Flag aria-hidden="true" className={ICON} />}>
         <InlineFieldShell
-          label="Expected close date"
+          label="Data prevista de fechamento"
           editing={editingDate}
           onStartEdit={() => {
             setDateDraft(deal.expectedCloseDate);
             setEditingDate(true);
           }}
           value={deal.expectedCloseDate !== null ? formatMediumDate(deal.expectedCloseDate) : null}
-          emptyPrompt="Set expected close date"
+          emptyPrompt="Definir data prevista de fechamento"
         >
           <div>
             <DatePicker
-              ariaLabel="Expected close date"
+              ariaLabel="Data prevista de fechamento"
               value={dateDraft}
-              placeholder="Set date"
+              placeholder="Definir data"
               defaultOpen
               triggerClassName="flex h-8 w-full items-center rounded border border-field-border bg-card px-2 text-left text-sm"
               formatLabel={formatMediumDate}

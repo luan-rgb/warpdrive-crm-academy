@@ -40,9 +40,9 @@ describe("DealFilterBuilder", () => {
     render(<DealFilterBuilder stages={STAGES} activeCount={0} onApply={vi.fn()} />);
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    expect(screen.queryByLabelText("Match combinator")).toBeNull();
+    expect(screen.queryByLabelText("Combinador de correspondência")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    expect(screen.getByLabelText("Match combinator")).toBeInTheDocument();
+    expect(screen.getByLabelText("Combinador de correspondência")).toBeInTheDocument();
   });
 
   it("applies the chosen combinator with the conditions", () => {
@@ -53,8 +53,8 @@ describe("DealFilterBuilder", () => {
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
     fireEvent.change(screen.getByLabelText("Condition 2 value"), { target: { value: "corp" } });
-    fireEvent.click(screen.getByLabelText("Match combinator"));
-    fireEvent.click(screen.getByRole("option", { name: "any condition" }));
+    fireEvent.click(screen.getByLabelText("Combinador de correspondência"));
+    fireEvent.click(screen.getByRole("option", { name: "qualquer condição" }));
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     expect(onApply).toHaveBeenCalledWith({
@@ -152,7 +152,7 @@ describe("DealFilterBuilder", () => {
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
     expect(screen.getByLabelText<HTMLInputElement>("Condition 1 value").value).toBe("acme");
-    expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 
   it("opens blank when nothing is applied", () => {

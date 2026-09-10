@@ -99,7 +99,7 @@ describe("BoardFilterControl", () => {
     await openBuilder(user, /Editar filtro/);
 
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
-    expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 
   it("opens a blank builder when no saved filter is selected", async () => {
@@ -110,7 +110,7 @@ describe("BoardFilterControl", () => {
     await openBuilder(user);
 
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(1);
-    expect(screen.queryByLabelText("Match combinator")).toBeNull();
+    expect(screen.queryByLabelText("Combinador de correspondência")).toBeNull();
   });
 });
 

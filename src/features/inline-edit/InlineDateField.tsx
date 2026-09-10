@@ -27,7 +27,7 @@ export function InlineDateField({ label, value, onSave }: InlineDateFieldProps):
         ariaLabel={label}
         value={f.draft}
         onChange={f.setDraft}
-        placeholder="Set date"
+        placeholder="Definir data"
         defaultOpen
         triggerClassName="flex h-8 w-full items-center rounded border border-field-border bg-card px-2 text-left text-sm"
       />

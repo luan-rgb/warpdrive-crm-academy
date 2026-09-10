@@ -38,7 +38,7 @@ describe("EngagementTimelineClient loading state", () => {
     timelineQuery.mockReturnValue({ data: undefined, isLoading: true, error: null });
     render(<EngagementTimelineClient />);
     expect(
-      screen.getByRole("status", { name: /loading engagement timeline/i }),
+      screen.getByRole("status", { name: /carregando linha do tempo de engajamento/i }),
     ).toBeInTheDocument();
     expect(screen.queryByText("Loading...")).toBeNull();
     expect(screen.queryByText(STRINGS.contacts.timelineEmpty)).toBeNull();
@@ -52,6 +52,6 @@ describe("EngagementTimelineClient loading state", () => {
     });
     render(<EngagementTimelineClient />);
     expect(screen.getByText(STRINGS.contacts.timelineEmpty)).toBeInTheDocument();
-    expect(screen.queryByRole("status", { name: /loading engagement timeline/i })).toBeNull();
+    expect(screen.queryByRole("status", { name: /carregando linha do tempo de engajamento/i })).toBeNull();
   });
 });

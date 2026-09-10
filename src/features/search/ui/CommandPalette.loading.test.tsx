@@ -41,7 +41,7 @@ describe("CommandPalette loading state", () => {
     vi.useFakeTimers();
     useQueryMock.mockReturnValue({ data: undefined, error: null });
     typeQuery("Acme");
-    expect(screen.getByRole("status", { name: /searching/i })).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: /buscando/i })).toBeInTheDocument();
     expect(screen.queryByText(STRINGS.search.emptyOrganizations)).toBeNull();
     expect(screen.queryByText(STRINGS.search.emptyDeals)).toBeNull();
   });
@@ -54,7 +54,7 @@ describe("CommandPalette loading state", () => {
     });
     typeQuery("Acme");
     expect(screen.getByText(STRINGS.search.emptyOrganizations)).toBeInTheDocument();
-    expect(screen.queryByRole("status", { name: /searching/i })).toBeNull();
+    expect(screen.queryByRole("status", { name: /buscando/i })).toBeNull();
   });
 
   it("reports a failed search as an error rather than as no results", () => {

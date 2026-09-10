@@ -50,7 +50,7 @@ export function ComposeNoteTab({
       <Textarea
         ref={noteRef}
         data-compose-primary="notes"
-        aria-label="Note"
+        aria-label="Nota"
         value={body}
         onChange={(e) => setBody(e.target.value)}
         rows={3}

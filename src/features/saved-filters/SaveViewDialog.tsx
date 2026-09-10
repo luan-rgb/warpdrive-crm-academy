@@ -18,7 +18,7 @@ import type { SavedFilterTargetEntity } from "./schemas";
 import { createSavedFilterAction } from "./serverActions";
 
 // One copy for both the checkbox's accessible name and its visible <label>.
-const SHARED_LABEL = "Shared with everyone";
+const SHARED_LABEL = "Compartilhado com todos";
 
 interface SaveViewDialogProps {
   targetEntity: SavedFilterTargetEntity;
@@ -44,7 +44,7 @@ export function SaveViewDialog({
   const [saving, setSaving] = useState(false);
 
   async function save(): Promise<void> {
-    const viewName = name.trim() === "" ? "Untitled view" : name.trim();
+    const viewName = name.trim() === "" ? "Visualização sem título" : name.trim();
     setSaving(true);
     const res = await createSavedFilterAction(
       { name: viewName, targetEntity, definition, isShared },
@@ -74,15 +74,15 @@ export function SaveViewDialog({
     >
       <DialogContent aria-describedby={undefined} className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Save current view</DialogTitle>
+          <DialogTitle>Salvar visualização atual</DialogTitle>
         </DialogHeader>
         <label className="block text-sm" htmlFor={nameId}>
-          <span className="mb-1 block font-medium">View name</span>
+          <span className="mb-1 block font-medium">Nome da visualização</span>
           <Input
             id={nameId}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Name this view"
+            placeholder="Nomeie esta visualização"
           />
         </label>
         <div className="flex items-center gap-2 text-sm">
@@ -102,10 +102,10 @@ export function SaveViewDialog({
         )}
         <DialogFooter>
           <Button variant="outline" size="sm" onClick={onClose}>
-            Cancel
+            Cancelar
           </Button>
           <Button size="sm" disabled={saving} onClick={() => void save()}>
-            Save
+            Salvar
           </Button>
         </DialogFooter>
       </DialogContent>

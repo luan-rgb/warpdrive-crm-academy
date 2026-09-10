@@ -64,7 +64,7 @@ export function VersionBanner() {
               View on GitHub →
             </a>
           )}
-          <Button variant="ghost" size="icon" onClick={handleDismiss} aria-label="Dismiss">
+          <Button variant="ghost" size="icon" onClick={handleDismiss} aria-label="Dispensar">
             ×
           </Button>
         </div>

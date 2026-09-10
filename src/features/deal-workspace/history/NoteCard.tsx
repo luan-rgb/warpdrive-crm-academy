@@ -98,7 +98,7 @@ export function NoteCard({
       {editing ? (
         <div>
           <textarea
-            aria-label="Note"
+            aria-label="Nota"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             rows={3}
@@ -147,12 +147,12 @@ export function NoteCard({
           </button>
           <DropdownMenu>
             <DropdownMenuTrigger
-              aria-label="More actions"
+              aria-label="Mais ações"
               className="relative shrink-0 rounded p-1 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:bg-accent hover:text-foreground"
             >
               <Ellipsis aria-hidden="true" className="h-4 w-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" aria-label="More actions" className="min-w-40">
+            <DropdownMenuContent align="end" aria-label="Mais ações" className="min-w-40">
               <DropdownMenuItem onSelect={() => setEditing(true)}>Edit</DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => setConfirmOpen(true)}

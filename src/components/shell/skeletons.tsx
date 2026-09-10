@@ -153,7 +153,7 @@ export function ThreadRowsSkeleton({ rows = 6 }: { rows?: number } = {}): React.
       <div
         role="status"
         aria-busy="true"
-        aria-label="Loading conversations"
+        aria-label="Carregando conversas"
         className="flex flex-col gap-3 p-3"
       >
         {Array.from({ length: rows }, (_, i) => (
@@ -175,7 +175,7 @@ export function ThreadRowsSkeleton({ rows = 6 }: { rows?: number } = {}): React.
 // overlay does not resize when results land.
 export function SearchResultsSkeleton(): React.ReactNode {
   return (
-    <div role="status" aria-busy="true" aria-label="Searching" className="py-1">
+    <div role="status" aria-busy="true" aria-label="Buscando" className="py-1">
       {Array.from({ length: 4 }, (_, section) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder sections
         <div key={section} className="px-3 py-1">
@@ -226,7 +226,7 @@ export function EngagementGridSkeleton({ lanes = 6 }: { lanes?: number } = {}): 
     <div
       role="status"
       aria-busy="true"
-      aria-label="Loading engagement timeline"
+      aria-label="Carregando linha do tempo de engajamento"
       className="rounded-lg border bg-card p-3 shadow-sm"
     >
       <div className="mb-3 flex gap-3">

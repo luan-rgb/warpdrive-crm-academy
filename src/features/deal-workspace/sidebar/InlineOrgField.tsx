@@ -118,7 +118,7 @@ export function InlineOrgField({
           label="Organization"
           hideLabel
           options={orgOptions}
-          placeholder="Search or add an organization"
+          placeholder="Buscar ou adicionar uma organização"
           createLabel={(q) => `Add '${q}' as new organization`}
           similarWarning="Similar organization already exists."
           onSelectExisting={(id) => setDraft({ kind: "existing", id })}

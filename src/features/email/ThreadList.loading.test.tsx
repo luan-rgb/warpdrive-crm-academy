@@ -54,7 +54,7 @@ describe("ThreadList loading state", () => {
       fetchNextPage: vi.fn(),
     });
     render(<ThreadList folder="inbox" />);
-    expect(screen.getByRole("status", { name: /loading conversations/i })).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: /carregando conversas/i })).toBeInTheDocument();
     expect(screen.queryByText(STRINGS.inbox.noThreads)).toBeNull();
     expect(screen.queryByText(/0 conversations/)).toBeNull();
   });
@@ -69,14 +69,14 @@ describe("ThreadList loading state", () => {
     });
     render(<ThreadList folder="inbox" />);
     expect(screen.getByText(STRINGS.inbox.noThreads)).toBeInTheDocument();
-    expect(screen.queryByRole("status", { name: /loading conversations/i })).toBeNull();
+    expect(screen.queryByRole("status", { name: /carregando conversas/i })).toBeNull();
     expect(screen.getByText(/0 conversations/)).toBeInTheDocument();
   });
 
   it("shows the skeleton when the caller supplies threads that are still loading", () => {
     inboxListQuery.mockReturnValue(emptyFolder);
     render(<ThreadList folder="inbox" threads={[]} threadsPending />);
-    expect(screen.getByRole("status", { name: /loading conversations/i })).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: /carregando conversas/i })).toBeInTheDocument();
     expect(screen.queryByText(STRINGS.inbox.noThreads)).toBeNull();
   });
 });

@@ -118,9 +118,9 @@ describe("CreateFilterModal", () => {
   // A saved deal filter was AND-only, so "any of these" was unreachable from the saved side.
   it("offers the all/any combinator once there is more than one condition", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
-    expect(screen.queryByLabelText("Match combinator")).toBeNull();
+    expect(screen.queryByLabelText("Combinador de correspondência")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    expect(screen.getByLabelText("Match combinator")).toBeInTheDocument();
+    expect(screen.getByLabelText("Combinador de correspondência")).toBeInTheDocument();
   });
 
   it("saves the chosen combinator with the definition", async () => {
@@ -130,8 +130,8 @@ describe("CreateFilterModal", () => {
     fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
     fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
     fireEvent.change(screen.getByLabelText("Condition 2 value"), { target: { value: "Corp" } });
-    fireEvent.click(screen.getByLabelText("Match combinator"));
-    fireEvent.click(screen.getByRole("option", { name: "any condition" }));
+    fireEvent.click(screen.getByLabelText("Combinador de correspondência"));
+    fireEvent.click(screen.getByRole("option", { name: "qualquer condição" }));
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledTimes(1));
@@ -156,7 +156,7 @@ describe("CreateFilterModal", () => {
       />,
     );
     expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
-    expect(screen.getByLabelText("Match combinator")).toHaveTextContent("any condition");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 
   it("closes via the X button", () => {

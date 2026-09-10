@@ -32,16 +32,16 @@ export function ParticipantsControl({
         {count === 0 ? (
           <>
             <Plus aria-hidden="true" className="h-3.5 w-3.5" />
-            Participants
+            Participantes
           </>
         ) : (
-          `${count} participant${count === 1 ? "" : "s"}`
+          `${count} ${count === 1 ? "participante" : "participantes"}`
         )}
       </button>
       <ParticipantsDialog
         open={open}
         onOpenChange={setOpen}
-        title={orgName ?? "this deal"}
+        title={orgName ?? "este negócio"}
         data={data}
       />
     </>

@@ -47,8 +47,8 @@ interface ConditionRowsProps {
 const REMOVE = "✕";
 
 const COMBINATOR_OPTIONS: SelectOption[] = [
-  { value: "and", label: "all conditions" },
-  { value: "or", label: "any condition" },
+  { value: "and", label: "todas as condições" },
+  { value: "or", label: "qualquer condição" },
 ];
 
 // The condition list body: combinator selector, one row per condition (field / operator / value /
@@ -83,9 +83,9 @@ export function ConditionRows({
     <>
       {supportsCombinator && rows.length > 1 ? (
         <div className="flex items-center gap-2 px-1">
-          <span className="text-xs text-muted-foreground">Match</span>
+          <span className="text-xs text-muted-foreground">Corresponder a</span>
           <Select
-            ariaLabel="Match combinator"
+            ariaLabel="Combinador de correspondência"
             value={combinator}
             onChange={(v) => onCombinatorChange(v === "or" ? "or" : "and")}
             options={COMBINATOR_OPTIONS}

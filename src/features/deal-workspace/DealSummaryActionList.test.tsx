@@ -150,18 +150,18 @@ it("toggles a label through the catalog dropdown picker via updateDealAction", a
 
 it("shows 'Set expected close date' as a CTA when unset, and the date when set", () => {
   const { unmount } = renderList();
-  expect(screen.getByText("Set expected close date")).toBeInTheDocument();
+  expect(screen.getByText("Definir data prevista de fechamento")).toBeInTheDocument();
   unmount();
 
   renderList({ expectedCloseDate: "2026-07-16" });
   expect(screen.getByText("Jul 16, 2026")).toBeInTheDocument();
-  expect(screen.queryByText("Set expected close date")).not.toBeInTheDocument();
+  expect(screen.queryByText("Definir data prevista de fechamento")).not.toBeInTheDocument();
 });
 
 it("shows the participant count-link (PD parity) and opens the participants table dialog", async () => {
   renderList();
   // One participant in the mock -> the trigger reads "1 participant", not "+ Participants".
-  fireEvent.click(screen.getByRole("button", { name: "1 participant" }));
+  fireEvent.click(screen.getByRole("button", { name: "1 participante" }));
   // Dialog table lists the participant as a person link with a remove control.
   expect(screen.getByRole("link", { name: "Ann Guest" })).toHaveAttribute(
     "href",
@@ -182,10 +182,10 @@ it("edits the value ONLY via the pencil, with a dirty-gated Save footer (PD mech
   renderList();
   // The value text is plain/selectable, not a click target.
   fireEvent.click(screen.getByText("$58,000"));
-  expect(screen.queryByLabelText("Value")).not.toBeInTheDocument();
+  expect(screen.queryByLabelText("Valor")).not.toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
-  const input = screen.getByLabelText<HTMLInputElement>("Value");
+  fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+  const input = screen.getByLabelText<HTMLInputElement>("Valor");
   expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   fireEvent.change(input, { target: { value: "61000" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -196,11 +196,11 @@ it("edits the value ONLY via the pencil, with a dirty-gated Save footer (PD mech
 
 it("value editor: blur does not commit and Cancel discards (PD: only Cancel/Save exit)", () => {
   renderList();
-  fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
-  const input = screen.getByLabelText<HTMLInputElement>("Value");
+  fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+  const input = screen.getByLabelText<HTMLInputElement>("Valor");
   fireEvent.change(input, { target: { value: "99999" } });
   fireEvent.blur(input);
-  expect(screen.getByLabelText("Value")).toBeInTheDocument();
+  expect(screen.getByLabelText("Valor")).toBeInTheDocument();
   expect(updateDealAction).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
   expect(updateDealAction).not.toHaveBeenCalled();
@@ -209,7 +209,7 @@ it("value editor: blur does not commit and Cancel discards (PD: only Cancel/Save
 
 it("close date: prompt click opens the editor; picking a day needs Save to commit", async () => {
   renderList();
-  fireEvent.click(screen.getByRole("button", { name: "Set expected close date" }));
+  fireEvent.click(screen.getByRole("button", { name: "Definir data prevista de fechamento" }));
   // Calendar opens immediately (PD behavior); picking a day only fills the draft. findByText:
   // the calendar is a next/dynamic chunk that loads on open.
   fireEvent.click(await screen.findByText("15"));
