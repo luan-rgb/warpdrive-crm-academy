@@ -88,7 +88,7 @@ it("inline-edits the Source Channel row through the deal update action", async (
 
   fireEvent.click(screen.getByRole("button", { name: "Edit Canal" }));
   fireEvent.click(screen.getByLabelText("Canal"));
-  fireEvent.click(screen.getByText("Inbound"));
+  fireEvent.click(screen.getByText("Entrada"));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() =>

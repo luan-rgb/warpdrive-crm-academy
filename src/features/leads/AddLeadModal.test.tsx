@@ -136,7 +136,7 @@ describe("AddLeadModal", () => {
   it("blocks an empty-title submit with an inline error", async () => {
     render(<AddLeadModal onClose={vi.fn()} onCreated={vi.fn()} />);
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent(/title/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/título/i);
     expect(createLeadAction).not.toHaveBeenCalled();
   });
 
@@ -147,7 +147,7 @@ describe("AddLeadModal", () => {
     // The org autofills the title; clear it so the lead is invalid (blank title) again.
     fireEvent.change(screen.getByLabelText("Título do lead"), { target: { value: "" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent(/title/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/título/i);
     expect(createOrgAction).not.toHaveBeenCalled();
     expect(createPersonAction).not.toHaveBeenCalled();
     expect(createLeadAction).not.toHaveBeenCalled();
