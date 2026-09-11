@@ -8,6 +8,7 @@ import { Select } from "@/components/ui/Select";
 import {
   ACTIVITY_ACTIONS,
   DEAL_ACTIONS,
+  GOAL_INTERVAL_LABELS,
   GOAL_INTERVALS,
   type GoalAssigneeKind,
   type GoalSubject,
@@ -198,7 +199,7 @@ export function GoalForm({
         ariaLabel={S.goalInterval}
         value={interval}
         onChange={setInterval}
-        options={GOAL_INTERVALS.map((i) => ({ value: i, label: i }))}
+        options={GOAL_INTERVALS.map((i) => ({ value: i, label: GOAL_INTERVAL_LABELS[i] }))}
       />
       <Input
         aria-label={S.goalTarget}

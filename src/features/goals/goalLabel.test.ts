@@ -10,28 +10,28 @@ const g = {
 
 describe("goalLabel", () => {
   test("names a deal value goal", () => {
-    expect(goalLabel(g)).toBe("Deal value won, monthly");
+    expect(goalLabel(g)).toBe("Valor de negócios ganhos, mensal");
   });
 
   test("names a deal count goal", () => {
-    expect(goalLabel({ ...g, metric: "count" })).toBe("Deals won, monthly");
+    expect(goalLabel({ ...g, metric: "count" })).toBe("Negócios ganhos, mensal");
   });
 
   test("names an activity completion goal", () => {
     expect(
       goalLabel({ subject: "activity", action: "completed", metric: "count", interval: "weekly" }),
-    ).toBe("Activities completed, weekly");
+    ).toBe("Atividades concluídas, semanal");
   });
 
   test("names deals added quarterly", () => {
     expect(goalLabel({ ...g, action: "added", metric: "count", interval: "quarterly" })).toBe(
-      "Deals added, quarterly",
+      "Negócios adicionados, trimestral",
     );
   });
 
   test("names a yearly lost-deal goal", () => {
     expect(goalLabel({ ...g, action: "lost", metric: "count", interval: "yearly" })).toBe(
-      "Deals lost, yearly",
+      "Negócios perdidos, anual",
     );
   });
 });

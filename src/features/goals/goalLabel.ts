@@ -1,13 +1,23 @@
-import type { GoalAction, GoalInterval, GoalMetric, GoalSubject } from "@/constants/goals";
+import {
+  GOAL_INTERVAL_LABELS,
+  type GoalAction,
+  type GoalInterval,
+  type GoalMetric,
+  type GoalSubject,
+} from "@/constants/goals";
 
-const ACTION_WORD: Record<GoalAction, string> = {
-  added: "added",
-  won: "won",
-  lost: "lost",
-  completed: "completed",
+// Gendered by subject: "added" agrees with masculine "negócios" and feminine "atividades".
+const DEAL_ACTION_WORD: Partial<Record<GoalAction, string>> = {
+  added: "adicionados",
+  won: "ganhos",
+  lost: "perdidos",
+};
+const ACTIVITY_ACTION_WORD: Partial<Record<GoalAction, string>> = {
+  added: "adicionadas",
+  completed: "concluídas",
 };
 
-// A goal has no name of its own; what it measures is its name. "Deal value won, monthly"
+// A goal has no name of its own; what it measures is its name. "Valor de negócios ganhos, mensal"
 // says more than any label a user would have typed.
 export function goalLabel(goal: {
   subject: GoalSubject;
@@ -16,6 +26,12 @@ export function goalLabel(goal: {
   interval: GoalInterval;
 }): string {
   const noun =
-    goal.subject === "deal" ? (goal.metric === "value" ? "Deal value" : "Deals") : "Activities";
-  return `${noun} ${ACTION_WORD[goal.action]}, ${goal.interval}`;
+    goal.subject === "deal"
+      ? goal.metric === "value"
+        ? "Valor de negócios"
+        : "Negócios"
+      : "Atividades";
+  const actionWord =
+    goal.subject === "deal" ? DEAL_ACTION_WORD[goal.action] : ACTIVITY_ACTION_WORD[goal.action];
+  return `${noun} ${actionWord}, ${GOAL_INTERVAL_LABELS[goal.interval]}`;
 }

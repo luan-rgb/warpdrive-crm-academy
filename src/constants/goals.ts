@@ -3,6 +3,13 @@
 export const GOAL_INTERVALS = ["weekly", "monthly", "quarterly", "yearly"] as const;
 export type GoalInterval = (typeof GOAL_INTERVALS)[number];
 
+export const GOAL_INTERVAL_LABELS: Record<GoalInterval, string> = {
+  weekly: "semanal",
+  monthly: "mensal",
+  quarterly: "trimestral",
+  yearly: "anual",
+};
+
 export const GOAL_SUBJECTS = ["deal", "activity"] as const;
 export type GoalSubject = (typeof GOAL_SUBJECTS)[number];
 
