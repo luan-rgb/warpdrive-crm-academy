@@ -75,7 +75,7 @@ async function renderToolbar(
 describe("FormatToolbar – icon rendering", () => {
   it("renders icon-only command buttons (svg icon, label via aria-label not text)", async () => {
     await renderToolbar();
-    const bold = screen.getByRole("button", { name: /bold/i });
+    const bold = screen.getByRole("button", { name: /negrito/i });
     // Icon present, and no visible text label (accessible name comes from aria-label).
     expect(bold.querySelector("svg")).not.toBeNull();
     expect(bold.textContent).toBe("");
@@ -95,73 +95,73 @@ describe("FormatToolbar – editor command wiring", () => {
 
   it("Bold button calls toggleBold", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /bold/i }));
+    fireEvent.click(screen.getByRole("button", { name: /negrito/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Italic button calls toggleItalic", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /italic/i }));
+    fireEvent.click(screen.getByRole("button", { name: /itálico/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Underline button calls toggleUnderline", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /underline/i }));
+    fireEvent.click(screen.getByRole("button", { name: /sublinhado/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Strikethrough button calls toggleStrike", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /strikethrough/i }));
+    fireEvent.click(screen.getByRole("button", { name: /tachado/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Bulleted list button calls toggleBulletList", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /bulleted list/i }));
+    fireEvent.click(screen.getByRole("button", { name: /lista com marcadores/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Ordered list button calls toggleOrderedList", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /ordered list/i }));
+    fireEvent.click(screen.getByRole("button", { name: /lista numerada/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Blockquote button calls toggleBlockquote", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /blockquote/i }));
+    fireEvent.click(screen.getByRole("button", { name: /citação/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Undo button calls undo", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /^undo$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^desfazer$/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Redo button calls redo", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /^redo$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^refazer$/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Clear format button calls clearNodes then unsetAllMarks", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /clear format/i }));
+    fireEvent.click(screen.getByRole("button", { name: /limpar formatação/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Indent button calls sinkListItem", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /^indent$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^aumentar recuo$/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
   it("Outdent button calls liftListItem", async () => {
     const { runSpy } = await renderToolbar();
-    fireEvent.click(screen.getByRole("button", { name: /^outdent$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^diminuir recuo$/i }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -189,7 +189,7 @@ describe("FormatToolbar – editor command wiring", () => {
 
   it("Image dialog calls setImage for a safe URL", async () => {
     const { runSpy } = await renderToolbar();
-    await userEvent.click(screen.getByRole("button", { name: /^image$/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^imagem$/i }));
     await userEvent.type(
       screen.getByRole("textbox", { name: "URL da imagem" }),
       "https://example.com/img.png",
@@ -233,7 +233,7 @@ describe("FormatToolbar – URL security (Fix 2)", () => {
     "data:text/html,<script>evil()</script>",
   ])("Image dialog rejects %s", async (url) => {
     const { runSpy } = await renderToolbar();
-    await userEvent.click(screen.getByRole("button", { name: /^image$/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^imagem$/i }));
     await userEvent.type(screen.getByRole("textbox", { name: "URL da imagem" }), url);
     await userEvent.click(screen.getByRole("button", { name: "Inserir imagem" }));
     expect(runSpy).not.toHaveBeenCalled();
@@ -242,7 +242,7 @@ describe("FormatToolbar – URL security (Fix 2)", () => {
 
   it("Image dialog allows data:image/ URL", async () => {
     const { runSpy } = await renderToolbar();
-    await userEvent.click(screen.getByRole("button", { name: /^image$/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^imagem$/i }));
     await userEvent.type(
       screen.getByRole("textbox", { name: "URL da imagem" }),
       "data:image/png;base64,abc",

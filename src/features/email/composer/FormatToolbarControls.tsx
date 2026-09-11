@@ -110,11 +110,11 @@ export function FormatToolbarControls({
       aria-label="Formatação de texto"
       className="flex flex-wrap items-center gap-0.5 border-b border-border px-2 py-1"
     >
-      <ToolButton label="Undo" icon={Undo2} onClick={actions.undo} />
-      <ToolButton label="Redo" icon={Redo2} onClick={actions.redo} />
+      <ToolButton label="Desfazer" icon={Undo2} onClick={actions.undo} />
+      <ToolButton label="Refazer" icon={Redo2} onClick={actions.redo} />
       <Divider />
       <Select
-        ariaLabel="Font family"
+        ariaLabel="Família da fonte"
         triggerContent={<Type aria-hidden="true" className="size-4" />}
         triggerClassName={COMPACT_TRIGGER_CLASSNAME}
         value={fontFamily}
@@ -122,7 +122,7 @@ export function FormatToolbarControls({
         options={FONT_FAMILY_OPTIONS}
       />
       <Select
-        ariaLabel="Font size"
+        ariaLabel="Tamanho da fonte"
         triggerContent={<ALargeSmall aria-hidden="true" className="size-4" />}
         triggerClassName={COMPACT_TRIGGER_CLASSNAME}
         value={fontSize}
@@ -132,25 +132,25 @@ export function FormatToolbarControls({
       <ColorPicker
         value={textColor}
         onChange={onTextColorChange}
-        ariaLabel="Text color"
+        ariaLabel="Cor do texto"
         triggerClassName={TOOL_BUTTON_CLASSNAME}
       />
       <Divider />
-      <ToolButton label="Bold" icon={Bold} onClick={actions.bold} />
-      <ToolButton label="Italic" icon={Italic} onClick={actions.italic} />
-      <ToolButton label="Underline" icon={Underline} onClick={actions.underline} />
-      <ToolButton label="Strikethrough" icon={Strikethrough} onClick={actions.strike} />
+      <ToolButton label="Negrito" icon={Bold} onClick={actions.bold} />
+      <ToolButton label="Itálico" icon={Italic} onClick={actions.italic} />
+      <ToolButton label="Sublinhado" icon={Underline} onClick={actions.underline} />
+      <ToolButton label="Tachado" icon={Strikethrough} onClick={actions.strike} />
       <Divider />
-      <ToolButton label="Bulleted list" icon={List} onClick={actions.bulletList} />
-      <ToolButton label="Ordered list" icon={ListOrdered} onClick={actions.orderedList} />
-      <ToolButton label="Outdent" icon={Outdent} onClick={actions.outdent} />
-      <ToolButton label="Indent" icon={Indent} onClick={actions.indent} />
-      <ToolButton label="Blockquote" icon={Quote} onClick={actions.blockquote} />
+      <ToolButton label="Lista com marcadores" icon={List} onClick={actions.bulletList} />
+      <ToolButton label="Lista numerada" icon={ListOrdered} onClick={actions.orderedList} />
+      <ToolButton label="Diminuir recuo" icon={Outdent} onClick={actions.outdent} />
+      <ToolButton label="Aumentar recuo" icon={Indent} onClick={actions.indent} />
+      <ToolButton label="Citação" icon={Quote} onClick={actions.blockquote} />
       <Divider />
       <ToolButton label="Link" icon={LinkIcon} onClick={actions.link} />
-      <ToolButton label="Image" icon={ImageIcon} onClick={actions.image} />
+      <ToolButton label="Imagem" icon={ImageIcon} onClick={actions.image} />
       <Divider />
-      <ToolButton label="Clear format" icon={RemoveFormatting} onClick={actions.clearFormat} />
+      <ToolButton label="Limpar formatação" icon={RemoveFormatting} onClick={actions.clearFormat} />
     </div>
   );
 }

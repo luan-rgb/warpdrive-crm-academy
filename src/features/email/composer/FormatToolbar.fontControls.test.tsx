@@ -98,13 +98,13 @@ describe("FormatToolbar – font/size/color controls present (Spec 6.5)", () => 
   it("renders a font-size select", async () => {
     const { FormatToolbar } = await import("./FormatToolbar");
     render(<FormatToolbar editor={makeFullStubEditor(vi.fn())} />);
-    expect(getSelectByLabel("size")).toBeInTheDocument();
+    expect(getSelectByLabel("tamanho")).toBeInTheDocument();
   });
 
   it("renders the shared text-color picker instead of a native color input", async () => {
     const { FormatToolbar } = await import("./FormatToolbar");
     render(<FormatToolbar editor={makeFullStubEditor(vi.fn())} />);
-    expect(screen.getByRole("button", { name: "Text color" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cor do texto" })).toBeInTheDocument();
     expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
   });
 });
@@ -119,7 +119,7 @@ describe("FormatToolbar – compact icon-style font triggers (PD parity)", () =>
   it("font-family trigger is an icon control identified by aria-label, not a wide text label", async () => {
     const { FormatToolbar } = await import("./FormatToolbar");
     render(<FormatToolbar editor={makeFullStubEditor(vi.fn())} />);
-    const trigger = screen.getByRole("combobox", { name: "Font family" });
+    const trigger = screen.getByRole("combobox", { name: "Família da fonte" });
     expect(trigger).not.toHaveTextContent("Padrão");
     expect(trigger.querySelector("svg")).not.toBeNull();
   });
@@ -127,7 +127,7 @@ describe("FormatToolbar – compact icon-style font triggers (PD parity)", () =>
   it("font-size trigger is an icon control identified by aria-label, not a wide text label", async () => {
     const { FormatToolbar } = await import("./FormatToolbar");
     render(<FormatToolbar editor={makeFullStubEditor(vi.fn())} />);
-    const trigger = screen.getByRole("combobox", { name: "Font size" });
+    const trigger = screen.getByRole("combobox", { name: "Tamanho da fonte" });
     expect(trigger).not.toHaveTextContent("Padrão");
     expect(trigger.querySelector("svg")).not.toBeNull();
   });
@@ -136,7 +136,7 @@ describe("FormatToolbar – compact icon-style font triggers (PD parity)", () =>
     const { FormatToolbar } = await import("./FormatToolbar");
     render(<FormatToolbar editor={makeFullStubEditor(vi.fn())} />);
     pickOption("font", "Georgia");
-    const trigger = screen.getByRole("combobox", { name: "Font family" });
+    const trigger = screen.getByRole("combobox", { name: "Família da fonte" });
     expect(trigger).not.toHaveTextContent("Georgia");
     expect(trigger.querySelector("svg")).not.toBeNull();
   });
@@ -159,7 +159,7 @@ describe("FormatToolbar – font/size/color command wiring (Spec 6.5)", () => {
     const { FormatToolbar } = await import("./FormatToolbar");
     const runSpy = vi.fn();
     render(<FormatToolbar editor={makeCommandEditor("setFontSize", runSpy)} />);
-    pickOption("size", "18");
+    pickOption("tamanho", "18");
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -167,7 +167,7 @@ describe("FormatToolbar – font/size/color command wiring (Spec 6.5)", () => {
     const { FormatToolbar } = await import("./FormatToolbar");
     const runSpy = vi.fn();
     render(<FormatToolbar editor={makeCommandEditor("setColor", runSpy)} />);
-    await userEvent.click(screen.getByRole("button", { name: "Text color" }));
+    await userEvent.click(screen.getByRole("button", { name: "Cor do texto" }));
     await userEvent.click(screen.getByRole("button", { name: "Red" }));
     expect(runSpy).toHaveBeenCalledTimes(1);
   });
