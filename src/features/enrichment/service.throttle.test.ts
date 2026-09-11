@@ -136,7 +136,11 @@ describe("runEnrichment rate limiting", () => {
 
     const result = await run(
       org.id,
-      stub((id) => ({ provider: id, kind: "unsupported", message: "No usable lookup identifier" })),
+      stub((id) => ({
+        provider: id,
+        kind: "unsupported",
+        message: "Nenhum identificador utilizável para busca",
+      })),
     );
     expect(result.ok === false && result.error.id).toBe("E_ENRICH_011");
     expect(result.ok === false && result.error.context?.earliestRetryIso).toBe(null);

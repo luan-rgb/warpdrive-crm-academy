@@ -35,10 +35,10 @@ const REQUEST_TIMEOUT_MS = 5_000;
 const FIRST_BACKOFF_MS = 500;
 const MAX_BACKOFF_MS = 2_000;
 
-const NO_IDENTIFIER = "No usable lookup identifier";
-const REQUEST_TIMED_OUT = "Provider did not answer in time";
-const NETWORK_FAILURE = "Provider request failed";
-const UNREADABLE_BODY = "Provider returned an unreadable response";
+const NO_IDENTIFIER = "Nenhum identificador utilizável para busca";
+const REQUEST_TIMED_OUT = "O provedor não respondeu a tempo";
+const NETWORK_FAILURE = "A requisição ao provedor falhou";
+const UNREADABLE_BODY = "O provedor retornou uma resposta ilegível";
 
 export type SleepFn = (ms: number, signal: AbortSignal) => Promise<void>;
 

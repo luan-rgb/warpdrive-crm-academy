@@ -41,7 +41,7 @@ describe("getprospectProvider transport failures", () => {
     globalThis.fetch = vi.fn(() => Promise.reject(timedOut));
     const out = await getprospectProvider.matchPerson(PERSON, API_KEY, SIGNAL);
     expect(out.kind).toBe("timeout");
-    expect(out.message ?? "").toContain("timed out");
+    expect(out.message ?? "").toContain("demorou demais");
   });
 
   it("lets an AbortError propagate instead of reporting a miss", async () => {

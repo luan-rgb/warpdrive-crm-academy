@@ -94,13 +94,14 @@ function leftOut(provider: ProviderView, now: Date): ProviderOutcome {
     return {
       provider: provider.provider,
       kind: "key_unreadable",
-      message: "Key could not be read",
+      message: "A chave não pôde ser lida",
     };
   }
   return {
     provider: provider.provider,
     kind: "skipped",
-    message: provider.throttleReason === "quota" ? "Out of credits" : "Rate limit reached",
+    message:
+      provider.throttleReason === "quota" ? "Créditos esgotados" : "Limite de requisições atingido",
     retryAfterIso: provider.throttledUntil?.toISOString(),
   };
 }

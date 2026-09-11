@@ -14,7 +14,7 @@ const ENTITLEMENT_HINTS = [
   "not accessible to your plan",
   "not available on your plan",
 ];
-const MESSAGE_NOT_ENTITLED = "Provider plan does not include this lookup";
+const MESSAGE_NOT_ENTITLED = "O plano do provedor não inclui essa busca";
 
 function matches(lowered: string, hints: readonly string[]): boolean {
   return hints.some((hint) => lowered.includes(hint));
@@ -69,13 +69,13 @@ export function classifyStatus(
     if (matches(lowered, ENTITLEMENT_HINTS)) {
       return { kind: "not_entitled", message: MESSAGE_NOT_ENTITLED };
     }
-    return { kind: "auth", message: "API key was rejected" };
+    return { kind: "auth", message: "A chave de API foi rejeitada" };
   }
 
   if (status === 429) {
     return {
       kind: "throttled",
-      message: "Rate limit reached",
+      message: "Limite de requisições atingido",
       retryAfterIso:
         parseRetryAfter(headers.get("retry-after"), now) ??
         new Date(now.getTime() + THROTTLE_FALLBACK_MS).toISOString(),
@@ -92,13 +92,13 @@ export function classifyStatus(
 
   // Message names the status only. The body can echo request headers, and an API key must never
   // reach a log line, a run row, or the dialog footer.
-  return { kind: "provider_error", message: `Provider returned ${status}` };
+  return { kind: "provider_error", message: `O provedor retornou ${status}` };
 }
 
 function quota(now: Date): StatusClassification {
   return {
     kind: "quota",
-    message: "Out of credits",
+    message: "Créditos esgotados",
     retryAfterIso: new Date(now.getTime() + QUOTA_COOLDOWN_MS).toISOString(),
   };
 }

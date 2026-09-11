@@ -17,10 +17,10 @@ const EMAIL_LOOKUP_PATH = "/public/v1/email/lookup";
 const LINKEDIN_CONTACT_PATH = "/public/v1/insights/contact";
 const COMPANY_SEARCH_PATH = "/public/v1/insights/companies";
 const COMPANY_PAGE_SIZE = "1";
-const EMAIL_MISS = "GetProspect does not hold that address";
-const LINKEDIN_MISS = "No contact for that LinkedIn profile";
-const MESSAGE_TIMEOUT = "Provider timed out";
-const MESSAGE_UNREACHABLE = "Provider was unreachable";
+const EMAIL_MISS = "O GetProspect não tem esse endereço";
+const LINKEDIN_MISS = "Nenhum contato para esse perfil do LinkedIn";
+const MESSAGE_TIMEOUT = "O provedor demorou demais para responder";
+const MESSAGE_UNREACHABLE = "O provedor estava inacessível";
 // Documented as "entity not found" on the insights and lookup endpoints, so a miss, not an outage.
 const NOT_FOUND = 404;
 
@@ -145,7 +145,7 @@ async function call(
     try {
       return ok(JSON.parse(text) as unknown);
     } catch {
-      return err(outcome("provider_error", "Response was not readable"));
+      return err(outcome("provider_error", "A resposta não pôde ser lida"));
     }
   } catch (error) {
     // An abort is the caller cancelling and is rethrown. AbortSignal.timeout rejects with a
@@ -174,13 +174,13 @@ function emailFinderParams(input: PersonLookup): Result<URLSearchParams, string>
   else if (first !== undefined && last !== undefined) {
     params.set("first_name", first);
     params.set("last_name", last);
-  } else return err("a full name");
+  } else return err("um nome completo");
 
   const domain = pickString(input.companyDomain);
   const name = pickString(input.companyName);
   if (domain !== undefined) params.set("domain", domain);
   else if (name !== undefined) params.set("company", name);
-  else return err("a company domain or company name");
+  else return err("um domínio ou nome de empresa");
   return ok(params);
 }
 
@@ -214,12 +214,15 @@ async function matchPerson(
   }
   const params = emailFinderParams(input);
   if (!params.ok) {
-    return outcome("no_match", missed ?? `GetProspect needs ${params.error} to find an email`);
+    return outcome(
+      "no_match",
+      missed ?? `O GetProspect precisa de ${params.error} para encontrar um email`,
+    );
   }
   const query = params.value.toString();
   const res = await call(`${BASE_URL}${EMAIL_FINDER_PATH}?${query}`, apiKey, signal);
   if (!res.ok) return res.error;
-  return found(personFromEmail(res.value), "No email found for that name and company");
+  return found(personFromEmail(res.value), "Nenhum email encontrado para esse nome e empresa");
 }
 
 async function matchOrganization(
@@ -236,12 +239,12 @@ async function matchOrganization(
         ? { name: { included: [name] } }
         : undefined;
   if (filter === undefined) {
-    return outcome("no_match", "GetProspect needs a company domain or name to search");
+    return outcome("no_match", "O GetProspect precisa de um domínio ou nome de empresa para buscar");
   }
   const query = new URLSearchParams({ pageSize: COMPANY_PAGE_SIZE }).toString();
   const res = await call(`${BASE_URL}${COMPANY_SEARCH_PATH}?${query}`, apiKey, signal, filter);
   if (!res.ok) return res.error;
-  return found(orgFromCompany(res.value), "No company matched");
+  return found(orgFromCompany(res.value), "Nenhuma empresa correspondente");
 }
 
 export const getprospectProvider: EnrichmentProvider = {

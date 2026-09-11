@@ -102,7 +102,7 @@ describe("getprospectProvider", () => {
         SIGNAL,
       );
       expect(out.kind).toBe("no_match");
-      expect(out.message ?? "").toContain("name");
+      expect(out.message ?? "").toContain("nome");
       expect(mock).not.toHaveBeenCalled();
     });
 
@@ -114,7 +114,7 @@ describe("getprospectProvider", () => {
         SIGNAL,
       );
       expect(out.kind).toBe("no_match");
-      expect(out.message ?? "").toContain("company");
+      expect(out.message ?? "").toContain("empresa");
       expect(mock).not.toHaveBeenCalled();
     });
 
@@ -268,7 +268,7 @@ describe("getprospectProvider", () => {
         SIGNAL,
       );
       expect(out.kind).toBe("no_match");
-      expect(out.message ?? "").toContain("domain");
+      expect(out.message ?? "").toContain("domínio");
       expect(mock).not.toHaveBeenCalled();
     });
   });

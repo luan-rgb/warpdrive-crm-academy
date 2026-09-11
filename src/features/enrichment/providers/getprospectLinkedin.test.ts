@@ -113,6 +113,6 @@ describe("getprospect matchPerson by LinkedIn url", () => {
     const out = await run({ email: EMAIL, linkedinUrl: LINKEDIN_URL });
     expect(mock).toHaveBeenCalledTimes(2);
     expect(out.kind).toBe("no_match");
-    expect(out.message).toBe("GetProspect does not hold that address");
+    expect(out.message).toBe("O GetProspect não tem esse endereço");
   });
 });

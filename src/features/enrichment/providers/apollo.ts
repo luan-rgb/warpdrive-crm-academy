@@ -20,9 +20,9 @@ const DAY_MS = 24 * HOUR_MS;
 
 // Messages reach the dialog footer and the run row, so they name the failure and nothing else:
 // never the key, the request headers, or the response body.
-const MESSAGE_BAD_BODY = "Provider response was not readable";
-const MESSAGE_TIMEOUT = "Provider timed out";
-const MESSAGE_UNREACHABLE = "Provider was unreachable";
+const MESSAGE_BAD_BODY = "A resposta do provedor não pôde ser lida";
+const MESSAGE_TIMEOUT = "O provedor demorou demais para responder";
+const MESSAGE_UNREACHABLE = "O provedor estava inacessível";
 
 type Fields = Record<string, string | number>;
 type Json = Record<string, unknown>;
