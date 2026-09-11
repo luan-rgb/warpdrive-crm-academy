@@ -7,7 +7,7 @@ function hasCents(v: string): boolean {
 
 export function goalNumberText(v: string, metric: Goal["metric"]): string {
   const fraction = metric === "count" ? 0 : hasCents(v) ? 2 : 0;
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: fraction,
     maximumFractionDigits: fraction,
   }).format(Number(v));

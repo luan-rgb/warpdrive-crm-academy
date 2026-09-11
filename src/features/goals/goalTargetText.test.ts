@@ -11,7 +11,7 @@ describe("goalNumberText", () => {
   });
 
   it("groups a large count", () => {
-    expect(goalNumberText("2000.00", "count")).toBe("2,000");
+    expect(goalNumberText("2000.00", "count")).toBe("2.000");
   });
 
   it("rounds a count that somehow carries cents", () => {
@@ -19,11 +19,11 @@ describe("goalNumberText", () => {
   });
 
   it("drops empty cents from a value target", () => {
-    expect(goalNumberText("20000.00", "value")).toBe("20,000");
+    expect(goalNumberText("20000.00", "value")).toBe("20.000");
   });
 
   it("keeps real cents on a value target", () => {
-    expect(goalNumberText("1500.50", "value")).toBe("1,500.50");
+    expect(goalNumberText("1500.50", "value")).toBe("1.500,50");
   });
 });
 

@@ -113,15 +113,15 @@ it("shows a running subtotal/tax/total that updates when a line's tax rate chang
     />,
   );
   // base: 2 * 100.00 = 200.00, tax rate starts at 0
-  expect(screen.getByTestId("create-invoice-subtotal")).toHaveTextContent("$200.00");
-  expect(screen.getByTestId("create-invoice-tax-total")).toHaveTextContent("$0.00");
+  expect(screen.getByTestId("create-invoice-subtotal")).toHaveTextContent("US$ 200,00");
+  expect(screen.getByTestId("create-invoice-tax-total")).toHaveTextContent("US$ 0,00");
 
   const taxInput = screen.getByLabelText("Imposto % de Widget");
   fireEvent.change(taxInput, { target: { value: "10" } });
 
   await waitFor(() => {
-    expect(screen.getByTestId("create-invoice-tax-total")).toHaveTextContent("$20.00");
-    expect(screen.getByTestId("create-invoice-total")).toHaveTextContent("$220.00");
+    expect(screen.getByTestId("create-invoice-tax-total")).toHaveTextContent("US$ 20,00");
+    expect(screen.getByTestId("create-invoice-total")).toHaveTextContent("US$ 220,00");
   });
 });
 

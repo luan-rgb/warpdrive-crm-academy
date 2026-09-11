@@ -19,7 +19,7 @@ import {
 } from "./actions";
 
 function money(v: string | number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,

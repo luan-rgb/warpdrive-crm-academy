@@ -11,7 +11,7 @@ import { PrintButton } from "./PrintButton";
 export const metadata: Metadata = { title: "Fatura" };
 
 function money(v: string, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,

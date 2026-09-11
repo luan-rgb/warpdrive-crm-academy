@@ -17,7 +17,7 @@ import { CreateInvoiceDialog } from "./CreateInvoiceDialog";
 import { InvoiceEditDialog } from "./InvoiceEditDialog";
 
 function money(v: string, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,

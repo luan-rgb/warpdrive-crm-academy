@@ -48,7 +48,7 @@ const monetary: CustomFieldDef = {
 describe("CustomFieldDetail monetary currency", () => {
   it("formats a monetary value in the passed base currency, not always USD", () => {
     render(<CustomFieldDetail def={monetary} value={1000} currency="EUR" />);
-    const text = screen.getByText(/1,000/).textContent ?? "";
+    const text = screen.getByText(/1\.000/).textContent ?? "";
     expect(text).toContain("€");
     expect(text).not.toContain("$");
   });

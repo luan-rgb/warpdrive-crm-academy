@@ -2,20 +2,20 @@ import { describe, expect, it } from "vitest";
 import { formatCurrency } from "./formatCurrency";
 
 describe("formatCurrency", () => {
-  it("formats a decimal string as a whole-dollar amount with a thousands separator", () => {
-    expect(formatCurrency("25000.00")).toBe("R$25,000");
+  it("formats a decimal string as a whole-currency amount with a thousands separator", () => {
+    expect(formatCurrency("25000.00")).toBe("R$ 25.000");
   });
 
-  it("rounds fractional cents to whole dollars", () => {
-    expect(formatCurrency("1234567.89")).toBe("R$1,234,568");
+  it("rounds fractional cents to whole currency", () => {
+    expect(formatCurrency("1234567.89")).toBe("R$ 1.234.568");
   });
 
   it("formats zero", () => {
-    expect(formatCurrency("0")).toBe("R$0");
+    expect(formatCurrency("0")).toBe("R$ 0");
   });
 
   it("accepts a number", () => {
-    expect(formatCurrency(4200)).toBe("R$4,200");
+    expect(formatCurrency(4200)).toBe("R$ 4.200");
   });
 
   it("returns empty string for non-numeric input", () => {
@@ -23,6 +23,6 @@ describe("formatCurrency", () => {
   });
 
   it("honors a non-default currency", () => {
-    expect(formatCurrency("1000", "EUR")).toBe("€1,000");
+    expect(formatCurrency("1000", "EUR")).toBe("€ 1.000");
   });
 });

@@ -14,7 +14,7 @@ import { readCsrfToken } from "@/utils/csrfCookie";
 import { addDealProductAction, removeDealProductAction, updateDealProductAction } from "./actions";
 
 function money(v: string | number): string {
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Number(v));

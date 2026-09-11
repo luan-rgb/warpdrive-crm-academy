@@ -162,7 +162,7 @@ describe("stats widgets", () => {
     );
     expect(screen.getByText("Bad timing")).toBeInTheDocument();
     expect(screen.getByText("(4)")).toBeInTheDocument();
-    expect(screen.getByText("$43,000")).toBeInTheDocument();
+    expect(screen.getByText("US$ 43.000")).toBeInTheDocument();
   });
 
   // Count and money sat in one justify-between row, so four rows put their counts at four
@@ -182,7 +182,7 @@ describe("stats widgets", () => {
     const count = screen.getByText("10");
     expect(count.className).toContain("text-right");
     expect(count.className).toContain("tabular-nums");
-    const value = screen.getByText("$418,500");
+    const value = screen.getByText("US$ 418.500");
     expect(value.className).toContain("text-right");
     expect(value.className).toContain("tabular-nums");
     expect(value.className).not.toContain("text-muted-foreground");

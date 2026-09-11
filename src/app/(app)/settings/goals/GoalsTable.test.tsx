@@ -45,6 +45,6 @@ describe("GoalsTable", () => {
         onEdit={() => {}}
       />,
     );
-    expect(screen.getByText("20,000")).toBeInTheDocument();
+    expect(screen.getByText("20.000")).toBeInTheDocument();
   });
 });

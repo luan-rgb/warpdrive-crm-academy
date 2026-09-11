@@ -18,5 +18,5 @@ export function trendTooltipValue(
   const amount = money(String(value ?? 0), currency);
   const count = countOf(datum);
   if (count === null) return amount;
-  return `${amount} from ${count} ${count === 1 ? "deal" : "deals"}`;
+  return `${amount} de ${count} ${count === 1 ? "negócio" : "negócios"}`;
 }

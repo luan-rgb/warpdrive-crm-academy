@@ -11,7 +11,7 @@ import { readCsrfToken } from "@/utils/csrfCookie";
 const S = SETTINGS_STRINGS;
 
 function priceText(price: string): string {
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Number(price));

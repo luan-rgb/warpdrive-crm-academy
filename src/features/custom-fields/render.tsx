@@ -17,7 +17,7 @@ function labelFor(def: CustomFieldDef, id: string): string {
 // Callers pass the tenant base currency (settings.base_currency via readBaseCurrency);
 // DEFAULT_BASE_CURRENCY is only the final fallback when a caller has none.
 function formatMoney(n: number, currency = DEFAULT_BASE_CURRENCY): string {
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency,
   }).format(n);

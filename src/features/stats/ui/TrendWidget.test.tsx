@@ -23,20 +23,20 @@ describe("WonTrendWidget", () => {
     render(<WonTrendWidget data={DATA} currency="USD" />);
     const table = screen.getByRole("table", { name: STRINGS.dashboard.trendTableCaption });
     expect(within(table).getAllByRole("row")).toHaveLength(DATA.length + 1);
-    expect(within(table).getByText("$1,500")).toBeInTheDocument();
-    expect(within(table).getByText("$2,000")).toBeInTheDocument();
+    expect(within(table).getByText("US$ 1.500")).toBeInTheDocument();
+    expect(within(table).getByText("US$ 2.000")).toBeInTheDocument();
   });
 
   it("names each month in words rather than leaving a raw YYYY-MM key", () => {
     render(<WonTrendWidget data={DATA} currency="USD" />);
-    expect(screen.getByRole("row", { name: /Jan 2026/ })).toBeInTheDocument();
-    expect(screen.getByRole("row", { name: /Mar 2026/ })).toBeInTheDocument();
+    expect(screen.getByRole("row", { name: /jan\. de 2026/ })).toBeInTheDocument();
+    expect(screen.getByRole("row", { name: /mar\. de 2026/ })).toBeInTheDocument();
   });
 
   // A gap in a line reads as missing data; a zero reads as zero. The table has to say the same.
   it("keeps a month with no wins as a zero row instead of dropping it", () => {
     render(<WonTrendWidget data={DATA} currency="USD" />);
-    const february = screen.getByRole("row", { name: /Feb 2026/ });
+    const february = screen.getByRole("row", { name: /fev\. de 2026/ });
     expect(within(february).getByText("0")).toBeInTheDocument();
   });
 

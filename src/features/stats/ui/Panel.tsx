@@ -53,7 +53,7 @@ export function durationDays(v: number): string {
 // reader west of Greenwich.
 export function monthLabel(month: string): string {
   const at = Date.UTC(Number(month.slice(0, 4)), Number(month.slice(5, 7)) - 1, 1);
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat("pt-BR", {
     month: "short",
     year: "numeric",
     timeZone: "UTC",
@@ -61,7 +61,7 @@ export function monthLabel(month: string): string {
 }
 
 export function money(v: string, currency: string): string {
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency,
     maximumFractionDigits: 0,

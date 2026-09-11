@@ -131,7 +131,7 @@ it("renders Summary as PD's action list (no field-label column), other sections 
   const summary = within(screen.getByRole("region", { name: "Resumo" }));
   expect(summary.queryByText("Value")).not.toBeInTheDocument();
   expect(summary.queryByText("Owner")).not.toBeInTheDocument();
-  expect(summary.getByText("$1,000")).toBeInTheDocument();
+  expect(summary.getByText("US$ 1.000")).toBeInTheDocument();
   expect(summary.queryAllByTestId("field-row")).toHaveLength(0);
   // Every other section keeps the right-aligned label default.
   expectLabelAlign("Organização", "Deal segment", "right");

@@ -2,7 +2,7 @@
 // Wiring test: a widget that no page renders is not shipped. This mounts the Performance page
 // with a full payload and asserts the trend and the funnel's basis actually reach the screen.
 import "@testing-library/jest-dom/vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(cleanup);
@@ -66,10 +66,9 @@ import { Dashboard } from "./Dashboard";
 describe("Performance page widgets", () => {
   it("renders the won-deal trend with its numbers in an accessible table", () => {
     render(<Dashboard today="2026-03-01" canViewOthers currency="USD" />);
-    expect(
-      screen.getByRole("table", { name: STRINGS.dashboard.trendTableCaption }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("row", { name: /Jan 2026/ })).toBeInTheDocument();
+    const table = screen.getByRole("table", { name: STRINGS.dashboard.trendTableCaption });
+    expect(table).toBeInTheDocument();
+    expect(within(table).getByRole("row", { name: /jan\. de 2026/ })).toBeInTheDocument();
   });
 
   it("states the funnel's basis using the owner scope the server resolved", () => {

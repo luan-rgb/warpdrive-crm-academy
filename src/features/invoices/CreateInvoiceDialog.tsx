@@ -23,7 +23,7 @@ function formatAddress(address: Record<string, unknown> | null): string {
 }
 
 function money(v: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,
