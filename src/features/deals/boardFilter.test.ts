@@ -14,7 +14,7 @@ describe("distinctBoardOwners", () => {
     expect(owners).toEqual([
       { ownerId: "u2", name: "Ada King" },
       { ownerId: "u1", name: "Bob Lee" },
-      { ownerId: "u3", name: "Unknown" },
+      { ownerId: "u3", name: "Desconhecido" },
     ]);
   });
 

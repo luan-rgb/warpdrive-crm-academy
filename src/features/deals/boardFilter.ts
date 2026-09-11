@@ -2,7 +2,7 @@
 // The board already carries ownerId + ownerName on every card, so the distinct owner set and the
 // per-owner narrowing are derived client-side from the loaded cards.
 
-const UNKNOWN_OWNER = "Unknown";
+const UNKNOWN_OWNER = "Desconhecido";
 
 export interface BoardOwner {
   ownerId: string;

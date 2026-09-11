@@ -28,7 +28,7 @@ const COMPACT_TRIGGER_CLASSNAME =
 const TOOL_BUTTON_CLASSNAME =
   "size-10 p-0 text-muted-foreground hover:bg-accent hover:text-accent-foreground";
 const FONT_FAMILY_OPTIONS: SelectOption[] = [
-  { label: "Default", value: "" },
+  { label: "Padrão", value: "" },
   { label: "Arial", value: "Arial, sans-serif" },
   { label: "Georgia", value: "Georgia, serif" },
   { label: "Courier New", value: "'Courier New', monospace" },
@@ -36,7 +36,7 @@ const FONT_FAMILY_OPTIONS: SelectOption[] = [
   { label: "Trebuchet MS", value: "'Trebuchet MS', sans-serif" },
 ];
 const FONT_SIZE_OPTIONS: SelectOption[] = [
-  { label: "Default", value: "" },
+  { label: "Padrão", value: "" },
   ...[10, 12, 14, 16, 18, 24, 32].map((size) => ({ label: String(size), value: `${size}px` })),
 ];
 

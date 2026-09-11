@@ -66,7 +66,7 @@ function RowArchiveButton({
       onClick={() => void run()}
       className={`${ROW_ACTION_BUTTON} self-start`}
     >
-      {isArchive ? "Unarchive" : "Archive"}
+      {isArchive ? "Desarquivar" : "Arquivar"}
     </button>
   );
 }

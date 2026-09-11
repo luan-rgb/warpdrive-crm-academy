@@ -201,7 +201,7 @@ export function ThreadList({
                   onClick={bulkArchive}
                   className="rounded-md border px-3 py-1 text-sm transition-transform hover:bg-accent active:scale-[0.96] disabled:opacity-50"
                 >
-                  {folder === "archive" ? "Unarchive" : "Archive"}
+                  {folder === "archive" ? "Desarquivar" : "Arquivar"}
                 </button>
               )}
               <button

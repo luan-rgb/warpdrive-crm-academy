@@ -74,7 +74,7 @@ it("reports the error id when archiving is denied (no silent no-op)", async () =
   const onArchiveDone = vi.fn();
   render(<ThreadRow {...props} onArchiveDone={onArchiveDone} />);
 
-  screen.getByRole("button", { name: "Archive" }).click();
+  screen.getByRole("button", { name: "Arquivar" }).click();
 
   await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
   expect(onArchiveDone).not.toHaveBeenCalled();

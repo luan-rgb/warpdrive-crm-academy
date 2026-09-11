@@ -35,11 +35,11 @@ it("renders every folder as a link carrying ?folder= and marks the one from ?fol
   pathname = "/inbox";
   searchParamsStr = "folder=sent";
   render(<InboxFolderRail newEmailEnabled={false} />);
-  expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: /Caixa de entrada/ })).toHaveAttribute(
     "href",
     "/inbox?folder=inbox",
   );
-  const sent = screen.getByRole("link", { name: /Sent/ });
+  const sent = screen.getByRole("link", { name: /Enviados/ });
   expect(sent).toHaveAttribute("href", "/inbox?folder=sent");
   expect(sent).toHaveAttribute("aria-current", "page");
   expect(screen.queryByText(/soon/)).toBeNull();
@@ -49,16 +49,16 @@ it("defaults the list route with no ?folder= to Inbox active", () => {
   pathname = "/inbox";
   searchParamsStr = "";
   render(<InboxFolderRail newEmailEnabled={false} />);
-  expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
+  expect(screen.getByRole("link", { name: /Caixa de entrada/ })).toHaveAttribute("aria-current", "page");
 });
 
 it("keeps Inbox active on the reader route (a thread is open)", () => {
   pathname = "/inbox/thread-abc123";
   searchParamsStr = "";
   render(<InboxFolderRail newEmailEnabled={true} />);
-  expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
+  expect(screen.getByRole("link", { name: /Caixa de entrada/ })).toHaveAttribute("aria-current", "page");
   // No stray folder claims the highlight on the reader route.
-  expect(screen.getByRole("link", { name: /Sent/ })).not.toHaveAttribute("aria-current");
+  expect(screen.getByRole("link", { name: /Enviados/ })).not.toHaveAttribute("aria-current");
 });
 
 it("marks New email active on the compose route and leaves every folder inactive", () => {
@@ -66,7 +66,7 @@ it("marks New email active on the compose route and leaves every folder inactive
   searchParamsStr = "";
   render(<InboxFolderRail newEmailEnabled={true} />);
   expect(screen.getByRole("link", { name: /Novo e-mail/ })).toHaveAttribute("aria-current", "page");
-  expect(screen.getByRole("link", { name: /Inbox/ })).not.toHaveAttribute("aria-current");
+  expect(screen.getByRole("link", { name: /Caixa de entrada/ })).not.toHaveAttribute("aria-current");
 });
 
 it("New email is a disabled, non-navigating button without a mailbox", () => {
@@ -100,7 +100,7 @@ it("re-derives the highlight on navigation without remounting the nav element", 
   searchParamsStr = "folder=inbox";
   const { rerender } = render(<InboxFolderRail newEmailEnabled={true} />);
   const navBefore = screen.getByRole("navigation", { name: "Pastas de e-mail" });
-  expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
+  expect(screen.getByRole("link", { name: /Caixa de entrada/ })).toHaveAttribute("aria-current", "page");
 
   // Simulate a client navigation into the reader: the persistent layout keeps the rail mounted,
   // so the same nav node stays in the DOM while its highlight updates from the new pathname.
@@ -109,5 +109,5 @@ it("re-derives the highlight on navigation without remounting the nav element", 
   rerender(<InboxFolderRail newEmailEnabled={true} />);
   const navAfter = screen.getByRole("navigation", { name: "Pastas de e-mail" });
   expect(navAfter).toBe(navBefore);
-  expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
+  expect(screen.getByRole("link", { name: /Caixa de entrada/ })).toHaveAttribute("aria-current", "page");
 });

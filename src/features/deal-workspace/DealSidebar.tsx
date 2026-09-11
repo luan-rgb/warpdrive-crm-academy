@@ -259,13 +259,13 @@ export function DealSidebar({
         title={sections.overview}
         headerActions={sectionActions(sections.overview, [dealFieldsItem])}
       >
-        <FieldRow label="Deal age">
-          <span className="tabular-nums">{overview.ageDays}</span> days
+        <FieldRow label="Idade do negócio">
+          <span className="tabular-nums">{overview.ageDays}</span> dias
         </FieldRow>
-        <FieldRow label="Inactive">
-          <span className="tabular-nums">{overview.inactiveDays}</span> days
+        <FieldRow label="Inatividade">
+          <span className="tabular-nums">{overview.inactiveDays}</span> dias
         </FieldRow>
-        <FieldRow label="Created">
+        <FieldRow label="Criado em">
           <span className="tabular-nums">{deal.createdAt.toLocaleDateString()}</span>
         </FieldRow>
       </CollapsibleSection>

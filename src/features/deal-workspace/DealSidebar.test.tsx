@@ -106,7 +106,7 @@ it("opens every section by default (section content is visible without a click)"
   // Source content (defaults to collapsed before this change).
   expect(screen.getByText("ID do canal")).toBeInTheDocument();
   // Overview content (also defaulted collapsed).
-  expect(screen.getByText("Deal age")).toBeInTheDocument();
+  expect(screen.getByText("Idade do negócio")).toBeInTheDocument();
 });
 
 it("omits the Summary section when summary is hidden", () => {

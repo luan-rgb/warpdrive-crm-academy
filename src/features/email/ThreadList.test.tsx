@@ -142,7 +142,7 @@ describe("ThreadList", () => {
 
   it("shows an Archive affordance for inbox rows and no filter chips off-inbox", () => {
     const { rerender } = render(<ThreadList folder="inbox" />);
-    expect(screen.getByRole("button", { name: "Archive" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Arquivar" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Todos" })).toBeInTheDocument();
     rerender(<ThreadList folder="sent" />);
     expect(screen.queryByRole("button", { name: "Todos" })).toBeNull();
@@ -220,7 +220,7 @@ describe("ThreadList", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
-    fireEvent.click(within(bulkBar).getByRole("button", { name: "Archive" }));
+    fireEvent.click(within(bulkBar).getByRole("button", { name: "Arquivar" }));
 
     await vi.waitFor(() => expect(archiveMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
     await vi.waitFor(() => expect(invalidateInboxList).toHaveBeenCalled());
@@ -261,7 +261,7 @@ describe("ThreadList", () => {
     fireEvent.click(markReadButton);
 
     expect(markReadButton).toBeDisabled();
-    expect(within(bulkBar).getByRole("button", { name: "Archive" })).toBeDisabled();
+    expect(within(bulkBar).getByRole("button", { name: "Arquivar" })).toBeDisabled();
     expect(within(bulkBar).getByRole("button", { name: "Mark unread" })).toBeDisabled();
 
     resolveMarkRead({ ok: true, value: { threadId: "t1" } });

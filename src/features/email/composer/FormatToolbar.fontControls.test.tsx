@@ -120,7 +120,7 @@ describe("FormatToolbar – compact icon-style font triggers (PD parity)", () =>
     const { FormatToolbar } = await import("./FormatToolbar");
     render(<FormatToolbar editor={makeFullStubEditor(vi.fn())} />);
     const trigger = screen.getByRole("combobox", { name: "Font family" });
-    expect(trigger).not.toHaveTextContent("Default");
+    expect(trigger).not.toHaveTextContent("Padrão");
     expect(trigger.querySelector("svg")).not.toBeNull();
   });
 
@@ -128,7 +128,7 @@ describe("FormatToolbar – compact icon-style font triggers (PD parity)", () =>
     const { FormatToolbar } = await import("./FormatToolbar");
     render(<FormatToolbar editor={makeFullStubEditor(vi.fn())} />);
     const trigger = screen.getByRole("combobox", { name: "Font size" });
-    expect(trigger).not.toHaveTextContent("Default");
+    expect(trigger).not.toHaveTextContent("Padrão");
     expect(trigger.querySelector("svg")).not.toBeNull();
   });
 

@@ -9,9 +9,9 @@ export function parseFolder(raw: string | null | undefined): FolderKey {
 }
 
 export const FOLDER_LABELS: Record<FolderKey, string> = {
-  inbox: "Inbox",
-  drafts: "Drafts",
-  outbox: "Outbox",
-  sent: "Sent",
-  archive: "Archive",
+  inbox: "Caixa de entrada",
+  drafts: "Rascunhos",
+  outbox: "Caixa de saída",
+  sent: "Enviados",
+  archive: "Arquivados",
 };
