@@ -129,7 +129,7 @@ export function LeadsActionBar(props: LeadsActionBarProps): React.ReactNode {
                 props.onExport();
               }}
             >
-              Export leads
+              Exportar leads
             </button>
           )}
         </PopMenu>

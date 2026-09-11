@@ -152,7 +152,7 @@ export function LeadHeader({ lead }: { lead: LeadDetail }): React.ReactNode {
                   void del();
                 }}
               >
-                Delete lead
+                Excluir lead
               </button>
             )}
           </PopMenu>

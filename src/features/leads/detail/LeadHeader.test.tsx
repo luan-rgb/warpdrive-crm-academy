@@ -176,7 +176,7 @@ describe("LeadHeader error surfacing", () => {
     render(<LeadHeader lead={LEAD} />);
 
     await user.click(screen.getByRole("button", { name: "Mais ações do lead" }));
-    await user.click(screen.getByRole("menuitem", { name: "Delete lead" }));
+    await user.click(screen.getByRole("menuitem", { name: "Excluir lead" }));
 
     await waitFor(() => expect(bulkUpdateLeadsAction).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
@@ -194,7 +194,7 @@ describe("LeadHeader delete dismissal", () => {
     });
     render(ui);
     await user.click(screen.getByRole("button", { name: "Mais ações do lead" }));
-    await user.click(screen.getByRole("menuitem", { name: "Delete lead" }));
+    await user.click(screen.getByRole("menuitem", { name: "Excluir lead" }));
     await waitFor(() => expect(bulkUpdateLeadsAction).toHaveBeenCalledTimes(1));
   }
 
@@ -234,7 +234,7 @@ describe("LeadHeader delete dismissal", () => {
     render(<LeadHeader lead={LEAD} />);
 
     await user.click(screen.getByRole("button", { name: "Mais ações do lead" }));
-    await user.click(screen.getByRole("menuitem", { name: "Delete lead" }));
+    await user.click(screen.getByRole("menuitem", { name: "Excluir lead" }));
 
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
     expect(invalidateLeadList).not.toHaveBeenCalled();
