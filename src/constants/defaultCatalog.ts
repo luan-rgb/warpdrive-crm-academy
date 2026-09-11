@@ -6,8 +6,8 @@ import type { LabelColor, LabelTarget } from "./labelColors";
 // from here so production defaults and demo data never drift apart.
 
 export const DEFAULT_PIPELINE = {
-  name: "Sales Pipeline",
-  stages: ["Qualified", "Contact made", "Demo Scheduled", "Negotiation", "Closing"],
+  name: "Funil de vendas",
+  stages: ["Qualificado", "Contato feito", "Demonstração agendada", "Negociação", "Fechamento"],
 } as const;
 
 // Stage insert rows for a new pipeline's default stages (order = index). Shared by the first-run
@@ -21,27 +21,27 @@ export function buildDefaultStageValues(
 // [name, color] tuples; array index is the persisted `order`. Colors are LabelColor members.
 export const DEFAULT_LABELS: Record<LabelTarget, ReadonlyArray<readonly [string, LabelColor]>> = {
   person: [
-    ["Champion", "green"],
-    ["Decision Maker", "purple"],
-    ["Influencer", "blue"],
-    ["Blocker", "red"],
-    ["Gatekeeper", "orange"],
+    ["Defensor", "green"],
+    ["Decisor", "purple"],
+    ["Influenciador", "blue"],
+    ["Bloqueador", "red"],
+    ["Porteiro", "orange"],
   ],
   organization: [
     ["Enterprise", "purple"],
-    ["Mid-Market", "blue"],
-    ["SMB", "teal"],
+    ["Médio porte", "blue"],
+    ["Pequena empresa", "teal"],
     ["Startup", "green"],
   ],
   deal: [
-    ["Hot", "red"],
-    ["Warm", "orange"],
-    ["Cold", "blue"],
+    ["Quente", "red"],
+    ["Morno", "orange"],
+    ["Frio", "blue"],
   ],
   lead: [
-    ["New", "blue"],
-    ["Working", "orange"],
-    ["Qualified", "green"],
-    ["Disqualified", "gray"],
+    ["Novo", "blue"],
+    ["Em andamento", "orange"],
+    ["Qualificado", "green"],
+    ["Desqualificado", "gray"],
   ],
 };

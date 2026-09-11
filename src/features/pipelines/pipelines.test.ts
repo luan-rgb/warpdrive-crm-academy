@@ -161,14 +161,14 @@ describe("pipeline CRUD", () => {
       const p = await createPipelineWithStages(
         db,
         s,
-        { name: "Sales Pipeline", visibilityGroupId: null },
+        { name: "Funil de vendas", visibilityGroupId: null },
         new AbortController().signal,
       );
       expect(p.ok).toBe(true);
       if (p.ok !== true) return;
       const list = await listVisiblePipelines(db, s, new AbortController().signal);
       expect(list).toHaveLength(1);
-      expect(list[0]!.name).toBe("Sales Pipeline");
+      expect(list[0]!.name).toBe("Funil de vendas");
       expect(list[0]!.stages.map((st) => st.name)).toEqual([...DEFAULT_PIPELINE.stages]);
       expect(list[0]!.stages.map((st) => st.order)).toEqual([0, 1, 2, 3, 4]);
     });
