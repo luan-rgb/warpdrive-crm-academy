@@ -25,7 +25,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps): React.R
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body className="flex min-h-screen flex-col items-center justify-center gap-3 p-6 text-center font-sans">
         <h1 className="text-lg font-semibold">{STRINGS.errors.appCrashTitle}</h1>
         <p className="max-w-md text-sm text-muted-foreground">{STRINGS.errors.appCrashBody}</p>

@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }): React
   return (
     // suppressHydrationWarning: the inline script below adds/removes `dark` on <html> before
     // React hydrates, so the client class list legitimately differs from the server render.
-    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${inter.variable} antialiased`} suppressHydrationWarning>
       <body>
         {/* Runs before anything else in the body parses, so the theme is settled at first paint. */}
         <script
