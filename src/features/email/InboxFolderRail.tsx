@@ -49,7 +49,7 @@ export function InboxFolderRail({
           no-mailbox state renders a genuinely inert disabled button instead of a navigable
           link; only the enabled state navigates to the full-pane compose route. */}
       {newEmailEnabled ? (
-        <Tip label="Compose a new email">
+        <Tip label="Escrever novo email">
           <Link
             href="/inbox/compose"
             aria-current={composeActive ? "page" : undefined}

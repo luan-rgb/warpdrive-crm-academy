@@ -43,7 +43,7 @@ describe("renderNotificationEmail link", () => {
   });
 
   it("falls back to the app root when the row has no target", () => {
-    expect(render({ entityType: null, entityId: null }).text).toContain("Open:");
+    expect(render({ entityType: null, entityId: null }).text).toContain("Abrir:");
   });
 });
 
@@ -63,7 +63,7 @@ describe("renderNotificationEmail", () => {
       },
       "Jane",
     );
-    expect(out.subject).toContain("mentioned you");
+    expect(out.subject).toContain("mencionou você");
     expect(out.text).toContain("Jane");
     expect(out.html).toContain("<");
   });
@@ -83,7 +83,7 @@ describe("renderNotificationEmail", () => {
       },
       "Jane",
     );
-    expect(out.subject).toContain("Reminder");
+    expect(out.subject).toContain("Lembrete");
     expect(out.text).toContain("Call Acme");
   });
 

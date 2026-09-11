@@ -16,8 +16,8 @@ function escapeHtml(s: string): string {
 }
 
 function wrap(line: string, link: string): { text: string; html: string } {
-  const text = `${line}\n\nOpen: ${link}`;
-  const html = `<p>${escapeHtml(line)}</p><p><a href="${escapeHtml(link)}">Open in Warpdrive</a></p>`;
+  const text = `${line}\n\nAbrir: ${link}`;
+  const html = `<p>${escapeHtml(line)}</p><p><a href="${escapeHtml(link)}">Abrir no Warpdrive</a></p>`;
   return { text, html };
 }
 
@@ -37,59 +37,61 @@ export function renderNotificationEmail(
 
   switch (row.type) {
     case "mention":
-      subject = "Somebody mentioned you in Warpdrive";
-      line = `${recipientName}, somebody mentioned you.`;
+      subject = "Alguém mencionou você no Warpdrive";
+      line = `${recipientName}, alguém mencionou você.`;
       break;
     case "activity_assigned":
-      subject = "An activity was assigned to you in Warpdrive";
-      line = `${recipientName}, an activity was assigned to you.`;
+      subject = "Uma atividade foi atribuída a você no Warpdrive";
+      line = `${recipientName}, uma atividade foi atribuída a você.`;
       break;
     case "activity_reminder": {
       const activitySubject =
-        typeof row.payload.subject === "string" ? row.payload.subject : "activity";
-      subject = `Reminder: ${activitySubject} is due soon`;
-      line = `${recipientName}, your activity "${activitySubject}" is due soon.`;
+        typeof row.payload.subject === "string" ? row.payload.subject : "atividade";
+      subject = `Lembrete: ${activitySubject} vence em breve`;
+      line = `${recipientName}, sua atividade "${activitySubject}" vence em breve.`;
       break;
     }
     case "deal_followed_update":
-      subject = "A deal you follow has an update";
-      line = `${recipientName}, a deal you are following has been updated.`;
+      subject = "Um negócio que você segue teve uma atualização";
+      line = `${recipientName}, um negócio que você segue foi atualizado.`;
       break;
     case "email_open":
-      subject = "Your email was opened";
-      line = `${recipientName}, someone opened your email.`;
+      subject = "Seu email foi aberto";
+      line = `${recipientName}, alguém abriu seu email.`;
       break;
     case "email_click":
-      subject = "A link in your email was clicked";
-      line = `${recipientName}, someone clicked a link in your email.`;
+      subject = "Um link no seu email foi clicado";
+      line = `${recipientName}, alguém clicou em um link no seu email.`;
       break;
     case "deal_won":
-      subject = "Deal won!";
-      line = `${recipientName}, a deal was marked as won.`;
+      subject = "Negócio ganho!";
+      line = `${recipientName}, um negócio foi marcado como ganho.`;
       break;
     case "deal_lost":
-      subject = "Deal lost";
-      line = `${recipientName}, a deal was marked as lost.`;
+      subject = "Negócio perdido";
+      line = `${recipientName}, um negócio foi marcado como perdido.`;
       break;
     case "comment_reply":
-      subject = "Someone replied to your comment in Warpdrive";
-      line = `${recipientName}, somebody replied to your comment.`;
+      subject = "Alguém respondeu ao seu comentário no Warpdrive";
+      line = `${recipientName}, alguém respondeu ao seu comentário.`;
       break;
     case "automation":
-      subject = "Automation executed";
-      line = `${recipientName}, an automation rule ran on a deal.`;
+      subject = "Automação executada";
+      line = `${recipientName}, uma regra de automação rodou em um negócio.`;
       break;
     case "deal_email_received": {
       const emailSubject = typeof row.payload.subject === "string" ? row.payload.subject : null;
       subject =
-        emailSubject !== null ? `New email on a deal: ${emailSubject}` : "New email on a deal";
-      line = `${recipientName}, a new email arrived on a deal you follow.`;
+        emailSubject !== null
+          ? `Novo email em um negócio: ${emailSubject}`
+          : "Novo email em um negócio";
+      line = `${recipientName}, um novo email chegou em um negócio que você segue.`;
       break;
     }
     default: {
       // Unknown future type: render a generic fallback. Never throw (pg-boss resilience).
-      subject = "Warpdrive notification";
-      line = `${recipientName}, you have a new notification.`;
+      subject = "Notificação do Warpdrive";
+      line = `${recipientName}, você tem uma nova notificação.`;
     }
   }
 

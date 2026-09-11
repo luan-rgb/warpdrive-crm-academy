@@ -136,7 +136,7 @@ describe("ActivityCard", () => {
   it("completes the activity via the checkbox and notifies onChanged", async () => {
     const onChanged = vi.fn();
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={onChanged} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: /mark as done/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /marcar como concluída/i }));
     await waitFor(() => expect(completeActivityAction).toHaveBeenCalledTimes(1));
     expect(completeActivityAction.mock.calls[0]?.[0]).toMatchObject({ id: "a1", done: true });
     await waitFor(() => expect(onChanged).toHaveBeenCalled());
@@ -144,7 +144,7 @@ describe("ActivityCard", () => {
 
   it("optimistically flips the activity's done in the listForEntity cache (instant move)", async () => {
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={vi.fn()} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: /mark as done/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /marcar como concluída/i }));
     // The deal cache is updated immediately (before the server round-trip resolves).
     await waitFor(() => expect(setData).toHaveBeenCalled());
     const dealCall = setData.mock.calls.find(
@@ -164,7 +164,7 @@ describe("ActivityCard", () => {
       error: { id: "E_PERM_001" },
     } as never);
     render(<ActivityCard activity={makeActivity()} at={AT} onChanged={vi.fn()} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: /mark as done/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /marcar como concluída/i }));
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));
     // Rollback: the optimistic cache change is reconciled by refetching the deal list.
     expect(invalidate).toHaveBeenCalledWith(
@@ -198,7 +198,7 @@ describe("ActivityCard", () => {
 
   it("shows a reopen control, not a mark-as-done one, once done", () => {
     render(<ActivityCard activity={makeActivity({ done: true })} at={AT} />);
-    expect(screen.queryByRole("checkbox", { name: /mark as done/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("checkbox", { name: /marcar como concluída/i })).not.toBeInTheDocument();
   });
 
   it("renders location text and a note preview when present", () => {

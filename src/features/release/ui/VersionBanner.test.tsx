@@ -51,7 +51,7 @@ describe("VersionBanner", () => {
   it("renders the version pair when an update is available", () => {
     mockStatus({});
     render(<VersionBanner />);
-    expect(screen.getByText(/v1\.7\.0 is available/)).toBeTruthy();
+    expect(screen.getByText(/v1\.7\.0 está disponível/)).toBeTruthy();
     expect(screen.getByText(/1\.6\.0/)).toBeTruthy();
   });
 
@@ -66,7 +66,7 @@ describe("VersionBanner", () => {
     localStorage.setItem(RELEASE_DISMISS_KEY, "v1.7.0");
     mockStatus({ latest: "v1.8.0" });
     render(<VersionBanner />);
-    expect(screen.getByText(/v1\.8\.0 is available/)).toBeTruthy();
+    expect(screen.getByText(/v1\.8\.0 está disponível/)).toBeTruthy();
   });
 
   it("stores the dismissed version in localStorage when dismiss is clicked", () => {
@@ -80,7 +80,7 @@ describe("VersionBanner", () => {
     mockStatus({});
     render(<VersionBanner />);
     expect(screen.queryByText(/birthday suggestions/)).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: /release notes/i }));
+    fireEvent.click(screen.getByRole("button", { name: /notas de versão/i }));
     expect(screen.getByText(/birthday suggestions/)).toBeTruthy();
   });
 
@@ -90,7 +90,7 @@ describe("VersionBanner", () => {
     });
     mockStatus({});
     expect(() => render(<VersionBanner />)).not.toThrow();
-    expect(screen.getByText(/v1\.7\.0 is available/)).toBeTruthy();
+    expect(screen.getByText(/v1\.7\.0 está disponível/)).toBeTruthy();
   });
 
   it("dismisses without throwing when localStorage.setItem throws", () => {
@@ -100,6 +100,6 @@ describe("VersionBanner", () => {
     mockStatus({});
     render(<VersionBanner />);
     expect(() => fireEvent.click(screen.getByRole("button", { name: /dispensar/i }))).not.toThrow();
-    expect(screen.queryByText(/v1\.7\.0 is available/)).toBeNull();
+    expect(screen.queryByText(/v1\.7\.0 está disponível/)).toBeNull();
   });
 });

@@ -122,7 +122,7 @@ export function ActivityCard({
           checked={done}
           onCheckedChange={() => void toggle()}
           disabled={busy}
-          label={done ? "Reopen activity" : "Mark as done"}
+          label={done ? "Reabrir atividade" : "Marcar como concluída"}
           className="mt-0.5 rounded-full data-[state=checked]:border-success data-[state=checked]:bg-success data-[state=checked]:text-success-foreground"
         />
         <div className="min-w-0 flex-1">

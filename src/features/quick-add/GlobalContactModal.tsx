@@ -164,7 +164,7 @@ function ContactCreateModal({
 
   return (
     <EntityCreateDialogShell
-      title={kind === "person" ? "Add person" : "Add organization"}
+      title={kind === "person" ? "Adicionar pessoa" : "Adicionar organização"}
       bodyClassName="grid gap-6 md:grid-cols-[1.4fr_1fr]"
       error={error}
       pending={pending}

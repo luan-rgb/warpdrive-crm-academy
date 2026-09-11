@@ -141,7 +141,7 @@ describe("GlobalContactModal person (rich create, M1)", () => {
 
   it("uses the same full-width entity-create shell as Add lead", () => {
     render(<GlobalContactModal kind="person" onClose={noop} onCreated={noop} />);
-    expect(screen.getByRole("heading", { name: "Add person" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Adicionar pessoa" })).toBeInTheDocument();
     expect(screen.getByRole("dialog")).toHaveClass("max-w-3xl", "p-0");
     expect(screen.getByRole("button", { name: "Salvar" })).toBeInTheDocument();
   });

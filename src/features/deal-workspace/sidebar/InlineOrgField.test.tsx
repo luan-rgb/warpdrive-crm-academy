@@ -37,23 +37,23 @@ describe("InlineOrgField", () => {
       "/contacts/orgs/o1",
     );
     // The name is not itself a click-to-edit target; the editor appears only after the pencil.
-    expect(screen.queryByLabelText("Organization")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Edit Organization" }));
-    expect(screen.getByLabelText("Organization")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Organização")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Edit Organização" }));
+    expect(screen.getByLabelText("Organização")).toBeInTheDocument();
     // Dirty-gated: nothing chosen yet, so Save is disabled (PD: no autosave).
     expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   });
 
-  it("offers an 'Add organization' prompt for a deal with no org, opening the editor", () => {
+  it("offers an 'Adicionar organização' prompt for a deal with no org, opening the editor", () => {
     render(<InlineOrgField {...baseProps} org={null} />);
-    fireEvent.click(screen.getByRole("button", { name: "Add organization" }));
-    expect(screen.getByLabelText("Organization")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar organização" }));
+    expect(screen.getByLabelText("Organização")).toBeInTheDocument();
   });
 
   it("links the deal to a chosen existing org via updateDealAction (no create)", async () => {
     render(<InlineOrgField {...baseProps} org={{ id: "o1", name: "North Labs" }} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Organization" }));
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Union" } });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Organização" }));
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Union" } });
     fireEvent.mouseDown(screen.getByRole("button", { name: "Union Dynamics" }));
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(updateDealAction).toHaveBeenCalled());
@@ -64,10 +64,10 @@ describe("InlineOrgField", () => {
 
   it("creates a new org when typed, then links the deal to the new org's id", async () => {
     render(<InlineOrgField {...baseProps} org={null} orgOptions={[]} />);
-    fireEvent.click(screen.getByRole("button", { name: "Add organization" }));
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Brand New Co" } });
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar organização" }));
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Brand New Co" } });
     fireEvent.mouseDown(
-      screen.getByRole("button", { name: /Add 'Brand New Co' as new organization/ }),
+      screen.getByRole("button", { name: /Adicionar 'Brand New Co' como nova organização/ }),
     );
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() => expect(createOrgAction).toHaveBeenCalled());
@@ -80,8 +80,8 @@ describe("InlineOrgField", () => {
 
   it("Cancel discards the pending choice without calling any action", () => {
     render(<InlineOrgField {...baseProps} org={{ id: "o1", name: "North Labs" }} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Organization" }));
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "Union" } });
+    fireEvent.click(screen.getByRole("button", { name: "Edit Organização" }));
+    fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Union" } });
     fireEvent.mouseDown(screen.getByRole("button", { name: "Union Dynamics" }));
     fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(updateDealAction).not.toHaveBeenCalled();

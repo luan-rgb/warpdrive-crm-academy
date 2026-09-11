@@ -98,7 +98,7 @@ export function InlineOrgField({
 
   return (
     <InlineFieldShell
-      label="Organization"
+      label="Organização"
       editing={editing}
       onStartEdit={start}
       value={
@@ -111,15 +111,15 @@ export function InlineOrgField({
           </Link>
         ) : null
       }
-      emptyPrompt="Add organization"
+      emptyPrompt="Adicionar organização"
     >
       <div>
         <EntityCombobox
-          label="Organization"
+          label="Organização"
           hideLabel
           options={orgOptions}
           placeholder="Buscar ou adicionar uma organização"
-          createLabel={(q) => `Add '${q}' as new organization`}
+          createLabel={(q) => `Adicionar '${q}' como nova organização`}
           similarWarning="Já existe uma organização parecida."
           onSelectExisting={(id) => setDraft({ kind: "existing", id })}
           onCreateNew={(name) => setDraft({ kind: "new", name })}

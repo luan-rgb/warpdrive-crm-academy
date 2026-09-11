@@ -43,15 +43,15 @@ export function VersionBanner() {
   return (
     <div className="border-b bg-accent/60 px-4 py-2 text-sm text-accent-foreground">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3">
-        <span className="font-semibold">🎉 warpdrive {latest} is available</span>
-        <span className="text-muted-foreground">(current: {data.current})</span>
+        <span className="font-semibold">🎉 warpdrive {latest} está disponível</span>
+        <span className="text-muted-foreground">(atual: {data.current})</span>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setExpanded((e) => !e)}
-          aria-label={expanded ? "Hide release notes" : "Show release notes"}
+          aria-label={expanded ? "Ocultar notas de versão" : "Mostrar notas de versão"}
         >
-          {expanded ? "Hide release notes" : "Show release notes"}
+          {expanded ? "Ocultar notas de versão" : "Mostrar notas de versão"}
         </Button>
         <div className="ml-auto flex items-center gap-3">
           {data.releaseUrl !== null && (
@@ -61,7 +61,7 @@ export function VersionBanner() {
               rel="noopener noreferrer"
               className="underline-offset-2 hover:underline"
             >
-              View on GitHub →
+              Ver no GitHub →
             </a>
           )}
           <Button variant="ghost" size="icon" onClick={handleDismiss} aria-label="Dispensar">
