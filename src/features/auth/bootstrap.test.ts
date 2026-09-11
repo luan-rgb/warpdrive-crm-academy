@@ -158,7 +158,7 @@ describe("first-run bootstrap", () => {
     const r = await upsertUserOnLogin(h.db, ident(), SIG());
     if (r.ok === false) throw new Error("setup");
     const [g] = await h.db.select().from(visibilityGroups);
-    expect(g!.name).toBe("Everyone");
+    expect(g!.name).toBe("Todos");
     const members = await h.db.select().from(visibilityGroupMembers);
     expect(members).toHaveLength(1);
     const [u] = await h.db.select().from(users);

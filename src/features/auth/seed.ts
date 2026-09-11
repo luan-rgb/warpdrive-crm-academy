@@ -41,7 +41,7 @@ export async function ensureSeedData(tx: Tx, signal: AbortSignal): Promise<SeedH
     .values({ name: "Admin", flags: ADMIN_DEFAULT_FLAGS, isDefault: false })
     .onConflictDoNothing();
 
-  await tx.insert(visibilityGroups).values({ name: "Everyone" }).onConflictDoNothing();
+  await tx.insert(visibilityGroups).values({ name: "Todos" }).onConflictDoNothing();
 
   signal.throwIfAborted();
 
@@ -97,7 +97,7 @@ export async function readSeedHandles(tx: Tx, signal: AbortSignal): Promise<Seed
     sql`SELECT id FROM permission_sets WHERE name = 'Admin' AND is_default = false LIMIT 1`,
   );
   const everyoneRow = await tx.execute(
-    sql`SELECT id FROM visibility_groups WHERE name = 'Everyone' LIMIT 1`,
+    sql`SELECT id FROM visibility_groups WHERE name = 'Todos' LIMIT 1`,
   );
 
   const regular = regularRow.rows[0] as { id: string } | undefined;
