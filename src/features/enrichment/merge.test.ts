@@ -6,21 +6,21 @@ import type { ResolvedMapping } from "./types";
 const MAPPINGS: ResolvedMapping[] = [
   {
     canonicalKey: "person.title",
-    label: "Job title",
+    label: "Cargo",
     targetKind: "custom",
     targetKey: null,
     targetFieldDefId: "def-title",
   },
   {
     canonicalKey: "person.linkedinUrl",
-    label: "LinkedIn URL",
+    label: "URL do LinkedIn",
     targetKind: "custom",
     targetKey: null,
     targetFieldDefId: "def-li",
   },
   {
     canonicalKey: "org.employeeCount",
-    label: "Employee count",
+    label: "Número de funcionários",
     targetKind: "builtin",
     targetKey: "employeeCount",
     targetFieldDefId: null,

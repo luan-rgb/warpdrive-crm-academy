@@ -182,8 +182,8 @@ describe("PersonDetailClient", () => {
     expect(personSection.getByText("Sobrenome")).toBeInTheDocument();
     expect(personSection.getByRole("button", { name: /opções de pessoa/i })).toBeInTheDocument();
     fireEvent.click(personSection.getByRole("button", { name: /editar seção pessoa/i }));
-    expect(personSection.getByLabelText("First name")).toHaveValue("Jane");
-    expect(personSection.getByLabelText("Last name")).toHaveValue("Roe");
+    expect(personSection.getByLabelText("Primeiro nome")).toHaveValue("Jane");
+    expect(personSection.getByLabelText("Sobrenome")).toHaveValue("Roe");
   });
 
   it("renders a person Overview section sourced from activityStats", () => {

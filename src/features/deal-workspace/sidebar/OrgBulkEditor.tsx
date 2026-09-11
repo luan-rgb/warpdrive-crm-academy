@@ -36,11 +36,11 @@ interface OrgBulkEditorProps {
 const NONE: ReadonlySet<string> = new Set();
 
 const ADDRESS_PARTS = [
-  { key: "street", label: "Street" },
-  { key: "city", label: "City" },
-  { key: "region", label: "Region" },
-  { key: "postal", label: "Postal code" },
-  { key: "country", label: "Country" },
+  { key: "street", label: "Rua" },
+  { key: "city", label: "Cidade" },
+  { key: "region", label: "Região" },
+  { key: "postal", label: "Código postal" },
+  { key: "country", label: "País" },
 ] as const;
 
 const textOrNull = (v: string): string | null => (v.trim() === "" ? null : v.trim());
@@ -126,19 +126,19 @@ export function OrgBulkEditor({
 
   return (
     <div className="flex flex-col gap-2">
-      <BulkEditRow label="Name" value={name} onChange={setName} disabled={pending} />
+      <BulkEditRow label="Nome" value={name} onChange={setName} disabled={pending} />
       {!hidden.has("domain") && (
-        <BulkEditRow label="Website" value={domain} onChange={setDomain} disabled={pending} />
+        <BulkEditRow label="Site" value={domain} onChange={setDomain} disabled={pending} />
       )}
       {!hidden.has("linkedinUrl") && (
         <BulkEditRow label="LinkedIn" value={linkedin} onChange={setLinkedin} disabled={pending} />
       )}
       {!hidden.has("industry") && (
-        <BulkEditRow label="Industry" value={industry} onChange={setIndustry} disabled={pending} />
+        <BulkEditRow label="Setor" value={industry} onChange={setIndustry} disabled={pending} />
       )}
       {!hidden.has("annualRevenue") && (
         <BulkEditRow
-          label="Annual revenue"
+          label="Faturamento anual"
           value={revenue}
           onChange={setRevenue}
           disabled={pending}
@@ -146,7 +146,7 @@ export function OrgBulkEditor({
       )}
       {!hidden.has("employeeCount") && (
         <BulkEditRow
-          label="Number of employees"
+          label="Número de funcionários"
           value={employees}
           onChange={setEmployees}
           disabled={pending}

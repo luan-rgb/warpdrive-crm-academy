@@ -11,7 +11,7 @@ afterEach(cleanup);
 
 const agreed: ProposedField = {
   canonicalKey: "person.title",
-  label: "Job title",
+  label: "Cargo",
   values: [{ value: "Head of Growth", providers: ["apollo", "rocketreach"] }],
   selectedValue: "Head of Growth",
   currentValue: null,
@@ -50,7 +50,7 @@ it("shows the label, the value, and every contributing provider", () => {
       onMakePrimaryChange={() => {}}
     />,
   );
-  expect(screen.getByText("Job title")).toBeInTheDocument();
+  expect(screen.getByText("Cargo")).toBeInTheDocument();
   expect(screen.getByText("Head of Growth")).toBeInTheDocument();
   expect(screen.getByText("apollo, rocketreach")).toBeInTheDocument();
   expect(screen.queryByRole("radio")).not.toBeInTheDocument();
@@ -70,7 +70,7 @@ it("reports a toggled checkbox", async () => {
       onMakePrimaryChange={() => {}}
     />,
   );
-  await user.click(screen.getByRole("checkbox", { name: "Job title" }));
+  await user.click(screen.getByRole("checkbox", { name: "Cargo" }));
   expect(onCheckedChange).toHaveBeenCalledWith(false);
 });
 

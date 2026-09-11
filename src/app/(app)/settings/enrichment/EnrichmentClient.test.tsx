@@ -54,7 +54,7 @@ const CUSTOM = encodeTarget({ kind: "custom", fieldDefId: "11111111-1111-4111-81
 
 const OPTIONS = [
   { value: NOT_MAPPED_VALUE, label: S.mappingNotMapped },
-  { value: DOMAIN, label: "Website / domain", group: S.mappingBuiltinGroup },
+  { value: DOMAIN, label: "Site / domínio", group: S.mappingBuiltinGroup },
   { value: CUSTOM, label: "Segment", group: S.mappingCustomGroup },
 ];
 
@@ -80,7 +80,7 @@ function renderClient() {
         rows: [
           {
             canonicalKey: "org.domain",
-            label: "Website / domain",
+            label: "Site / domínio",
             value: DOMAIN,
             options: OPTIONS,
           },

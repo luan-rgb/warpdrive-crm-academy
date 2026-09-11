@@ -20,11 +20,11 @@ const CUSTOM = encodeTarget({ kind: "custom", fieldDefId: "f1" });
 const ROWS: MappingRow[] = [
   {
     canonicalKey: "org.domain",
-    label: "Website / domain",
+    label: "Site / domínio",
     value: DOMAIN,
     options: [
       { value: NOT_MAPPED_VALUE, label: S.mappingNotMapped },
-      { value: DOMAIN, label: "Website / domain", group: S.mappingBuiltinGroup },
+      { value: DOMAIN, label: "Site / domínio", group: S.mappingBuiltinGroup },
       { value: CUSTOM, label: "Segment", group: S.mappingCustomGroup },
     ],
   },
@@ -52,7 +52,7 @@ describe("MappingTable", () => {
     renderTable();
     expect(screen.getByText(S.mappingColField)).toBeInTheDocument();
     expect(
-      screen.getByRole("combobox", { name: `${S.mappingOrganization} Website / domain` }),
+      screen.getByRole("combobox", { name: `${S.mappingOrganization} Site / domínio` }),
     ).toBeInTheDocument();
   });
 
@@ -73,15 +73,15 @@ describe("MappingTable", () => {
   it("locks only the pickers of the rows named as busy", () => {
     const industry: MappingRow = {
       canonicalKey: "org.industry",
-      label: "Industry",
+      label: "Setor",
       value: NOT_MAPPED_VALUE,
       options: [{ value: NOT_MAPPED_VALUE, label: S.mappingNotMapped }],
     };
     renderTable({ rows: [...ROWS, industry], busyKeys: new Set(["org.domain"]) });
 
     const name = (label: string) => `${S.mappingOrganization} ${label}`;
-    expect(screen.getByRole("combobox", { name: name("Website / domain") })).toBeDisabled();
-    expect(screen.getByRole("combobox", { name: name("Industry") })).toBeEnabled();
+    expect(screen.getByRole("combobox", { name: name("Site / domínio") })).toBeDisabled();
+    expect(screen.getByRole("combobox", { name: name("Setor") })).toBeEnabled();
   });
 
   it("points at Data fields when the entity has no custom fields yet", () => {

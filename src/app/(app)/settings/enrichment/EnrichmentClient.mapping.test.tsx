@@ -39,7 +39,7 @@ const SEGMENT = encodeTarget({ kind: "custom", fieldDefId: "f1" });
 const ROWS: MappingRow[] = [
   {
     canonicalKey: "org.domain",
-    label: "Website / domain",
+    label: "Site / domínio",
     value: NOT_MAPPED_VALUE,
     options: [
       { value: NOT_MAPPED_VALUE, label: S.mappingNotMapped },
@@ -48,7 +48,7 @@ const ROWS: MappingRow[] = [
   },
   {
     canonicalKey: "org.industry",
-    label: "Industry",
+    label: "Setor",
     value: NOT_MAPPED_VALUE,
     options: [
       { value: NOT_MAPPED_VALUE, label: S.mappingNotMapped },
@@ -90,7 +90,7 @@ function picker(label: string): HTMLElement {
 
 // Map the domain row, the write an admin is most likely to change again straight away.
 function startMapping(): void {
-  fireEvent.click(picker("Website / domain"));
+  fireEvent.click(picker("Site / domínio"));
   fireEvent.click(screen.getByText("Domain field"));
 }
 
@@ -116,7 +116,7 @@ describe("EnrichmentClient in-flight mapping writes", () => {
     renderMappings();
     startMapping();
 
-    await waitFor(() => expect(picker("Website / domain")).toBeDisabled());
+    await waitFor(() => expect(picker("Site / domínio")).toBeDisabled());
   });
 
   it("leaves the other mapping row and the rest of the page usable", async () => {
@@ -124,8 +124,8 @@ describe("EnrichmentClient in-flight mapping writes", () => {
     renderMappings();
     startMapping();
 
-    await waitFor(() => expect(picker("Website / domain")).toBeDisabled());
-    expect(picker("Industry")).toBeEnabled();
+    await waitFor(() => expect(picker("Site / domínio")).toBeDisabled());
+    expect(picker("Setor")).toBeEnabled();
     expect(screen.getByRole("switch", { name: `${S.enabledLabel}: Apollo` })).toBeEnabled();
     expect(screen.getByLabelText(S.cacheLabel)).toBeEnabled();
     expect(screen.getByRole("button", { name: S.cacheSave })).toBeEnabled();
@@ -135,22 +135,22 @@ describe("EnrichmentClient in-flight mapping writes", () => {
     const release = deferMapping();
     renderMappings();
     startMapping();
-    await waitFor(() => expect(picker("Website / domain")).toBeDisabled());
+    await waitFor(() => expect(picker("Site / domínio")).toBeDisabled());
 
     release({ ok: true });
 
-    await waitFor(() => expect(picker("Website / domain")).toBeEnabled());
+    await waitFor(() => expect(picker("Site / domínio")).toBeEnabled());
   });
 
   it("hands the picker back when the write failed", async () => {
     const release = deferMapping();
     renderMappings();
     startMapping();
-    await waitFor(() => expect(picker("Website / domain")).toBeDisabled());
+    await waitFor(() => expect(picker("Site / domínio")).toBeDisabled());
 
     release({ ok: false, error: { id: "E_ENRICH_010" } });
 
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_ENRICH_010"));
-    expect(picker("Website / domain")).toBeEnabled();
+    expect(picker("Site / domínio")).toBeEnabled();
   });
 });

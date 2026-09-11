@@ -111,14 +111,14 @@ it("labels every mappable entity for the picker", () => {
 // bare "Name" on both collapsed pickers, so the two destinations were indistinguishable without
 // reopening the menu. Qualify the label with its owning entity.
 it("qualifies a field label with its owning entity", () => {
-  expect(qualifiedFieldLabel("organization", "Name")).toBe("Organization[Name]");
-  expect(qualifiedFieldLabel("person", "Name")).toBe("Person[Name]");
-  expect(qualifiedFieldLabel("organization", "Address: city")).toBe("Organization[Address: city]");
+  expect(qualifiedFieldLabel("organization", "Name")).toBe("Organização[Name]");
+  expect(qualifiedFieldLabel("person", "Name")).toBe("Pessoa[Name]");
+  expect(qualifiedFieldLabel("organization", "Address: city")).toBe("Organização[Address: city]");
 });
 
 // The note entity has one field whose label already IS the entity name; "Note[Note]" is noise.
 it("does not repeat an entity whose field label already names it", () => {
-  expect(qualifiedFieldLabel("note", "Note")).toBe("Note");
+  expect(qualifiedFieldLabel("note", "Nota")).toBe("Nota");
 });
 
 // STANDARD_IMPORT_FIELDS stays as the primary entity's fields so mapping-completeness and the

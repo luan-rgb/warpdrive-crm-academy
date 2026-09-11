@@ -36,7 +36,7 @@ const run: RunView = {
   fields: [
     {
       canonicalKey: "person.title",
-      label: "Job title",
+      label: "Cargo",
       values: [{ value: "Head of Growth", providers: ["apollo", "rocketreach"] }],
       selectedValue: "Head of Growth",
       currentValue: null,
@@ -103,7 +103,7 @@ function renderDialog(overrides: Partial<React.ComponentProps<typeof EnrichDialo
 it("checks the empty fields, leaves an overwrite unchecked, and counts the apply", () => {
   renderDialog();
   expect(screen.getByRole("dialog")).toHaveTextContent(S.title("Jane Doe"));
-  expect(screen.getByRole("checkbox", { name: "Job title" })).toBeChecked();
+  expect(screen.getByRole("checkbox", { name: "Cargo" })).toBeChecked();
   expect(screen.getByRole("checkbox", { name: "LinkedIn" })).toBeChecked();
   expect(screen.getByRole("checkbox", { name: "Location" })).not.toBeChecked();
   expect(screen.getByRole("button", { name: S.apply(2) })).toBeEnabled();
@@ -129,7 +129,7 @@ it("applies the picked variant of a contested field", async () => {
 it("disables Apply once nothing is selected", async () => {
   const user = userEvent.setup();
   renderDialog();
-  await user.click(screen.getByRole("checkbox", { name: "Job title" }));
+  await user.click(screen.getByRole("checkbox", { name: "Cargo" }));
   await user.click(screen.getByRole("checkbox", { name: "LinkedIn" }));
   expect(screen.getByRole("button", { name: S.apply(0) })).toBeDisabled();
 });

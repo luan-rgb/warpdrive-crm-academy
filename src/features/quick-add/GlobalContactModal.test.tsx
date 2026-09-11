@@ -222,13 +222,13 @@ describe("GlobalContactModal organization (rich create, M1)", () => {
   it("offers an Address field at create time", () => {
     render(<GlobalContactModal kind="org" onClose={noop} onCreated={noop} />);
     expect(screen.getByLabelText("Name")).toBeInTheDocument();
-    expect(screen.getByLabelText("Street")).toBeInTheDocument();
+    expect(screen.getByLabelText("Rua")).toBeInTheDocument();
   });
 
   it("submits the address entered in the create modal", () => {
     render(<GlobalContactModal kind="org" onClose={noop} onCreated={noop} />);
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Acme Inc" } });
-    fireEvent.change(screen.getByLabelText("Street"), { target: { value: "1 Main St" } });
+    fireEvent.change(screen.getByLabelText("Rua"), { target: { value: "1 Main St" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createOrgAction).toHaveBeenCalledWith(
       expect.objectContaining({

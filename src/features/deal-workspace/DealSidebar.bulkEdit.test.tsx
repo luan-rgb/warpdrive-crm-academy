@@ -48,7 +48,7 @@ const textDef: CustomFieldDef = {
   id: "cf1",
   targetEntity: "deal",
   type: "text",
-  name: "Industry",
+  name: "Setor",
   key: "industry",
   options: [],
   isRequired: false,
@@ -114,8 +114,8 @@ it("the Person section pencil opens every field at once and saves them in one ac
   fireEvent.click(personSection.getByRole("button", { name: "Editar seção Pessoa" }));
 
   // All editable Person fields are open simultaneously (First name + Last name inputs both present).
-  const firstName = personSection.getByLabelText("First name");
-  const lastName = personSection.getByLabelText("Last name");
+  const firstName = personSection.getByLabelText("Primeiro nome");
+  const lastName = personSection.getByLabelText("Sobrenome");
   fireEvent.change(firstName, { target: { value: "Mia" } });
   fireEvent.change(lastName, { target: { value: "Stone" } });
 
@@ -142,8 +142,8 @@ it("the Organization section pencil bulk-edits firmographics in one action call"
   const orgSection = within(screen.getByRole("region", { name: "Organização" }));
   fireEvent.click(orgSection.getByRole("button", { name: "Editar seção Organização" }));
 
-  fireEvent.change(orgSection.getByLabelText("Website"), { target: { value: "orgone.com" } });
-  fireEvent.change(orgSection.getByLabelText("Industry"), { target: { value: "Retail" } });
+  fireEvent.change(orgSection.getByLabelText("Site"), { target: { value: "orgone.com" } });
+  fireEvent.change(orgSection.getByLabelText("Setor"), { target: { value: "Retail" } });
   fireEvent.click(orgSection.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(updateOrgAction).toHaveBeenCalledTimes(1));
@@ -165,8 +165,8 @@ it("inline-edits deal custom fields from inside the Organization section", async
 
   const organization = within(screen.getByRole("region", { name: "Organização" }));
   expect(screen.queryByRole("region", { name: "Details" })).not.toBeInTheDocument();
-  fireEvent.click(organization.getAllByRole("button", { name: "Edit Industry" }).at(-1)!);
-  fireEvent.change(organization.getByLabelText("Industry"), { target: { value: "Finance" } });
+  fireEvent.click(organization.getAllByRole("button", { name: "Edit Setor" }).at(-1)!);
+  fireEvent.change(organization.getByLabelText("Setor"), { target: { value: "Finance" } });
   fireEvent.click(organization.getByRole("button", { name: "Salvar" }));
 
   await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalledTimes(1));

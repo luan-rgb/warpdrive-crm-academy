@@ -1,4 +1,4 @@
-// A CSV that carries "First name" / "Last name" instead of one full-name column is the ordinary
+// A CSV that carries "Primeiro nome" / "Sobrenome" instead of one full-name column is the ordinary
 // shape of an exported contact list, so the picker offers both and the display name is derived
 // from them when the file has no name column of its own.
 import { describe, expect, it } from "vitest";
@@ -28,8 +28,8 @@ describe("import: person name parts", () => {
     const first = ENTITY_FIELDS.person.find((f) => f.field === "firstName");
     const last = ENTITY_FIELDS.person.find((f) => f.field === "lastName");
 
-    expect(first?.label).toBe("First name");
-    expect(last?.label).toBe("Last name");
+    expect(first?.label).toBe("Primeiro nome");
+    expect(last?.label).toBe("Sobrenome");
     expect(first?.required).toBe(false);
     expect(last?.required).toBe(false);
   });

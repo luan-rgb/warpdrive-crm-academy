@@ -14,11 +14,11 @@ import { refreshQuietly } from "./sidebarEditors";
 
 // The editable text parts of a structured address, in display order.
 const ADDRESS_PARTS = [
-  { key: "street", label: "Street" },
-  { key: "city", label: "City" },
-  { key: "region", label: "Region" },
-  { key: "postal", label: "Postal code" },
-  { key: "country", label: "Country" },
+  { key: "street", label: "Rua" },
+  { key: "city", label: "Cidade" },
+  { key: "region", label: "Região" },
+  { key: "postal", label: "Código postal" },
+  { key: "country", label: "País" },
 ] as const;
 
 type AddressPart = (typeof ADDRESS_PARTS)[number]["key"];
@@ -104,13 +104,13 @@ export function OrgAddressField({
   ) : null;
 
   return (
-    <FieldRow label="Address" empty={formatted === "-"}>
+    <FieldRow label="Endereço" empty={formatted === "-"}>
       <InlineFieldShell
-        label="Address"
+        label="Endereço"
         editing={f.editing}
         onStartEdit={f.start}
         value={formatted === "-" ? null : formatted}
-        emptyPrompt="+ Add address"
+        emptyPrompt="+ Adicionar endereço"
       >
         {editor}
       </InlineFieldShell>

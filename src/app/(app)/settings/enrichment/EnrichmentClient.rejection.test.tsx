@@ -44,7 +44,7 @@ const DOMAIN = encodeTarget({ kind: "builtin", key: "domain" });
 const ROWS: MappingRow[] = [
   {
     canonicalKey: "org.domain",
-    label: "Website / domain",
+    label: "Site / domínio",
     value: NOT_MAPPED_VALUE,
     options: [
       { value: NOT_MAPPED_VALUE, label: S.mappingNotMapped },
@@ -92,7 +92,7 @@ function toggle(): HTMLElement {
 
 function picker(): HTMLElement {
   return screen.getByRole("combobox", {
-    name: `${S.mappingOrganization} Website / domain`,
+    name: `${S.mappingOrganization} Site / domínio`,
   });
 }
 

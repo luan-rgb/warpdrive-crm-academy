@@ -52,7 +52,7 @@ const run: RunView = {
   fields: [
     {
       canonicalKey: "person.title",
-      label: "Job title",
+      label: "Cargo",
       values: [{ value: "Head of Growth", providers: ["apollo"] }],
       selectedValue: "Head of Growth",
       currentValue: null,
@@ -148,7 +148,7 @@ it("runs the fan-out on click and reviews the result", async () => {
     { entityType: "person", entityId: run.entityId },
     "csrf-token",
   );
-  expect(await screen.findByRole("checkbox", { name: "Job title" })).toBeChecked();
+  expect(await screen.findByRole("checkbox", { name: "Cargo" })).toBeChecked();
 });
 
 it("applies the selection, closes, and refreshes the surface", async () => {
@@ -234,7 +234,7 @@ it("keeps the dialog open when an organization could not be linked", async () =>
   // The committed row leaves the dialog. Keeping it would let a retry rewrite a field that
   // already landed and add a second change-log row for it.
   await waitFor(() =>
-    expect(screen.queryByRole("checkbox", { name: "Job title" })).not.toBeInTheDocument(),
+    expect(screen.queryByRole("checkbox", { name: "Cargo" })).not.toBeInTheDocument(),
   );
 });
 

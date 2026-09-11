@@ -12,7 +12,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
       oldValue: "Software",
       newValue: { value: "Fintech", providers: ["apollo"] },
     });
-    expect(label).toBe("Industry: Software → Fintech (from Apollo)");
+    expect(label).toBe("Setor: Software → Fintech (from Apollo)");
     expect(label).not.toContain("{");
     expect(label).not.toContain("}");
     expect(label).not.toContain('"');
@@ -24,7 +24,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
       oldValue: null,
       newValue: { value: "Acme", providers: ["rocketreach"] },
     });
-    expect(label).toBe("Company name: (none) → Acme (from RocketReach)");
+    expect(label).toBe("Nome da empresa: (none) → Acme (from RocketReach)");
   });
 
   it("names both providers when two of them agreed on the value", () => {
@@ -45,7 +45,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
       oldValue: null,
       newValue: { value: "Fintech", providers: ["retired-provider"] },
     });
-    expect(label).toBe("Industry: (none) → Fintech (from retired-provider)");
+    expect(label).toBe("Setor: (none) → Fintech (from retired-provider)");
   });
 
   it("drops the provenance clause when no provider is recorded", () => {
@@ -54,7 +54,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
       oldValue: "Software",
       newValue: { value: "Fintech", providers: [] },
     });
-    expect(label).toBe("Industry: Software → Fintech");
+    expect(label).toBe("Setor: Software → Fintech");
   });
 
   it("renders an enrichment row as a plain event row on the timeline", () => {
@@ -75,7 +75,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
     const evt = items[0];
     expect(evt?.kind).toBe("event");
     if (evt?.kind === "event") {
-      expect(evt.label).toBe("Employee count: (none) → 240 (from GetProspect)");
+      expect(evt.label).toBe("Número de funcionários: (none) → 240 (from GetProspect)");
       expect(evt.actorName).toBe("Nick");
     }
   });
@@ -115,7 +115,7 @@ describe("formatChangeLabel: rows that are not enrichment are untouched", () => 
     for (const newValue of malformed) {
       const label = formatChangeLabel({ field: "org.industry", oldValue: "Software", newValue });
       expect(label).not.toContain("undefined");
-      expect(label.startsWith("Industry: Software → ")).toBe(true);
+      expect(label.startsWith("Setor: Software → ")).toBe(true);
     }
   });
 });

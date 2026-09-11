@@ -6,8 +6,8 @@ import { buildMappingRows, decodeTarget, encodeTarget, NOT_MAPPED_VALUE } from "
 const S = ENRICHMENT_STRINGS.settings;
 
 const BUILTINS = [
-  { value: encodeTarget({ kind: "builtin", key: "domain" }), label: "Website / domain" },
-  { value: encodeTarget({ kind: "builtin", key: "industry" }), label: "Industry" },
+  { value: encodeTarget({ kind: "builtin", key: "domain" }), label: "Site / domínio" },
+  { value: encodeTarget({ kind: "builtin", key: "industry" }), label: "Setor" },
 ];
 
 function def(id: string, name: string, type: string) {
@@ -46,7 +46,7 @@ describe("buildMappingRows", () => {
     const keys = rows.map((r) => r.canonicalKey);
     expect(keys).toContain("org.domain");
     expect(keys).not.toContain("person.email");
-    expect(rows.find((r) => r.canonicalKey === "org.domain")?.label).toBe("Website / domain");
+    expect(rows.find((r) => r.canonicalKey === "org.domain")?.label).toBe("Site / domínio");
   });
 
   it("offers Not mapped first, then the built-ins, then compatible custom fields", () => {
@@ -151,7 +151,7 @@ describe("buildMappingRows", () => {
     const mappings: ResolvedMapping[] = [
       {
         canonicalKey: "org.domain",
-        label: "Website / domain",
+        label: "Site / domínio",
         targetKind: "builtin",
         targetKey: "domain",
         targetFieldDefId: null,

@@ -193,7 +193,7 @@ describe("readPersonCurrent companyDomain with a target of its own", () => {
   const mapped = (targetKey: string): ResolvedMapping[] => [
     {
       canonicalKey: "person.companyDomain",
-      label: "Company domain",
+      label: "Domínio da empresa",
       targetKind: "builtin",
       targetKey,
       targetFieldDefId: null,

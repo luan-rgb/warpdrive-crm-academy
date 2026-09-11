@@ -49,7 +49,7 @@ it("saves the whole email array when a non-primary address changes", async () =>
 
 it("sends nothing for contact points the user did not touch", async () => {
   const save = renderEditor();
-  fireEvent.change(screen.getByLabelText("First name"), { target: { value: "Patrick" } });
+  fireEvent.change(screen.getByLabelText("Primeiro nome"), { target: { value: "Patrick" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(save).toHaveBeenCalled());

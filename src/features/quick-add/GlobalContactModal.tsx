@@ -34,11 +34,11 @@ interface GlobalContactModalProps extends ContactCreateModalProps {
 }
 
 const ADDRESS_FIELDS = [
-  ["street", "Street"],
-  ["city", "City"],
-  ["region", "Region"],
-  ["postal", "Postal"],
-  ["country", "Country"],
+  ["street", "Rua"],
+  ["city", "Cidade"],
+  ["region", "Região"],
+  ["postal", "Código postal"],
+  ["country", "País"],
 ] as const;
 
 // Compatibility entry point for the global quick-add menu. List and embedded surfaces use the

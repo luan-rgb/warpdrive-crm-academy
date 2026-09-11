@@ -1,7 +1,7 @@
 export const DEFAULT_LOST_REASONS = [
-  "Price too high",
-  "Lost to competitor",
-  "No budget",
-  "No decision",
-  "Bad timing",
+  "Preço muito alto",
+  "Perdido para concorrente",
+  "Sem orçamento",
+  "Sem decisão",
+  "Momento inoportuno",
 ] as const;

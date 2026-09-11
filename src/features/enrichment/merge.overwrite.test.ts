@@ -13,7 +13,7 @@ const EMAIL: ResolvedMapping = {
 
 const TITLE: ResolvedMapping = {
   canonicalKey: "person.title",
-  label: "Job title",
+  label: "Cargo",
   targetKind: "custom",
   targetKey: null,
   targetFieldDefId: "def-title",

@@ -144,8 +144,8 @@ it("uses the complete deal Person section and its section-wide edit action", () 
   expect(personSection.getByText("Sobrenome")).toBeInTheDocument();
   expect(personSection.getByText("Nome")).toBeInTheDocument();
   fireEvent.click(personSection.getByRole("button", { name: "Editar seção Pessoa" }));
-  expect(personSection.getByLabelText("First name")).toHaveValue("Jane");
-  expect(personSection.getByLabelText("Last name")).toHaveValue("Roe");
+  expect(personSection.getByLabelText("Primeiro nome")).toHaveValue("Jane");
+  expect(personSection.getByLabelText("Sobrenome")).toHaveValue("Roe");
   expect(personSection.getByRole("button", { name: "Cancelar" })).toBeInTheDocument();
   expect(personSection.getByRole("button", { name: "Salvar" })).toBeInTheDocument();
 });

@@ -62,7 +62,7 @@ it("shows blank firmographic rows when the section is not hiding empties", () =>
   expect(screen.getByText("Setor")).toBeInTheDocument();
   expect(screen.getByText("Faturamento anual")).toBeInTheDocument();
   expect(screen.getByText("Número de funcionários")).toBeInTheDocument();
-  expect(screen.getByText("Address")).toBeInTheDocument();
+  expect(screen.getByText("Endereço")).toBeInTheDocument();
 });
 
 it("hides blank firmographic rows when the funnel is hiding empties", () => {
@@ -76,7 +76,7 @@ it("hides blank firmographic rows when the funnel is hiding empties", () => {
   expect(screen.queryByText("Setor")).not.toBeInTheDocument();
   expect(screen.queryByText("Faturamento anual")).not.toBeInTheDocument();
   expect(screen.queryByText("Número de funcionários")).not.toBeInTheDocument();
-  expect(screen.queryByText("Address")).not.toBeInTheDocument();
+  expect(screen.queryByText("Endereço")).not.toBeInTheDocument();
   // Name is never value-less; it always stays.
   expect(screen.getByText("Nome")).toBeInTheDocument();
 });
@@ -89,9 +89,9 @@ it("edits the Address as a composite of subfields, saving a merged address objec
   render(<OrgBlock org={org} />);
 
   // A populated Address renders a formatted value + a pencil to open the composite editor.
-  fireEvent.click(screen.getByRole("button", { name: "Edit Address" }));
-  fireEvent.change(screen.getByLabelText("City"), { target: { value: "Portland" } });
-  fireEvent.change(screen.getByLabelText("Postal code"), { target: { value: "97201" } });
+  fireEvent.click(screen.getByRole("button", { name: "Edit Endereço" }));
+  fireEvent.change(screen.getByLabelText("Cidade"), { target: { value: "Portland" } });
+  fireEvent.change(screen.getByLabelText("Código postal"), { target: { value: "97201" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() =>

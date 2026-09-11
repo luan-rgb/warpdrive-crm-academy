@@ -22,7 +22,7 @@ const config = vi.fn(() =>
     orgMappings: [
       {
         canonicalKey: "org.domain",
-        label: "Website / domain",
+        label: "Site / domínio",
         targetKind: "builtin" as const,
         targetKey: "domain",
         targetFieldDefId: null,

@@ -80,8 +80,8 @@ export function PersonBulkEditor({
 
   return (
     <div className="flex flex-col gap-2">
-      <BulkRow label="First name" value={first} onChange={setFirst} disabled={pending} />
-      <BulkRow label="Last name" value={last} onChange={setLast} disabled={pending} />
+      <BulkRow label="Primeiro nome" value={first} onChange={setFirst} disabled={pending} />
+      <BulkRow label="Sobrenome" value={last} onChange={setLast} disabled={pending} />
       {!hidden.has("phones") && (
         <BulkPointsRow
           kind="Phone"

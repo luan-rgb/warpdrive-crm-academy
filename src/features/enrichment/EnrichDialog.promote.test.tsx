@@ -102,7 +102,7 @@ it("omits the flag on a target that holds one value", async () => {
   const onApply = renderDialog(
     emailField({
       canonicalKey: "person.title",
-      label: "Job title",
+      label: "Cargo",
       values: [{ value: "Head of Growth", providers: ["apollo"] }],
       selectedValue: "Head of Growth",
       currentValue: null,

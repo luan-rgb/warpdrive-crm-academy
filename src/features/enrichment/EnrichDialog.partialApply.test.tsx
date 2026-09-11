@@ -13,7 +13,7 @@ afterEach(cleanup);
 
 const title: ProposedField = {
   canonicalKey: "person.title",
-  label: "Job title",
+  label: "Cargo",
   values: [{ value: "Head of Growth", providers: ["apollo"] }],
   selectedValue: "Head of Growth",
   currentValue: null,
@@ -75,13 +75,13 @@ it("keeps a row the user unchecked after a partial apply", async () => {
   const onApply = vi.fn();
   const view = render(dialog(runWith([title, company], "2026-08-24T09:00:00.000Z"), onApply));
 
-  await user.click(screen.getByRole("checkbox", { name: /Job title/ }));
-  expect(screen.getByRole("checkbox", { name: /Job title/ })).not.toBeChecked();
+  await user.click(screen.getByRole("checkbox", { name: /Cargo/ }));
+  expect(screen.getByRole("checkbox", { name: /Cargo/ })).not.toBeChecked();
 
   // The company could not be linked, so it stays; the title committed and leaves the dialog.
   view.rerender(dialog(runWith([title], "2026-08-24T09:05:00.000Z"), onApply));
 
-  expect(screen.getByRole("checkbox", { name: /Job title/ })).not.toBeChecked();
+  expect(screen.getByRole("checkbox", { name: /Cargo/ })).not.toBeChecked();
 });
 
 // Refresh is a paid fan-out. Starting one while an apply is in flight lets the two answers land on

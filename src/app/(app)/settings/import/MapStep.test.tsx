@@ -57,7 +57,7 @@ function chooseSelect(label: string, option: string): void {
 it("keeps Continue disabled until a column maps to Name", () => {
   render(<Harness onContinue={vi.fn()} />);
   expect(screen.getByRole("button", { name: "Continuar" })).toBeDisabled();
-  chooseSelect("Mapeia para: Full Name", "Person[Name] *");
+  chooseSelect("Mapeia para: Full Name", "Pessoa[Nome] *");
   expect(screen.getByRole("button", { name: "Continuar" })).toBeEnabled();
 });
 
@@ -65,10 +65,10 @@ it("keeps Continue disabled until a column maps to Name", () => {
 // screen looked identical while writing different records. The entity has to be on the label.
 it("names the owning entity on the collapsed picker of a mapped column", () => {
   render(<Harness onContinue={vi.fn()} />);
-  chooseSelect("Mapeia para: Full Name", "Person[Name] *");
-  chooseSelect("Mapeia para: Profile", "Organization[Name]");
-  expect(screen.getByLabelText("Mapeia para: Full Name")).toHaveTextContent("Person[Name] *");
-  expect(screen.getByLabelText("Mapeia para: Profile")).toHaveTextContent("Organization[Name]");
+  chooseSelect("Mapeia para: Full Name", "Pessoa[Nome] *");
+  chooseSelect("Mapeia para: Profile", "Organização[Nome]");
+  expect(screen.getByLabelText("Mapeia para: Full Name")).toHaveTextContent("Pessoa[Nome] *");
+  expect(screen.getByLabelText("Mapeia para: Profile")).toHaveTextContent("Organização[Nome]");
 });
 
 it("offers custom fields from the defs and calls onContinue", () => {
@@ -77,7 +77,7 @@ it("offers custom fields from the defs and calls onContinue", () => {
   fireEvent.click(screen.getByLabelText("Mapeia para: Profile"));
   expect(screen.getByRole("option", { name: "LinkedIn" })).toBeInTheDocument();
   fireEvent.click(screen.getByRole("option", { name: "LinkedIn" }));
-  chooseSelect("Mapeia para: Full Name", "Person[Name] *");
+  chooseSelect("Mapeia para: Full Name", "Pessoa[Nome] *");
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(onContinue).toHaveBeenCalledOnce();
 });
@@ -145,11 +145,11 @@ it("maps a column to an Organization field on a lead import", () => {
   // The picker groups fields by entity; both groups are present on a lead import.
   fireEvent.click(screen.getByLabelText("Mapeia para: url"));
   expect(
-    screen.getByRole("option", { name: "Organization[Website / domain]" }),
+    screen.getByRole("option", { name: "Organização[Site / domínio]" }),
   ).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("option", { name: "Organization[Website / domain]" }));
+  fireEvent.click(screen.getByRole("option", { name: "Organização[Site / domínio]" }));
 
-  chooseSelect("Mapeia para: reporter_type", "Lead[Title] *");
+  chooseSelect("Mapeia para: reporter_type", "Lead[Título] *");
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
 
   expect(onMapping).toHaveBeenCalledWith({
@@ -170,7 +170,7 @@ it("hides the dedup radio on a lead import, where leads always create", () => {
 it("records the row-note checkbox in the mapping options", () => {
   const onMapping = vi.fn();
   render(<LeadHarness onMapping={onMapping} />);
-  chooseSelect("Mapeia para: reporter_type", "Lead[Title] *");
+  chooseSelect("Mapeia para: reporter_type", "Lead[Título] *");
   fireEvent.click(screen.getByRole("checkbox", { name: "Adicionar colunas não mapeadas como nota" }));
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(onMapping.mock.calls[0]?.[0]).toMatchObject({
