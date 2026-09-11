@@ -55,7 +55,7 @@ describe("HistoryFeed dispatch", () => {
       { kind: "created", id: "deal-created", at: AT, actorName: "Nick" },
     ];
     render(<HistoryFeed items={items} emptyLabel="empty" />);
-    expect(screen.getByText("Deal created")).toBeInTheDocument();
+    expect(screen.getByText("Negócio criado")).toBeInTheDocument();
     // Stage change renders as an inline event row, same shape as a status change.
     expect(screen.getByText("Stage: Demo → Proposal")).toBeInTheDocument();
     expect(screen.getByText("Discovery call")).toBeInTheDocument();

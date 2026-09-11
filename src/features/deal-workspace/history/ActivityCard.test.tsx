@@ -244,7 +244,7 @@ describe("ActivityCard", () => {
 
   it("renders an OVERDUE badge with the destructive treatment when overdue", () => {
     render(<ActivityCard activity={makeActivity({ overdue: true })} at={AT} />);
-    const badge = screen.getByText(/overdue/i);
+    const badge = screen.getByText(/atrasada/i);
     expect(badge).toHaveClass("text-destructive");
   });
 
@@ -260,7 +260,7 @@ describe("ActivityCard", () => {
 
   it("omits the OVERDUE badge when the activity is not overdue", () => {
     render(<ActivityCard activity={makeActivity({ overdue: false })} at={AT} />);
-    expect(screen.queryByText(/overdue/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/atrasada/i)).not.toBeInTheDocument();
   });
 
   it("renders the duration when durationMinutes is set", () => {

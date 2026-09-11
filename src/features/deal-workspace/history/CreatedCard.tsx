@@ -12,7 +12,7 @@ export function CreatedCard({
 }): React.ReactNode {
   return (
     <div className="py-0.5">
-      <p className="text-sm font-medium text-foreground">Deal created</p>
+      <p className="text-sm font-medium text-foreground">Negócio criado</p>
       <AttributionLine at={at} actorName={actorName} />
     </div>
   );

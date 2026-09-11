@@ -41,9 +41,9 @@ export function CreatePermissionSetForm({ onCreated }: Props): React.ReactElemen
           <ShieldPlus className="size-4" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="text-sm font-semibold">Create a permission set</h2>
+          <h2 className="text-sm font-semibold">Criar um conjunto de permissão</h2>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Bundle access rules that can be assigned to users.
+            Agrupe regras de acesso que podem ser atribuídas a usuários.
           </p>
         </div>
       </div>

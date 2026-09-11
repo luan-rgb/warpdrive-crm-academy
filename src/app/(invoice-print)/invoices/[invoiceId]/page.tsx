@@ -8,7 +8,7 @@ import { settings } from "@/db/schema/system";
 import { getInvoice } from "@/features/invoices/invoicesRepo";
 import { PrintButton } from "./PrintButton";
 
-export const metadata: Metadata = { title: "Invoice" };
+export const metadata: Metadata = { title: "Fatura" };
 
 function money(v: string, currency: string): string {
   return new Intl.NumberFormat("en-US", {
@@ -58,7 +58,7 @@ export default async function InvoicePrintPage({
               {companySettings?.companyName ?? "Warpdrive"}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Invoice {invoiceNumber(invoice.sequenceNumber)}
+              Fatura {invoiceNumber(invoice.sequenceNumber)}
             </p>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default async function InvoicePrintPage({
 
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div>
-          <p className="text-muted-foreground">Billed to</p>
+          <p className="text-muted-foreground">Faturado para</p>
           <p className="font-medium">{invoice.billToName ?? "—"}</p>
           {invoice.billToAddress != null && (
             <p className="text-muted-foreground">{invoice.billToAddress}</p>
@@ -82,18 +82,18 @@ export default async function InvoicePrintPage({
             <p className="text-muted-foreground">{invoice.billToEmail}</p>
           )}
           {invoice.billToTaxId != null && (
-            <p className="text-muted-foreground">Tax ID: {invoice.billToTaxId}</p>
+            <p className="text-muted-foreground">CNPJ/CPF: {invoice.billToTaxId}</p>
           )}
           {deal !== undefined && <p className="text-muted-foreground">{deal.title}</p>}
         </div>
         <div className="text-right">
           <p>
-            <span className="text-muted-foreground">Issue date: </span>
+            <span className="text-muted-foreground">Data de emissão: </span>
             {invoice.issueDate}
           </p>
           {invoice.dueDate !== null && (
             <p>
-              <span className="text-muted-foreground">Due date: </span>
+              <span className="text-muted-foreground">Data de vencimento: </span>
               {invoice.dueDate}
             </p>
           )}
@@ -108,10 +108,10 @@ export default async function InvoicePrintPage({
         <thead className="border-b text-left text-xs uppercase text-muted-foreground">
           <tr>
             <th className="py-2">Item</th>
-            <th className="py-2 text-right">Qty</th>
-            <th className="py-2 text-right">Unit price</th>
-            <th className="py-2 text-right">Discount</th>
-            {invoice.taxMode !== "none" && <th className="py-2 text-right">Tax</th>}
+            <th className="py-2 text-right">Qtd.</th>
+            <th className="py-2 text-right">Preço unitário</th>
+            <th className="py-2 text-right">Desconto</th>
+            {invoice.taxMode !== "none" && <th className="py-2 text-right">Imposto</th>}
             <th className="py-2 text-right">Total</th>
           </tr>
         </thead>
@@ -143,7 +143,7 @@ export default async function InvoicePrintPage({
         </p>
         {invoice.taxMode !== "none" && (
           <p>
-            <span className="text-muted-foreground">Tax: </span>
+            <span className="text-muted-foreground">Imposto: </span>
             {money(invoice.taxTotal, currency)}
           </p>
         )}
@@ -155,7 +155,7 @@ export default async function InvoicePrintPage({
 
       {invoice.notes !== null && invoice.notes !== "" && (
         <div className="text-sm">
-          <p className="text-muted-foreground">Notes</p>
+          <p className="text-muted-foreground">Notas</p>
           <p>{invoice.notes}</p>
         </div>
       )}

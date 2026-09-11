@@ -42,7 +42,7 @@ describe("AttributionLine", () => {
 describe("CreatedCard", () => {
   it("renders the 'Deal created' title with a timestamped attribution", () => {
     render(<CreatedCard at={AT} actorName="Nick" />);
-    expect(screen.getByText("Deal created")).toBeInTheDocument();
+    expect(screen.getByText("Negócio criado")).toBeInTheDocument();
     expect(screen.getByText(/Nick \(Web App\)/)).toBeInTheDocument();
     expect(document.querySelector("time")).toHaveAttribute("dateTime", AT.toISOString());
   });

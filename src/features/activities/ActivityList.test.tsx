@@ -48,8 +48,8 @@ const items: ActivityRow[] = [
 describe("ActivityList", () => {
   it("groups activities and links to the related record", () => {
     render(<ActivityList items={items} now={Date.now()} />);
-    expect(screen.getByRole("region", { name: "Overdue" })).toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Upcoming" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Atrasadas" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Próximas" })).toBeInTheDocument();
     // The overdue Call links to its deal.
     expect(screen.getByRole("link", { name: "Open" })).toHaveAttribute("href", "/deals/d1");
   });

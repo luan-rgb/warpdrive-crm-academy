@@ -50,9 +50,9 @@ function toCalendar(a: ActivityRow): CalendarActivity {
 }
 
 const SECTION_LABEL: Record<"overdue" | "today" | "upcoming", string> = {
-  overdue: "Overdue",
-  today: "Today",
-  upcoming: "Upcoming",
+  overdue: "Atrasadas",
+  today: "Hoje",
+  upcoming: "Próximas",
 };
 
 function Row({

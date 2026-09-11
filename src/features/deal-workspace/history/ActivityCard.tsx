@@ -139,7 +139,7 @@ export function ActivityCard({
           </button>
           <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-xs text-muted-foreground">
             {activity.overdue ? (
-              <span className="font-semibold uppercase text-destructive">Overdue</span>
+              <span className="font-semibold uppercase text-destructive">Atrasada</span>
             ) : null}
             <span
               data-testid="activity-date"

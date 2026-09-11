@@ -11,15 +11,15 @@ const NOW = new Date(2026, 6, 8); // Wed 2026-07-08
 describe("ActivityPresetChips", () => {
   it("renders the four preset chips", () => {
     render(<ActivityPresetChips from={null} to={null} onApply={() => {}} now={NOW} />);
-    for (const name of ["Overdue", "Today", "This week", "To-do"]) {
+    for (const name of ["Atrasada", "Hoje", "Esta semana", "A fazer"]) {
       expect(screen.getByRole("button", { name })).toBeInTheDocument();
     }
   });
 
   it("marks the chip matching the current range as pressed", () => {
     render(<ActivityPresetChips from="2026-07-08" to="2026-07-08" onApply={() => {}} now={NOW} />);
-    expect(screen.getByRole("button", { name: "Today" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Overdue" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: "Hoje" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Atrasada" })).toHaveAttribute(
       "aria-pressed",
       "false",
     );
@@ -28,7 +28,7 @@ describe("ActivityPresetChips", () => {
   it("applies the range for the clicked chip", () => {
     const onApply = vi.fn();
     render(<ActivityPresetChips from={null} to={null} onApply={onApply} now={NOW} />);
-    fireEvent.click(screen.getByRole("button", { name: "Overdue" }));
+    fireEvent.click(screen.getByRole("button", { name: "Atrasada" }));
     expect(onApply).toHaveBeenCalledWith({ from: null, to: "2026-07-07" });
   });
 });

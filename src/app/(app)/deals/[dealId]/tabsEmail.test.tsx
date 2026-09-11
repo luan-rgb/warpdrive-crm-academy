@@ -74,7 +74,7 @@ describe("deal workspace email timeline", () => {
     );
 
     expect(screen.getAllByTestId("email-card")[0]).toHaveTextContent("Follow up to our meeting");
-    expect(screen.getByText(/Deal created/i)).toBeInTheDocument();
+    expect(screen.getByText(/Negócio criado/i)).toBeInTheDocument();
   });
 
   it("shows the same email under the Email tab and nothing else", () => {
@@ -92,7 +92,7 @@ describe("deal workspace email timeline", () => {
     );
 
     expect(screen.getAllByTestId("email-card")).toHaveLength(1);
-    expect(screen.queryByText(/Deal created/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Negócio criado/i)).not.toBeInTheDocument();
   });
 
   it("says email could not be loaded rather than showing an empty timeline", () => {
@@ -112,7 +112,7 @@ describe("deal workspace email timeline", () => {
     expect(
       screen.getByText(/Não foi possível carregar os e-mails deste negócio/i),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Deal created/i)).toBeInTheDocument();
+    expect(screen.getByText(/Negócio criado/i)).toBeInTheDocument();
   });
 });
 

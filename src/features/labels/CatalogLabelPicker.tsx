@@ -71,7 +71,7 @@ export function CatalogLabelPicker({
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <a href={LABELS_SETTINGS_HREF}>Create new label</a>
+          <a href={LABELS_SETTINGS_HREF}>Criar nova etiqueta</a>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

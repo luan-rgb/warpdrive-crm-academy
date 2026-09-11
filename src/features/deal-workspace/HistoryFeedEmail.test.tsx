@@ -46,7 +46,7 @@ describe("HistoryFeed with email items", () => {
     );
 
     expect(screen.getByTestId("email-card")).toHaveTextContent("Follow up to our meeting");
-    expect(screen.getByText(/Deal created/i)).toBeInTheDocument();
+    expect(screen.getByText(/Negócio criado/i)).toBeInTheDocument();
   });
 
   it("marks the email row with an envelope rather than the neutral dot", () => {

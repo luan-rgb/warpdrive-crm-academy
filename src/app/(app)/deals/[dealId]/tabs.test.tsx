@@ -154,8 +154,8 @@ describe("WorkspaceTabs", () => {
     // Stage change renders as an inline event row with resolved names, not raw ids.
     expect(screen.getByText("Stage: Demo → Proposal")).toBeInTheDocument();
     expect(screen.queryByText("stage-proposal")).not.toBeInTheDocument();
-    // Lazy "Deal created" anchor from deal.createdAt.
-    expect(screen.getByText("Deal created")).toBeInTheDocument();
+    // Lazy "Negócio criado" anchor from deal.createdAt.
+    expect(screen.getByText("Negócio criado")).toBeInTheDocument();
   });
 
   it("does not show a Deal created anchor under the Changelog tab", () => {
@@ -169,7 +169,7 @@ describe("WorkspaceTabs", () => {
         createdActorName="Nick"
       />,
     );
-    expect(screen.queryByText("Deal created")).not.toBeInTheDocument();
+    expect(screen.queryByText("Negócio criado")).not.toBeInTheDocument();
     expect(screen.getByText("Stage: Demo → Proposal")).toBeInTheDocument();
   });
 
@@ -196,11 +196,11 @@ describe("WorkspaceTabs", () => {
 
     // renderTabs()'s single activity is open (done: false), so it's Focus-bound.
     expect(focusSection.getByText("Call")).toBeInTheDocument();
-    expect(focusSection.queryByText("Deal created")).not.toBeInTheDocument();
+    expect(focusSection.queryByText("Negócio criado")).not.toBeInTheDocument();
     expect(focusSection.queryByText("hi")).not.toBeInTheDocument();
 
     // History (default tab "all") is unaffected by Focus and still shows the rest of the log.
-    expect(historySection.getByText("Deal created")).toBeInTheDocument();
+    expect(historySection.getByText("Negócio criado")).toBeInTheDocument();
     expect(historySection.getByText("hi")).toBeInTheDocument();
     // The open activity lives in Focus, so History's Activities tab carries no badge at all.
     expect(historySection.getByRole("tab", { name: "Atividades" })).toBeInTheDocument();

@@ -41,9 +41,9 @@ export function CreateGroupForm({ onCreated }: Props): React.ReactElement {
           <Eye className="size-4" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="text-sm font-semibold">Create a visibility group</h2>
+          <h2 className="text-sm font-semibold">Criar um grupo de visibilidade</h2>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Control which records a group of users can access.
+            Controle quais registros um grupo de usuários pode acessar.
           </p>
         </div>
       </div>

@@ -48,7 +48,7 @@ describe("HistoryFeed with draft items", () => {
     render(<HistoryFeed items={items} emptyLabel="No history yet." />);
 
     expect(screen.getByTestId("draft-card")).toHaveTextContent("Unsent outreach");
-    expect(screen.getByText(/Deal created/i)).toBeInTheDocument();
+    expect(screen.getByText(/Negócio criado/i)).toBeInTheDocument();
   });
 
   it("forwards a resume up to the host that owns the composer", async () => {

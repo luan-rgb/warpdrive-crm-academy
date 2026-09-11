@@ -35,7 +35,7 @@ describe("CatalogLabelPicker", () => {
     await openMenu();
     expect(screen.getByRole("menuitemcheckbox", { name: /Champion/ })).toBeInTheDocument();
     expect(screen.getByRole("menuitemcheckbox", { name: /Hot/ })).toBeInTheDocument();
-    const create = screen.getByRole("menuitem", { name: /create new label/i });
+    const create = screen.getByRole("menuitem", { name: /criar nova etiqueta/i });
     expect(create).toHaveAttribute("href", "/settings/company/labels");
   });
 
@@ -63,7 +63,7 @@ describe("CatalogLabelPicker", () => {
     render(<CatalogLabelPicker target="deal" value={[]} onChange={() => {}} />);
     await openMenu();
     expect(screen.getByText(/ainda não há etiquetas/i)).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: /create new label/i })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /criar nova etiqueta/i })).toBeInTheDocument();
     queryData = catalog;
   });
 

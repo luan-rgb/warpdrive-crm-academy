@@ -8,10 +8,10 @@ import {
 } from "./activityDatePresets";
 
 const CHIPS: { key: ActivityDatePreset; label: string }[] = [
-  { key: "overdue", label: "Overdue" },
-  { key: "today", label: "Today" },
-  { key: "this_week", label: "This week" },
-  { key: "todo", label: "To-do" },
+  { key: "overdue", label: "Atrasada" },
+  { key: "today", label: "Hoje" },
+  { key: "this_week", label: "Esta semana" },
+  { key: "todo", label: "A fazer" },
 ];
 
 // Quick time-preset chips for the activities list (A1). Each sets the filter's date range;
