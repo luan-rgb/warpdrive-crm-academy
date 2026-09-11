@@ -58,16 +58,16 @@ it("renders the confirmed files from the query", () => {
 it("hides the upload control in readOnly mode but keeps the list + download", () => {
   render(<FileAttachments entityType="deal" entityId="d1" readOnly />);
   // The confirmed file list and its download affordance still render.
-  expect(screen.getByRole("button", { name: "Download report.pdf" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Baixar report.pdf" })).toBeInTheDocument();
   // But there is no uploader: neither the button nor the hidden file input.
-  expect(screen.queryByLabelText("Upload file")).not.toBeInTheDocument();
-  expect(screen.queryByRole("button", { name: "Upload file" })).not.toBeInTheDocument();
+  expect(screen.queryByLabelText("Enviar arquivo")).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Enviar arquivo" })).not.toBeInTheDocument();
 });
 
 it("runs request -> upload -> confirm then refetches on file select", async () => {
   render(<FileAttachments entityType="deal" entityId="d1" />);
   const file = new File(["hello"], "note.txt", { type: "text/plain" });
-  const input = screen.getByLabelText("Upload file");
+  const input = screen.getByLabelText("Enviar arquivo");
   fireEvent.change(input, { target: { files: [file] } });
 
   await waitFor(() => expect(requestUploadAction).toHaveBeenCalledTimes(1));
@@ -85,7 +85,7 @@ it("rejects an oversized file without calling the server", async () => {
   render(<FileAttachments entityType="deal" entityId="d1" />);
   const big = new File([""], "big.txt", { type: "text/plain" });
   Object.defineProperty(big, "size", { value: 999_999_999 });
-  fireEvent.change(screen.getByLabelText("Upload file"), { target: { files: [big] } });
+  fireEvent.change(screen.getByLabelText("Enviar arquivo"), { target: { files: [big] } });
 
   await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
   expect(requestUploadAction).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ it("mints a presigned download URL on demand when a file is downloaded", async (
   const open = vi.fn();
   vi.stubGlobal("open", open);
   render(<FileAttachments entityType="deal" entityId="d1" />);
-  fireEvent.click(screen.getByRole("button", { name: "Download report.pdf" }));
+  fireEvent.click(screen.getByRole("button", { name: "Baixar report.pdf" }));
   await waitFor(() => expect(requestDownloadAction).toHaveBeenCalledWith("csrf", "f1"));
 });
 
@@ -104,7 +104,7 @@ it("downloads via an anchor click, not window.open (which popup blockers suppres
   vi.stubGlobal("open", open);
   const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
   render(<FileAttachments entityType="deal" entityId="d1" />);
-  fireEvent.click(screen.getByRole("button", { name: "Download report.pdf" }));
+  fireEvent.click(screen.getByRole("button", { name: "Baixar report.pdf" }));
   await waitFor(() => expect(click).toHaveBeenCalled());
   expect(open).not.toHaveBeenCalled();
   click.mockRestore();
@@ -119,7 +119,7 @@ it("still refetches after a partial-batch failure so confirmed uploads are not h
   render(<FileAttachments entityType="deal" entityId="d1" />);
   const f1 = new File(["a"], "one.txt", { type: "text/plain" });
   const f2 = new File(["b"], "two.txt", { type: "text/plain" });
-  fireEvent.change(screen.getByLabelText("Upload file"), { target: { files: [f1, f2] } });
+  fireEvent.change(screen.getByLabelText("Enviar arquivo"), { target: { files: [f1, f2] } });
   await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
   await waitFor(() => expect(refetch).toHaveBeenCalled());
 });
@@ -131,6 +131,6 @@ it("surfaces an error when the upload fetch rejects (network drop) instead of fa
   );
   render(<FileAttachments entityType="deal" entityId="d1" />);
   const file = new File(["x"], "note.txt", { type: "text/plain" });
-  fireEvent.change(screen.getByLabelText("Upload file"), { target: { files: [file] } });
+  fireEvent.change(screen.getByLabelText("Enviar arquivo"), { target: { files: [file] } });
   await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
 });

@@ -7,11 +7,12 @@
 export const ATTACH_MAX_FILE_BYTES = 26_214_400;
 
 export const FILE_ATTACHMENTS_STRINGS = {
-  uploadLabel: "Upload file",
-  emptyLabel: "No files attached yet.",
-  downloadLabel: (filename: string): string => `Download ${filename}`,
-  tooLarge: (name: string, maxMb: number): string => `"${name}" is too large (max ${maxMb} MB).`,
-  unsupportedType: (name: string): string => `"${name}" has an unsupported file type.`,
-  uploadFailed: (name: string): string => `Upload failed for "${name}".`,
-  downloadFailed: "Could not open that file.",
+  uploadLabel: "Enviar arquivo",
+  emptyLabel: "Ainda não há arquivos anexados.",
+  downloadLabel: (filename: string): string => `Baixar ${filename}`,
+  tooLarge: (name: string, maxMb: number): string =>
+    `"${name}" é muito grande (máx. ${maxMb} MB).`,
+  unsupportedType: (name: string): string => `"${name}" tem um tipo de arquivo não suportado.`,
+  uploadFailed: (name: string): string => `Falha ao enviar "${name}".`,
+  downloadFailed: "Não foi possível abrir esse arquivo.",
 } as const;
