@@ -11,6 +11,7 @@ import { InlineFieldShell } from "@/features/inline-edit/InlineFieldShell";
 import { saveErrorMessage } from "@/features/inline-edit/saveError";
 import { formatCurrency } from "@/lib/formatCurrency";
 import { formatMediumDate } from "@/lib/formatDate";
+import { parseLocaleNumber } from "@/lib/parseLocaleNumber";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { LabelRow } from "./LabelRow";
 import { ParticipantsControl } from "./ParticipantsControl";
@@ -86,8 +87,8 @@ export function DealSummaryActionList({
   // Dirty + parseable gating for the value editor's Save (PD disables Save until the
   // draft differs; an unparseable draft must never commit).
   const trimmed = draft.trim();
-  const parsedValue = trimmed === "" ? null : Number(trimmed);
-  const valueValid = parsedValue === null || !Number.isNaN(parsedValue);
+  const parsedValue = parseLocaleNumber(trimmed);
+  const valueValid = trimmed === "" || parsedValue !== null;
   const valueDirty = valueValid && parsedValue !== deal.value;
 
   function commitValue(): void {

@@ -3,6 +3,7 @@ import type React from "react";
 import { updateOrgAction } from "@/features/contacts/actions";
 import { FieldRow } from "@/features/deal-workspace/sidebar/FieldRow";
 import { InlineTextField } from "@/features/inline-edit/InlineTextField";
+import { parseLocaleNumber } from "@/lib/parseLocaleNumber";
 import { err, ok, type Result } from "@/types/result";
 import { readCsrfToken } from "@/utils/csrfCookie";
 
@@ -102,10 +103,7 @@ export function OrgFirmographicsPanel({
             label="Funcionários"
             value={org.employeeCount == null ? "" : String(org.employeeCount)}
             placeholder="+ Adicionar funcionários"
-            onSave={(v) => {
-              const trimmed = v.trim();
-              return save({ employeeCount: trimmed === "" ? null : Number(trimmed) });
-            }}
+            onSave={(v) => save({ employeeCount: parseLocaleNumber(v) })}
           />
         </FieldRow>
       )}

@@ -3,6 +3,7 @@ import type React from "react";
 import { useState } from "react";
 import { InlineEditFooter } from "@/features/inline-edit/InlineEditFooter";
 import { saveErrorMessage } from "@/features/inline-edit/saveError";
+import { parseLocaleNumber } from "@/lib/parseLocaleNumber";
 import { BulkEditRow } from "./BulkEditRow";
 
 // The change shape OrgBlock.save accepts (kept in sync). All optional so the bulk save sends only
@@ -97,7 +98,7 @@ export function OrgBulkEditor({
     if (textOrNull(linkedin) !== org.linkedinUrl) change.linkedinUrl = textOrNull(linkedin);
     if (textOrNull(industry) !== org.industry) change.industry = textOrNull(industry);
     if (textOrNull(revenue) !== org.annualRevenue) change.annualRevenue = textOrNull(revenue);
-    const emp = employees.trim() === "" ? null : Number(employees);
+    const emp = parseLocaleNumber(employees);
     if (emp !== org.employeeCount) change.employeeCount = emp;
     const nextAddress = addressChange(addr, org.address);
     if (nextAddress !== undefined) change.address = nextAddress;

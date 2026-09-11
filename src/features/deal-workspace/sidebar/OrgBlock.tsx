@@ -4,6 +4,7 @@ import type React from "react";
 import type { Organization } from "@/db/schema";
 import { updateOrgAction } from "@/features/contacts/actions";
 import { ContactCustomFieldRows } from "@/features/custom-fields/ContactCustomFieldRows";
+import { parseLocaleNumber } from "@/lib/parseLocaleNumber";
 import type { CustomFieldDef } from "@/types/customFields";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { externalHref, LinkValue } from "./contactLinks";
@@ -182,10 +183,7 @@ export function OrgBlock({
           empty={org.employeeCount === null}
           initialDraft={org.employeeCount === null ? "" : String(org.employeeCount)}
           renderEditor={textEditor("editor-employees")}
-          onSave={(draft) => {
-            const trimmed = draft.trim();
-            return save({ employeeCount: trimmed === "" ? null : Number(trimmed) });
-          }}
+          onSave={(draft) => save({ employeeCount: parseLocaleNumber(draft) })}
         />
       )}
       {!hidden.has("address") && (

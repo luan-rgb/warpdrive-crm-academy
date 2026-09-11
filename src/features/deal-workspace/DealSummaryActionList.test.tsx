@@ -194,6 +194,18 @@ it("edits the value ONLY via the pencil, with a dirty-gated Save footer (PD mech
   expect(payload.value).toBe(61000);
 });
 
+it("edits the value typed in pt-BR notation (period thousands, comma decimal)", async () => {
+  renderList();
+  fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+  const input = screen.getByLabelText<HTMLInputElement>("Valor");
+  fireEvent.change(input, { target: { value: "10.000,50" } });
+  expect(screen.getByRole("button", { name: "Salvar" })).not.toBeDisabled();
+  fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
+  await vi.waitFor(() => expect(updateDealAction).toHaveBeenCalled());
+  const [payload] = updateDealAction.mock.calls[0] as unknown as [Record<string, unknown>];
+  expect(payload.value).toBe(10000.5);
+});
+
 it("value editor: blur does not commit and Cancel discards (PD: only Cancel/Save exit)", () => {
   renderList();
   fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
