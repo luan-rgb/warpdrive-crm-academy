@@ -175,7 +175,7 @@ export function LeftNav({ initialExpanded = false }: LeftNavProps = {}): React.R
       <button
         type="button"
         onClick={toggle}
-        aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
+        aria-label={expanded ? "Recolher barra lateral" : "Expandir barra lateral"}
         aria-expanded={expanded}
         className={cn(
           "mt-auto flex items-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-white",

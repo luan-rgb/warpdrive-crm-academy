@@ -59,7 +59,7 @@ export function DatePicker({
   value,
   onChange,
   ariaLabel,
-  placeholder = "Select date",
+  placeholder = "Selecionar data",
   triggerClassName,
   placeholderClassName,
   formatLabel,

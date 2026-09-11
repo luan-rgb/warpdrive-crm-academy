@@ -82,7 +82,7 @@ describe("LeftNav", () => {
   test("defaults to expanded on a wide screen (no stored preference)", () => {
     setViewport(true);
     render(<LeftNav />);
-    expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Recolher barra lateral" })).not.toBeNull();
     expect(screen.getByText("Pipeline").className).not.toContain("sr-only");
     expect(screen.getByRole("navigation", { name: "Navegação principal" }).className).toMatch(/w-56\b/);
   });
@@ -90,7 +90,7 @@ describe("LeftNav", () => {
   test("defaults to the collapsed rail on a small screen (no stored preference)", () => {
     setViewport(false);
     render(<LeftNav />);
-    expect(screen.getByRole("button", { name: "Expand sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Expandir barra lateral" })).not.toBeNull();
     expect(screen.getByText("Pipeline").className).toContain("sr-only");
     expect(screen.getByRole("navigation", { name: "Navegação principal" }).className).toMatch(/w-16\b/);
   });
@@ -99,12 +99,12 @@ describe("LeftNav", () => {
     // Start collapsed (small screen), then toggle expands.
     setViewport(false);
     render(<LeftNav />);
-    const toggle = screen.getByRole("button", { name: "Expand sidebar" });
+    const toggle = screen.getByRole("button", { name: "Expandir barra lateral" });
     expect(toggle.getAttribute("aria-expanded")).toBe("false");
     expect(screen.getByText("Pipeline").className).toContain("sr-only");
 
     fireEvent.click(toggle);
-    const collapse = screen.getByRole("button", { name: "Collapse sidebar" });
+    const collapse = screen.getByRole("button", { name: "Recolher barra lateral" });
     expect(collapse.getAttribute("aria-expanded")).toBe("true");
     expect(screen.getByText("Pipeline").className).not.toContain("sr-only");
   });
@@ -113,11 +113,11 @@ describe("LeftNav", () => {
     // Small screen would default collapsed, but the user's stored choice wins.
     setViewport(false);
     const first = render(<LeftNav />);
-    fireEvent.click(screen.getByRole("button", { name: "Expand sidebar" }));
+    fireEvent.click(screen.getByRole("button", { name: "Expandir barra lateral" }));
     first.unmount();
 
     render(<LeftNav />);
-    expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Recolher barra lateral" })).not.toBeNull();
     expect(screen.getByText("Configurações").className).not.toContain("sr-only");
   });
 
@@ -125,11 +125,11 @@ describe("LeftNav", () => {
     // Wide screen would default expanded, but a stored collapse choice wins.
     setViewport(true);
     const first = render(<LeftNav />);
-    fireEvent.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    fireEvent.click(screen.getByRole("button", { name: "Recolher barra lateral" }));
     first.unmount();
 
     render(<LeftNav />);
-    expect(screen.getByRole("button", { name: "Expand sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Expandir barra lateral" })).not.toBeNull();
     expect(screen.getByText("Configurações").className).toContain("sr-only");
   });
 
@@ -154,21 +154,21 @@ describe("LeftNav bracket shortcuts", () => {
     setViewport(true);
     render(<LeftNav />);
     fireEvent.keyDown(window, { key: "]" });
-    expect(screen.getByRole("button", { name: "Expand sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Expandir barra lateral" })).not.toBeNull();
   });
 
   test("[ expands a collapsed rail", () => {
     setViewport(false);
     render(<LeftNav />);
     fireEvent.keyDown(window, { key: "[" });
-    expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Recolher barra lateral" })).not.toBeNull();
   });
 
   test("[ on an already expanded rail leaves it expanded", () => {
     setViewport(true);
     render(<LeftNav />);
     fireEvent.keyDown(window, { key: "[" });
-    expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Recolher barra lateral" })).not.toBeNull();
   });
 
   test("the bracket choice persists across mounts like the toggle button", () => {
@@ -178,7 +178,7 @@ describe("LeftNav bracket shortcuts", () => {
     first.unmount();
 
     render(<LeftNav />);
-    expect(screen.getByRole("button", { name: "Expand sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Expandir barra lateral" })).not.toBeNull();
   });
 
   test("does not fire while typing in a text field", () => {
@@ -188,7 +188,7 @@ describe("LeftNav bracket shortcuts", () => {
     document.body.append(input);
     fireEvent.keyDown(input, { key: "]" });
     input.remove();
-    expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Recolher barra lateral" })).not.toBeNull();
   });
 
   test("does not fire while a dialog is open", () => {
@@ -199,6 +199,6 @@ describe("LeftNav bracket shortcuts", () => {
     document.body.append(dialog);
     fireEvent.keyDown(window, { key: "]" });
     dialog.remove();
-    expect(screen.getByRole("button", { name: "Collapse sidebar" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Recolher barra lateral" })).not.toBeNull();
   });
 });

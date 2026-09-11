@@ -30,7 +30,7 @@ describe("MoreActivitiesChip", () => {
     // keeps the cluster connected. Listed without times they all read as the marker's own hour.
     const items = [mk("a", new Date(2026, 6, 15, 9, 0)), mk("b", new Date(2026, 6, 15, 11, 30))];
     render(<MoreActivitiesChip activities={items} onOpen={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Show 2 more activities" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mostrar mais 2 atividades" }));
     expect(screen.getByText("09:00")).toBeInTheDocument();
     expect(screen.getByText("11:30")).toBeInTheDocument();
   });
@@ -42,8 +42,8 @@ describe("MoreActivitiesChip", () => {
         onOpen={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Show 1 more activities" }));
-    expect(screen.getByText("All day")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Mostrar mais 1 atividades" }));
+    expect(screen.getByText("Dia inteiro")).toBeInTheDocument();
     expect(screen.queryByText("00:00")).toBeNull();
   });
 });
