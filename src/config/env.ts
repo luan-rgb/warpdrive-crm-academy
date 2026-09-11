@@ -54,7 +54,7 @@ const base = z.object({
   // that has already connected the clients it needs can set "disabled" and shut the door. An
   // enum rather than a boolean so a typo fails at boot instead of silently reading as "open".
   OAUTH_REGISTRATION: z.enum(["open", "disabled"]).default("open"),
-  BASE_CURRENCY: z.string().length(3).default("USD"),
+  BASE_CURRENCY: z.string().length(3).default("BRL"),
   SEED_ADMIN_EMAIL: z.string().email().or(z.literal("")).default(""),
   ALLOW_FIRST_LOGIN_ADMIN: boolFromString.default(false),
   // Optional build-time stamp of the running version (e.g. a release tag). Empty when unstamped;

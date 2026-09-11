@@ -24,7 +24,7 @@ export function PersonSection({
   onExitBulk,
   hidden = NONE,
   customFieldDefs = [],
-  currency = "USD",
+  currency = "BRL",
   showLabels = false,
 }: {
   person: Person;

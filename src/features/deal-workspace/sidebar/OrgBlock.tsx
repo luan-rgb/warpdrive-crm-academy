@@ -47,7 +47,7 @@ export function OrgBlock({
   hidden = NONE,
   labels,
   customFieldDefs = [],
-  currency = "USD",
+  currency = "BRL",
 }: {
   org: Organization;
   bulkEditing?: boolean;

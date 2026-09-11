@@ -23,7 +23,7 @@ export function OrganizationSection({
   onExitBulk,
   hidden = NONE,
   customFieldDefs = [],
-  currency = "USD",
+  currency = "BRL",
   showLabels = false,
   children,
 }: {

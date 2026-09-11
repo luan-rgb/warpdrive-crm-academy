@@ -27,7 +27,7 @@ export async function ensureSeedData(tx: Tx, signal: AbortSignal): Promise<SeedH
   signal.throwIfAborted();
 
   // Settings singleton: id is fixed boolean true; ON CONFLICT no-op if already present.
-  await tx.insert(settings).values({ baseCurrency: "USD" }).onConflictDoNothing();
+  await tx.insert(settings).values({ baseCurrency: "BRL" }).onConflictDoNothing();
 
   // Use onConflictDoNothing + SQL re-read so this function is safe even if seed rows
   // already exist (e.g. two new-user logins arrive before bootstrap closes).

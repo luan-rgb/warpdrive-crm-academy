@@ -23,7 +23,7 @@ export async function readBaseCurrency(db: Db, signal: AbortSignal): Promise<str
     .select({ baseCurrency: settings.baseCurrency })
     .from(settings)
     .where(eq(settings.id, true));
-  const value = row?.baseCurrency ?? "USD";
+  const value = row?.baseCurrency ?? "BRL";
   currencyCache.set(db, CURRENCY_KEY, value);
   return value;
 }

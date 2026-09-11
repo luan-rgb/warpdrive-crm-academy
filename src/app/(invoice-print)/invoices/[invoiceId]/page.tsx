@@ -39,7 +39,7 @@ export default async function InvoicePrintPage({
 
   const [deal] = await db.select().from(deals).where(eq(deals.id, invoice.dealId));
   const [companySettings] = await db.select().from(settings).where(eq(settings.id, true));
-  const currency = companySettings?.baseCurrency ?? "USD";
+  const currency = companySettings?.baseCurrency ?? "BRL";
 
   return (
     <div className="space-y-8">

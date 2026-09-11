@@ -32,7 +32,7 @@ export function LeadWorkspaceClient({
   hiddenOrgFields,
   personCustomFieldDefs = [],
   organizationCustomFieldDefs = [],
-  baseCurrency = "USD",
+  baseCurrency = "BRL",
 }: LeadWorkspaceClientProps): React.ReactNode {
   const timelineQ = trpc.lead.leadTimeline.useQuery({ leadId: lead.id });
   const timeline = timelineQ.data ?? { items: [], emails: [] };

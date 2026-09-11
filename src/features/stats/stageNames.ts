@@ -13,7 +13,7 @@ export async function loadDashboardConfig(
 ): Promise<{ currency: string; defaultPipelineId: string | null }> {
   signal.throwIfAborted();
   const [s] = await db.select().from(settings).where(eq(settings.id, true));
-  const currency = s?.baseCurrency ?? "USD";
+  const currency = s?.baseCurrency ?? "BRL";
   const defaultPipelineId = s?.defaultPipelineId ?? null;
   return { currency, defaultPipelineId };
 }

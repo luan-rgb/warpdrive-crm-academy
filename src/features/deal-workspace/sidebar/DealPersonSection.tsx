@@ -42,7 +42,7 @@ export function DealPersonSection({
   onExitBulk,
   hidden = NONE,
   customFieldDefs = [],
-  currency = "USD",
+  currency = "BRL",
 }: {
   person: Person | null;
   dealId: string;

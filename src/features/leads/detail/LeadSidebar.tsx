@@ -34,7 +34,7 @@ export function LeadSidebar({
   hiddenOrgFields = NONE,
   personCustomFieldDefs = [],
   organizationCustomFieldDefs = [],
-  baseCurrency = "USD",
+  baseCurrency = "BRL",
 }: {
   lead: LeadDetail;
   owners: { id: string; name: string; avatarUrl?: string | null }[];

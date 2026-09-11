@@ -6,9 +6,9 @@ import { readBaseCurrency } from "./readBaseCurrency";
 const sig = () => new AbortController().signal;
 
 describe("readBaseCurrency", () => {
-  it("falls back to USD when the settings singleton is absent", async () => {
+  it("falls back to BRL when the settings singleton is absent", async () => {
     await withTestDb(async (db) => {
-      expect(await readBaseCurrency(db, sig())).toBe("USD");
+      expect(await readBaseCurrency(db, sig())).toBe("BRL");
     });
   });
 

@@ -37,7 +37,7 @@ export function PersonBlock({
   hideNameParts = false,
   labels,
   customFieldDefs = [],
-  currency = "USD",
+  currency = "BRL",
 }: {
   person: Person;
   bulkEditing?: boolean;

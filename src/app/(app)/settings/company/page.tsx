@@ -32,7 +32,7 @@ export default async function CompanyGeneralPage(): Promise<ReactNode> {
   return (
     <CompanyGeneralClient
       companyName={row?.companyName ?? ""}
-      baseCurrency={row?.baseCurrency ?? "USD"}
+      baseCurrency={row?.baseCurrency ?? "BRL"}
       invoiceHeaderText={row?.invoiceHeaderText ?? ""}
       invoiceFooterText={row?.invoiceFooterText ?? ""}
       invoiceHeaderImageUrl={row?.invoiceHeaderImageUrl ?? null}

@@ -57,7 +57,7 @@ function shouldOpenDealDetails(openAfterCreate: boolean, suppressDetailNav: bool
 }
 
 export function AddDealModal(props: AddDealModalProps): React.ReactNode {
-  const { pipelineId, pipelines, baseCurrency = "USD", stageId, prefillTitle } = props;
+  const { pipelineId, pipelines, baseCurrency = "BRL", stageId, prefillTitle } = props;
   const { onClose, onCreated, suppressDetailNav = false } = props;
   const router = useRouter();
   const { autoPrefixLeadDealTitles, openDetailsAfterCreate } = useInterfacePrefs();
