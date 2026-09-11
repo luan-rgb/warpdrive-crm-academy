@@ -16,7 +16,7 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
       oldValue: "Old Deal",
       newValue: "New Deal",
     });
-    expect(label).toBe("Title: Old Deal → New Deal");
+    expect(label).toBe("Título: Old Deal → New Deal");
   });
 
   it("labels a value change readably, containing the field name and both amounts", () => {
@@ -25,7 +25,7 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
       oldValue: "1000",
       newValue: "2000",
     });
-    expect(label).toContain("Value");
+    expect(label).toContain("Valor");
     expect(label).toContain("1000");
     expect(label).toContain("2000");
   });
@@ -36,7 +36,7 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
       oldValue: "2026-06-01",
       newValue: "2026-08-01",
     });
-    expect(label).toBe("Expected close date: 2026-06-01 → 2026-08-01");
+    expect(label).toBe("Data prevista de fechamento: 2026-06-01 → 2026-08-01");
   });
 
   it("labels a custom-field change as 'Custom field' with both values", () => {
@@ -45,7 +45,7 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
       oldValue: "EMEA",
       newValue: "APAC",
     });
-    expect(label).toBe("Custom field: EMEA → APAC");
+    expect(label).toBe("Campo personalizado: EMEA → APAC");
   });
 
   it("renders a null starting value (never set) as (none)", () => {
@@ -54,48 +54,48 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
       oldValue: null,
       newValue: "2000.00",
     });
-    expect(label).toBe("Value: (none) → 2000.00");
+    expect(label).toBe("Valor: (nenhum) → 2000.00");
   });
 
   it("labels a person link/unlink/change directionally without leaking the id", () => {
     expect(formatChangeLabel({ field: "person_id", oldValue: null, newValue: "p1" })).toBe(
-      "Linked a person",
+      "Vinculou uma pessoa",
     );
     expect(formatChangeLabel({ field: "person_id", oldValue: "p1", newValue: null })).toBe(
-      "Unlinked the person",
+      "Desvinculou a pessoa",
     );
     expect(formatChangeLabel({ field: "person_id", oldValue: "p1", newValue: "p2" })).toBe(
-      "Changed the linked person",
+      "Alterou a pessoa vinculada",
     );
   });
 
   it("labels an organization link/unlink/change directionally", () => {
     expect(formatChangeLabel({ field: "org_id", oldValue: null, newValue: "o1" })).toBe(
-      "Linked an organization",
+      "Vinculou uma organização",
     );
     expect(formatChangeLabel({ field: "org_id", oldValue: "o1", newValue: null })).toBe(
-      "Unlinked the organization",
+      "Desvinculou a organização",
     );
     expect(formatChangeLabel({ field: "org_id", oldValue: "o1", newValue: "o2" })).toBe(
-      "Changed the linked organization",
+      "Alterou a organização vinculada",
     );
   });
 
   it("labels participant add/remove directionally", () => {
     expect(formatChangeLabel({ field: "participant", oldValue: null, newValue: "p1" })).toBe(
-      "Added a participant",
+      "Adicionou um participante",
     );
     expect(formatChangeLabel({ field: "participant", oldValue: "p1", newValue: null })).toBe(
-      "Removed a participant",
+      "Removeu um participante",
     );
   });
 
   it("labels follower add/remove directionally", () => {
     expect(formatChangeLabel({ field: "follower", oldValue: null, newValue: "u1" })).toBe(
-      "Started following",
+      "Começou a seguir",
     );
     expect(formatChangeLabel({ field: "follower", oldValue: "u1", newValue: null })).toBe(
-      "Stopped following",
+      "Parou de seguir",
     );
   });
 
@@ -117,7 +117,7 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
     const evt = items[0];
     expect(evt?.kind).toBe("event");
     if (evt?.kind === "event") {
-      expect(evt.label).toBe("Value: 1000.00 → 2000.00");
+      expect(evt.label).toBe("Valor: 1000.00 → 2000.00");
       expect(evt.actorName).toBe("Nick");
     }
   });

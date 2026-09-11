@@ -32,14 +32,14 @@ export function customFieldChangeField(key: string): string {
 
 // Human labels for the Unit E fields (render layer, no magic strings). Person/org and
 // participant/follower use directional phrasing chosen from the add-vs-remove direction.
-export const CHANGE_LABEL_CUSTOM_FIELD = "Custom field";
-export const CHANGE_LABEL_PERSON_LINKED = "Linked a person";
-export const CHANGE_LABEL_PERSON_UNLINKED = "Unlinked the person";
-export const CHANGE_LABEL_PERSON_CHANGED = "Changed the linked person";
-export const CHANGE_LABEL_ORG_LINKED = "Linked an organization";
-export const CHANGE_LABEL_ORG_UNLINKED = "Unlinked the organization";
-export const CHANGE_LABEL_ORG_CHANGED = "Changed the linked organization";
-export const CHANGE_LABEL_PARTICIPANT_ADDED = "Added a participant";
-export const CHANGE_LABEL_PARTICIPANT_REMOVED = "Removed a participant";
-export const CHANGE_LABEL_FOLLOWER_ADDED = "Started following";
-export const CHANGE_LABEL_FOLLOWER_REMOVED = "Stopped following";
+export const CHANGE_LABEL_CUSTOM_FIELD = "Campo personalizado";
+export const CHANGE_LABEL_PERSON_LINKED = "Vinculou uma pessoa";
+export const CHANGE_LABEL_PERSON_UNLINKED = "Desvinculou a pessoa";
+export const CHANGE_LABEL_PERSON_CHANGED = "Alterou a pessoa vinculada";
+export const CHANGE_LABEL_ORG_LINKED = "Vinculou uma organização";
+export const CHANGE_LABEL_ORG_UNLINKED = "Desvinculou a organização";
+export const CHANGE_LABEL_ORG_CHANGED = "Alterou a organização vinculada";
+export const CHANGE_LABEL_PARTICIPANT_ADDED = "Adicionou um participante";
+export const CHANGE_LABEL_PARTICIPANT_REMOVED = "Removeu um participante";
+export const CHANGE_LABEL_FOLLOWER_ADDED = "Começou a seguir";
+export const CHANGE_LABEL_FOLLOWER_REMOVED = "Parou de seguir";

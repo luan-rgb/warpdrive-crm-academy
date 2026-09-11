@@ -266,11 +266,11 @@ describe("formatChangeLabel", () => {
       oldValue: "2026-06-01",
       newValue: "2026-06-08",
     });
-    expect(label).toBe("Expected close date: 2026-06-01 → 2026-06-08");
+    expect(label).toBe("Data prevista de fechamento: 2026-06-01 → 2026-06-08");
   });
 
   it("renders null or empty values as (none)", () => {
     const label = formatChangeLabel({ field: "label", oldValue: null, newValue: "" });
-    expect(label).toBe("Label: (none) → (none)");
+    expect(label).toBe("Etiqueta: (nenhum) → (nenhum)");
   });
 });

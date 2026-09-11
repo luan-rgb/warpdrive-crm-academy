@@ -24,7 +24,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
       oldValue: null,
       newValue: { value: "Acme", providers: ["rocketreach"] },
     });
-    expect(label).toBe("Nome da empresa: (none) → Acme (from RocketReach)");
+    expect(label).toBe("Nome da empresa: (nenhum) → Acme (from RocketReach)");
   });
 
   it("names both providers when two of them agreed on the value", () => {
@@ -45,7 +45,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
       oldValue: null,
       newValue: { value: "Fintech", providers: ["retired-provider"] },
     });
-    expect(label).toBe("Setor: (none) → Fintech (from retired-provider)");
+    expect(label).toBe("Setor: (nenhum) → Fintech (from retired-provider)");
   });
 
   it("drops the provenance clause when no provider is recorded", () => {
@@ -75,7 +75,7 @@ describe("formatChangeLabel: enrichment audit rows", () => {
     const evt = items[0];
     expect(evt?.kind).toBe("event");
     if (evt?.kind === "event") {
-      expect(evt.label).toBe("Número de funcionários: (none) → 240 (from GetProspect)");
+      expect(evt.label).toBe("Número de funcionários: (nenhum) → 240 (from GetProspect)");
       expect(evt.actorName).toBe("Nick");
     }
   });
@@ -85,21 +85,21 @@ describe("formatChangeLabel: rows that are not enrichment are untouched", () => 
   it("renders an ordinary field edit exactly as before", () => {
     expect(
       formatChangeLabel({ field: CHANGE_FIELD_TITLE, oldValue: "Old Deal", newValue: "New Deal" }),
-    ).toBe("Title: Old Deal → New Deal");
+    ).toBe("Título: Old Deal → New Deal");
     expect(
       formatChangeLabel({ field: "expected_close_date", oldValue: null, newValue: "2026-08-01" }),
-    ).toBe("Expected close date: (none) → 2026-08-01");
+    ).toBe("Data prevista de fechamento: (nenhum) → 2026-08-01");
     expect(formatChangeLabel({ field: "person_id", oldValue: null, newValue: "p1" })).toBe(
-      "Linked a person",
+      "Vinculou uma pessoa",
     );
   });
 
   it("keeps rendering an unrelated object value the way it renders today", () => {
     expect(formatChangeLabel({ field: "labels", oldValue: null, newValue: ["Hot", "Cold"] })).toBe(
-      "Labels: (none) → Hot, Cold",
+      "Etiquetas: (nenhum) → Hot, Cold",
     );
     expect(formatChangeLabel({ field: "title", oldValue: null, newValue: { a: 1 } })).toBe(
-      'Title: (none) → {"a":1}',
+      'Título: (nenhum) → {"a":1}',
     );
   });
 

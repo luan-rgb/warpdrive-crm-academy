@@ -2,11 +2,16 @@
 // feed rather than the wording of an individual audit row.
 import {
   CHANGE_FIELD_CUSTOM_PREFIX,
+  CHANGE_FIELD_EXPECTED_CLOSE,
   CHANGE_FIELD_FOLLOWER,
   CHANGE_FIELD_ORG,
   CHANGE_FIELD_PARTICIPANT,
   CHANGE_FIELD_PERSON,
+  CHANGE_FIELD_SOURCE_CHANNEL_ID,
+  CHANGE_FIELD_STAGE_ID,
   CHANGE_FIELD_STATUS,
+  CHANGE_FIELD_TITLE,
+  CHANGE_FIELD_VALUE,
   CHANGE_LABEL_CUSTOM_FIELD,
   CHANGE_LABEL_FOLLOWER_ADDED,
   CHANGE_LABEL_FOLLOWER_REMOVED,
@@ -24,10 +29,10 @@ import { isSourceChannelKey, SOURCE_CHANNELS } from "@/constants/sourceChannels"
 import { canonicalField } from "@/features/enrichment/canonical";
 import { asLostStatusValue } from "./lostStatusValue";
 
-// Format a jsonb audit value for display; null/empty read as "(none)".
+// Format a jsonb audit value for display; null/empty read as "(nenhum)".
 export function formatValue(value: unknown): string {
-  if (value === null || value === undefined) return "(none)";
-  if (typeof value === "string") return value.length === 0 ? "(none)" : value;
+  if (value === null || value === undefined) return "(nenhum)";
+  if (typeof value === "string") return value.length === 0 ? "(nenhum)" : value;
   if (typeof value === "number" || typeof value === "boolean") return String(value);
   return JSON.stringify(value);
 }
@@ -35,7 +40,7 @@ export function formatValue(value: unknown): string {
 // Field-aware value formatting: resolve label-key arrays and source-channel keys to display names.
 function formatFieldValue(field: string, value: unknown): string {
   if (field === "labels") {
-    if (!Array.isArray(value) || value.length === 0) return "(none)";
+    if (!Array.isArray(value) || value.length === 0) return "(nenhum)";
     // Stored label values are the catalog display names, so render them directly.
     return value.map((k) => String(k)).join(", ");
   }
@@ -72,12 +77,27 @@ function provenanceClause(providers: string[]): string {
   return ` (from ${list})`;
 }
 
-// "expected_close_date" -> "Expected close date". Enrichment writes the dotted canonical key
-// (org.industry), which the shared vocabulary already carries a label for. Custom-field edits
+// Deal-history field names have no canonical.ts entry (that vocabulary is person/org enrichment
+// only), so they'd otherwise fall through to the raw English key. Mirrors builtinFields.ts wording.
+const DEAL_FIELD_LABELS: Readonly<Record<string, string>> = {
+  [CHANGE_FIELD_STAGE_ID]: "Etapa",
+  [CHANGE_FIELD_STATUS]: "Status",
+  [CHANGE_FIELD_TITLE]: "Título",
+  [CHANGE_FIELD_VALUE]: "Valor",
+  [CHANGE_FIELD_EXPECTED_CLOSE]: "Data prevista de fechamento",
+  [CHANGE_FIELD_SOURCE_CHANNEL_ID]: "Canal de origem",
+  labels: "Etiquetas",
+  label: "Etiqueta",
+};
+
+// "expected_close_date" -> "Data prevista de fechamento". Enrichment writes the dotted canonical
+// key (org.industry), which the shared vocabulary already carries a label for. Custom-field edits
 // carry a dynamic def key under a prefix (custom_field:region); collapse them all to one generic
 // "Custom field" label since the read layer does not resolve the def name here.
 function humanizeField(field: string): string {
   if (field.startsWith(CHANGE_FIELD_CUSTOM_PREFIX)) return CHANGE_LABEL_CUSTOM_FIELD;
+  const deal = DEAL_FIELD_LABELS[field];
+  if (deal !== undefined) return deal;
   const canonical = canonicalField(field);
   if (canonical !== undefined) return canonical.label;
   const spaced = field.replace(/_/g, " ").trim();
