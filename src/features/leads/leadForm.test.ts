@@ -5,7 +5,7 @@ describe("parseNewLead", () => {
   it("rejects an empty title", () => {
     const r = parseNewLead({ title: "  ", value: "" });
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.error).toMatch(/title/i);
+    if (!r.ok) expect(r.error).toMatch(/título/i);
   });
 
   it("builds a manually-created lead input with defaults", () => {

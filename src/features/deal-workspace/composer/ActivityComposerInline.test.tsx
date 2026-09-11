@@ -197,7 +197,7 @@ it("blocks save and shows an error when the start date is cleared", async () => 
   fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
-  expect(await screen.findByRole("alert")).toHaveTextContent("Date is required");
+  expect(await screen.findByRole("alert")).toHaveTextContent("A data é obrigatória");
   expect(createActivityAction).not.toHaveBeenCalled();
 });
 
@@ -226,7 +226,7 @@ it("still requires a subject when anchored to a lead instead of a deal", () => {
   // to actually exercise the required-subject validation.
   fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
-  expect(screen.getByRole("alert")).toHaveTextContent("Subject is required");
+  expect(screen.getByRole("alert")).toHaveTextContent("O assunto é obrigatório");
   expect(createActivityAction).not.toHaveBeenCalled();
 });
 

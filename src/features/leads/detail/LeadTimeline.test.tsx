@@ -94,7 +94,7 @@ describe("LeadTimeline", () => {
   it("Focus view shows the empty label when there are no open activities", async () => {
     render(<LeadTimeline items={makeItems(makeActivity({ done: true }))} emails={emails} />);
     await userEvent.click(screen.getByRole("tab", { name: "Foco" }));
-    expect(screen.getByText("Nothing needs your attention")).toBeInTheDocument();
+    expect(screen.getByText("Nada precisa da sua atenção")).toBeInTheDocument();
   });
 
   it("History still includes a completed activity, the note, and the label change event", () => {

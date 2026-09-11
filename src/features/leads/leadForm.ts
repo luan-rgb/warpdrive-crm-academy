@@ -21,7 +21,7 @@ export interface NewLeadFields {
 // server-side; ownerId is honored server-side only for actors with deal.changeOwner.
 export function parseNewLead(fields: NewLeadFields): ParseLeadResult {
   const title = fields.title.trim();
-  if (title === "") return { ok: false, error: "Title is required" };
+  if (title === "") return { ok: false, error: "O título é obrigatório" };
 
   const money = parseMoneyValue(fields.value);
   if (!money.ok) return money;

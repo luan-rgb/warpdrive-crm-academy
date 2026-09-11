@@ -18,7 +18,7 @@ export function parseMoneyValue(raw: string): MoneyParse {
   if (t === "") return { ok: true, value: null };
   const n = Number(t);
   if (!Number.isFinite(n) || n < 0) {
-    return { ok: false, error: "Value must be a non-negative number" };
+    return { ok: false, error: "O valor deve ser um número não negativo" };
   }
   return { ok: true, value: Math.round(n * 100) / 100 };
 }

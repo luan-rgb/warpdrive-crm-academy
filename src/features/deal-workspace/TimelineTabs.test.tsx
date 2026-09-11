@@ -53,9 +53,9 @@ describe("TimelineTabs", () => {
   it("renders children below the tab switch", () => {
     render(
       <TimelineTabs view="focus" onView={() => {}}>
-        <p>Nothing needs your attention</p>
+        <p>Nada precisa da sua atenção</p>
       </TimelineTabs>,
     );
-    expect(screen.getByText("Nothing needs your attention")).toBeInTheDocument();
+    expect(screen.getByText("Nada precisa da sua atenção")).toBeInTheDocument();
   });
 });

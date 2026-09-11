@@ -247,6 +247,6 @@ describe("WorkspaceTabs", () => {
       />,
     );
     const focusSection = within(screen.getByRole("region", { name: "focus" }));
-    expect(focusSection.getByText("Nothing needs your attention")).toBeInTheDocument();
+    expect(focusSection.getByText("Nada precisa da sua atenção")).toBeInTheDocument();
   });
 });

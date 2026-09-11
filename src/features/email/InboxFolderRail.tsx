@@ -62,7 +62,7 @@ export function InboxFolderRail({
           </Link>
         </Tip>
       ) : (
-        <Tip label="Compose needs a connected mailbox">
+        <Tip label="Escrever requer uma caixa de entrada conectada">
           <button
             type="button"
             disabled

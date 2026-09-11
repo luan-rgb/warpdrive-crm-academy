@@ -141,7 +141,7 @@ export function useActivityComposer(props: ActivityComposerProps) {
 
   async function submit(): Promise<void> {
     if (subjectValue.trim() === "") {
-      setError("Subject is required");
+      setError("O assunto é obrigatório");
       return;
     }
     if (effectiveTypeId === "") {
@@ -149,7 +149,7 @@ export function useActivityComposer(props: ActivityComposerProps) {
       return;
     }
     if (startDate.trim() === "") {
-      setError("Date is required");
+      setError("A data é obrigatória");
       return;
     }
     setPending(true);

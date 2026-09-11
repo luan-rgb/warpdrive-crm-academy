@@ -155,7 +155,7 @@ export function WorkspaceTabs({
         <SectionHeading>Foco</SectionHeading>
         <HistoryFeed
           items={focus}
-          emptyLabel="Nothing needs your attention"
+          emptyLabel="Nada precisa da sua atenção"
           onActivityChanged={onActivityChanged}
           onNoteChanged={onNoteChanged}
           onEditActivity={onEditActivity}

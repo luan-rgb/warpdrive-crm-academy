@@ -70,7 +70,7 @@ export function LeadTimeline({
       <PinnedNotesSection items={pinned} onNoteChanged={onNoteChanged} />
       <TimelineTabs view={view} onView={setView}>
         {view === "focus" ? (
-          <HistoryFeed items={focus} emptyLabel="Nothing needs your attention" />
+          <HistoryFeed items={focus} emptyLabel="Nada precisa da sua atenção" />
         ) : (
           <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)}>
             <TabsList className="mb-3 flex-wrap gap-1">
