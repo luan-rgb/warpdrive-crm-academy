@@ -3,6 +3,12 @@ import type React from "react";
 import type { DealStatus } from "@/constants/dealStatus";
 import { DealStatusBadge } from "@/features/deal-workspace/DealStatusBadge";
 
+const STATUS_LABEL: Record<DealStatus, string> = {
+  open: "Aberto",
+  won: "Ganho",
+  lost: "Perdido",
+};
+
 export interface LinkedDealRowProps {
   deal: { id: string; title: string; status: DealStatus };
 }
@@ -14,7 +20,7 @@ export function LinkedDealRow({ deal }: LinkedDealRowProps): React.ReactNode {
     <li>
       <Link
         href={`/deals/${deal.id}`}
-        aria-label={`${deal.title}, status ${deal.status}`}
+        aria-label={`${deal.title}, status: ${STATUS_LABEL[deal.status]}`}
         className="group flex min-h-10 items-center justify-between gap-3 rounded px-1 py-1 text-sm transition-colors duration-150 hover:bg-accent motion-reduce:transition-none"
       >
         <span className="min-w-0 truncate text-primary group-hover:underline">{deal.title}</span>

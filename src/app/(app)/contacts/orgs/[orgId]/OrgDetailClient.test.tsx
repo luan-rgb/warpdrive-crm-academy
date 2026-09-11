@@ -147,7 +147,7 @@ describe("OrgDetailClient", () => {
       "/contacts/people/p1",
     );
     const deals = within(screen.getByRole("region", { name: "Negócios" }));
-    expect(deals.getByRole("link", { name: "Acme renewal, status open" })).toHaveAttribute(
+    expect(deals.getByRole("link", { name: "Acme renewal, status: Aberto" })).toHaveAttribute(
       "href",
       "/deals/d1",
     );

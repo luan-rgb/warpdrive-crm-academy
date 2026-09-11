@@ -151,7 +151,7 @@ describe("PersonDetailClient", () => {
     const header = screen.getByRole("banner");
     expect(header.parentElement?.firstElementChild).toBe(header);
     const dealsSection = within(screen.getByRole("region", { name: "Negócios" }));
-    expect(dealsSection.getByRole("link", { name: "Acme renewal, status won" })).toHaveAttribute(
+    expect(dealsSection.getByRole("link", { name: "Acme renewal, status: Ganho" })).toHaveAttribute(
       "href",
       "/deals/d1",
     );

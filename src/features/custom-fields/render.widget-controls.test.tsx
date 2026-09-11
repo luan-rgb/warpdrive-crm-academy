@@ -189,7 +189,7 @@ describe("SingleOptionControl clear option", () => {
     const onChange = vi.fn();
     render(<SingleOptionControl id="s" def={optionDef()} value="a" onChange={onChange} />);
     fireEvent.click(screen.getByLabelText("Stage"));
-    fireEvent.click(screen.getByRole("option", { name: "-- select --" }));
+    fireEvent.click(screen.getByRole("option", { name: "-- selecionar --" }));
     expect(onChange).toHaveBeenCalledWith("");
   });
 });

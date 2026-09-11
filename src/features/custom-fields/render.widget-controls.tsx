@@ -12,7 +12,7 @@ import type { CustomFieldDef } from "@/types/customFields";
 import type { ControlProps } from "./render.widget-types";
 import { addrVal, numVal, rangeVal, strVal } from "./render.widget-types";
 
-const SELECT_PLACEHOLDER = "-- select --";
+const SELECT_PLACEHOLDER = "-- selecionar --";
 
 export function TextControl({ id, def, value, onChange }: ControlProps & { id: string }) {
   return (
@@ -205,13 +205,15 @@ export function ReferenceControl({ def, value, onChange }: ControlProps) {
     options = (orgsQ.data ?? []).map((option) => ({ value: option.id, label: option.name }));
   }
 
+  const typeLabel = def.type === "user" ? "usuário" : def.type === "person" ? "pessoa" : "organização";
+
   return (
     <Combobox
       ariaLabel={def.name}
       value={strVal(value)}
       onChange={onChange}
-      placeholder={loading ? "Loading..." : `Select ${def.type}`}
-      options={[{ value: "", label: "None" }, ...options]}
+      placeholder={loading ? "Carregando..." : `Selecionar ${typeLabel}`}
+      options={[{ value: "", label: "Nenhum" }, ...options]}
     />
   );
 }
