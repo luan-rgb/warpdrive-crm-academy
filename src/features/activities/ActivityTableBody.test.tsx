@@ -36,15 +36,15 @@ function renderBody(props: { loadPending: boolean; loadFailed: boolean }): void 
 describe("ActivityTableBody loading state", () => {
   it("reserves the row layout with a labelled skeleton while rows are pending", () => {
     renderBody({ loadPending: true, loadFailed: false });
-    expect(screen.getByRole("status", { name: /loading activities/i })).toBeInTheDocument();
-    expect(screen.queryByText(/No activities in this view/)).toBeNull();
+    expect(screen.getByRole("status", { name: /carregando atividades/i })).toBeInTheDocument();
+    expect(screen.queryByText(/Nenhuma atividade nesta visualização/)).toBeNull();
     // More than one placeholder row, so the table does not collapse and jump when data lands.
     expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
   });
 
   it("shows the empty copy only once the query has resolved", () => {
     renderBody({ loadPending: false, loadFailed: false });
-    expect(screen.getByText(/No activities in this view/)).toBeInTheDocument();
-    expect(screen.queryByRole("status", { name: /loading activities/i })).toBeNull();
+    expect(screen.getByText(/Nenhuma atividade nesta visualização/)).toBeInTheDocument();
+    expect(screen.queryByRole("status", { name: /carregando atividades/i })).toBeNull();
   });
 });

@@ -129,8 +129,8 @@ describe("DealPersonSection with no linked person", () => {
 
   it("creates a new person and links it when nothing matches", async () => {
     renderSection({ bulkEditing: true });
-    await userEvent.type(screen.getByLabelText("First name"), "Dana");
-    await userEvent.type(screen.getByLabelText("Last name"), "Whitfield");
+    await userEvent.type(screen.getByLabelText("Primeiro nome"), "Dana");
+    await userEvent.type(screen.getByLabelText("Sobrenome"), "Whitfield");
     await userEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(createPersonAction).toHaveBeenCalledTimes(1));

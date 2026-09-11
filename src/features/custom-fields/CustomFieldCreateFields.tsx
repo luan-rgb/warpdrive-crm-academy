@@ -64,7 +64,7 @@ export function CustomFieldCreateFields({
   defs,
   values,
   onChange,
-  title = "Custom fields",
+  title = "Campos personalizados",
 }: {
   defs: CustomFieldDef[];
   values: CustomFieldValues;

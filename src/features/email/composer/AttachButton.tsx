@@ -108,7 +108,7 @@ export function AttachButton({
           {error}
         </p>
       )}
-      <Tip label="Attach file">
+      <Tip label="Anexar arquivo">
         <button
           type="button"
           aria-label="Anexar arquivo"

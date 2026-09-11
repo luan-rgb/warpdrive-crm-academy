@@ -20,7 +20,7 @@ import { VideoCallField } from "./VideoCallField";
 
 const ICON = "h-4 w-4";
 
-const NO_PRIORITY_LABEL = "No priority";
+const NO_PRIORITY_LABEL = "Sem prioridade";
 
 interface Props extends ActivityComposerProps {
   // Collapses the composer back to its one-line prompt (Cancel button). Optional so scopes that

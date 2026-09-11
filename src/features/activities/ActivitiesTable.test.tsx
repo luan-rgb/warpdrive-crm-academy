@@ -186,7 +186,7 @@ describe("ActivitiesTable", () => {
 
   it("shows an error state with a Retry (not the empty state) when the query fails", () => {
     // A transient batched-401 leaves rowsQ.data undefined AND isError=true. The table must not
-    // paint that as "No activities in this view." (indistinguishable from a genuinely empty list),
+    // paint that as "Nenhuma atividade nesta visualização." (indistinguishable from a genuinely empty list),
     // and must offer a way to recover. Regression guard for ACTIVITIES-01 / the F5-1 class.
     useQuery.mockReturnValue({
       data: undefined,
@@ -195,7 +195,7 @@ describe("ActivitiesTable", () => {
       refetch,
     });
     render(<ActivitiesTable />);
-    expect(screen.queryByText("No activities in this view.")).toBeNull();
+    expect(screen.queryByText("Nenhuma atividade nesta visualização.")).toBeNull();
     expect(screen.getByRole("alert")).toBeInTheDocument();
     const retry = screen.getByRole("button", { name: /tentar novamente/i });
     fireEvent.click(retry);
@@ -205,7 +205,7 @@ describe("ActivitiesTable", () => {
   it("does not show the empty state while the first load is still pending", () => {
     useQuery.mockReturnValue({ data: undefined, isPending: true, refetch });
     render(<ActivitiesTable />);
-    expect(screen.queryByText("No activities in this view.")).toBeNull();
+    expect(screen.queryByText("Nenhuma atividade nesta visualização.")).toBeNull();
   });
 
   it("opens the Add activity modal from + Activity", () => {

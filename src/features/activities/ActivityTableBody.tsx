@@ -49,14 +49,14 @@ export function ActivityTableBody({
     );
   }
   if (loadPending) {
-    return <TableRowsSkeleton columnCount={columnCount} label="Loading activities" />;
+    return <TableRowsSkeleton columnCount={columnCount} label="Carregando atividades" />;
   }
   // visible is a prefix of the full row set, so an empty slice means an empty set.
   if (rowWindow.visible.length === 0) {
     return (
       <tr>
         <td colSpan={columnCount} className="px-3 py-10 text-center text-muted-foreground">
-          No activities in this view.
+          Nenhuma atividade nesta visualização.
         </td>
       </tr>
     );
@@ -80,7 +80,7 @@ export function ActivityTableBody({
               onClick={rowWindow.showMore}
               className="rounded-md border px-4 py-1.5 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
             >
-              Show more ({rowWindow.remaining} more)
+              Mostrar mais ({rowWindow.remaining} restantes)
             </button>
           </td>
         </tr>

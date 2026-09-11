@@ -150,13 +150,13 @@ export function PersonLinkEditor({
     <div className="space-y-2 py-1 text-sm">
       <Field
         id={ids.first}
-        label="First name"
+        label="Primeiro nome"
         value={draft.firstName}
         onChange={(v) => set({ firstName: v })}
       />
       <Field
         id={ids.last}
-        label="Last name"
+        label="Sobrenome"
         value={draft.lastName}
         onChange={(v) => set({ lastName: v })}
       />
