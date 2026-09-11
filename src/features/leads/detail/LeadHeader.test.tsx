@@ -8,7 +8,7 @@ import { DetailDrawerCloseContext } from "@/features/navigation/detailDrawerClos
 import type { LeadDetail } from "../leadRepo";
 
 beforeAll(() => {
-  // Radix DropdownMenu (the "More lead actions" overflow menu) needs these in jsdom.
+  // Radix DropdownMenu (the "Mais ações do lead" overflow menu) needs these in jsdom.
   Element.prototype.scrollIntoView = vi.fn();
   Element.prototype.hasPointerCapture = vi.fn(() => false);
   Element.prototype.releasePointerCapture = vi.fn();
@@ -175,7 +175,7 @@ describe("LeadHeader error surfacing", () => {
     vi.mocked(bulkUpdateLeadsAction).mockResolvedValue({ ok: false, error: { id: "E_PERM_001" } });
     render(<LeadHeader lead={LEAD} />);
 
-    await user.click(screen.getByRole("button", { name: "More lead actions" }));
+    await user.click(screen.getByRole("button", { name: "Mais ações do lead" }));
     await user.click(screen.getByRole("menuitem", { name: "Delete lead" }));
 
     await waitFor(() => expect(bulkUpdateLeadsAction).toHaveBeenCalledTimes(1));
@@ -193,7 +193,7 @@ describe("LeadHeader delete dismissal", () => {
       value: { updated: 1, skipped: 0 },
     });
     render(ui);
-    await user.click(screen.getByRole("button", { name: "More lead actions" }));
+    await user.click(screen.getByRole("button", { name: "Mais ações do lead" }));
     await user.click(screen.getByRole("menuitem", { name: "Delete lead" }));
     await waitFor(() => expect(bulkUpdateLeadsAction).toHaveBeenCalledTimes(1));
   }
@@ -233,7 +233,7 @@ describe("LeadHeader delete dismissal", () => {
     vi.mocked(bulkUpdateLeadsAction).mockResolvedValue({ ok: false, error: { id: "E_PERM_001" } });
     render(<LeadHeader lead={LEAD} />);
 
-    await user.click(screen.getByRole("button", { name: "More lead actions" }));
+    await user.click(screen.getByRole("button", { name: "Mais ações do lead" }));
     await user.click(screen.getByRole("menuitem", { name: "Delete lead" }));
 
     await waitFor(() => expect(reportError).toHaveBeenCalledWith("E_PERM_001"));

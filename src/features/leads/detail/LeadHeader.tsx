@@ -137,7 +137,7 @@ export function LeadHeader({ lead }: { lead: LeadDetail }): React.ReactNode {
             {archived ? "Restaurar" : "Arquivar"}
           </button>
           <PopMenu
-            triggerLabel="More lead actions"
+            triggerLabel="Mais ações do lead"
             triggerClassName="rounded-md border p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
             align="right"
             trigger={<EllipsisVertical aria-hidden="true" className="h-4 w-4" />}

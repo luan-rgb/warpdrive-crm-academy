@@ -175,7 +175,7 @@ export function ThreadList({
         <div className="flex items-center gap-2">
           {canSelectInFolder(folder) && (
             <Checkbox
-              label="Select all threads"
+              label="Selecionar todas as conversas"
               checked={selection.allSelected(visibleIds)}
               onCheckedChange={() => selection.toggleAll(visibleIds)}
             />

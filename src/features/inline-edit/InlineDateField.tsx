@@ -50,7 +50,7 @@ export function InlineDateField({ label, value, onSave }: InlineDateFieldProps):
         editing={f.editing}
         onStartEdit={f.start}
         value={value !== null ? formatMdy(value) : null}
-        emptyPrompt="Set date"
+        emptyPrompt="Definir data"
       >
         {editor}
       </InlineFieldShell>

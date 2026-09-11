@@ -181,9 +181,9 @@ describe("ThreadList", () => {
       fetchNextPage: vi.fn(),
     });
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all threads" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as conversas" }));
     expect(screen.getByText("2 selected")).toBeInTheDocument();
-    expect(screen.getByRole("checkbox", { name: "Select all threads" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Selecionar todas as conversas" })).toBeChecked();
   });
 
   it("clicking a row checkbox does not also navigate to the thread", () => {
@@ -230,7 +230,7 @@ describe("ThreadList", () => {
 
   it("hides selection chrome entirely in the linked folder", () => {
     render(<ThreadList folder="linked" threads={[inboxRow]} />);
-    expect(screen.queryByRole("checkbox", { name: "Select all threads" })).toBeNull();
+    expect(screen.queryByRole("checkbox", { name: "Selecionar todas as conversas" })).toBeNull();
     expect(screen.queryByRole("checkbox", { name: "Select Renewal" })).toBeNull();
     expect(screen.queryByRole("toolbar", { name: "Ações em massa" })).toBeNull();
   });
@@ -282,7 +282,7 @@ describe("ThreadList", () => {
       ),
     );
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select all threads" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as conversas" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     fireEvent.click(within(bulkBar).getByRole("button", { name: "Mark read" }));
