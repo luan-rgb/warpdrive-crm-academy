@@ -14,7 +14,7 @@ export const MAIL_LABEL_COLOR: Record<MailLabel, LabelColor> = {
 
 // Human-facing chip text (the raw values are snake_case tokens, not display copy).
 export const MAIL_LABEL_NAME: Record<MailLabel, string> = {
-  important: "Important",
-  to_do: "To do",
-  later: "Later",
+  important: "Importante",
+  to_do: "A fazer",
+  later: "Depois",
 };

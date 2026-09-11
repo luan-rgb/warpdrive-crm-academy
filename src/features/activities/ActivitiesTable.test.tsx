@@ -145,7 +145,7 @@ describe("ActivitiesTable", () => {
     // Enriched cells.
     expect(screen.getByText("jane@acme.com")).toBeInTheDocument();
     expect(screen.getByText("+14155550100")).toBeInTheDocument();
-    expect(screen.getByText("High")).toBeInTheDocument();
+    expect(screen.getByText("Alta")).toBeInTheDocument();
   });
 
   it("renders the row's duration and assignee (not the creator/owner)", () => {
