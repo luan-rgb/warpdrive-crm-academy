@@ -71,7 +71,7 @@ async function openDeleteConfirm(
   user: ReturnType<typeof userEvent.setup>,
   name = "Acme people",
 ): Promise<HTMLElement> {
-  await user.click(screen.getByRole("button", { name: "Saved views" }));
+  await user.click(screen.getByRole("button", { name: "Visualizações salvas" }));
   await user.click(screen.getByRole("menuitem", { name: `Excluir ${name}` }));
   return await screen.findByRole("alertdialog");
 }
@@ -82,7 +82,7 @@ describe("SavedViewControl delete", () => {
     const user = userEvent.setup();
     renderControl(null);
 
-    await user.click(screen.getByRole("button", { name: "Saved views" }));
+    await user.click(screen.getByRole("button", { name: "Visualizações salvas" }));
 
     expect(screen.getByRole("menuitem", { name: "Excluir Acme people" })).toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: "Excluir Team view" })).toBeNull();

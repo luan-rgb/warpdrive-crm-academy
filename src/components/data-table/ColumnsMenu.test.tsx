@@ -36,19 +36,19 @@ describe("ColumnsMenu", () => {
   it("lists visible columns and offers hidden ones to re-add", async () => {
     const user = userEvent.setup();
     setup(["title", "org"]);
-    await user.click(screen.getByRole("button", { name: "Customize columns" }));
+    await user.click(screen.getByRole("button", { name: "Personalizar colunas" }));
     // Visible columns are shown. The draggable list is loaded via next/dynamic on first open,
     // so it lands a tick after the popover's static content.
     expect(await screen.findByText("Organization")).not.toBeNull();
-    // The hidden "Value" column is offered under a Hidden group.
-    expect(screen.getByText("Hidden")).not.toBeNull();
+    // The hidden "Value" column is offered under a Ocultas group.
+    expect(screen.getByText("Ocultas")).not.toBeNull();
     expect(screen.getAllByText("Value").length).toBeGreaterThan(0);
   });
 
   it("toggles a hidden column on when its checkbox is chosen", async () => {
     const user = userEvent.setup();
     const { onToggle } = setup(["title", "org"]);
-    await user.click(screen.getByRole("button", { name: "Customize columns" }));
+    await user.click(screen.getByRole("button", { name: "Personalizar colunas" }));
     await user.click(screen.getByRole("checkbox", { name: "Value" }));
     expect(onToggle).toHaveBeenCalledWith("value");
   });

@@ -114,7 +114,7 @@ export function GlobalAddMenu(): React.ReactNode {
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label="Quick add"
+            aria-label="Adicionar rapidamente"
             className="flex h-9 w-9 items-center justify-center rounded-md bg-action text-lg font-medium text-action-foreground transition-transform hover:opacity-90 active:scale-[0.96]"
           >
             <span aria-hidden="true">+</span>

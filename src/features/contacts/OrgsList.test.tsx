@@ -237,7 +237,7 @@ describe("OrgsList", () => {
     const user = userEvent.setup();
     render(<OrgsList rows={[orgRow("o1", "Acme Inc")]} total={1} />);
 
-    await user.click(screen.getByRole("button", { name: "Saved views" }));
+    await user.click(screen.getByRole("button", { name: "Visualizações salvas" }));
     await user.click(screen.getByRole("menuitem", { name: "SaaS orgs" }));
 
     await vi.waitFor(() =>

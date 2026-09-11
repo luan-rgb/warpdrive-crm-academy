@@ -45,7 +45,7 @@ afterEach(() => {
 describe("UserMenu appearance", () => {
   it("offers the three appearance choices and marks the stored one", async () => {
     render(<UserMenu userId="u1" userName="Ada" appearance="night" />);
-    await userEvent.click(screen.getByRole("button", { name: "Account menu" }));
+    await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
 
     expect(screen.getByRole("menuitemradio", { name: "Day" })).not.toBeChecked();
     expect(screen.getByRole("menuitemradio", { name: "Night" })).toBeChecked();
@@ -57,18 +57,18 @@ describe("UserMenu appearance", () => {
   // this session would silently read back as the old theme.
   it("still shows the pick after the menu is closed and reopened", async () => {
     render(<UserMenu userId="u1" userName="Ada" appearance="day" />);
-    await userEvent.click(screen.getByRole("button", { name: "Account menu" }));
+    await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
     await userEvent.click(screen.getByRole("menuitemradio", { name: "Night" }));
     await waitFor(() => expect(setAppearanceAction).toHaveBeenCalledTimes(1));
 
-    await userEvent.click(screen.getByRole("button", { name: "Account menu" }));
+    await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
     expect(screen.getByRole("menuitemradio", { name: "Night" })).toBeChecked();
     expect(screen.getByRole("menuitemradio", { name: "Day" })).not.toBeChecked();
   });
 
   it("paints and persists the picked appearance", async () => {
     render(<UserMenu userId="u1" userName="Ada" appearance="day" />);
-    await userEvent.click(screen.getByRole("button", { name: "Account menu" }));
+    await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
     await userEvent.click(screen.getByRole("menuitemradio", { name: "Night" }));
 
     await waitFor(() => expect(setAppearanceAction).toHaveBeenCalledTimes(1));

@@ -247,7 +247,7 @@ describe("LeadsInbox", () => {
     const user = userEvent.setup();
     render(<LeadsInbox />);
 
-    await user.click(screen.getByRole("button", { name: "Saved views" }));
+    await user.click(screen.getByRole("button", { name: "Visualizações salvas" }));
     await user.click(screen.getByRole("menuitem", { name: "Web leads" }));
 
     await waitFor(() =>

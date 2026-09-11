@@ -253,7 +253,7 @@ describe("PeopleList", () => {
     const user = userEvent.setup();
     render(<PeopleList rows={rows} total={2} />);
 
-    await user.click(screen.getByRole("button", { name: "Saved views" }));
+    await user.click(screen.getByRole("button", { name: "Visualizações salvas" }));
     await user.click(screen.getByRole("menuitem", { name: "Acme people" }));
 
     await vi.waitFor(() =>

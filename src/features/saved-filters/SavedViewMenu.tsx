@@ -55,10 +55,10 @@ export function SavedViewMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Saved views"
+        aria-label="Visualizações salvas"
         className="inline-flex items-center gap-1.5 rounded-md border bg-card px-2.5 py-1 text-sm text-foreground hover:bg-accent"
       >
-        <span className="max-w-32 truncate">{selected?.name ?? "Saved views"}</span>
+        <span className="max-w-32 truncate">{selected?.name ?? "Visualizações salvas"}</span>
         <ChevronDown aria-hidden="true" className="h-3.5 w-3.5 text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
@@ -83,7 +83,7 @@ export function SavedViewMenu({
                   else's shared view. */}
               {v.isOwn && (
                 <DropdownMenuItem
-                  aria-label={v.favorite ? "Unfavorite view" : "Favorite view"}
+                  aria-label={v.favorite ? "Desfavoritar visualização" : "Favoritar visualização"}
                   // Starring is not picking, so the menu stays open.
                   onSelect={(e) => {
                     e.preventDefault();
@@ -109,7 +109,7 @@ export function SavedViewMenu({
           onSelect={onSaveCurrent}
           className="font-medium text-primary"
         >
-          <span aria-hidden="true">+</span> Save current view
+          <span aria-hidden="true">+</span> Salvar visualização atual
         </DropdownMenuItem>
       </DropdownMenuContent>
 

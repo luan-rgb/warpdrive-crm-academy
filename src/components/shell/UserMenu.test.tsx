@@ -27,32 +27,32 @@ afterEach(cleanup);
 describe("UserMenu", () => {
   it("is collapsed by default (no menu shown)", () => {
     render(<UserMenu userId="u1" />);
-    const btn = screen.getByRole("button", { name: "Account menu" });
+    const btn = screen.getByRole("button", { name: "Menu da conta" });
     expect(btn.getAttribute("aria-expanded")).toBe("false");
     expect(screen.queryByRole("menu")).toBeNull();
   });
 
   it("shows the user's initials on the avatar when a name is given", () => {
     render(<UserMenu userId="u1" userName="Nick Snegirev" />);
-    expect(screen.getByRole("button", { name: "Account menu" }).textContent).toContain("NS");
+    expect(screen.getByRole("button", { name: "Menu da conta" }).textContent).toContain("NS");
   });
 
   it("renders the uploaded avatar image when avatarUrl is set (not just initials)", () => {
     render(<UserMenu userId="u1" userName="Nick Snegirev" avatarUrl="https://cdn.example/a.png" />);
-    const img = screen.getByRole("button", { name: "Account menu" }).querySelector("img");
+    const img = screen.getByRole("button", { name: "Menu da conta" }).querySelector("img");
     expect(img).not.toBeNull();
     expect(img?.getAttribute("src")).toBe("https://cdn.example/a.png");
     // The initials fall back away once the photo is present.
-    expect(screen.getByRole("button", { name: "Account menu" }).textContent).not.toContain("NS");
+    expect(screen.getByRole("button", { name: "Menu da conta" }).textContent).not.toContain("NS");
   });
 
   it("opens a menu with Settings and Log out on click", async () => {
     const user = userEvent.setup();
     render(<UserMenu userId="u1" />);
-    await user.click(screen.getByRole("button", { name: "Account menu" }));
-    const settings = screen.getByRole("menuitem", { name: /Settings/ });
-    const logout = screen.getByRole("menuitem", { name: /Log out/ });
-    // The menu is headed "My account", so Settings lands on the signed-in user's own
+    await user.click(screen.getByRole("button", { name: "Menu da conta" }));
+    const settings = screen.getByRole("menuitem", { name: /Configurações/ });
+    const logout = screen.getByRole("menuitem", { name: /Sair/ });
+    // The menu is headed "Minha conta", so Settings lands on the signed-in user's own
     // preferences. It used to open the company user roster, which is administration.
     expect(settings.getAttribute("href")).toBe("/settings/profile");
     expect(logout.getAttribute("href")).toBe("/auth/logout");

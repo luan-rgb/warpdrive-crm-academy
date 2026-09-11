@@ -23,7 +23,7 @@ export interface ColumnsMenuProps {
   onReorder: (from: string, to: string) => void;
 }
 
-// Shared "Customize columns" cog menu for any list table. Visible columns render in stored order as
+// Shared "Personalizar colunas" cog menu for any list table. Visible columns render in stored order as
 // a draggable list (pinned column first, no handle); hidden columns render below as checkboxes so
 // they can be re-added. Built on the shadcn Popover (not DropdownMenu) because the content is
 // heterogeneous form-like controls (checkboxes, drag handles) a Radix menu would trap.
@@ -41,13 +41,13 @@ export function ColumnsMenu({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        aria-label="Customize columns"
+        aria-label="Personalizar colunas"
         className="rounded-md border p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
       >
         <Settings aria-hidden="true" className="h-4 w-4" />
       </PopoverTrigger>
       <PopoverContent align="end" className="min-w-56 p-1 text-sm">
-        <p className="px-2 py-1 text-xs font-medium uppercase text-muted-foreground">Columns</p>
+        <p className="px-2 py-1 text-xs font-medium uppercase text-muted-foreground">Colunas</p>
         <ColumnsMenuSortableList
           catalog={catalog}
           order={order}
@@ -57,7 +57,9 @@ export function ColumnsMenu({
         />
         {hidden.length > 0 ? (
           <>
-            <p className="px-2 pt-2 text-xs font-medium uppercase text-muted-foreground">Hidden</p>
+            <p className="px-2 pt-2 text-xs font-medium uppercase text-muted-foreground">
+              Ocultas
+            </p>
             {hidden.map((col) => (
               <div
                 key={col.key}

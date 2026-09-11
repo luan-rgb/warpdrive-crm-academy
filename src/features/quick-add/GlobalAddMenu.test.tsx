@@ -47,7 +47,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     for (const label of ["Lead", "Deal", "Activity", "Person", "Organization"]) {
       expect(screen.getByRole("menuitem", { name: new RegExp(label) })).toBeInTheDocument();
     }
@@ -63,7 +63,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     await user.click(screen.getByRole("menuitem", { name: /Activity/ }));
     expect(screen.getByTestId("activity-modal")).toBeInTheDocument();
   });
@@ -72,7 +72,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     await user.click(screen.getByRole("menuitem", { name: /Deal/ }));
     expect(screen.getByTestId("deal-modal")).toBeInTheDocument();
   });
@@ -81,7 +81,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     await user.click(screen.getByRole("menuitem", { name: /Person/ }));
     expect(screen.getByTestId("contact-modal-person")).toBeInTheDocument();
   });
@@ -90,7 +90,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [], isSuccess: true });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     expect(screen.getByRole("menuitem", { name: /Deal/ })).toHaveAttribute("data-disabled");
   });
 
@@ -100,7 +100,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: undefined, isSuccess: false });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     expect(screen.getByRole("menuitem", { name: /Deal/ })).not.toHaveAttribute("data-disabled");
   });
 
@@ -108,7 +108,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     await user.keyboard("l");
     expect(screen.getByTestId("lead-modal")).toBeInTheDocument();
   });
@@ -117,7 +117,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     for (const label of ["Lead", "Deal", "Activity", "Person", "Organization", "Note", "Email"]) {
       expect(screen.getByRole("menuitem", { name: new RegExp(label) })).toBeInTheDocument();
     }
@@ -127,7 +127,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     await user.click(screen.getByRole("menuitem", { name: /Note/ }));
     expect(screen.getByTestId("note-modal")).toBeInTheDocument();
   });
@@ -136,7 +136,7 @@ describe("GlobalAddMenu", () => {
     const user = userEvent.setup();
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
-    await user.click(screen.getByRole("button", { name: "Quick add" }));
+    await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
     await user.click(screen.getByRole("menuitem", { name: /Email/ }));
     expect(push).toHaveBeenCalledWith("/inbox/compose");
   });

@@ -44,7 +44,7 @@ export function UserMenu({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label="Account menu"
+          aria-label="Menu da conta"
           className={cn(
             "flex h-8 w-8 items-center justify-center overflow-hidden rounded-full text-xs font-semibold transition-transform active:scale-[0.96]",
             // Skip the tinted background when a photo fills the circle.
@@ -57,7 +57,7 @@ export function UserMenu({
             // biome-ignore lint/performance/noImgElement: tiny header avatar, next/image not warranted
             <img
               src={avatarUrl}
-              alt={userName ?? "Account"}
+              alt={userName ?? "Conta"}
               className="h-full w-full rounded-full object-cover"
             />
           ) : userName !== undefined && userName !== "" ? (
@@ -68,20 +68,20 @@ export function UserMenu({
         </button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent aria-label="Account" align="end" className="w-56">
+      <DropdownMenuContent aria-label="Conta" align="end" className="w-56">
         <DropdownMenuLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          My account
+          Minha conta
         </DropdownMenuLabel>
         <DropdownMenuItem asChild className="gap-2.5">
           <Link href="/settings/profile">
             <Settings aria-hidden="true" className="h-4 w-4 text-muted-foreground" />
-            Settings
+            Configurações
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="gap-2.5">
           <a href="/auth/logout">
             <LogOut aria-hidden="true" className="h-4 w-4 text-muted-foreground" />
-            Log out
+            Sair
           </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

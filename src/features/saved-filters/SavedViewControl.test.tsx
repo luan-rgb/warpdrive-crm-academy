@@ -68,7 +68,7 @@ function renderControl(
 }
 
 async function openMenu(user: ReturnType<typeof userEvent.setup>): Promise<void> {
-  await user.click(screen.getByRole("button", { name: "Saved views" }));
+  await user.click(screen.getByRole("button", { name: "Visualizações salvas" }));
 }
 
 describe("SavedViewControl", () => {
@@ -100,7 +100,7 @@ describe("SavedViewControl", () => {
     const onSelectView = renderControl();
 
     await openMenu(user);
-    await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Salvar visualização atual/ }));
     await user.type(screen.getByLabelText("Nome da visualização"), "Acme people");
     await user.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -124,7 +124,7 @@ describe("SavedViewControl", () => {
 
     await openMenu(user);
 
-    expect(screen.getByRole("menuitem", { name: /Save current view/ })).toHaveAttribute(
+    expect(screen.getByRole("menuitem", { name: /Salvar visualização atual/ })).toHaveAttribute(
       "aria-disabled",
       "true",
     );
@@ -136,7 +136,7 @@ describe("SavedViewControl", () => {
     const onSelectView = renderControl();
 
     await openMenu(user);
-    await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Salvar visualização atual/ }));
     await user.type(screen.getByLabelText("Nome da visualização"), "Shared people");
     await user.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -183,7 +183,7 @@ describe("SavedViewControl", () => {
     renderControl();
 
     await openMenu(user);
-    await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Salvar visualização atual/ }));
 
     expect(screen.getByLabelText("Nome da visualização")).toHaveClass("focus-visible:ring-ring/50");
   });
@@ -193,7 +193,7 @@ describe("SavedViewControl", () => {
     renderControl();
 
     await openMenu(user);
-    await user.click(screen.getByRole("menuitem", { name: /Save current view/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Salvar visualização atual/ }));
     await user.click(screen.getByText("Compartilhado com todos"));
 
     expect(screen.getByRole("checkbox", { name: "Compartilhado com todos" })).toBeChecked();
@@ -206,8 +206,8 @@ describe("SavedViewControl", () => {
     renderControl();
 
     await openMenu(user);
-    expect(screen.getAllByRole("menuitem", { name: /favorite view/i })).toHaveLength(1);
-    await user.click(screen.getByRole("menuitem", { name: /favorite view/i }));
+    expect(screen.getAllByRole("menuitem", { name: /favoritar visualização/i })).toHaveLength(1);
+    await user.click(screen.getByRole("menuitem", { name: /favoritar visualização/i }));
 
     expect(toggleFavoriteAction).toHaveBeenCalledWith("v1", "csrf");
   });
