@@ -77,10 +77,15 @@ async function gmailFetch<T>(
   const res = await fetch(url, { ...init, signal });
   signal.throwIfAborted();
   if (!res.ok) {
+    // Google's error body (invalid_grant, accessNotConfigured, insufficient scope, ...) names the
+    // actual cause; status/statusText alone ("403 Forbidden") does not, and was all this logged
+    // before, making a token vs. API-config vs. scope failure indistinguishable in the logs.
+    const body: unknown = await res.json().catch(() => null);
     return err(
       new AppError("E_GMAIL_001", "gmail call failed", {
         status: res.status,
         statusText: res.statusText,
+        body,
       }),
     );
   }
