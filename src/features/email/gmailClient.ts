@@ -77,15 +77,24 @@ async function gmailFetch<T>(
   const res = await fetch(url, { ...init, signal });
   signal.throwIfAborted();
   if (!res.ok) {
-    // Google's error body (invalid_grant, accessNotConfigured, insufficient scope, ...) names the
-    // actual cause; status/statusText alone ("403 Forbidden") does not, and was all this logged
-    // before, making a token vs. API-config vs. scope failure indistinguishable in the logs.
-    const body: unknown = await res.json().catch(() => null);
+    // The Gmail API error envelope is { error: { code, message, status } }; message names the
+    // actual cause (Gmail API not enabled, insufficient scope, invalid credentials, ...), which
+    // status/statusText alone ("403 Forbidden") does not. syncFailureDetail already surfaces
+    // context.oauthError in the log line, so this is the only wiring this needs.
+    const oauthError = await res
+      .clone()
+      .json()
+      .then((b: unknown) =>
+        typeof b === "object" && b !== null && "error" in b
+          ? ((b as { error: { message?: string } }).error?.message ?? null)
+          : null,
+      )
+      .catch(() => null);
     return err(
       new AppError("E_GMAIL_001", "gmail call failed", {
         status: res.status,
         statusText: res.statusText,
-        body,
+        oauthError,
       }),
     );
   }
