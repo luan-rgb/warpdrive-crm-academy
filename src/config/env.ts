@@ -27,9 +27,15 @@ const boolFromString = z.enum(["true", "false"]).transform((v) => v === "true");
 
 const base = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  GOOGLE_OAUTH_CLIENT_ID: z.string().min(1),
-  GOOGLE_OAUTH_CLIENT_SECRET: z.string().min(1),
-  GOOGLE_WORKSPACE_DOMAIN: z.string().min(1),
+  // Optional (empty disables Google sign-in, see auth/google.ts): a deploy with no Google
+  // Workspace, or one where Google's redirect_uri can't be registered per subdomain (multi-tenant
+  // hosting, one subdomain per student), uses magic-link sign-in below instead.
+  GOOGLE_OAUTH_CLIENT_ID: z.string().default(""),
+  GOOGLE_OAUTH_CLIENT_SECRET: z.string().default(""),
+  GOOGLE_WORKSPACE_DOMAIN: z.string().default(""),
+  // Optional (empty disables magic-link sign-in, see auth/magicLink.ts and magicLinkEmail.ts).
+  RESEND_API_KEY: z.string().default(""),
+  MAGIC_LINK_FROM_EMAIL: z.string().email().or(z.literal("")).default(""),
   BASE_URL: z.string().url(),
   DATABASE_URL: z.string().min(1),
   WS_TICKET_SECRET: z.string().min(32),
@@ -96,6 +102,19 @@ const schema = base.superRefine((v, ctx) => {
         code: z.ZodIssueCode.custom,
         path: ["SEED_ADMIN_EMAIL"],
         message: "SEED_ADMIN_EMAIL is required in production",
+      });
+    }
+    const googleConfigured =
+      v.GOOGLE_OAUTH_CLIENT_ID !== "" &&
+      v.GOOGLE_OAUTH_CLIENT_SECRET !== "" &&
+      v.GOOGLE_WORKSPACE_DOMAIN !== "";
+    const magicLinkConfigured = v.RESEND_API_KEY !== "" && v.MAGIC_LINK_FROM_EMAIL !== "";
+    if (!googleConfigured && !magicLinkConfigured) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["GOOGLE_OAUTH_CLIENT_ID"],
+        message:
+          "production needs a way to sign in: set GOOGLE_OAUTH_CLIENT_ID/SECRET/WORKSPACE_DOMAIN, or RESEND_API_KEY/MAGIC_LINK_FROM_EMAIL",
       });
     }
   }

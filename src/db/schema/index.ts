@@ -28,6 +28,7 @@ export * from "./invoices";
 export * from "./labels";
 export * from "./leads";
 export * from "./lostReasons";
+export * from "./magicLinkTokens";
 export * from "./mailLabels";
 export * from "./mentions";
 export * from "./notes";

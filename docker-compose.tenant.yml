@@ -12,9 +12,14 @@ x-app-build: &app-build
 
 x-tenant-env: &tenant-env
   NODE_ENV: production
-  GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:?set GOOGLE_OAUTH_CLIENT_ID}
-  GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:?set GOOGLE_OAUTH_CLIENT_SECRET}
-  GOOGLE_WORKSPACE_DOMAIN: ${GOOGLE_WORKSPACE_DOMAIN:?set GOOGLE_WORKSPACE_DOMAIN}
+  # Optional: empty disables Google sign-in (src/features/auth/google.ts). A deploy needs this
+  # OR the two magic-link vars below; env.ts's own boot guard enforces that, not this file.
+  GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
+  GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:-}
+  GOOGLE_WORKSPACE_DOMAIN: ${GOOGLE_WORKSPACE_DOMAIN:-}
+  # Optional: empty disables magic-link sign-in (src/features/auth/magicLink.ts).
+  RESEND_API_KEY: ${RESEND_API_KEY:-}
+  MAGIC_LINK_FROM_EMAIL: ${MAGIC_LINK_FROM_EMAIL:-}
   BASE_URL: ${BASE_URL:?set BASE_URL}
   DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL}
   WS_TICKET_SECRET: ${WS_TICKET_SECRET:?set WS_TICKET_SECRET}

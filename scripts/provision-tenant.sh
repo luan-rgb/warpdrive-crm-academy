@@ -77,7 +77,7 @@ JSON
 docker run --rm --network tenants-net \
   --entrypoint sh \
   -v "${POLICY_FILE}:/policy.json:ro" \
-  minio/mc:latest -c "
+  quay.io/minio/mc:latest -c "
     mc alias set shared http://shared-minio:9000 '${SHARED_MINIO_ROOT_USER}' '${SHARED_MINIO_ROOT_PASSWORD}' &&
     mc mb --ignore-existing shared/${BUCKET} &&
     mc admin user add shared ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} &&
@@ -102,6 +102,8 @@ sed \
   -e "s|__GOOGLE_OAUTH_CLIENT_ID__|${GOOGLE_OAUTH_CLIENT_ID}|g" \
   -e "s|__GOOGLE_OAUTH_CLIENT_SECRET__|${GOOGLE_OAUTH_CLIENT_SECRET}|g" \
   -e "s|__GOOGLE_WORKSPACE_DOMAIN__|${GOOGLE_WORKSPACE_DOMAIN}|g" \
+  -e "s|__RESEND_API_KEY__|${RESEND_API_KEY:-}|g" \
+  -e "s|__MAGIC_LINK_FROM_EMAIL__|${MAGIC_LINK_FROM_EMAIL:-}|g" \
   -e "s|__SEED_ADMIN_EMAIL__|${SEED_ADMIN_EMAIL}|g" \
   envs/tenant.env.template > "$ENV_FILE"
 
@@ -116,8 +118,7 @@ docker compose -p "aluno-${SLUG}" -f docker-compose.tenant.yml --env-file "$ENV_
 echo "== adding Caddy site block for $SLUG =="
 {
   echo "# BEGIN TENANT ${SLUG}"
-  echo "${SLUG}.{\$BASE_DOMAIN} {"
-  echo "	tls {\$ACME_EMAIL}"
+  echo "http://${SLUG}.{\$BASE_DOMAIN} {"
   echo "	header {"
   echo "		Strict-Transport-Security \"max-age=31536000; includeSubDomains\""
   echo "		-Server"

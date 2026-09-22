@@ -24,6 +24,12 @@ export const STRINGS = {
     signInWithGoogle: "Entrar com o Google",
     loginTitle: "Entrar no Warpdrive",
     domainOnly: "Use a conta do Google Workspace da sua empresa.",
+    emailPlaceholder: "seu@email.com",
+    sendMagicLink: "Enviar link de acesso",
+    magicLinkSent: "Link enviado! Confira seu e-mail.",
+    magicLinkInvalidEmail: "E-mail inválido.",
+    magicLinkAuthFailed: "O link expirou ou já foi usado. Peça um novo.",
+    orDivider: "ou",
   },
   contacts: {
     peopleHeading: "Pessoas",

@@ -24,7 +24,8 @@ services:
       retries: 10
 
   minio:
-    image: minio/minio
+    # Docker Hub's minio/minio now denies anonymous pulls; quay.io mirror still works.
+    image: quay.io/minio/minio
     container_name: shared-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
@@ -38,9 +39,11 @@ services:
     image: caddy:2-alpine
     container_name: shared-caddy
     restart: unless-stopped
+    # Internal-only: host nginx already owns 80/443 for other products on this box and
+    # terminates TLS for *.crm.estrategistacrm.com.br with its own wildcard cert, then
+    # proxy_passes plain HTTP here. See the note at the top of Caddyfile.tenants.
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:8880:80"
     environment:
       BASE_DOMAIN: ${BASE_DOMAIN:?set BASE_DOMAIN}
       ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL}
