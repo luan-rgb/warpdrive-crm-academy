@@ -131,7 +131,7 @@ echo "== adding Caddy site block for $SLUG =="
   echo "	reverse_proxy aluno-${SLUG}-app-1:3000"
   echo "}"
   echo "# END TENANT ${SLUG}"
-} >> Caddyfile.tenants
-docker compose -p tenants-shared -f docker-compose.shared.yml exec caddy caddy reload --config /etc/caddy/Caddyfile
+} >> caddy/Caddyfile.tenants
+docker compose -p tenants-shared -f docker-compose.shared.yml exec caddy caddy reload --config /etc/caddy/Caddyfile.tenants
 
 echo "== done: https://${SLUG}.${BASE_DOMAIN} =="

@@ -19,7 +19,7 @@ cd "$ROOT_DIR"
 
 # shellcheck source=/dev/null
 # set -a: export every var from shared.env so docker compose --env-file interpolation
-# (e.g. ${BASE_DOMAIN} in Caddyfile.tenants reload) and the psql/mc commands below see them.
+# (e.g. ${BASE_DOMAIN} in caddy/Caddyfile.tenants reload) and the psql/mc commands below see them.
 set -a
 source envs/shared.env
 set +a
@@ -58,10 +58,10 @@ docker run --rm --network tenants-net --entrypoint sh quay.io/minio/mc:latest -c
 "
 
 echo "== removing Caddy site block for $SLUG =="
-if grep -q "# BEGIN TENANT ${SLUG}\$" Caddyfile.tenants 2>/dev/null; then
-  sed -i.bak "/# BEGIN TENANT ${SLUG}\$/,/# END TENANT ${SLUG}\$/d" Caddyfile.tenants
-  rm -f Caddyfile.tenants.bak
-  docker compose -p tenants-shared -f docker-compose.shared.yml exec caddy caddy reload --config /etc/caddy/Caddyfile
+if grep -q "# BEGIN TENANT ${SLUG}\$" caddy/Caddyfile.tenants 2>/dev/null; then
+  sed -i.bak "/# BEGIN TENANT ${SLUG}\$/,/# END TENANT ${SLUG}\$/d" caddy/Caddyfile.tenants
+  rm -f caddy/Caddyfile.tenants.bak
+  docker compose -p tenants-shared -f docker-compose.shared.yml exec caddy caddy reload --config /etc/caddy/Caddyfile.tenants
 fi
 
 rm -f "$ENV_FILE"
