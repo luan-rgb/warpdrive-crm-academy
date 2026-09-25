@@ -123,6 +123,10 @@ export const ERROR_IDS = {
   GMAIL_MAIL_LABEL_INPUT_INVALID: "E_GMAIL_024", // create-mail-label action input failed Zod validation (U6)
   GMAIL_MAIL_LABEL_UNKNOWN: "E_GMAIL_025", // thread-labels write referenced a key absent from the mail_labels catalog (integrity: would persist an invisible, unremovable label)
   GMAIL_MESSAGE_NOT_FOUND: "E_GMAIL_026", // single message not found OR its thread not visible (404-on-invisible, mailbox privacy)
+  // NYLAS (src/features/email/nylasClient.ts: the Gmail/Outlook connect path, see
+  // docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md)
+  NYLAS_API_FAILED: "E_NYLAS_001", // Nylas API call failed (non-2xx) or response failed schema validation
+  NYLAS_NOT_YET_IMPLEMENTED: "E_NYLAS_002", // sendRaw/trashThread: checkpoint 4, not built yet
   // OAUTH
   OAUTH_INVALID_CLIENT: "E_OAUTH_001",
   OAUTH_INVALID_GRANT: "E_OAUTH_002",
