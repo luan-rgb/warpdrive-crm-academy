@@ -192,3 +192,46 @@ export async function syncMailbox(
   args.signal.throwIfAborted();
   return ok({ applied });
 }
+
+// Nylas-connected accounts have no historyId-style cursor to poll (see
+// docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md: Nylas is push/webhook
+// oriented, Gmail's pull-based historyList has no equivalent). Rather than build a separate
+// webhook receiver + cross-tenant delivery mechanism, this just re-fetches the account's most
+// recent messages on the SAME polling cadence syncMailbox already runs on, and feeds all of
+// their ids through applyMessageIds every tick: that function is already idempotent (ON
+// CONFLICT DO NOTHING on both unique keys, ready for "a redelivered list is a no-op" by design),
+// so re-applying an already-stored message costs a no-op upsert, not a duplicate. Simpler and
+// lower-risk than teaching a new push-delivery path to reuse this same tested logic from
+// outside this process; latency is bounded by the poll interval (worker.ts's schedule) rather
+// than instant, which is an acceptable tradeoff for now, not a hidden defect. Whole-thread trash
+// reconciliation (applyTrashTransitions) is skipped: see the ponytail note on getThread in
+// nylasClient.ts for why that isn't wired up yet either.
+export async function syncNylasMailbox(
+  db: Db,
+  args: { accountId: string; gmail: GmailClient; signal: AbortSignal },
+): Promise<Result<{ applied: number }, AppError>> {
+  args.signal.throwIfAborted();
+  const acctRow = await db.execute(
+    sql`SELECT status, user_id FROM email_accounts WHERE id=${args.accountId}`,
+  );
+  const acct = acctRow.rows[0] as { status: string; user_id: string } | undefined;
+  if (acct === undefined || acct.status === "disconnected") return ok({ applied: 0 });
+
+  const owner = await hydrateOwner(db, acct.user_id, args.signal);
+  if (!owner.ok) return owner;
+
+  const list = await args.gmail.listMessages({ signal: args.signal });
+  if (!list.ok) return list;
+
+  const applied = await applyMessageIds(
+    { db, accountId: args.accountId, owner: owner.value, gmail: args.gmail, signal: args.signal },
+    list.value.messages.map((m) => m.id),
+  );
+  if (!applied.ok) return applied;
+
+  await db.execute(sql`
+    UPDATE email_accounts SET last_sync_at=now(), last_error_id=NULL WHERE id=${args.accountId}
+  `);
+  args.signal.throwIfAborted();
+  return ok({ applied: applied.value });
+}

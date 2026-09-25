@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { env } from "@/config/env";
 import { SYNC_JITTER_MODULO_SECONDS } from "@/constants/email";
 import type { AppError } from "@/constants/errorIds";
 import type { Db } from "@/db/client";
@@ -7,10 +8,24 @@ import { makeStorageClient } from "@/features/files/storage";
 import { err, ok, type Result } from "@/types/result";
 import { createGmailClient, type GmailClient } from "./gmailClient";
 import { makeRefresh } from "./gmailRefresh";
+import { createNylasClient } from "./nylasClient";
 import { processSendAttempt } from "./outbox";
-import { syncMailbox } from "./sync";
+import { syncMailbox, syncNylasMailbox } from "./sync";
 import { ensureAccessToken } from "./tokens";
 import { performWorkerSendCrm } from "./workerSendCrm";
+
+// Which provider an email_account uses (see docs/superpowers/specs/
+// 2026-09-25-nylas-email-integration-design.md): decides both which client to build and which
+// sync strategy applies (syncMailbox's historyId polling vs syncNylasMailbox's recent-messages
+// re-fetch). A single small lookup shared by resolveClient and runSyncJob, rather than each
+// running its own query for the same fact.
+async function loadNylasGrantId(db: Db, accountId: string): Promise<string | null> {
+  const rows = await db.execute(
+    sql`SELECT nylas_grant_id FROM email_accounts WHERE id=${accountId}`,
+  );
+  const row = rows.rows[0] as { nylas_grant_id: string | null } | undefined;
+  return row?.nylas_grant_id ?? null;
+}
 
 // Deterministic per-mailbox jitter (seconds) to spread sync starts and avoid a
 // thundering herd. FNV-1a over the accountId bytes mod SYNC_JITTER_MODULO_SECONDS:
@@ -36,6 +51,16 @@ async function defaultResolveClient(
   signal: AbortSignal,
 ): Promise<Result<GmailClient, AppError>> {
   signal.throwIfAborted();
+  const nylasGrantId = await loadNylasGrantId(prodDb, accountId);
+  if (nylasGrantId !== null) {
+    return ok(
+      createNylasClient({
+        apiKey: env.NYLAS_API_KEY,
+        grantId: nylasGrantId,
+        region: env.NYLAS_REGION,
+      }),
+    );
+  }
   const token = await ensureAccessToken(prodDb, {
     accountId,
     deps: { refresh: makeRefresh(signal) },
@@ -46,9 +71,9 @@ async function defaultResolveClient(
 
 const defaultSyncDeps: SyncDeps = { resolveClient: defaultResolveClient };
 
-// Per-job sync handler. Resolves a client, runs syncMailbox, and on ANY error stamps
-// last_error_id and RETURNS the err (never throws raw, never logs tokens). The pg-boss
-// handler converts a returned err into a sanitized throw for backoff.
+// Per-job sync handler. Resolves a client, runs the right sync strategy for the account's
+// provider, and on ANY error stamps last_error_id and RETURNS the err (never throws raw, never
+// logs tokens). The pg-boss handler converts a returned err into a sanitized throw for backoff.
 export async function runSyncJob(
   db: Db,
   args: { accountId: string; signal: AbortSignal },
@@ -58,11 +83,19 @@ export async function runSyncJob(
   const client = await deps.resolveClient(args.accountId, args.signal);
   if (!client.ok) return stampError(db, args.accountId, client.error, args.signal);
 
-  const synced = await syncMailbox(db, {
-    accountId: args.accountId,
-    gmail: client.value,
-    signal: args.signal,
-  });
+  const nylasGrantId = await loadNylasGrantId(db, args.accountId);
+  const synced =
+    nylasGrantId !== null
+      ? await syncNylasMailbox(db, {
+          accountId: args.accountId,
+          gmail: client.value,
+          signal: args.signal,
+        })
+      : await syncMailbox(db, {
+          accountId: args.accountId,
+          gmail: client.value,
+          signal: args.signal,
+        });
   if (!synced.ok) return stampError(db, args.accountId, synced.error, args.signal);
   return ok(synced.value);
 }
