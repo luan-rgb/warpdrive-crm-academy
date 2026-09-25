@@ -12,6 +12,10 @@ x-app-build: &app-build
 
 x-tenant-env: &tenant-env
   NODE_ENV: production
+  # Hardcoded, not sourced from an env file: every CRM Academy tenant is a hosted/managed
+  # deployment (never an OSS self-hoster admin who'd want the update-check banner), so this is a
+  # fleet-wide policy, not a per-tenant choice. See env.ts's own comment on DISABLE_UPDATE_CHECK.
+  DISABLE_UPDATE_CHECK: "true"
   # Optional: empty disables Google sign-in (src/features/auth/google.ts). A deploy needs this
   # OR the two magic-link vars below; env.ts's own boot guard enforces that, not this file.
   GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
