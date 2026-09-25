@@ -111,6 +111,12 @@ sem saber o porquê:
    container resolvia, manualmente). Corrigido trocando pra mount de **diretório**
    (`./caddy:/etc/caddy:ro`), que não tem esse problema. Isso já causou um apagão silencioso real
    (nenhum aluno provisionado entre os testes de 21/09 e a correção em 23/09 teria funcionado).
+   **Reapareceu em 25/09** de um jeito diferente: `caddy/Caddyfile.tenants` continuava versionado
+   no git, e um `git pull`/`checkout` reescreve o arquivo (novo inode) mesmo estando *dentro* de
+   um diretório montado — o container voltou a ver o diretório vazio. Corrigido de vez tirando o
+   arquivo do git (mesmo tratamento do `envs/shared.env`): agora é `caddy/Caddyfile.tenants.example`
+   versionado + `caddy/Caddyfile.tenants` gitignorado, copiado uma vez no setup. Nunca mais um
+   `git pull` toca nesse arquivo.
 3. **Log do `hotmart-lifecycle.sh` duplicava cada linha.** O script já redireciona sua própria
    saída pra um `tee`; o crontab redirecionava de novo por fora. Corrigido removendo o
    redirecionamento externo no crontab (o script já cuida disso sozinho).

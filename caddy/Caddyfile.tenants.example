@@ -26,17 +26,3 @@ http://s3.{$BASE_DOMAIN} {
 
 	reverse_proxy shared-minio:9000
 }
-# BEGIN TENANT estrategistacrm
-http://estrategistacrm.{$BASE_DOMAIN} {
-	header {
-		Strict-Transport-Security "max-age=31536000; includeSubDomains"
-		-Server
-	}
-	request_body {
-		max_size 80MB
-	}
-	@ws path /_ws*
-	reverse_proxy @ws aluno-estrategistacrm-ws-1:8080
-	reverse_proxy aluno-estrategistacrm-app-1:3000
-}
-# END TENANT estrategistacrm

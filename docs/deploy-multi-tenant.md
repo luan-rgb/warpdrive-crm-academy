@@ -17,6 +17,13 @@ in the app cannot leak one student's data to another.
    set `BASE_DOMAIN` and `ACME_EMAIL`, and set `GOOGLE_OAUTH_CLIENT_ID` /
    `GOOGLE_OAUTH_CLIENT_SECRET` / `GOOGLE_WORKSPACE_DOMAIN` from your Google Cloud OAuth client
    (one client, shared by every student; see the caveat below).
+2b. `cp caddy/Caddyfile.tenants.example caddy/Caddyfile.tenants`. This file is gitignored on
+   purpose, same reasoning as `envs/shared.env`: `provision-tenant.sh`/`deprovision-tenant.sh`
+   mutate it directly (appending/removing a `BEGIN/END TENANT` block per student), and a file
+   under git that a script also edits at runtime gets rewritten (new inode) by the next
+   `git pull`/`checkout` that touches it, which silently breaks the directory bind mount Caddy
+   reads it through (see "Bugs reais encontrados" in `docs/PROJETO.md` — this happened twice
+   before this file was untracked). Never `git add` this file back.
 3. `docker compose -p tenants-shared -f docker-compose.shared.yml --env-file envs/shared.env up -d`
 
 ## Adding a student
