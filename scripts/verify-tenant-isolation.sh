@@ -63,7 +63,7 @@ echo "== checking MinIO isolation: ${A}'s key must not read ${B}'s bucket =="
 # case here. Under `set -e`, an unguarded failing command substitution would abort the whole
 # script before the PASS/FAIL check below ever runs, so the failure must be swallowed and the
 # captured output inspected instead.
-RESULT="$(docker run --rm --network tenants-net --entrypoint sh minio/mc:latest -c "
+RESULT="$(docker run --rm --network tenants-net --entrypoint sh quay.io/minio/mc:latest -c "
   mc alias set testa http://shared-minio:9000 '${MINIO_KEY_A}' '${MINIO_SECRET_A}' >/dev/null 2>&1
   mc ls testa/${BUCKET_B} 2>&1
 " || true)"

@@ -24,7 +24,8 @@ services:
       retries: 10
 
   minio:
-    image: minio/minio
+    # Docker Hub's minio/minio now denies anonymous pulls; quay.io mirror still works.
+    image: quay.io/minio/minio
     container_name: shared-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
@@ -38,14 +39,25 @@ services:
     image: caddy:2-alpine
     container_name: shared-caddy
     restart: unless-stopped
+    # Internal-only: host nginx already owns 80/443 for other products on this box and
+    # terminates TLS for *.crm.estrategistacrm.com.br with its own wildcard cert, then
+    # proxy_passes plain HTTP here. See the note at the top of caddy/Caddyfile.tenants.
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:8880:80"
     environment:
       BASE_DOMAIN: ${BASE_DOMAIN:?set BASE_DOMAIN}
       ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL}
+    # DIRECTORY mount, not a single-file mount: provision-tenant.sh/deprovision-tenant.sh edit
+    # caddy/Caddyfile.tenants with sed -i, which rewrites it via a new inode (temp file + rename).
+    # A single-file bind mount stays pinned to the OLD inode when that happens, so the container
+    # silently keeps serving a frozen snapshot forever after the first edit, no error, no `caddy
+    # reload` fixes it, only a container recreate does (see the incident this comment postdates:
+    # every deploy between provisioning "teste1"/"teste-lifecycle" and this comment was routed by
+    # a Caddy that had stopped seeing new tenant blocks). A directory mount has no such inode
+    # pinning: whatever file currently sits at that path within it is what gets read.
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile.tenants", "--adapter", "caddyfile"]
     volumes:
-      - ./Caddyfile.tenants:/etc/caddy/Caddyfile
+      - ./caddy:/etc/caddy:ro
       - shared_caddydata:/data
       - shared_caddyconfig:/config
     networks: [tenants-net]

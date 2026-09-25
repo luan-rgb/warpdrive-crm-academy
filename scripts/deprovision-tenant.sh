@@ -19,7 +19,7 @@ cd "$ROOT_DIR"
 
 # shellcheck source=/dev/null
 # set -a: export every var from shared.env so docker compose --env-file interpolation
-# (e.g. ${BASE_DOMAIN} in Caddyfile.tenants reload) and the psql/mc commands below see them.
+# (e.g. ${BASE_DOMAIN} in caddy/Caddyfile.tenants reload) and the psql/mc commands below see them.
 set -a
 source envs/shared.env
 set +a
@@ -35,6 +35,9 @@ if [[ -f "$ENV_FILE" ]]; then
   docker compose -p "aluno-${SLUG}" -f docker-compose.tenant.yml --env-file "$ENV_FILE" down || true
 fi
 
+echo "== removing $SLUG's built images (each tenant builds its own, never shared; see the note atop docker-compose.tenant.yml) =="
+docker rmi -f "aluno-${SLUG}-app" "aluno-${SLUG}-ws" "aluno-${SLUG}-worker" "aluno-${SLUG}-migrate" 2>/dev/null || true
+
 echo "== dropping Postgres database and role for $SLUG =="
 # ON_ERROR_STOP=0: tolerate "does not exist" so this script is safe to re-run.
 docker compose -p tenants-shared -f docker-compose.shared.yml exec -T postgres \
@@ -46,7 +49,7 @@ SQL
 echo "== removing MinIO bucket and access key for $SLUG =="
 # --entrypoint sh: the minio/mc image's default entrypoint is `mc` itself, so `sh -c "..."`
 # needs the entrypoint overridden or it tries to run `mc` with "sh" as its first argument.
-docker run --rm --network tenants-net --entrypoint sh minio/mc:latest -c "
+docker run --rm --network tenants-net --entrypoint sh quay.io/minio/mc:latest -c "
   set -e
   mc alias set shared http://shared-minio:9000 '${SHARED_MINIO_ROOT_USER}' '${SHARED_MINIO_ROOT_PASSWORD}'
   mc admin user remove shared ${MINIO_ACCESS_KEY} || true
@@ -55,10 +58,10 @@ docker run --rm --network tenants-net --entrypoint sh minio/mc:latest -c "
 "
 
 echo "== removing Caddy site block for $SLUG =="
-if grep -q "# BEGIN TENANT ${SLUG}\$" Caddyfile.tenants 2>/dev/null; then
-  sed -i.bak "/# BEGIN TENANT ${SLUG}\$/,/# END TENANT ${SLUG}\$/d" Caddyfile.tenants
-  rm -f Caddyfile.tenants.bak
-  docker compose -p tenants-shared -f docker-compose.shared.yml exec caddy caddy reload --config /etc/caddy/Caddyfile
+if grep -q "# BEGIN TENANT ${SLUG}\$" caddy/Caddyfile.tenants 2>/dev/null; then
+  sed -i.bak "/# BEGIN TENANT ${SLUG}\$/,/# END TENANT ${SLUG}\$/d" caddy/Caddyfile.tenants
+  rm -f caddy/Caddyfile.tenants.bak
+  docker compose -p tenants-shared -f docker-compose.shared.yml exec caddy caddy reload --config /etc/caddy/Caddyfile.tenants
 fi
 
 rm -f "$ENV_FILE"

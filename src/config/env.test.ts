@@ -43,6 +43,34 @@ describe("env boundary", () => {
     expect(result.ok).toBe(true);
   });
 
+  test("rejects production with neither Google OAuth nor magic-link configured", () => {
+    const result = parseEnv({
+      ...process.env,
+      NODE_ENV: "production",
+      SEED_ADMIN_EMAIL: "admin@example.com",
+      GOOGLE_OAUTH_CLIENT_ID: "",
+      GOOGLE_OAUTH_CLIENT_SECRET: "",
+      GOOGLE_WORKSPACE_DOMAIN: "",
+      RESEND_API_KEY: "",
+      MAGIC_LINK_FROM_EMAIL: "",
+    });
+    expect(result.ok).toBe(false);
+  });
+
+  test("accepts production with only magic-link configured (no Google OAuth)", () => {
+    const result = parseEnv({
+      ...process.env,
+      NODE_ENV: "production",
+      SEED_ADMIN_EMAIL: "admin@example.com",
+      GOOGLE_OAUTH_CLIENT_ID: "",
+      GOOGLE_OAUTH_CLIENT_SECRET: "",
+      GOOGLE_WORKSPACE_DOMAIN: "",
+      RESEND_API_KEY: "re_test_key",
+      MAGIC_LINK_FROM_EMAIL: "login@example.com",
+    });
+    expect(result.ok).toBe(true);
+  });
+
   test("rejects a bare-hostname MINIO_ENDPOINT that is not a parseable URL", () => {
     // Regression: the prod deploy prescribed MINIO_ENDPOINT=minio, which passes a min(1)
     // check but throws "Invalid URL" in buildMinioClient (new URL(endpoint)) on the FIRST

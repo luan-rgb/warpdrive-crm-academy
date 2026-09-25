@@ -21,6 +21,9 @@ export const RATE_LIMITS = {
   oauthToken: { limit: 60, windowMs: MINUTE },
   // Starting a Google login is a human act with a redirect in the middle.
   authStart: { limit: 20, windowMs: MINUTE },
+  // Each request sends a real email. A legitimate person retries a handful of times (typo,
+  // slow inbox); anything beyond that from one address is someone else's inbox being spammed.
+  authMagicLinkRequest: { limit: 5, windowMs: HOUR },
   // The container healthcheck polls every 15s (4/min). The rest of the headroom is for
   // whatever external monitoring an operator points at it.
   health: { limit: 60, windowMs: MINUTE },

@@ -20,6 +20,11 @@ const COOKIE_OPTS = {
 
 // GET /auth/start: build the Google OAuth redirect, set state/nonce/PKCE cookies.
 export async function GET(req: NextRequest): Promise<Response> {
+  // Not configured on this deploy (e.g. multi-tenant hosting, magic-link only): 404 rather than
+  // building a redirect_uri Google will reject anyway. Same "don't disclose route existence when
+  // disabled" shape as dev-login.
+  if (env.GOOGLE_OAUTH_CLIENT_ID === "") return new Response(null, { status: 404 });
+
   // Starting a login is a human act with a redirect in the middle; nobody legitimately does it
   // twenty times a minute. Each call mints two 32-byte secrets, a PKCE pair and four cookies.
   const limit = checkRateLimit("authStart", req.headers);

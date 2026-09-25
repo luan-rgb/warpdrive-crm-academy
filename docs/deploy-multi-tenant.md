@@ -57,6 +57,36 @@ provisioned by the identical code path, so a regression that broke isolation wou
 regardless of which tenant is cast as the attacker. A clean exit (0) with two `PASS:` lines is the
 only acceptable result before deploying a provisioning change to real students.
 
+## Hotmart automation (student self-checkout)
+
+As of 2026-09, provisioning is no longer only the manual admin action the original design
+(`docs/superpowers/specs/2026-09-05-multi-tenant-provisioning-design.md`) described. A student
+who buys CRM Academy on Hotmart gets a tenant automatically, with no admin step:
+
+- The existing `crm-hotmart` Supabase Edge Function (already deployed, already configured in the
+  Hotmart panel with the real hottok) keeps doing exactly what it did before: validate the
+  webhook, and on `PURCHASE_APPROVED` insert a row into `crm_compras` with `entregar_em` set 7
+  days out (the guarantee window). On `PURCHASE_CANCELED`/`PURCHASE_REFUNDED`/`PURCHASE_CHARGEBACK`/
+  etc it flips that row's `status`. None of this changed.
+- `scripts/hotmart-lifecycle.sh` (cron, daily) is new and owns everything downstream, for CRM
+  Academy rows only (`produto_nome ILIKE '%CRM Academy%'`; every other product's rows are
+  untouched): once `entregar_em` has passed, it provisions a warpdrive tenant (`provision-tenant.sh`
+  with a slug generated from the buyer's name), emails the student their CRM's URL, and tracks
+  `warpdrive_slug` / `warpdrive_status` / `warpdrive_expires_at` on that same `crm_compras` row (this
+  is the "table separate from the tenants themselves" that tracks provisioning state, reusing the
+  existing purchases table instead of a new database). It also suspends (stops, never deletes) a
+  tenant whose free year (`warpdrive_expires_at`, one year from provisioning) has passed, or whose
+  purchase was refunded/canceled/charged back after already being provisioned, and emails a 30-day
+  expiry warning once per tenant (`warpdrive_warned_at`).
+- `crm-entregar` (the generic code-based delivery cron shared by other Hotmart products, e.g.
+  Clube do Livro, Imersão) now explicitly excludes CRM Academy rows, so the two delivery paths
+  never race on the same purchase.
+- Login no longer requires Google OAuth per tenant (see `GOOGLE_OAUTH_CLIENT_ID` etc. now being
+  optional in `envs/shared.env`): magic-link sign-in (`src/features/auth/magicLink.ts`, via Resend)
+  works with no per-tenant Google Cloud Console step, which is what made same-day automated
+  provisioning viable in the first place (Google's OAuth redirect_uri can't be registered
+  per-subdomain without a human in the loop).
+
 ## Backups
 
 All student databases live in the one `shared_pgdata` volume (one shared Postgres instance), so

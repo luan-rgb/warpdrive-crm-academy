@@ -568,6 +568,13 @@
       "when": 1788435030695,
       "tag": "0080_oval_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 81,
+      "version": "7",
+      "when": 1790020720577,
+      "tag": "0081_oval_captain_cross",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,42 @@
+# Shared Caddy config for multi-tenant CRM Academy hosting. The s3 block below is static: one
+# shared MinIO fronts every tenant's bucket, selected by bucket name in the request path, not by
+# hostname, so it needs no per-tenant block. Per-tenant site blocks are appended below by
+# scripts/provision-tenant.sh between BEGIN/END TENANT markers, and removed by
+# scripts/deprovision-tenant.sh using the same markers. Do not hand-edit a generated block; edit
+# anything above the first marker freely. See docs/deploy-multi-tenant.md.
+#
+# TLS is NOT managed here: this VPS already terminates TLS at the host nginx with a wildcard
+# cert for *.crm.estrategistacrm.com.br (acme.sh, DNS-01), reused instead of per-site ACME here
+# because nginx already owns host ports 80/443 for other products on this box. Caddy only does
+# Host-header routing to each tenant's containers over plain HTTP on an internal-only port
+# (see docker-compose.shared.yml). auto_https off: without it, Caddy would still try to obtain
+# its own certs for these domain-shaped addresses and would fail (it can't bind 80/443, and
+# doesn't need to).
+{
+	auto_https off
+}
+
+http://s3.{$BASE_DOMAIN} {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Content-Security-Policy "sandbox; default-src 'none'; frame-ancestors 'none'"
+		-Server
+	}
+
+	reverse_proxy shared-minio:9000
+}
+# BEGIN TENANT estrategistacrm
+http://estrategistacrm.{$BASE_DOMAIN} {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+	request_body {
+		max_size 80MB
+	}
+	@ws path /_ws*
+	reverse_proxy @ws aluno-estrategistacrm-ws-1:8080
+	reverse_proxy aluno-estrategistacrm-app-1:3000
+}
+# END TENANT estrategistacrm
