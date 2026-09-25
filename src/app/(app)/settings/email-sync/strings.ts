@@ -17,6 +17,7 @@ export const EMAIL_SYNC_STRINGS = {
   connect: "Conectar Gmail",
   reconnect: "Reconectar",
   disconnect: "Desconectar",
+  connectOutlook: "Conectar Outlook",
   connecting: "Conectando...",
   disconnecting: "Desconectando...",
   actionError: "Não foi possível concluir essa ação. Tente novamente.",

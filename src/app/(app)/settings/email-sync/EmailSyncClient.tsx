@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { connectGmailStart, disconnectMailboxAction } from "@/features/email/actions";
+import {
+  connectGmailStart,
+  connectNylasStart,
+  disconnectMailboxAction,
+} from "@/features/email/actions";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import {
   SettingsCard,
@@ -30,7 +34,15 @@ function formatSync(iso: string | null): string {
   return S.lastSynced(new Date(iso).toLocaleString());
 }
 
-export function EmailSyncClient({ mailbox }: { mailbox: MailboxView | null }): React.ReactNode {
+export function EmailSyncClient({
+  mailbox,
+  googleConfigured,
+  nylasConfigured,
+}: {
+  mailbox: MailboxView | null;
+  googleConfigured: boolean;
+  nylasConfigured: boolean;
+}): React.ReactNode {
   const router = useRouter();
   const [now, setNow] = useState<Date | null>(null);
   // eslint-disable-next-line react-hooks/set-state-in-effect -- the clock is the browser's, not the request's: rendering a stall from the server time would disagree with the tab a minute later
@@ -52,6 +64,22 @@ export function EmailSyncClient({ mailbox }: { mailbox: MailboxView | null }): R
     } catch {
       // Minting the consent URL failed (dead session or transient error): un-stick the button
       // and surface a retry hint rather than leaving it disabled on "Connecting..." forever.
+      setPending(false);
+      setError(S.actionError);
+    }
+  }
+
+  // Same idea as startConnect, but via Nylas (src/features/email/nylasClient.ts): works for any
+  // student's own Gmail or Outlook, not just accounts in one Google Workspace domain, and needs
+  // no per-tenant setup (see the design doc). The reconnect callback also rebinds by user_id, so
+  // this is safe to offer for reconnect too, not just a first-time connect.
+  async function startConnectNylas(provider: "google" | "microsoft"): Promise<void> {
+    setPending(true);
+    setError(null);
+    try {
+      const { url } = await connectNylasStart(provider);
+      window.location.href = url;
+    } catch {
       setPending(false);
       setError(S.actionError);
     }
@@ -106,8 +134,10 @@ export function EmailSyncClient({ mailbox }: { mailbox: MailboxView | null }): R
         )}
       </SettingsCardBody>
 
-      <SettingsCardFooter>
-        {error !== null ? <span className="mr-auto text-sm text-red-600">{error}</span> : null}
+      <SettingsCardFooter className="flex-wrap gap-2">
+        {error !== null ? (
+          <span className="mr-auto w-full text-sm text-red-600">{error}</span>
+        ) : null}
         {connected ? (
           <Button
             type="button"
@@ -118,11 +148,66 @@ export function EmailSyncClient({ mailbox }: { mailbox: MailboxView | null }): R
             {pending ? S.disconnecting : S.disconnect}
           </Button>
         ) : (
-          <Button type="button" disabled={pending} onClick={() => void startConnect()}>
-            {pending ? S.connecting : mailbox === null ? S.connect : S.reconnect}
-          </Button>
+          <ConnectButtons
+            pending={pending}
+            hasMailbox={mailbox !== null}
+            googleConfigured={googleConfigured}
+            nylasConfigured={nylasConfigured}
+            onGoogle={() => void startConnect()}
+            onNylas={(provider) => void startConnectNylas(provider)}
+          />
         )}
       </SettingsCardFooter>
     </SettingsCard>
+  );
+}
+
+// Split out from the main render (kept the component's cognitive complexity under the project's
+// lint budget): which connect buttons show at all depends only on which providers this
+// deployment has configured (nylasConfigured / googleConfigured), never on connection state
+// (the caller only renders this in the not-connected branch).
+function ConnectButtons({
+  pending,
+  hasMailbox,
+  googleConfigured,
+  nylasConfigured,
+  onGoogle,
+  onNylas,
+}: {
+  pending: boolean;
+  hasMailbox: boolean;
+  googleConfigured: boolean;
+  nylasConfigured: boolean;
+  onGoogle: () => void;
+  onNylas: (provider: "google" | "microsoft") => void;
+}): React.ReactNode {
+  return (
+    <>
+      {nylasConfigured && (
+        <>
+          <Button type="button" disabled={pending} onClick={() => onNylas("google")}>
+            {pending ? S.connecting : hasMailbox ? S.reconnect : S.connect}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={pending}
+            onClick={() => onNylas("microsoft")}
+          >
+            {pending ? S.connecting : S.connectOutlook}
+          </Button>
+        </>
+      )}
+      {googleConfigured && (
+        <Button
+          type="button"
+          variant={nylasConfigured ? "outline" : "default"}
+          disabled={pending}
+          onClick={onGoogle}
+        >
+          {pending ? S.connecting : hasMailbox ? S.reconnect : S.connect}
+        </Button>
+      )}
+    </>
   );
 }

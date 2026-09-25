@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { sql } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { env } from "@/config/env";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import { db } from "@/db/client";
 import { makeStorageClient } from "@/features/files/storage";
@@ -172,6 +173,34 @@ export async function connectGmailStart(): Promise<{ url: string }> {
   });
 
   return { url: buildAuthUrl({ userId: ctx.session.userId, state }) };
+}
+
+// Gmail/Outlook via Nylas (src/features/email/nylasClient.ts): unlike connectGmailStart above,
+// no per-request state cookie here, because the redirect the user follows never comes back to
+// THIS tenant directly — Nylas's hosted auth has one fixed redirect_uri for every tenant (see
+// docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md), so the callback lands on
+// the shared-nylas-relay service instead, which is also where the single-use state is minted and
+// checked. This action's only job is asking that service for the URL to send the browser to.
+export async function connectNylasStart(
+  provider: "google" | "microsoft",
+): Promise<{ url: string }> {
+  const ctx = await createContext();
+  if (ctx.session === null) {
+    throw new AppError("E_AUTH_001", "connectNylasStart called without a session", {});
+  }
+  const tenantSlug = new URL(env.BASE_URL).hostname.split(".")[0] ?? "";
+
+  const res = await fetch("http://shared-nylas-relay:8081/connect-init", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ tenant_slug: tenantSlug, user_id: ctx.session.userId, provider }),
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!res.ok) {
+    throw new AppError("E_NYLAS_001", "connect-init failed", { status: res.status });
+  }
+  const body = (await res.json()) as { authUrl: string };
+  return { url: body.authUrl };
 }
 
 const disconnectMailboxInput = z.object({ accountId: z.string().uuid() });
