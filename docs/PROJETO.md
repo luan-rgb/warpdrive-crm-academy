@@ -70,6 +70,15 @@ pronto pra isso ainda — hoje é manual: `docker compose -p aluno-<slug> ... up
 containers, e atualizar `warpdrive_status`/`warpdrive_expires_at` na mesma linha de `crm_compras`.
 Se isso virar rotina, vale um `scripts/reactivate-tenant.sh`.
 
+**"Um aluno perdeu acesso ao e-mail que usa pra entrar."** Login é só magic-link (sem senha, sem
+"esqueci minha senha"): perder o e-mail é perder o único jeito de entrar, e não tem
+auto-recuperação dentro do app. `scripts/reset-tenant-login-email.sh <slug> <email-antigo>
+<email-novo>` resolve — troca o e-mail (e o `google_sub` sintético junto, tem que ser os dois ou
+o próximo login cria uma conta nova em vez de reconhecer a pessoa) na conta existente do aluno,
+sem apagar nada dela. Confirme que é mesmo o aluno pedindo (cruze com `crm_compras` ou o e-mail da
+compra original) antes de rodar — o script não verifica identidade por você. Só funciona pra quem
+loga por magic-link; alguém que usa Google OAuth recupera pelo próprio Google.
+
 **"Quero mudar quanto tempo depois do vencimento ele é suspenso, ou o aviso de 30 dias."** Edite
 as constantes no topo de `scripts/hotmart-lifecycle.sh` (`interval '30 days'` etc.) e o `+365 days`
 na seção de entrega.
