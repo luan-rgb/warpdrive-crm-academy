@@ -2,8 +2,18 @@ import { AppError } from "@/constants/errorIds";
 import { err, ok, type Result } from "@/types/result";
 import type { GmailClient } from "./gmailClient";
 import type { GmailMessage, HistoryList, MessageList, SendResult } from "./gmailSchemas";
+import { decodeSelfBuiltMime } from "./mimeDecodeSelfBuilt";
 import { toGmailMessageShape } from "./nylasMessageMap";
-import { nylasMessageListSchema, nylasMessageSchema, nylasThreadSchema } from "./nylasSchemas";
+import {
+  nylasMessageListSchema,
+  nylasMessageSchema,
+  nylasSendResultSchema,
+  nylasThreadSchema,
+} from "./nylasSchemas";
+
+function toParticipants(addresses: string[]): { email: string }[] {
+  return addresses.map((email) => ({ email }));
+}
 
 export interface NylasClientConfig {
   apiKey: string;
@@ -111,10 +121,53 @@ export function createNylasClient(config: NylasClientConfig): GmailClient {
       });
     },
 
-    sendRaw(): Promise<Result<SendResult, AppError>> {
-      return Promise.resolve(
-        err(new AppError("E_NYLAS_002", "nylas sendRaw not yet implemented (checkpoint 4)", {})),
+    // rawBase64 is always THIS repo's own buildMime output (mime.ts), never arbitrary MIME from
+    // elsewhere (only outbox.ts and sendSystem.ts call sendRaw), so decodeSelfBuiltMime's narrow
+    // understanding of that one deterministic shape is exactly what's needed here, not a general
+    // RFC822 parser. Nylas's send endpoint takes structured fields, not a raw MIME blob.
+    async sendRaw({ rawBase64, threadId, signal }): Promise<Result<SendResult, AppError>> {
+      const decoded = decodeSelfBuiltMime(rawBase64);
+      const body: Record<string, unknown> = {
+        to: toParticipants(decoded.to),
+        subject: decoded.subject,
+        body: decoded.html,
+      };
+      if (decoded.cc.length > 0) body.cc = toParticipants(decoded.cc);
+      if (decoded.bcc.length > 0) body.bcc = toParticipants(decoded.bcc);
+      if (decoded.attachments.length > 0) {
+        body.attachments = decoded.attachments.map((a) => ({
+          filename: a.filename,
+          content_type: a.contentType,
+          content: a.bytes.toString("base64"),
+        }));
+      }
+      if (threadId !== undefined) {
+        // Nylas replies thread by MESSAGE id (reply_to_message_id), not thread id (passing a
+        // thread id errors); the interface only gives us a thread id (Gmail's own semantics), so
+        // resolve it to that thread's most recent message first. Best-effort: a thread lookup
+        // failure degrades to sending un-threaded rather than failing the whole send.
+        const thread = await nylasFetch(
+          `${API}/threads/${threadId}`,
+          { headers: auth },
+          { parse: (u) => nylasThreadSchema.parse((u as { data: unknown }).data) },
+          signal,
+        );
+        const lastMessageId = thread.ok ? thread.value.message_ids.at(-1) : undefined;
+        if (lastMessageId !== undefined) body.reply_to_message_id = lastMessageId;
+      }
+
+      const r = await nylasFetch(
+        `${API}/messages/send`,
+        {
+          method: "POST",
+          headers: { ...auth, "content-type": "application/json" },
+          body: JSON.stringify(body),
+        },
+        { parse: (u) => nylasSendResultSchema.parse((u as { data: unknown }).data) },
+        signal,
       );
+      if (!r.ok) return r;
+      return ok({ id: r.value.id, threadId: r.value.thread_id });
     },
 
     async searchByRfc822({ messageIdHeader, signal }): Promise<Result<MessageList, AppError>> {
