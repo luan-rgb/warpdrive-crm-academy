@@ -15,7 +15,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { and, eq, gt, isNull, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { Db } from "@/db/client";
-import { magicLinkTokens } from "@/db/schema";
+import { magicLinkTokens, users } from "@/db/schema";
 import { err, ok, type Result } from "@/types/result";
 import type { VerifiedIdentity } from "./bootstrap";
 import { upsertUserOnLogin } from "./bootstrap";
@@ -40,24 +40,46 @@ export interface RequestMagicLinkOk {
 export interface Deps {
   db: Db;
   signal: AbortSignal;
+  // Google login has GOOGLE_WORKSPACE_DOMAIN (the `hd` claim) as a free membership gate: only
+  // accounts in that Workspace ever get a token verified with it. Magic-link has nothing
+  // equivalent, so this is injected to build one: a stranger who only knows a tenant's URL must
+  // not be able to hand themselves an account in it just by owning an inbox.
+  seedAdminEmail: string;
 }
 
-// Always succeeds for any syntactically valid email, whether or not an account exists yet for
-// it (same shape as bootstrap's invite-placeholder flow). The caller (the route) must send an
-// identical response either way: whether this address has an account is not this feature's to
-// reveal (account enumeration).
+// Whether this tenant already recognises the email: either the seed admin (allowed even before
+// their very first login, since no user row exists for them yet), or an existing user row
+// (already bootstrapped, or an invited placeholder created by inviteUser). Anyone else is a
+// stranger, not a student, regardless of how syntactically valid their email is.
+async function isKnownToTenant(db: Db, email: string, seedAdminEmail: string): Promise<boolean> {
+  if (seedAdminEmail.trim().toLowerCase() === email) return true;
+  const existing = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+  return existing.length > 0;
+}
+
+// Never mints a token for an email this tenant doesn't already recognise (see isKnownToTenant):
+// unlike a SaaS with open signup, every tenant here belongs to exactly one paying student (plus
+// whoever they've invited), so "does this account exist" is not a secret worth protecting at the
+// cost of silently handing out access to anyone who asks.
 export async function requestMagicLink(
   rawEmail: unknown,
   deps: Deps,
-): Promise<Result<RequestMagicLinkOk, "invalid_email">> {
+): Promise<Result<RequestMagicLinkOk, "invalid_email" | "not_a_student">> {
   const parsed = emailSchema.safeParse(rawEmail);
   if (!parsed.success) return err("invalid_email");
   const email = parsed.data.trim().toLowerCase();
 
+  deps.signal.throwIfAborted();
+  if (!(await isKnownToTenant(deps.db, email, deps.seedAdminEmail))) return err("not_a_student");
+  deps.signal.throwIfAborted();
+
   const token = randomBytes(32).toString("base64url");
   const expiresAt = new Date(Date.now() + TOKEN_TTL_MS);
 
-  deps.signal.throwIfAborted();
   await deps.db.insert(magicLinkTokens).values({ email, tokenHash: hashToken(token), expiresAt });
   deps.signal.throwIfAborted();
 
@@ -95,6 +117,13 @@ export async function verifyMagicLink(
     .returning({ email: magicLinkTokens.email });
   deps.signal.throwIfAborted();
   if (claimed === undefined) return err("invalid_token");
+
+  // Defense in depth: requestMagicLink already refused to mint a token for an unrecognised
+  // email, but this is the actual security boundary (the token is the bearer credential from
+  // here on), so it re-checks rather than trusting that the earlier gate was the only path here.
+  if (!(await isKnownToTenant(deps.db, claimed.email, deps.seedAdminEmail))) {
+    return err("not_a_student");
+  }
 
   const identity: VerifiedIdentity = {
     email: claimed.email,

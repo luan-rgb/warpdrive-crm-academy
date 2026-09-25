@@ -1,9 +1,11 @@
 /**
  * POST /auth/magic-link/request: sends a one-time sign-in link to the given email.
  *
- * Always redirects to the same /login?sent=1 whether or not an account exists for that address
- * (never disclose account existence), UNLESS the email is not even syntactically valid, which
- * is a format problem the visitor can fix and isn't an enumeration leak either way.
+ * Deliberately DOES disclose "you're not a recognised member of this CRM" (unlike a typical
+ * SaaS's account-enumeration-safe "check your inbox either way"): each tenant here belongs to
+ * exactly one paying student (plus whoever they've invited, see isKnownToTenant in magicLink.ts),
+ * so silently emailing a link to any address that asks would let a stranger self-register into
+ * someone else's CRM just by knowing its URL. A clear rejection is the whole point.
  */
 
 import { type NextRequest, NextResponse } from "next/server";
@@ -21,9 +23,13 @@ export async function POST(req: NextRequest): Promise<Response> {
   const form = await req.formData().catch(() => null);
   const rawEmail = form?.get("email");
 
-  const result = await requestMagicLink(rawEmail, { db, signal });
+  const result = await requestMagicLink(rawEmail, {
+    db,
+    signal,
+    seedAdminEmail: env.SEED_ADMIN_EMAIL,
+  });
   if (!result.ok) {
-    return NextResponse.redirect(new URL("/login?error=invalid_email", env.BASE_URL));
+    return NextResponse.redirect(new URL(`/login?error=${result.error}`, env.BASE_URL));
   }
 
   const verifyUrl = new URL(

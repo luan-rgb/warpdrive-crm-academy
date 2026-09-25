@@ -25,7 +25,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const token = req.nextUrl.searchParams.get("token");
   if (token === null) return loginError("missing token");
 
-  const result = await verifyMagicLink(token, { db, signal });
+  const result = await verifyMagicLink(token, { db, signal, seedAdminEmail: env.SEED_ADMIN_EMAIL });
   if (!result.ok) return loginError(result.error);
 
   const jar = await cookies();

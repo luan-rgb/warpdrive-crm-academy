@@ -29,6 +29,8 @@ export const STRINGS = {
     magicLinkSent: "Link enviado! Confira seu e-mail.",
     magicLinkInvalidEmail: "E-mail inválido.",
     magicLinkAuthFailed: "O link expirou ou já foi usado. Peça um novo.",
+    magicLinkNotAStudent:
+      "Esse e-mail não tem acesso a este CRM. Se você é aluno da CRM Academy, use o e-mail da sua compra; se acha que isso é um engano, fale com o suporte.",
     orDivider: "ou",
   },
   contacts: {

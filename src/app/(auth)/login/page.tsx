@@ -27,6 +27,11 @@ export default async function LoginPage({ searchParams }: Props): Promise<React.
         {error === "auth_failed" && (
           <p className="text-pretty text-sm text-destructive">{STRINGS.auth.magicLinkAuthFailed}</p>
         )}
+        {error === "not_a_student" && (
+          <p className="text-pretty text-sm text-destructive">
+            {STRINGS.auth.magicLinkNotAStudent}
+          </p>
+        )}
 
         {googleConfigured && (
           <>
