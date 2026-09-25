@@ -1,0 +1,1 @@
+ALTER TABLE "email_accounts" ADD COLUMN "nylas_grant_id" text;

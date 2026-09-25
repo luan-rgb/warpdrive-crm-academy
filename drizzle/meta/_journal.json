@@ -575,6 +575,13 @@
       "when": 1790020720577,
       "tag": "0081_oval_captain_cross",
       "breakpoints": true
+    },
+    {
+      "idx": 82,
+      "version": "7",
+      "when": 1790368847967,
+      "tag": "0082_warm_harrier",
+      "breakpoints": true
     }
   ]
 }

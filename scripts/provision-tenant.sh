@@ -104,6 +104,9 @@ sed \
   -e "s|__GOOGLE_WORKSPACE_DOMAIN__|${GOOGLE_WORKSPACE_DOMAIN}|g" \
   -e "s|__RESEND_API_KEY__|${RESEND_API_KEY:-}|g" \
   -e "s|__MAGIC_LINK_FROM_EMAIL__|${MAGIC_LINK_FROM_EMAIL:-}|g" \
+  -e "s|__NYLAS_API_KEY__|${NYLAS_API_KEY:-}|g" \
+  -e "s|__NYLAS_CLIENT_ID__|${NYLAS_CLIENT_ID:-}|g" \
+  -e "s|__NYLAS_REGION__|${NYLAS_REGION:-us}|g" \
   -e "s|__SEED_ADMIN_EMAIL__|${SEED_ADMIN_EMAIL}|g" \
   envs/tenant.env.template > "$ENV_FILE"
 

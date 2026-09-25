@@ -36,6 +36,12 @@ const base = z.object({
   // Optional (empty disables magic-link sign-in, see auth/magicLink.ts and magicLinkEmail.ts).
   RESEND_API_KEY: z.string().default(""),
   MAGIC_LINK_FROM_EMAIL: z.string().email().or(z.literal("")).default(""),
+  // Optional (empty disables Gmail/Outlook mailbox connect, see features/email/nylasClient.ts).
+  // Unlike a per-student Google OAuth client, Nylas's hosted auth uses one fixed redirect_uri
+  // regardless of which tenant the flow is for, so one Nylas app can serve every tenant.
+  NYLAS_API_KEY: z.string().default(""),
+  NYLAS_CLIENT_ID: z.string().default(""),
+  NYLAS_REGION: z.enum(["us", "eu"]).default("us"),
   BASE_URL: z.string().url(),
   DATABASE_URL: z.string().min(1),
   WS_TICKET_SECRET: z.string().min(32),
