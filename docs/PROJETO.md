@@ -114,6 +114,39 @@ sem saber o porquê:
 3. **Log do `hotmart-lifecycle.sh` duplicava cada linha.** O script já redireciona sua própria
    saída pra um `tee`; o crontab redirecionava de novo por fora. Corrigido removendo o
    redirecionamento externo no crontab (o script já cuida disso sozinho).
+4. **Magic-link deixava qualquer e-mail se autocadastrar num tenant.** Achado ao vivo (o próprio
+   usuário testou com um e-mail pessoal e ganhou uma conta real, não-admin, dentro do tenant
+   `estrategistacrm`). Google OAuth tinha `GOOGLE_WORKSPACE_DOMAIN` como trava de graça; magic-link
+   não tinha equivalente. Corrigido em `src/features/auth/magicLink.ts`
+   (`isKnownToTenant`): só emite link pro seed admin ou pra quem já existe/foi convidado.
+
+## Gmail/Outlook automático (Nylas) — 2026-09-25
+
+Aluno conecta a própria caixa (Gmail ou Outlook, qualquer domínio) sozinho, sem nenhum passo seu
+manual — resolve o mesmo problema de escala que o login já tinha (Google não registra
+redirect_uri por subdomínio), agora pro envio/recebimento de e-mail. Design completo em
+`docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md`; resumo do que existe:
+
+- **`src/features/email/nylasClient.ts`** implementa a mesma interface `GmailClient` que o Gmail
+  direto já usava — os ~70 arquivos que dependem dela (envio, threads, anexos, spam sweep...) não
+  mudaram nada. `nylasMessageMap.ts` traduz o formato (já decodificado) da Nylas pro formato que o
+  parser de MIME do Gmail já sabia ler.
+- **Envio**: `mimeDecodeSelfBuilt.ts` desmonta o MIME que o próprio `buildMime` já constrói (nunca
+  um parser RFC822 genérico) de volta pros campos estruturados que a API da Nylas espera.
+- **Sincronização**: a Nylas não tem um cursor tipo `historyId` do Gmail (é orientada a webhook, não
+  a consulta) — em vez de construir um receptor de webhook, o worker que já existe (`sync.ts`,
+  `worker.ts`) ganhou um segundo caminho (`syncNylasMailbox`) que busca as mensagens recentes a
+  cada rodada e reaproveita a idempotência do `applyMessageIds` já testado. Troca instantaneidade
+  por simplicidade — é uma escolha deliberada, não uma lacuna escondida.
+- **Conexão**: `nylas-relay/` é um serviço novo (`docker-compose.shared.yml`, ao lado do
+  Postgres/MinIO/Caddy) que existe só porque a Nylas exige **um único redirect_uri fixo** pra
+  aplicação inteira — nenhum tenant sozinho pode ser dono dele. Recebe o callback, descobre de qual
+  aluno é (tabela `warpdrive_ops.nylas_connect_requests`), e grava o `grant_id` direto no banco do
+  tenant certo. Exposto em `https://crm.estrategistacrm.com.br/api/nylas/*` via nginx.
+- **Testado ao vivo**, não só com mock: conectei minha própria conta Gmail de verdade, sincronizei
+  50 mensagens reais pro banco do meu tenant, mandei um e-mail real e confirmei que chegou.
+  **Outlook não foi testado com uma conta real** (não tinha uma disponível) — o caminho é o mesmo
+  código pra qualquer provedor, mas vale um teste real assim que der.
 
 ## O que ainda não existe / próximos passos possíveis
 
@@ -126,6 +159,13 @@ sem saber o porquê:
   criar um client OAuth no Google Cloud Console e cadastrar `https://<slug>.crm.estrategistacrm.com.br/auth/callback`
   manualmente pra cada aluno que quiser usar essa opção — o problema de escala original continua
   existindo pra esse método específico.
+- **`trashThread`/`sendRaw` com resposta em thread** via Nylas: envio simples funciona; excluir
+  (mover pra lixeira) uma conversa inteira e o reconciliamento de "thread toda excluída" ainda não
+  têm equivalente Nylas implementado (ver comentários `ponytail` em `nylasClient.ts`).
+- **Outlook** nunca testado com uma conta Microsoft real (só Gmail).
+- Linhas de `nylas_connect_requests` de um tenant desprovisionado não são limpas (sobra cosmética
+  numa tabela compartilhada, não afeta nada, já que o banco do próprio tenant some de qualquer
+  jeito).
 
 ## Onde ler mais
 
