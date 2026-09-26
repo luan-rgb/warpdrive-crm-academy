@@ -249,7 +249,9 @@ describe("PersonDetailClient composer + inline person section", () => {
         baseCurrency="USD"
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
+    );
     fireEvent.change(screen.getByLabelText("Assunto"), { target: { value: "Intro call" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 

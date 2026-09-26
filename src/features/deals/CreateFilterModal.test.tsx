@@ -156,7 +156,9 @@ describe("CreateFilterModal", () => {
       />,
     );
     expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 
   it("closes via the X button", () => {
@@ -185,7 +187,9 @@ describe("CreateFilterModal", () => {
     fireEvent.click(screen.getByRole("option", { name: "Responsável" }));
     fireEvent.click(screen.getByLabelText("Valor da condição 1"));
     fireEvent.click(screen.getByRole("option", { name: "Ada King" }));
-    expect(screen.getByLabelText<HTMLInputElement>("Nome do filtro").value).toBe("Responsável é Ada King");
+    expect(screen.getByLabelText<HTMLInputElement>("Nome do filtro").value).toBe(
+      "Responsável é Ada King",
+    );
   });
 
   it("previews the in-progress definition without saving it", () => {

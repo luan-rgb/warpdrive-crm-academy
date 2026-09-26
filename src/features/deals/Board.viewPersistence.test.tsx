@@ -163,7 +163,9 @@ describe("board toolbar view restored from the saved preference", () => {
     await user.click(screen.getByLabelText("Filtro"));
     await user.click(screen.getByRole("menuitem", { name: /Criar novo filtro/ }));
     expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 
   test("clears the applied ad-hoc filter from the Filter menu", async () => {

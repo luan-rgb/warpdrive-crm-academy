@@ -98,7 +98,9 @@ describe("DealList", () => {
         visibleColumns={DEAL_LIST_COLUMNS.filter((c) => c.defaultVisible === true)}
       />,
     );
-    expect(screen.getByRole("columnheader", { name: "Data prevista de fechamento" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("columnheader", { name: "Data prevista de fechamento" }),
+    ).toBeInTheDocument();
     const titleRow = screen.getByText("Acme renewal").closest("tr") as HTMLElement;
     // Date-only value must render in local time (no UTC off-by-one).
     expect(within(titleRow).getByText("1 de ago. de 2026")).toBeInTheDocument();

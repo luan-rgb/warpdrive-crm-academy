@@ -133,7 +133,9 @@ describe("AgendaDayColumn", () => {
     // user walked 24 empty hours before reaching anything real.
     renderColumn([mk("real", new Date(2026, 6, 15, 14, 0), 60)]);
     const chip = screen.getByRole("button", { name: "Activity real" });
-    const firstSlot = screen.getByRole("button", { name: "Adicionar atividade em 2026-07-15 às 00:00" });
+    const firstSlot = screen.getByRole("button", {
+      name: "Adicionar atividade em 2026-07-15 às 00:00",
+    });
     expect(chip.compareDocumentPosition(firstSlot) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
@@ -148,7 +150,9 @@ describe("AgendaDayColumn", () => {
 
   it("walks the hours with the arrow keys once a lane has focus", () => {
     renderColumn([]);
-    const start = screen.getByRole("button", { name: "Adicionar atividade em 2026-07-15 às 08:00" });
+    const start = screen.getByRole("button", {
+      name: "Adicionar atividade em 2026-07-15 às 08:00",
+    });
     start.focus();
     fireEvent.keyDown(start, { key: "ArrowDown" });
     expect(
@@ -160,7 +164,9 @@ describe("AgendaDayColumn", () => {
 
   it("stops at the ends of the day rather than wrapping around midnight", () => {
     renderColumn([]);
-    const first = screen.getByRole("button", { name: "Adicionar atividade em 2026-07-15 às 00:00" });
+    const first = screen.getByRole("button", {
+      name: "Adicionar atividade em 2026-07-15 às 00:00",
+    });
     first.focus();
     fireEvent.keyDown(first, { key: "ArrowUp" });
     expect(first).toHaveFocus();

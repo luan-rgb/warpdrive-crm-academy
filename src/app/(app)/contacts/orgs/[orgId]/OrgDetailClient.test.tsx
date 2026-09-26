@@ -199,7 +199,9 @@ describe("OrgDetailClient composer seam", () => {
     if (composeSection === null) throw new Error("compose section not found");
     const compose = within(composeSection as HTMLElement);
 
-    fireEvent.click(compose.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }));
+    fireEvent.click(
+      compose.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
+    );
     fireEvent.change(compose.getByLabelText("Assunto"), { target: { value: "Check in" } });
     fireEvent.click(compose.getByRole("button", { name: "Salvar" }));
 

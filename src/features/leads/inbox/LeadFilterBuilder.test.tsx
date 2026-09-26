@@ -97,7 +97,9 @@ describe("LeadFilterBuilder label condition", () => {
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.getByLabelText("Valor da condição 1")).toHaveValue("acme");
     expect(screen.getByLabelText("Valor da condição 2")).toHaveValue("web");
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 
   it("does not compile a label condition with nothing picked", () => {

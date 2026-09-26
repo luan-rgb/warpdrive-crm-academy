@@ -242,7 +242,9 @@ describe("ThreadList", () => {
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     expect(within(bulkBar).queryByRole("button", { name: /archive/i })).toBeNull();
     expect(within(bulkBar).getByRole("button", { name: "Marcar como lida" })).toBeInTheDocument();
-    expect(within(bulkBar).getByRole("button", { name: "Marcar como não lida" })).toBeInTheDocument();
+    expect(
+      within(bulkBar).getByRole("button", { name: "Marcar como não lida" }),
+    ).toBeInTheDocument();
   });
 
   it("disables the bulk action buttons while a bulk action is in flight", () => {

@@ -118,7 +118,9 @@ describe("ContactFilterBuilder label condition", () => {
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.getByLabelText("Valor da condição 1")).toHaveValue("acme");
     expect(screen.getByLabelText("Valor da condição 2")).toHaveValue("globex");
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 
   it("still renders a number box for a numeric field", () => {

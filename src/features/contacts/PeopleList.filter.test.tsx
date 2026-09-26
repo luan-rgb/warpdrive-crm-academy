@@ -73,6 +73,8 @@ describe("PeopleList filter round trip", () => {
     openFilter();
     expect(screen.getByLabelText("Valor da condição 1")).toHaveValue("acme");
     expect(screen.getByLabelText("Valor da condição 2")).toHaveValue("globex");
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 });

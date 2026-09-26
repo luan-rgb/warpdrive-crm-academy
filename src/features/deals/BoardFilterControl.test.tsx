@@ -99,7 +99,9 @@ describe("BoardFilterControl", () => {
     await openBuilder(user, /Editar filtro/);
 
     expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 
   it("opens a blank builder when no saved filter is selected", async () => {

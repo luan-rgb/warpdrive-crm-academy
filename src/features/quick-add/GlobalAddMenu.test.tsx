@@ -118,7 +118,15 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    for (const label of ["Lead", "Negócio", "Atividade", "Pessoa", "Organização", "Nota", "E-mail"]) {
+    for (const label of [
+      "Lead",
+      "Negócio",
+      "Atividade",
+      "Pessoa",
+      "Organização",
+      "Nota",
+      "E-mail",
+    ]) {
       expect(screen.getByRole("menuitem", { name: new RegExp(label) })).toBeInTheDocument();
     }
   });

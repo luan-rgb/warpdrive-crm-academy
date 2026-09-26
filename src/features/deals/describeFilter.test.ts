@@ -77,6 +77,8 @@ describe("describeRows", () => {
   });
 
   it("falls back to the raw value when the id matches no option", () => {
-    expect(describeRows([{ field: "ownerId", op: "eq", value: "u9" }], FIELDS)).toBe("Responsável é u9");
+    expect(describeRows([{ field: "ownerId", op: "eq", value: "u9" }], FIELDS)).toBe(
+      "Responsável é u9",
+    );
   });
 });

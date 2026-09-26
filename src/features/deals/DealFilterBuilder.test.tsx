@@ -152,7 +152,9 @@ describe("DealFilterBuilder", () => {
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
     expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
     expect(screen.getByLabelText<HTMLInputElement>("Valor da condição 1").value).toBe("acme");
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 
   it("opens blank when nothing is applied", () => {
