@@ -19,6 +19,7 @@ import { CSRF_COOKIE, mintCsrfToken } from "@/features/auth/csrf";
 import { LOGIN_RETURN_COOKIE, safeLoginReturnPath } from "@/features/auth/loginReturn";
 import { createSession, SESSION_COOKIE, sessionCookieOptions } from "@/features/auth/session";
 import { verifyGoogleIdToken } from "@/features/auth/verifyGoogleIdToken";
+import { safeErrorSummary } from "@/lib/safeError";
 
 const STATE_COOKIE = "wd_oauth_state";
 const NONCE_COOKIE = "wd_oauth_nonce";
@@ -136,7 +137,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     });
     return res;
   } catch (e) {
-    console.error("[auth/callback] infra error during login:", e);
+    console.error("[auth/callback] infra error during login:", safeErrorSummary(e));
     return loginError("internal error");
   }
 }

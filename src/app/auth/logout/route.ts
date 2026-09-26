@@ -16,6 +16,7 @@ import { db } from "@/db/client";
 import { CSRF_COOKIE } from "@/features/auth/csrf";
 import { logoutCore } from "@/features/auth/logout";
 import { SESSION_COOKIE } from "@/features/auth/session";
+import { safeErrorSummary } from "@/lib/safeError";
 
 const CLEARED_COOKIE_OPTIONS = {
   httpOnly: true,
@@ -43,7 +44,7 @@ export async function GET(): Promise<NextResponse> {
 
     return redirectToLogin();
   } catch (e) {
-    console.error("[auth/logout] infra error during logout:", e);
+    console.error("[auth/logout] infra error during logout:", safeErrorSummary(e));
     return redirectToLogin();
   }
 }
