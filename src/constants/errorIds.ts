@@ -132,6 +132,8 @@ export const ERROR_IDS = {
   MAIL_CREDENTIALS_MISSING: "E_MAIL_001", // account row has no usable stored credential for its provider
   MAIL_ACCOUNT_NOT_FOUND: "E_MAIL_002", // email_accounts row not found for the id being resolved
   MAIL_GRAPH_FAILED: "E_MAIL_003", // Microsoft Graph call failed (non-2xx) or response failed schema validation
+  MAIL_IMAP_FAILED: "E_MAIL_004", // IMAP/SMTP operation failed (connection, protocol, message not found, SMTP reject)
+  MAIL_IMAP_VERIFY_FAILED: "E_MAIL_005", // IMAP/SMTP credential check failed while connecting a mailbox (context.stage names the side)
   // OAUTH
   OAUTH_INVALID_CLIENT: "E_OAUTH_001",
   OAUTH_INVALID_GRANT: "E_OAUTH_002",
