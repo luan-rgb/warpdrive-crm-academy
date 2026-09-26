@@ -8,6 +8,12 @@ set -euo pipefail
 SLUG="${1:?usage: deprovision-tenant.sh <slug> --yes-delete-data}"
 CONFIRM="${2:-}"
 
+# Same slug rule as provision-tenant.sh: this name reaches DROP DATABASE and rm.
+if [[ ! "$SLUG" =~ ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$ ]]; then
+  echo "error: invalid slug (got: $SLUG)" >&2
+  exit 1
+fi
+
 if [[ "$CONFIRM" != "--yes-delete-data" ]]; then
   echo "error: this permanently deletes ${SLUG}'s database, files, and containers." >&2
   echo "re-run with: scripts/deprovision-tenant.sh ${SLUG} --yes-delete-data" >&2

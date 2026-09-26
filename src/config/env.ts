@@ -106,6 +106,17 @@ const schema = base.superRefine((v, ctx) => {
     });
   }
   if (v.NODE_ENV === "production") {
+    // Session cookies are Secure and links in e-mails point at BASE_URL: a plain-http public URL
+    // in production would break login and send people to an unencrypted address.
+    for (const key of ["BASE_URL", "MINIO_ENDPOINT"] as const) {
+      if (!v[key].startsWith("https://")) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [key],
+          message: `${key} must be an https:// URL in production`,
+        });
+      }
+    }
     if (v.ALLOW_FIRST_LOGIN_ADMIN) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

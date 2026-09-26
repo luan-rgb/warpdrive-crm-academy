@@ -14,8 +14,16 @@ x-app-build: &app-build
     # Optional version stamp for the update-check banner. Unset falls back to package.json, then "dev".
     APP_VERSION: ${APP_VERSION:-}
 
+# Docker's json-file logs otherwise grow without bound on the VPS disk.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   caddy:
+    logging: *default-logging
     image: caddy:2-alpine
     restart: unless-stopped
     ports:
@@ -37,6 +45,7 @@ services:
         condition: service_started
 
   postgres:
+    logging: *default-logging
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
@@ -58,12 +67,14 @@ services:
       retries: 10
 
   minio:
+    logging: *default-logging
     image: minio/minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
-      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      # Required: unset, MinIO would boot with its well-known minioadmin defaults on a public host.
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:?set MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:?set MINIO_SECRET_KEY}
       # Browser uploads/downloads hit MinIO cross-origin (app on APP_DOMAIN, storage on
       # s3.APP_DOMAIN), so the S3 API must return CORS headers or the upload fetch rejects.
       MINIO_API_CORS_ALLOW_ORIGIN: ${BASE_URL}
@@ -74,6 +85,7 @@ services:
   # One-shot: create the app bucket idempotently and keep it private. The app itself never
   # creates the bucket, so on a fresh box uploads would fail without this step.
   createbuckets:
+    logging: *default-logging
     image: minio/mc
     depends_on:
       minio:
@@ -92,6 +104,7 @@ services:
 
   # One-shot: apply forward-only Drizzle migrations, then exit. Gates the long-running tier.
   migrate:
+    logging: *default-logging
     build: *app-build
     command: ["node", "dist/migrate.mjs"]
     env_file: .env
@@ -100,6 +113,7 @@ services:
         condition: service_healthy
 
   app:
+    logging: *default-logging
     build: *app-build
     restart: unless-stopped
     command: ["node_modules/.bin/next", "start"]
@@ -117,6 +131,7 @@ services:
         condition: service_completed_successfully
 
   ws:
+    logging: *default-logging
     build: *app-build
     restart: unless-stopped
     command: ["node", "dist/ws.mjs"]
@@ -136,6 +151,7 @@ services:
         condition: service_completed_successfully
 
   worker:
+    logging: *default-logging
     build: *app-build
     restart: unless-stopped
     command: ["node", "dist/worker.mjs"]

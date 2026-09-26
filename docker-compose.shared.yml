@@ -6,8 +6,16 @@ networks:
   tenants-net:
     name: tenants-net
 
+# Docker's json-file logs otherwise grow without bound on the VPS disk.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   postgres:
+    logging: *default-logging
     image: postgres:16-alpine
     container_name: shared-postgres
     restart: unless-stopped
@@ -24,6 +32,7 @@ services:
       retries: 10
 
   minio:
+    logging: *default-logging
     # Docker Hub's minio/minio now denies anonymous pulls; quay.io mirror still works.
     image: quay.io/minio/minio
     container_name: shared-minio
@@ -36,6 +45,7 @@ services:
     networks: [tenants-net]
 
   caddy:
+    logging: *default-logging
     image: caddy:2-alpine
     container_name: shared-caddy
     restart: unless-stopped
@@ -66,6 +76,7 @@ services:
         condition: service_started
 
   mail-oauth-relay:
+    logging: *default-logging
     build: ./mail-oauth-relay
     container_name: shared-mail-oauth-relay
     restart: unless-stopped

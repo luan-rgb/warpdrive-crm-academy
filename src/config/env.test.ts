@@ -37,6 +37,7 @@ describe("env boundary", () => {
     const result = parseEnv({
       ...process.env,
       NODE_ENV: "production",
+      MINIO_ENDPOINT: "https://s3.example.com",
       SEED_ADMIN_EMAIL: "admin@example.com",
       ALLOW_FIRST_LOGIN_ADMIN: "false",
     });
@@ -61,6 +62,7 @@ describe("env boundary", () => {
     const result = parseEnv({
       ...process.env,
       NODE_ENV: "production",
+      MINIO_ENDPOINT: "https://s3.example.com",
       SEED_ADMIN_EMAIL: "admin@example.com",
       GOOGLE_OAUTH_CLIENT_ID: "",
       GOOGLE_OAUTH_CLIENT_SECRET: "",
@@ -151,5 +153,30 @@ describe("env boundary", () => {
       expect(result.value.TOKEN_ENCRYPTION_KEY).toBe(keyFromFile);
       expect(result.value.TOKEN_ENCRYPTION_KEY).not.toBe(keyFromPlain);
     });
+  });
+});
+
+describe("production requires HTTPS for public URLs", () => {
+  const prod = {
+    ...process.env,
+    NODE_ENV: "production",
+    SEED_ADMIN_EMAIL: "admin@example.com",
+    ALLOW_FIRST_LOGIN_ADMIN: "false",
+  };
+
+  test("rejects an http BASE_URL or MINIO_ENDPOINT in production", () => {
+    expect(parseEnv({ ...prod, BASE_URL: "http://crm.example.com" }).ok).toBe(false);
+    expect(parseEnv({ ...prod, MINIO_ENDPOINT: "http://s3.example.com" }).ok).toBe(false);
+  });
+
+  test("accepts https in production and http outside it", () => {
+    expect(
+      parseEnv({
+        ...prod,
+        BASE_URL: "https://crm.example.com",
+        MINIO_ENDPOINT: "https://s3.example.com",
+      }).ok,
+    ).toBe(true);
+    expect(parseEnv({ ...process.env, BASE_URL: "http://localhost:3000" }).ok).toBe(true);
   });
 });

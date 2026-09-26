@@ -51,13 +51,22 @@ networks:
     name: tenants-net
     external: true
 
+# Docker's json-file logs otherwise grow without bound on the VPS disk.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   migrate:
+    logging: *default-logging
     build: *app-build
     command: ["node", "dist/migrate.mjs"]
     environment: *tenant-env
 
   app:
+    logging: *default-logging
     build: *app-build
     restart: unless-stopped
     command: ["node_modules/.bin/next", "start"]
@@ -73,6 +82,7 @@ services:
         condition: service_completed_successfully
 
   ws:
+    logging: *default-logging
     build: *app-build
     restart: unless-stopped
     command: ["node", "dist/ws.mjs"]
@@ -92,6 +102,7 @@ services:
         condition: service_completed_successfully
 
   worker:
+    logging: *default-logging
     build: *app-build
     restart: unless-stopped
     command: ["node", "dist/worker.mjs"]

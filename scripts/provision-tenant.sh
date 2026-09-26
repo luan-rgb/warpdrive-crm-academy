@@ -15,8 +15,16 @@ SEED_ADMIN_EMAIL="${2:?usage: provision-tenant.sh <slug> <seed-admin-email> [--s
 SKIP_APP=false
 [[ "${3:-}" == "--skip-app" ]] && SKIP_APP=true
 
-if [[ ! "$SLUG" =~ ^[a-z0-9-]+$ ]]; then
-  echo "error: slug must be lowercase letters, digits, hyphens only (got: $SLUG)" >&2
+# Same rule as mail-oauth-relay's isValidSlug: a DNS label (it becomes a subdomain, a database
+# name and a file name), no leading/trailing hyphen, at most 63 characters.
+if [[ ! "$SLUG" =~ ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$ ]]; then
+  echo "error: slug must be a DNS label: lowercase letters, digits, inner hyphens (got: $SLUG)" >&2
+  exit 1
+fi
+# The address comes from the Hotmart buyer and is written into the env file with sed; only plain
+# address characters get through, so nothing can inject a line or a sed expression.
+if [[ ! "$SEED_ADMIN_EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+  echo "error: invalid seed admin email (got: $SEED_ADMIN_EMAIL)" >&2
   exit 1
 fi
 
