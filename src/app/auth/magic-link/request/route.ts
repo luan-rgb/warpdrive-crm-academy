@@ -13,7 +13,11 @@ import { env } from "@/config/env";
 import { db } from "@/db/client";
 import { requestMagicLink } from "@/features/auth/magicLink";
 import { sendMagicLinkEmail } from "@/features/auth/magicLinkEmail";
-import { checkRateLimit, tooManyRequestsResponse } from "@/server/rateLimitGuard";
+import {
+  checkRateLimit,
+  checkRateLimitFor,
+  tooManyRequestsResponse,
+} from "@/server/rateLimitGuard";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const limit = checkRateLimit("authMagicLinkRequest", req.headers);
@@ -22,6 +26,10 @@ export async function POST(req: NextRequest): Promise<Response> {
   const signal = AbortSignal.timeout(10_000);
   const form = await req.formData().catch(() => null);
   const rawEmail = form?.get("email");
+  if (typeof rawEmail === "string") {
+    const perEmail = checkRateLimitFor("authMagicLinkPerEmail", rawEmail.trim().toLowerCase());
+    if (!perEmail.allowed) return tooManyRequestsResponse(perEmail);
+  }
 
   const result = await requestMagicLink(rawEmail, {
     db,

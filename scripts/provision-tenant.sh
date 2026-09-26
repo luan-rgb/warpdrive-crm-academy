@@ -139,7 +139,11 @@ echo "== adding Caddy site block for $SLUG =="
   echo "	}"
   echo "	@ws path /_ws*"
   echo "	reverse_proxy @ws aluno-${SLUG}-ws-1:8080"
-  echo "	reverse_proxy aluno-${SLUG}-app-1:3000"
+  # The real visitor (resolved via trusted_proxies in the global block) as the last X-F-F entry,
+  # which is the one src/server/rateLimit.ts keys on.
+  echo "	reverse_proxy aluno-${SLUG}-app-1:3000 {"
+  echo "		header_up X-Forwarded-For {client_ip}"
+  echo "	}"
   echo "}"
   echo "# END TENANT ${SLUG}"
 } >> caddy/Caddyfile.tenants
