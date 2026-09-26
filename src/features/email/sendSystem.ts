@@ -5,7 +5,7 @@ import { db } from "@/db/client";
 import type { EmailAccountRow } from "@/types/email";
 import { ok, type Result } from "@/types/result";
 import type { GmailClient } from "./gmailClient";
-import { buildMime, deriveMessageId, toRawBase64 } from "./mime";
+import { buildMime, deriveMessageId, messageIdDomain, toRawBase64 } from "./mime";
 import { resolveProductionClient } from "./productionClient";
 
 export interface SystemSendDeps {
@@ -54,7 +54,7 @@ export async function sendGmail(
   const messageId = deriveMessageId({
     accountId: account.id,
     idempotencyKey: message.idempotencyKey ?? randomUUID(),
-    domain: env.GOOGLE_WORKSPACE_DOMAIN,
+    domain: messageIdDomain(account.emailAddress, env.GOOGLE_WORKSPACE_DOMAIN),
   });
   const mime = buildMime({
     from: account.emailAddress,
