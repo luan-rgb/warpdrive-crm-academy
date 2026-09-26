@@ -272,6 +272,40 @@ esse arquivo; para pôr um "?" novo, crie a chave lá e use `<HelpTooltip topic=
 `CollapsibleSection` da barra lateral do negócio). O teste `src/test/helpCoverage.test.ts` exige
 `help` em todo título de página.
 
+## Automações mais completas e "Apps conectados" (2026-09-26)
+
+Comparado com o Workflow Automation do Pipedrive
+(https://support.pipedrive.com/en/article/workflow-automation), as automações ganharam:
+
+- **Condições** ("Só executar se..."): várias condições ligadas por E, sobre valor, etapa,
+  responsável, status, etiqueta, título e data prevista de fechamento do negócio. Regras antigas
+  ficam sem condições e continuam funcionando igual.
+- **Novos gatilhos:** atividade criada e atividade concluída em um negócio (pela tela ou pelo
+  Claude via MCP).
+- **Novas ações:** adicionar anotação ao negócio; chamar webhook (POST com os dados do negócio,
+  bom para Zapier, Make ou n8n; endereços internos da VPS são bloqueados e redirecionamentos não
+  são seguidos); notificar qualquer usuário (não só o responsável), com cópia por e-mail conforme
+  as preferências dele; atualizar campo agora cobre título, valor, etapa, responsável e data
+  prevista, com seletores em vez de texto livre.
+- **Histórico de execuções** na tela de edição de cada automação, com o resultado de cada ação
+  (por exemplo, "Enviar e-mail: erro (o responsável não tem caixa conectada)").
+- Automações nunca disparam outras automações (atividade ou campo alterado por uma automação não
+  dispara nada), para evitar laços.
+
+Código em `src/features/automations/` (condições em `conditions.ts`, webhook em
+`webhookRunner.ts`) e tela em `src/app/(app)/settings/automations/`. Migração
+`drizzle/0086_automations_conditions.sql`.
+
+**Apps conectados** (`/settings/connections`) deixou de ficar vazio: mostra o estado real da
+caixa de e-mail (provedor, endereço, status, última sincronização), o endereço MCP para conectar
+o Claude, os provedores de enriquecimento ativos e as automações que chamam webhooks (só o
+domínio, pois a URL pode conter token), além da lista de apps autorizados com o botão revogar. Os
+cartões de enriquecimento e webhooks só aparecem para quem pode administrá-los.
+
+Ainda não existe em relação ao Pipedrive: atraso ("esperar N dias") dentro da automação,
+gatilhos de pessoa/organização/lead, formulários web, Smart BCC e exportação CSV de negócios e
+contatos.
+
 ## O que ainda não existe / próximos passos possíveis
 
 - Script de **reativação** de tenant suspenso (hoje é manual, ver acima).
