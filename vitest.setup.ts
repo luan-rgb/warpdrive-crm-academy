@@ -6,6 +6,10 @@ process.env.DATABASE_URL ??= "postgres://placeholder:placeholder@localhost:5432/
 process.env.GOOGLE_OAUTH_CLIENT_ID ??= "test-client-id";
 process.env.GOOGLE_OAUTH_CLIENT_SECRET ??= "test-client-secret";
 process.env.GOOGLE_WORKSPACE_DOMAIN ??= "example.com";
+process.env.GMAIL_OAUTH_CLIENT_ID ??= "test-gmail-client-id";
+process.env.GMAIL_OAUTH_CLIENT_SECRET ??= "test-gmail-client-secret";
+process.env.MICROSOFT_OAUTH_CLIENT_ID ??= "test-ms-client-id";
+process.env.MICROSOFT_OAUTH_CLIENT_SECRET ??= "test-ms-client-secret";
 // Use = (not ??=) because Vite/Vitest injects its own BASE_URL="/" into the worker env
 // before setupFiles run, which would make ??= a no-op. Our app BASE_URL must win.
 process.env.BASE_URL = process.env.BASE_URL?.startsWith("http")

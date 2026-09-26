@@ -1,9 +1,40 @@
 import { env } from "@/config/env";
 import { AppError } from "@/constants/errorIds";
+import {
+  GOOGLE_TOKEN_URL,
+  MICROSOFT_TOKEN_URL,
+  OUTLOOK_MAILBOX_SCOPES,
+} from "@/constants/mailOAuth";
 import { err, ok, type Result } from "@/types/result";
 import { tokenResponseSchema } from "./gmailSchemas";
 
-const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
+// Token endpoint + client per OAuth provider. Gmail prefers the mailbox client
+// (GMAIL_OAUTH_*, used by the central relay) and falls back to the sign-in client for
+// single-tenant installs that connected Gmail through /api/gmail/oauth/callback.
+function tokenRequest(provider: "gmail" | "outlook", refreshToken: string) {
+  if (provider === "outlook") {
+    return {
+      url: MICROSOFT_TOKEN_URL,
+      body: new URLSearchParams({
+        client_id: env.MICROSOFT_OAUTH_CLIENT_ID,
+        client_secret: env.MICROSOFT_OAUTH_CLIENT_SECRET,
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        scope: OUTLOOK_MAILBOX_SCOPES.join(" "),
+      }),
+    };
+  }
+  const useMailbox = env.GMAIL_OAUTH_CLIENT_ID !== "";
+  return {
+    url: GOOGLE_TOKEN_URL,
+    body: new URLSearchParams({
+      client_id: useMailbox ? env.GMAIL_OAUTH_CLIENT_ID : env.GOOGLE_OAUTH_CLIENT_ID,
+      client_secret: useMailbox ? env.GMAIL_OAUTH_CLIENT_SECRET : env.GOOGLE_OAUTH_CLIENT_SECRET,
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    }),
+  };
+}
 
 // Build the deps.refresh callback ensureAccessToken (Task 7) needs: exchange a stored
 // refresh token for a fresh access token at Google's token endpoint. Shared by the
@@ -16,24 +47,21 @@ const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 // Threaded with the request signal so an aborted send cannot keep the refresh alive.
 export function makeRefresh(
   signal: AbortSignal,
+  provider: "gmail" | "outlook" = "gmail",
 ): (
   refreshToken: string,
 ) => Promise<Result<{ accessToken: string; expiresIn: number; refreshToken?: string }, AppError>> {
   return async (refreshToken: string) => {
-    const res = await fetch(GOOGLE_TOKEN_URL, {
+    const req = tokenRequest(provider, refreshToken);
+    const res = await fetch(req.url, {
       method: "POST",
       headers: { "content-type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        client_id: env.GOOGLE_OAUTH_CLIENT_ID,
-        client_secret: env.GOOGLE_OAUTH_CLIENT_SECRET,
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-      }),
+      body: req.body,
       signal,
     });
     signal.throwIfAborted();
     if (!res.ok) {
-      // Classify by Google's OAuth error code, not the raw status: only invalid_grant
+      // Classify by the OAuth error code (RFC 6749, same for Google and Microsoft), not the raw status: only invalid_grant
       // definitively means the grant was revoked. Anything unparseable stays transient.
       const oauthError = await res
         .clone()

@@ -5,6 +5,8 @@ import { err, ok, type Result } from "@/types/result";
 // Secret vars may be supplied as <VAR>_FILE pointing at a Docker secret file.
 const SECRET_FILE_VARS = [
   "GOOGLE_OAUTH_CLIENT_SECRET",
+  "GMAIL_OAUTH_CLIENT_SECRET",
+  "MICROSOFT_OAUTH_CLIENT_SECRET",
   "WS_TICKET_SECRET",
   "TOKEN_ENCRYPTION_KEY",
   "MINIO_SECRET_KEY",
@@ -42,6 +44,18 @@ const base = z.object({
   NYLAS_API_KEY: z.string().default(""),
   NYLAS_CLIENT_ID: z.string().default(""),
   NYLAS_REGION: z.enum(["us", "eu"]).default("us"),
+  // Free direct mailbox connect (src/features/email/clientFactory.ts). One Google OAuth client
+  // and one Microsoft Entra app serve every tenant: Google and Microsoft only accept a fixed
+  // redirect_uri, so the OAuth dance runs in the central mail-oauth-relay service and tenants
+  // only need the ids/secrets here to refresh tokens. Empty disables that provider's button.
+  // The Gmail client is kept apart from GOOGLE_OAUTH_* (sign-in) on purpose: sign-in is
+  // Workspace-domain-restricted, a student's mailbox is not.
+  GMAIL_OAUTH_CLIENT_ID: z.string().default(""),
+  GMAIL_OAUTH_CLIENT_SECRET: z.string().default(""),
+  MICROSOFT_OAUTH_CLIENT_ID: z.string().default(""),
+  MICROSOFT_OAUTH_CLIENT_SECRET: z.string().default(""),
+  // Internal URL of the relay's connect-init endpoint (shared Docker network).
+  MAIL_OAUTH_RELAY_URL: z.string().url().default("http://shared-mail-oauth-relay:8081"),
   BASE_URL: z.string().url(),
   DATABASE_URL: z.string().min(1),
   WS_TICKET_SECRET: z.string().min(32),

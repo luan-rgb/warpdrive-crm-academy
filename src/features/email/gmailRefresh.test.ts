@@ -80,3 +80,52 @@ describe("makeRefresh error classification", () => {
     expect(r.error.id).toBe("E_GMAIL_001");
   });
 });
+
+describe("makeRefresh provider routing", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  function captureFetch(): { calls: { url: string; body: URLSearchParams }[] } {
+    const box = { calls: [] as { url: string; body: URLSearchParams }[] };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string, init: RequestInit) => {
+        box.calls.push({ url, body: new URLSearchParams(String(init.body)) });
+        return Promise.resolve(
+          jsonResponse(200, { access_token: "at", expires_in: 3600, refresh_token: "rotated" }),
+        );
+      }),
+    );
+    return box;
+  }
+
+  it("refreshes Outlook tokens at the Microsoft common endpoint with the Microsoft client", async () => {
+    const box = captureFetch();
+    const r = await makeRefresh(new AbortController().signal, "outlook")("rt");
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value.refreshToken).toBe("rotated");
+    expect(box.calls[0]?.url).toBe("https://login.microsoftonline.com/common/oauth2/v2.0/token");
+    expect(box.calls[0]?.body.get("client_id")).toBe("test-ms-client-id");
+    expect(box.calls[0]?.body.get("client_secret")).toBe("test-ms-client-secret");
+    expect(box.calls[0]?.body.get("scope")).toContain("offline_access");
+  });
+
+  it("refreshes Gmail tokens with the mailbox OAuth client, not the sign-in client", async () => {
+    const box = captureFetch();
+    const r = await makeRefresh(new AbortController().signal, "gmail")("rt");
+    expect(r.ok).toBe(true);
+    expect(box.calls[0]?.url).toBe("https://oauth2.googleapis.com/token");
+    expect(box.calls[0]?.body.get("client_id")).toBe("test-gmail-client-id");
+  });
+
+  it("maps a Microsoft invalid_grant to the revocation id E_GMAIL_002", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(jsonResponse(400, { error: "invalid_grant" }))),
+    );
+    const r = await makeRefresh(new AbortController().signal, "outlook")("rt");
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.id).toBe("E_GMAIL_002");
+  });
+});
