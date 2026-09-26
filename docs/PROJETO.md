@@ -261,6 +261,17 @@ continuam gravados como `Work`/`Mobile`... (dados existentes) e aparecem traduzi
 `pt-BR`. As exceções legítimas (chaves gravadas, nomes de fonte, endpoints de protocolo OAuth,
 mensagens de boot pro operador) ficam listadas com o motivo no próprio teste.
 
+## Ajuda "?" em cada funcionalidade (2026-09-26)
+
+Um ícone "?" ao lado de páginas, seções e campos importantes abre uma explicação curta (clique,
+toque ou Enter; funciona no celular). Componente: `src/components/ui/help-tooltip.tsx` (sobre o
+Popover do shadcn). **Todos os textos ficam num só lugar:** `src/constants/helpTexts.ts`, com
+chaves por área (`deal.value`, `pipeline.rotting`, `email.imap`...). Para mudar um texto, edite só
+esse arquivo; para pôr um "?" novo, crie a chave lá e use `<HelpTooltip topic="..." />` (ou a prop
+`help` de `PageHeading`, `SettingsHeading`, `SettingsCardHeader`, `Panel` do painel e
+`CollapsibleSection` da barra lateral do negócio). O teste `src/test/helpCoverage.test.ts` exige
+`help` em todo título de página.
+
 ## O que ainda não existe / próximos passos possíveis
 
 - Script de **reativação** de tenant suspenso (hoje é manual, ver acima).
