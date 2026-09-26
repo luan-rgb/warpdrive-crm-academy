@@ -127,6 +127,10 @@ export const ERROR_IDS = {
   // docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md)
   NYLAS_API_FAILED: "E_NYLAS_001", // Nylas API call failed (non-2xx) or response failed schema validation
   NYLAS_NOT_YET_IMPLEMENTED: "E_NYLAS_002", // sendRaw/trashThread: checkpoint 4, not built yet
+  // MAIL (provider-neutral mailbox plumbing: src/features/email/clientFactory.ts and the
+  // Outlook/IMAP clients; Gmail keeps its historical E_GMAIL_* ids)
+  MAIL_CREDENTIALS_MISSING: "E_MAIL_001", // account row has no usable stored credential for its provider
+  MAIL_ACCOUNT_NOT_FOUND: "E_MAIL_002", // email_accounts row not found for the id being resolved
   // OAUTH
   OAUTH_INVALID_CLIENT: "E_OAUTH_001",
   OAUTH_INVALID_GRANT: "E_OAUTH_002",

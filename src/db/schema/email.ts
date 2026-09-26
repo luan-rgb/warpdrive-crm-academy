@@ -15,6 +15,7 @@ import {
 import {
   EMAIL_ACCOUNT_STATUS,
   EMAIL_MESSAGE_DIRECTION,
+  EMAIL_PROVIDERS,
   EMAIL_SEND_STATUS,
   EMAIL_TRACKING_EVENT_TYPE,
   EMAIL_VISIBILITY,
@@ -26,6 +27,7 @@ const bytea = customType<{ data: Buffer; driverData: Buffer }>({
   dataType: () => "bytea",
 });
 
+export const emailProvider = pgEnum("email_provider", EMAIL_PROVIDERS);
 export const emailAccountStatus = pgEnum("email_account_status", EMAIL_ACCOUNT_STATUS);
 export const emailMessageDirection = pgEnum("email_message_direction", EMAIL_MESSAGE_DIRECTION);
 export const emailSendStatus = pgEnum("email_send_status", EMAIL_SEND_STATUS);
@@ -43,7 +45,13 @@ export const emailAccounts = pgTable("email_accounts", {
     .references(() => users.id)
     .unique(),
   emailAddress: citext("email_address").notNull().unique(),
+  provider: emailProvider("provider").notNull().default("gmail"),
   refreshTokenEnc: bytea("refresh_token_enc"),
+  // IMAP/SMTP accounts only: server hosts/ports/TLS and login (nothing secret, see
+  // imapSettingsSchema). The password lives encrypted in imap_password_enc, same AES-GCM
+  // envelope as refresh_token_enc.
+  imapSettings: jsonb("imap_settings"),
+  imapPasswordEnc: bytea("imap_password_enc"),
   // Nylas grant id (src/features/email/nylasClient.ts): a stable, non-expiring handle to the
   // connected mailbox. Unlike refresh_token_enc, this is never itself a bearer credential for
   // the mailbox (every call is authenticated with OUR OWN NYLAS_API_KEY, this just says which

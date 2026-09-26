@@ -1,3 +1,8 @@
+// Which mailbox transport an email_account uses (src/features/email/clientFactory.ts). All three
+// are free: Gmail and Outlook via OAuth through the central mail-oauth-relay, anything else via
+// IMAP/SMTP with a password the user types in.
+export const EMAIL_PROVIDERS = ["gmail", "outlook", "imap"] as const;
+export type EmailProvider = (typeof EMAIL_PROVIDERS)[number];
 export const EMAIL_ACCOUNT_STATUS = ["connected", "disconnected", "error"] as const;
 export const EMAIL_MESSAGE_DIRECTION = ["inbound", "outbound"] as const;
 export const EMAIL_SEND_STATUS = ["pending", "sending", "sent", "failed", "needs_review"] as const;

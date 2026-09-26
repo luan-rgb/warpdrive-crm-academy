@@ -10,10 +10,12 @@ export interface AccessToken {
   expiresAt: number;
 }
 
+export type RefreshFn = (
+  refreshToken: string,
+) => Promise<Result<{ accessToken: string; expiresIn: number; refreshToken?: string }, AppError>>;
+
 interface RefreshDeps {
-  refresh: (
-    refreshToken: string,
-  ) => Promise<Result<{ accessToken: string; expiresIn: number; refreshToken?: string }, AppError>>;
+  refresh: RefreshFn;
 }
 
 // Return a usable access token for an account, refreshing via deps.refresh when the
