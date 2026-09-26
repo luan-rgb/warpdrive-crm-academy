@@ -12,6 +12,7 @@ import {
   type GetCtx,
   getToolActor,
   registerTool,
+  requireFlag,
   resultToTool,
   type ToolRegistry,
   toolError,
@@ -32,6 +33,8 @@ export function registerActivityWriteTools(
     run: async (input, signal) => {
       const actor = getToolActor(getCtx);
       if (!actor.ok) return toolError(actor.error);
+      const denied = requireFlag(actor.value, "activity.create");
+      if (denied !== null) return denied;
       const created = await createActivity(db, toPermSetUser(actor.value), input, signal);
       if (created.ok)
         await triggerActivityAutomations(db, created.value, "activity_created", signal);

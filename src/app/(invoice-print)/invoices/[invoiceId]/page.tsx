@@ -5,11 +5,15 @@ import type { ReactNode } from "react";
 import { db } from "@/db/client";
 import { deals } from "@/db/schema/deals";
 import { settings } from "@/db/schema/system";
+import { authorizeDealAccess } from "@/features/deals/dealAccess";
 import { getInvoice } from "@/features/invoices/invoicesRepo";
 import { formatCurrencyExact } from "@/lib/formatCurrency";
+import { createContext } from "@/server/trpc/context";
 import { PrintButton } from "./PrintButton";
 
 export const metadata: Metadata = { title: "Fatura" };
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function money(v: string, currency: string): string {
   return formatCurrencyExact(v, currency);
@@ -29,7 +33,13 @@ export default async function InvoicePrintPage({
   params: Promise<{ invoiceId: string }>;
 }): Promise<ReactNode> {
   const { invoiceId } = await params;
-  const result = await getInvoice(db, invoiceId, AbortSignal.timeout(5000));
+  // The print layout only proves a session exists; the invoice itself is as private as its deal.
+  const { actor } = await createContext();
+  if (actor === null || !UUID_RE.test(invoiceId)) notFound();
+  const signal = AbortSignal.timeout(5000);
+  const access = await authorizeDealAccess(db, actor, { invoiceId }, "read", signal);
+  if (!access.ok) notFound();
+  const result = await getInvoice(db, invoiceId, signal);
   if (!result.ok) notFound();
   const { invoice, lines } = result.value;
 
