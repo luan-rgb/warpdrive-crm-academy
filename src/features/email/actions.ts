@@ -14,14 +14,13 @@ import { createContext } from "@/server/trpc/context";
 import { type ActionResult, clientErr, toClientResult } from "@/types/actionResult";
 import { err, ok, type Result } from "@/types/result";
 import { softDisconnectMailbox } from "./disconnect";
-import { createGmailClient, type GmailClient } from "./gmailClient";
-import { makeRefresh } from "./gmailRefresh";
+import type { GmailClient } from "./gmailClient";
 import { assertMailboxOwner } from "./mailboxOwnership";
 import { buildAuthUrl, GMAIL_OAUTH_STATE_COOKIE } from "./oauth";
+import { resolveProductionClient } from "./productionClient";
 import { sendEmail as orchestrateSend, type SendEmailInput, sendEmailInput } from "./send";
 import { isFutureScheduledSend } from "./sendScheduling";
 import { trashThread } from "./threadTrash";
-import { ensureAccessToken } from "./tokens";
 
 // Stub Gmail client for the future-scheduled path: runSend enqueues + prepares the body
 // then returns before any Gmail I/O, so this is never invoked. Any call is a programmer
@@ -88,13 +87,10 @@ export async function sendEmail(
     );
   }
 
-  const token = await ensureAccessToken(db, {
-    accountId: input.accountId,
-    deps: { refresh: makeRefresh(signal) },
-  });
-  if (!token.ok) return clientErr(token.error);
+  const client = await resolveProductionClient(db, input.accountId, signal);
+  if (!client.ok) return clientErr(client.error);
 
-  const gmail = createGmailClient(token.value.token);
+  const gmail = client.value;
   return toClientResult(
     await orchestrateSend(db, {
       actorId: ctx.actor.id,
@@ -141,13 +137,10 @@ export async function trashThreadAction(
   if (acct === undefined)
     return err(new AppError(ERROR_IDS.GMAIL_THREAD_NOT_FOUND, "thread not found", {}));
 
-  const token = await ensureAccessToken(db, {
-    accountId: acct.id,
-    deps: { refresh: makeRefresh(signal) },
-  });
-  if (!token.ok) return token;
+  const client = await resolveProductionClient(db, acct.id, signal);
+  if (!client.ok) return client;
 
-  const gmail = createGmailClient(token.value.token);
+  const gmail = client.value;
   return trashThread(db, { actor: ctx.actor, threadId: parsed.data.threadId, gmail }, signal);
 }
 
