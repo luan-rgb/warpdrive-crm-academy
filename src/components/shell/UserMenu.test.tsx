@@ -11,6 +11,8 @@ beforeAll(() => {
   Element.prototype.releasePointerCapture = vi.fn();
 });
 
+vi.mock("@/utils/csrfCookie", () => ({ readCsrfToken: () => "csrf-abc" }));
+
 // Render Next's Link as a plain anchor so hrefs are assertable without an app-router context.
 vi.mock("next/link", () => ({
   default: ({ href, children, ...rest }: { href: string; children: React.ReactNode }) => (
@@ -55,6 +57,24 @@ describe("UserMenu", () => {
     // The menu is headed "Minha conta", so Settings lands on the signed-in user's own
     // preferences. It used to open the company user roster, which is administration.
     expect(settings.getAttribute("href")).toBe("/settings/profile");
-    expect(logout.getAttribute("href")).toBe("/auth/logout");
+    expect(logout).toBeInTheDocument();
+  });
+
+  // Logging out is a state change, so it is a same-site POST carrying the CSRF token, never a
+  // GET link another page could trigger.
+  it("logs out by POSTing the CSRF token to /auth/logout", async () => {
+    const submitted: { action: string; method: string; csrf: string | null }[] = [];
+    HTMLFormElement.prototype.requestSubmit = function (this: HTMLFormElement) {
+      submitted.push({
+        action: this.getAttribute("action") ?? "",
+        method: this.getAttribute("method") ?? "",
+        csrf: new FormData(this).get("csrf") as string | null,
+      });
+    };
+    const user = userEvent.setup();
+    render(<UserMenu userId="u1" />);
+    await user.click(screen.getByRole("button", { name: "Menu da conta" }));
+    await user.click(screen.getByRole("menuitem", { name: /Sair/ }));
+    expect(submitted).toEqual([{ action: "/auth/logout", method: "post", csrf: "csrf-abc" }]);
   });
 });
