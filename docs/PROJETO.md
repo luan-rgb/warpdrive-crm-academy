@@ -234,6 +234,17 @@ ver a primeira sincronização trazer e-mails; enviar um e-mail e uma resposta (
 mesma conversa e na pasta Enviados); mover uma conversa pra lixeira pelo CRM; baixar um anexo;
 desconectar e reconectar.
 
+## Moeda em reais (2026-09-26)
+
+Todo valor monetário passa por um único formatador, `src/lib/formatCurrency.ts`
+(`Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`): `formatCurrency` para valores
+arredondados (cartões do funil, totais, painel) e `formatCurrencyExact` com centavos (preços de
+produtos, itens de negócio, faturas). Corrigido nesta rodada: preços de produtos e metas de valor
+sem "R$", valor do lead, histórico de alterações ("1500.00"), o campo `{{deal.value}}` dos e-mails e
+das automações (ia cru pro cliente) e o padrão `USD` da coluna `settings.base_currency` (migração
+0085 troca pra BRL). O teste `src/lib/currencyGuard.test.ts` quebra se alguém formatar dinheiro fora
+do helper ou reintroduzir `USD`/`en-US`.
+
 ## O que ainda não existe / próximos passos possíveis
 
 - Script de **reativação** de tenant suspenso (hoje é manual, ver acima).
