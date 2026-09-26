@@ -34,7 +34,8 @@ export const ERROR_IDS = {
   DEAL_MERGE_SAME: "E_DEAL_010", // mergeDeals: source and target are the same deal
   DEAL_DUPLICATE_INPUT_INVALID: "E_DEAL_011", // duplicateDeal action input failed Zod validation
   DEAL_CONVERT_INPUT_INVALID: "E_DEAL_012", // convertDealToLead action input failed Zod validation
-  DEAL_MERGE_INPUT_INVALID: "E_DEAL_013", // mergeDeals action input failed Zod validation
+  DEAL_MERGE_INPUT_INVALID: "E_DEAL_013",
+  DEAL_BULK_INPUT_INVALID: "E_DEAL_014", // bulk archive/stage action input failed Zod validation (ids, batch size, flags) // mergeDeals action input failed Zod validation
   // LEAD
   LEAD_NOT_FOUND: "E_LEAD_001", // lead not found or not visible (404-on-invisible)
   LEAD_ARCHIVE_FORBIDDEN: "E_LEAD_002", // archive denied: lead not visible/owned by actor
@@ -70,7 +71,8 @@ export const ERROR_IDS = {
   CONTACT_CREATE_INPUT_INVALID: "E_CONTACT_010", // createPersonAction input failed Zod validation
   // NOTE
   NOTE_NOT_FOUND: "E_NOTE_001", // note not found or soft-deleted
-  NOTE_NOT_AUTHOR: "E_NOTE_002", // only the note author (or an admin) may edit or delete it
+  NOTE_NOT_AUTHOR: "E_NOTE_002",
+  NOTE_INPUT_INVALID: "E_NOTE_003", // note pin/edit action input failed Zod validation // only the note author (or an admin) may edit or delete it
   // IMPORT
   IMPORT_ROW_GONE: "E_IMPORT_001", // import row vanished before commit could claim it
   IMPORT_BATCH_NOT_FOUND: "E_IMPORT_002", // import batch not found or not owned (404-on-invisible)
@@ -89,7 +91,8 @@ export const ERROR_IDS = {
   ACTIVITY_FORBIDDEN: "E_ACTIVITY_002", // visible but action flag missing (403-shape)
   ACTIVITY_TYPE_IN_USE: "E_ACTIVITY_003", // delete blocked: activity type is a system row or still referenced by an activity
   ACTIVITY_TYPE_KEY_EXISTS: "E_ACTIVITY_004", // create blocked: an activity type with that key already exists
-  ACTIVITY_UPDATE_INPUT_INVALID: "E_ACTIVITY_005", // edit action input failed Zod validation
+  ACTIVITY_UPDATE_INPUT_INVALID: "E_ACTIVITY_005",
+  ACTIVITY_COMPLETE_INPUT_INVALID: "E_ACTIVITY_008", // completeActivityAction input failed Zod validation // edit action input failed Zod validation
   ACTIVITY_TYPE_INVALID: "E_ACTIVITY_006", // patched typeId is missing or archived (activity WAS found)
   ACTIVITY_END_BEFORE_START: "E_ACTIVITY_007", // multi-day endAt is earlier than the start (dueAt)
   // LABEL

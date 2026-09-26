@@ -94,3 +94,5 @@ export const activityListFilter = z.object({
   typeKey: z.string().nullable().default(null),
 });
 export type ActivityListFilter = z.infer<typeof activityListFilter>;
+
+export const completeActivityInput = z.object({ id: z.string().uuid(), done: z.boolean() });

@@ -16,3 +16,5 @@ export const noteUpdateInput = z.object({
   body: z.string().min(1).max(50_000),
 });
 export type NoteUpdateInput = z.infer<typeof noteUpdateInput>;
+
+export const togglePinInput = z.object({ noteId: z.string().uuid(), pinned: z.boolean() });
