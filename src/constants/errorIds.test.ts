@@ -47,6 +47,10 @@ describe("error IDs", () => {
       "AUTOMATION",
       "PRODUCT",
       "INVOICE",
+      // INTERNAL is the generic id for unexpected server failures sent to the client (details stay
+      // in the server log); RATE covers per-user/per-key rate limits.
+      "INTERNAL",
+      "RATE",
     ];
     for (const id of Object.values(ERROR_IDS)) {
       const m = /^E_([A-Z]+)_(\d{3})$/.exec(id);
