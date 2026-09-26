@@ -245,6 +245,22 @@ das automações (ia cru pro cliente) e o padrão `USD` da coluna `settings.base
 0085 troca pra BRL). O teste `src/lib/currencyGuard.test.ts` quebra se alguém formatar dinheiro fora
 do helper ou reintroduzir `USD`/`en-US`.
 
+## Interface 100% em português (2026-09-26)
+
+A varredura foi sistemática: `src/test/uiTextScan.ts` usa o compilador do TypeScript pra extrair
+todo texto visível do código (texto de JSX, `placeholder`/`aria-label`/`title`/`label`/`message`,
+props padrão, arquivos de strings, mapas `*_LABEL`) e marca o que parece inglês. Achou 267
+ocorrências; todas as reais foram traduzidas (filtros e seus operadores, primitivos compartilhados
+como Select/Combobox, tela de consentimento OAuth, metas, menu "+", formulários de negócio e contato,
+atividades e calendário, inbox e composer, leads, erros de importação, validações). Datas que seguiam
+o idioma do navegador agora são sempre `pt-BR` ("há 3 dias", "ontem"). Os tipos de telefone/e-mail
+continuam gravados como `Work`/`Mobile`... (dados existentes) e aparecem traduzidos na tela
+(`src/constants/contactPointLabels.ts`).
+
+`src/test/ptBrAudit.test.ts` quebra se aparecer texto novo em inglês na interface ou data sem
+`pt-BR`. As exceções legítimas (chaves gravadas, nomes de fonte, endpoints de protocolo OAuth,
+mensagens de boot pro operador) ficam listadas com o motivo no próprio teste.
+
 ## O que ainda não existe / próximos passos possíveis
 
 - Script de **reativação** de tenant suspenso (hoje é manual, ver acima).
