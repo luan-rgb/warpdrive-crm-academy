@@ -154,7 +154,7 @@ it("shows 'Set expected close date' as a CTA when unset, and the date when set",
   unmount();
 
   renderList({ expectedCloseDate: "2026-07-16" });
-  expect(screen.getByText("Jul 16, 2026")).toBeInTheDocument();
+  expect(screen.getByText("16 de jul. de 2026")).toBeInTheDocument();
   expect(screen.queryByText("Definir data prevista de fechamento")).not.toBeInTheDocument();
 });
 

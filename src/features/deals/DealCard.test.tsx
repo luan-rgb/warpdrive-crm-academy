@@ -172,7 +172,7 @@ describe("DealCard", () => {
       />,
     );
     // Value is rendered as formatted currency (whole dollars), not the raw decimal string.
-    expect(screen.getByText("$25,000")).toBeTruthy();
+    expect(screen.getByText("R$ 25.000")).toBeTruthy();
     expect(screen.getByText("Hot")).toBeTruthy();
   });
 

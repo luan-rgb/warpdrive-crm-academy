@@ -1,5 +1,6 @@
 import type React from "react";
 import { STRINGS } from "@/constants/strings";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 // Every dashboard panel goes through here so an empty one says why it is empty. A heading
 // over dead space reads as a broken page, not as "there is nothing to show".
@@ -61,9 +62,5 @@ export function monthLabel(month: string): string {
 }
 
 export function money(v: string, currency: string): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(Number(v));
+  return formatCurrency(v, currency);
 }

@@ -10,6 +10,7 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Button } from "@/components/ui/Button";
 import type { Organization, Person } from "@/db/schema";
+import { formatCurrencyExact } from "@/lib/formatCurrency";
 import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { deleteInvoiceAction, updateInvoiceStatusAction } from "./actions";
@@ -17,12 +18,7 @@ import { CreateInvoiceDialog } from "./CreateInvoiceDialog";
 import { InvoiceEditDialog } from "./InvoiceEditDialog";
 
 function money(v: string, currency: string): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(v));
+  return formatCurrencyExact(v, currency);
 }
 
 function invoiceNumber(sequenceNumber: number): string {

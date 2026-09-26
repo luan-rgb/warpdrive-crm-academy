@@ -1,31 +1,18 @@
 // Data test for the migration that retires the Nylas integration: mailboxes connected through
 // Nylas cannot be carried over (a Nylas grant is not a Google/Microsoft refresh token), so they
 // must end up disconnected with an explanatory error id, keeping their row and synced mail.
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import path from "node:path";
+import { rmSync } from "node:fs";
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { afterAll, beforeAll, expect, test } from "vitest";
 import { applyMigrations } from "./migrate";
+import { migrationsUpTo } from "./testing/migrationsUpTo";
 
 let container: StartedPostgreSqlContainer;
 let pool: Pool;
 let partial: string;
-
-// A copy of drizzle/ whose journal stops right before the Nylas retirement migration.
-function migrationsUpTo(tag: string): string {
-  const dir = mkdtempSync(path.join(tmpdir(), "wd-mig-"));
-  cpSync("drizzle", dir, { recursive: true });
-  const journalPath = path.join(dir, "meta", "_journal.json");
-  const journal = JSON.parse(readFileSync(journalPath, "utf8")) as { entries: { tag: string }[] };
-  const stop = journal.entries.findIndex((e) => e.tag.startsWith(tag));
-  journal.entries = journal.entries.slice(0, stop);
-  writeFileSync(journalPath, JSON.stringify(journal));
-  return dir;
-}
 
 beforeAll(async () => {
   container = await new PostgreSqlContainer("postgres:16-alpine").start();

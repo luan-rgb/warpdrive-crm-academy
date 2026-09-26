@@ -27,6 +27,7 @@ import {
 import { ENRICHMENT_STRINGS } from "@/constants/enrichmentStrings";
 import { isSourceChannelKey, SOURCE_CHANNELS } from "@/constants/sourceChannels";
 import { canonicalField } from "@/features/enrichment/canonical";
+import { formatCurrency } from "@/lib/formatCurrency";
 import { asLostStatusValue } from "./lostStatusValue";
 
 // Format a jsonb audit value for display; null/empty read as "(nenhum)".
@@ -38,7 +39,11 @@ export function formatValue(value: unknown): string {
 }
 
 // Field-aware value formatting: resolve label-key arrays and source-channel keys to display names.
-function formatFieldValue(field: string, value: unknown): string {
+export function formatFieldValue(field: string, value: unknown): string {
+  if (field === "value" && (typeof value === "string" || typeof value === "number")) {
+    const money = formatCurrency(value);
+    if (money !== "") return money;
+  }
   if (field === "labels") {
     if (!Array.isArray(value) || value.length === 0) return "(nenhum)";
     // Stored label values are the catalog display names, so render them directly.

@@ -1,3 +1,5 @@
+import { formatCurrency } from "@/lib/formatCurrency";
+
 // Minimal {{deal.field}} placeholder substitution for automation message/email templates.
 // Not a templating library dependency (YAGNI): three known placeholders don't need one.
 export function renderTemplate(
@@ -6,6 +8,6 @@ export function renderTemplate(
 ): string {
   return template
     .replaceAll("{{deal.title}}", deal.title)
-    .replaceAll("{{deal.value}}", deal.value ?? "")
+    .replaceAll("{{deal.value}}", deal.value === null ? "" : formatCurrency(deal.value))
     .replaceAll("{{deal.owner}}", deal.ownerName);
 }

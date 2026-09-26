@@ -74,7 +74,7 @@ export function ParticipantsDialog({
                   <td className="py-2 pr-3 tabular-nums">{p.openDeals}</td>
                   <td className="py-2 pr-3">
                     {p.nextActivityAt !== null
-                      ? new Date(p.nextActivityAt).toLocaleDateString("en-US", {
+                      ? new Date(p.nextActivityAt).toLocaleDateString("pt-BR", {
                           month: "short",
                           day: "numeric",
                           year: "numeric",

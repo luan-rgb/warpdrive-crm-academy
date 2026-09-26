@@ -6,17 +6,13 @@ import { db } from "@/db/client";
 import { deals } from "@/db/schema/deals";
 import { settings } from "@/db/schema/system";
 import { getInvoice } from "@/features/invoices/invoicesRepo";
+import { formatCurrencyExact } from "@/lib/formatCurrency";
 import { PrintButton } from "./PrintButton";
 
 export const metadata: Metadata = { title: "Fatura" };
 
 function money(v: string, currency: string): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(v));
+  return formatCurrencyExact(v, currency);
 }
 
 function lineTotal(quantity: string, unitPrice: string, discountPercent: string): number {

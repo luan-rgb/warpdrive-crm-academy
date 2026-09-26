@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { formatDateTimePtBr, formatMediumDate } from "./formatDate";
 
 describe("formatMediumDate", () => {
-  it("formats a YYYY-MM-DD date as 'Mon D, YYYY'", () => {
-    expect(formatMediumDate("2026-07-16")).toBe("Jul 16, 2026");
+  it("formats a YYYY-MM-DD date as a readable pt-BR date", () => {
+    expect(formatMediumDate("2026-07-16")).toBe("16 de jul. de 2026");
   });
 
   it("returns the raw string when it is not a parseable date", () => {

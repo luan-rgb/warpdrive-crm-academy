@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/RadioGroup";
 import { Textarea } from "@/components/ui/Textarea";
 import type { Organization, Person } from "@/db/schema";
 import type { InvoiceTaxMode } from "@/db/schema/invoices";
+import { formatCurrencyExact } from "@/lib/formatCurrency";
 import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { createInvoiceAction } from "./actions";
@@ -23,12 +24,7 @@ function formatAddress(address: Record<string, unknown> | null): string {
 }
 
 function money(v: number, currency: string): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(v);
+  return formatCurrencyExact(v, currency);
 }
 
 function lineBase(quantity: string, unitPrice: string): number {

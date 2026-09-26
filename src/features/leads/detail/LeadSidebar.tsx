@@ -68,7 +68,10 @@ export function LeadSidebar({
     <aside className="min-w-0 space-y-2">
       <CollapsibleSection
         title={STRINGS.dealSidebar.sections.summary}
-        headerActions={sectionHeaderActions(STRINGS.dealSidebar.sections.summary, fieldsItem("deal"))}
+        headerActions={sectionHeaderActions(
+          STRINGS.dealSidebar.sections.summary,
+          fieldsItem("deal"),
+        )}
       >
         <LeadSummaryEditPanel
           lead={{
@@ -80,6 +83,7 @@ export function LeadSidebar({
             expectedCloseDate: lead.expectedCloseDate,
           }}
           owners={owners}
+          currency={baseCurrency}
         />
         <FieldRow label="Etiquetas">
           <LeadLabelRow
@@ -92,7 +96,10 @@ export function LeadSidebar({
 
       <CollapsibleSection
         title={STRINGS.dealSidebar.sections.source}
-        headerActions={sectionHeaderActions(STRINGS.dealSidebar.sections.source, fieldsItem("deal"))}
+        headerActions={sectionHeaderActions(
+          STRINGS.dealSidebar.sections.source,
+          fieldsItem("deal"),
+        )}
       >
         <FieldRow label="Procedência">{lead.sourceOrigin.replace(/_/g, " ")}</FieldRow>
         <FieldRow label="Canal" empty={lead.sourceChannel === null}>
@@ -133,7 +140,10 @@ export function LeadSidebar({
 
       <CollapsibleSection
         title={STRINGS.dealSidebar.sections.overview}
-        headerActions={sectionHeaderActions(STRINGS.dealSidebar.sections.overview, fieldsItem("deal"))}
+        headerActions={sectionHeaderActions(
+          STRINGS.dealSidebar.sections.overview,
+          fieldsItem("deal"),
+        )}
       >
         <FieldRow label="Criado em">{lead.createdAt.toLocaleDateString()}</FieldRow>
       </CollapsibleSection>

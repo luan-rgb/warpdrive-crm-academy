@@ -166,3 +166,17 @@ describe("InlineDateField (PD mechanism)", () => {
     expect(screen.getByText("07/04/2026")).toBeInTheDocument();
   });
 });
+
+describe("InlineTextField display formatting", () => {
+  it("shows the formatted value at rest but edits the raw one", () => {
+    render(
+      <InlineTextField
+        label="Valor"
+        value="25000"
+        display={(v) => `R$ ${v}`}
+        onSave={() => Promise.resolve({ ok: true, value: undefined })}
+      />,
+    );
+    expect(screen.getByText("R$ 25000")).toBeInTheDocument();
+  });
+});

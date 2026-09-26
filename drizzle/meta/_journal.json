@@ -596,6 +596,13 @@
       "when": 1790394947732,
       "tag": "0084_retire_nylas",
       "breakpoints": true
+    },
+    {
+      "idx": 85,
+      "version": "7",
+      "when": 1790396901974,
+      "tag": "0085_base_currency_brl",
+      "breakpoints": true
     }
   ]
 }
