@@ -34,6 +34,11 @@ export const auditTargetEnum = pgEnum("audit_target", [
   "deal",
   "person",
   "organization",
+  // Security events (src/features/identity/securityAudit.ts).
+  "session",
+  "oauth_client",
+  "mailbox",
+  "export",
 ]);
 
 // Singleton: exactly one row, guarded by CHECK (id = true).

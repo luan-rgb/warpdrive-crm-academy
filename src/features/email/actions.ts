@@ -10,6 +10,7 @@ import { db } from "@/db/client";
 import { makeStorageClient } from "@/features/files/storage";
 import { guardCsrf } from "@/features/identity/actions/shared";
 import { SIG } from "@/features/identity/actions/sig";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { createContext } from "@/server/trpc/context";
 import { type ActionResult, clientErr, toClientResult } from "@/types/actionResult";
 import { err, ok, type Result } from "@/types/result";
@@ -230,5 +231,11 @@ export async function disconnectMailboxAction(
   if (!owner.ok) return owner;
 
   await softDisconnectMailbox(db, parsed.data.accountId, signal);
+  await recordSecurityEvent(db, {
+    actorId: ctx.actor.id,
+    targetType: "mailbox",
+    targetId: parsed.data.accountId,
+    action: "mailbox.disconnect",
+  });
   return ok({ disconnected: true });
 }

@@ -19,6 +19,7 @@ import { db } from "@/db/client";
 import { CSRF_COOKIE, validateCsrf } from "@/features/auth/csrf";
 import { logoutCore } from "@/features/auth/logout";
 import { SESSION_COOKIE } from "@/features/auth/session";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { safeErrorSummary } from "@/lib/safeError";
 
 const CLEARED_COOKIE_OPTIONS = {
@@ -58,7 +59,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     if (!csrf.ok) return NextResponse.redirect(new URL("/", env.BASE_URL));
 
     const sid = jar.get(SESSION_COOKIE)?.value ?? null;
-    await logoutCore({ db, sid, signal });
+    const out = await logoutCore({ db, sid, signal });
+    if (out.ok && out.value.userId !== null) {
+      await recordSecurityEvent(db, {
+        actorId: out.value.userId,
+        targetType: "session",
+        targetId: null,
+        action: "auth.logout",
+      });
+    }
 
     return redirectToLogin();
   } catch (e) {

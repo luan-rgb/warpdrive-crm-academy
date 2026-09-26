@@ -4,8 +4,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { env } from "@/config/env";
 
 vi.mock("@/db/client", () => ({ db: {} }));
-const logoutCore = vi.fn(() => Promise.resolve());
+const logoutCore = vi.fn(() => Promise.resolve({ ok: true as const, value: { userId: "u1" } }));
 vi.mock("@/features/auth/logout", () => ({ logoutCore }));
+const recordSecurityEvent = vi.fn(() => Promise.resolve());
+vi.mock("@/features/identity/securityAudit", () => ({ recordSecurityEvent }));
 const cookieStore = new Map<string, string>();
 vi.mock("next/headers", () => ({
   cookies: () =>
@@ -25,6 +27,7 @@ function post(token: string | null, headers: Record<string, string>): NextReques
 describe("/auth/logout", () => {
   beforeEach(() => {
     logoutCore.mockClear();
+    recordSecurityEvent.mockClear();
     cookieStore.clear();
     cookieStore.set("wd_sid", "sid");
     cookieStore.set("wd_csrf", "tok");
@@ -51,6 +54,10 @@ describe("/auth/logout", () => {
       }),
     );
     expect(logoutCore).toHaveBeenCalledTimes(1);
+    expect(recordSecurityEvent).toHaveBeenCalledWith(
+      {},
+      expect.objectContaining({ actorId: "u1", action: "auth.logout" }),
+    );
     expect(res.headers.get("location")).toContain("/login");
   });
 });

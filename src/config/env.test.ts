@@ -159,7 +159,7 @@ describe("env boundary", () => {
 describe("production requires HTTPS for public URLs", () => {
   const prod = {
     ...process.env,
-    NODE_ENV: "production",
+    NODE_ENV: "production" as const,
     SEED_ADMIN_EMAIL: "admin@example.com",
     ALLOW_FIRST_LOGIN_ADMIN: "false",
   };

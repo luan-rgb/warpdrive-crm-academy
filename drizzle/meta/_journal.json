@@ -610,6 +610,13 @@
       "when": 1790401786304,
       "tag": "0086_automations_conditions",
       "breakpoints": true
+    },
+    {
+      "idx": 87,
+      "version": "7",
+      "when": 1790440239379,
+      "tag": "0087_audit_security_targets",
+      "breakpoints": true
     }
   ]
 }

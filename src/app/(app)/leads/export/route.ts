@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/client";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { columnsFromKeys, leadRowsToCsv } from "@/features/leads/inbox/exportCsv";
 import { leadExportQuery } from "@/features/leads/inbox/exportQuery";
 import { listLeadsForExport } from "@/features/leads/leadRepo";
@@ -39,6 +40,13 @@ export async function GET(req: NextRequest): Promise<Response> {
       signal,
     );
     const csv = leadRowsToCsv(rows, columnsFromKeys(q.columns), currency);
+    await recordSecurityEvent(db, {
+      actorId: actor.id,
+      targetType: "export",
+      targetId: null,
+      action: "data.export",
+      detail: { entity: "leads", rows: rows.length },
+    });
     return new NextResponse(csv, {
       status: 200,
       headers: {

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { env } from "@/config/env";
 import { db } from "@/db/client";
 import { completeRedirectPath, completeRelayConnect } from "@/features/email/relayComplete";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { createContext } from "@/server/trpc/context";
 
 // The relay's ticket is 32 random bytes in base64url.
@@ -26,5 +27,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     fetch,
     AbortSignal.timeout(10_000),
   );
+  if (outcome.ok) {
+    await recordSecurityEvent(db, {
+      actorId: ctx.session.userId,
+      targetType: "mailbox",
+      targetId: null,
+      action: "mailbox.connect",
+      detail: { provider: outcome.value.provider },
+    });
+  }
   return NextResponse.redirect(new URL(completeRedirectPath(outcome), env.BASE_URL));
 }

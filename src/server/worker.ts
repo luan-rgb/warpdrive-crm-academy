@@ -5,6 +5,7 @@ import { registerReminderWorker } from "@/features/activities/reminders";
 import { registerAutomationExecuteWorker } from "@/features/automations/job";
 import { registerEmailJobs } from "@/features/email/workerJobs";
 import { registerReaperJob } from "@/features/files/reaper";
+import { registerAuditRetentionJob } from "@/features/identity/securityAudit";
 import { registerImportWorkers } from "@/features/import/registerImportWorkers";
 import { registerEmailNotificationWorker } from "@/features/notifications/email/job";
 import { registerReleaseCheckJob } from "@/features/release/job";
@@ -17,6 +18,7 @@ import { setBoss } from "@/jobs/boss";
 export async function registerAllJobs(boss: PgBossType): Promise<void> {
   await registerEmailJobs(boss);
   await registerReaperJob(boss);
+  await registerAuditRetentionJob(boss);
   await registerImportWorkers(boss);
   await registerEmailNotificationWorker(boss);
   await registerReminderWorker(boss);

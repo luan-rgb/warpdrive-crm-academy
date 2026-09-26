@@ -3,6 +3,7 @@
 import { AppError } from "@/constants/errorIds";
 import { db } from "@/db/client";
 import { guardCsrf } from "@/features/identity/actions/shared";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { checkRateLimitFor } from "@/server/rateLimitGuard";
 import { createContext } from "@/server/trpc/context";
 import { type ActionResult, clientErr, toClientResult } from "@/types/actionResult";
@@ -26,12 +27,20 @@ export async function connectImapAction(
     return clientErr(new AppError("E_RATE_001", "too many imap connect attempts", {}));
   }
 
-  return toClientResult(
-    await connectImapMailbox(db, {
-      userId: ctx.actor.id,
-      rawInput,
-      deps: { verify: (cfg, signal) => verifyImapSmtp(cfg, signal), enqueue: enqueueInitialSync },
-      signal: AbortSignal.timeout(45_000),
-    }),
-  );
+  const connected = await connectImapMailbox(db, {
+    userId: ctx.actor.id,
+    rawInput,
+    deps: { verify: (cfg, signal) => verifyImapSmtp(cfg, signal), enqueue: enqueueInitialSync },
+    signal: AbortSignal.timeout(45_000),
+  });
+  if (connected.ok) {
+    await recordSecurityEvent(db, {
+      actorId: ctx.actor.id,
+      targetType: "mailbox",
+      targetId: connected.value.accountId,
+      action: "mailbox.connect",
+      detail: { provider: "imap" },
+    });
+  }
+  return toClientResult(connected);
 }
