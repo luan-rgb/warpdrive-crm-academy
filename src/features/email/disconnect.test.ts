@@ -18,6 +18,23 @@ async function seedConnectedAccount(
 }
 
 describe("softDisconnectMailbox", () => {
+  it("also wipes an IMAP password, so a disconnected mailbox keeps no usable credential", async () => {
+    await withTestDb(async (db) => {
+      const u = await seedUser(db);
+      const r = await db.execute(sql`
+        INSERT INTO email_accounts (user_id, email_address, provider, imap_password_enc, status)
+        VALUES (${u.id}, 'rep@example.com', 'imap', decode('deadbeef', 'hex'), 'connected')
+        RETURNING id
+      `);
+      const id = (r.rows[0] as { id: string }).id;
+      await softDisconnectMailbox(db, id, new AbortController().signal);
+      const row = (
+        await db.execute(sql`SELECT imap_password_enc FROM email_accounts WHERE id=${id}`)
+      ).rows[0] as { imap_password_enc: Buffer | null };
+      expect(row.imap_password_enc).toBeNull();
+    });
+  });
+
   it("sets status=disconnected, nulls the refresh token, and clears the error id", async () => {
     await withTestDb(async (db) => {
       const u = await seedUser(db);
