@@ -146,13 +146,16 @@ diretas, gratuitas e sem limite de contas**, e todo o código Nylas foi removido
 - **Gmail e Outlook (OAuth) passam pelo relay central `mail-oauth-relay/`** (serviço da stack
   compartilhada, mesma ideia do antigo `nylas-relay/`). Google e Microsoft só aceitam um
   redirect_uri fixo por app, e cada aluno tem um subdomínio. O tenant pede ao relay uma URL de
-  consentimento (`POST /connect-init`, servidor-a-servidor, com o segredo
-  `MAIL_OAUTH_RELAY_SECRET`); o relay gera um `state` de uso único (tabela
-  `warpdrive_ops.mail_oauth_requests`, criada sozinha no primeiro boot), recebe o callback, troca o
-  código, **criptografa o refresh token com a `TOKEN_ENCRYPTION_KEY` do próprio tenant** (lida de
-  `envs/aluno-<slug>.env`, montado somente leitura) e grava em `email_accounts` no banco
-  `aluno_<slug>` com o admin do Postgres compartilhado. Depois devolve o aluno pra
-  `/settings/email-sync`, que dispara a primeira sincronização.
+  consentimento (`POST /connect-init`, servidor-a-servidor, com o segredo do tenant); o relay gera
+  um `state` de uso único (tabela `warpdrive_ops.mail_oauth_requests`, criada sozinha no primeiro
+  boot), recebe o callback e troca o código. **O relay não grava nada no banco do aluno**: ele
+  guarda o resultado lacrado (AES-GCM) atrás de um ticket de uso único e manda o navegador para
+  `https://<slug>.../api/mail-oauth/complete`. Essa rota do CRM só aceita se quem está logado é o
+  mesmo usuário que pediu a conexão (um link de consentimento repassado a outra pessoa não liga a
+  caixa dela à sua conta), busca o token no relay (`POST /claim`), criptografa com a chave do
+  próprio tenant e grava. Depois leva o aluno para `/settings/email-sync`, que dispara a primeira
+  sincronização. Cada tenant recebe só `HMAC(segredo mestre, slug)` como
+  `MAIL_OAUTH_RELAY_SECRET`, nunca o segredo mestre, e o relay não monta mais `envs/`.
 - **Outlook** usa o endpoint `common` (conta pessoal Outlook/Hotmail/Live e corporativa Microsoft
   365). IDs imutáveis do Graph mantêm a mesma mensagem com o mesmo id quando ela muda de pasta.
 - **IMAP/SMTP** é pra qualquer outro provedor: o aluno preenche um formulário (com presets de
@@ -193,7 +196,8 @@ criar os apps)
    *Permissões de API* (delegadas, Microsoft Graph): `Mail.ReadWrite`, `Mail.Send`, `User.Read`,
    `offline_access`, `openid`, `email`.
 3. Em `envs/shared.env`: `GMAIL_OAUTH_CLIENT_ID/SECRET`, `MICROSOFT_OAUTH_CLIENT_ID/SECRET` e
-   `MAIL_OAUTH_RELAY_SECRET` (`openssl rand -hex 32`). Pode remover as variáveis `NYLAS_*`.
+   `MAIL_OAUTH_RELAY_SECRET` (`openssl rand -hex 32`, é o segredo mestre: fica só no
+   `shared.env`). Pode remover as variáveis `NYLAS_*`.
 4. **nginx** (`/etc/nginx/sites-available/warpdrive-tenants`, no bloco de
    `crm.estrategistacrm.com.br`): trocar a regra `/api/nylas/` por esta (só os callbacks ficam
    públicos; `/connect-init` nunca sai da rede Docker):

@@ -44,6 +44,12 @@ WS_TICKET_SECRET="$(openssl rand -hex 32)"
 TOKEN_ENCRYPTION_KEY="$(openssl rand -base64 32)"
 OAUTH_SIGNING_KEY="$(openssl rand -base64 32)"
 ENV_FILE="envs/aluno-${SLUG}.env"
+# Each tenant gets HMAC(master, slug), never the relay's master secret (mail-oauth-relay/lib.mjs
+# tenantSecret): a leaked tenant env can then only speak to the relay for that one tenant.
+TENANT_RELAY_SECRET=""
+if [[ -n "${MAIL_OAUTH_RELAY_SECRET:-}" ]]; then
+  TENANT_RELAY_SECRET="$(printf '%s' "$SLUG" | openssl dgst -sha256 -hmac "$MAIL_OAUTH_RELAY_SECRET" | sed 's/^.*= //')"
+fi
 
 if [[ -f "$ENV_FILE" ]]; then
   echo "error: $ENV_FILE already exists, refusing to overwrite an existing tenant" >&2
@@ -108,7 +114,7 @@ sed \
   -e "s|__GMAIL_OAUTH_CLIENT_SECRET__|${GMAIL_OAUTH_CLIENT_SECRET:-}|g" \
   -e "s|__MICROSOFT_OAUTH_CLIENT_ID__|${MICROSOFT_OAUTH_CLIENT_ID:-}|g" \
   -e "s|__MICROSOFT_OAUTH_CLIENT_SECRET__|${MICROSOFT_OAUTH_CLIENT_SECRET:-}|g" \
-  -e "s|__MAIL_OAUTH_RELAY_SECRET__|${MAIL_OAUTH_RELAY_SECRET:-}|g" \
+  -e "s|__MAIL_OAUTH_RELAY_SECRET__|${TENANT_RELAY_SECRET}|g" \
   -e "s|__SEED_ADMIN_EMAIL__|${SEED_ADMIN_EMAIL}|g" \
   envs/tenant.env.template > "$ENV_FILE"
 

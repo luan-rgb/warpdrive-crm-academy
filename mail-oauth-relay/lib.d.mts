@@ -9,13 +9,18 @@ export interface RelayConfig {
   microsoft: { clientId: string; clientSecret: string };
 }
 
+export interface ClaimedMailbox {
+  provider: "gmail" | "outlook";
+  email: string;
+  refreshToken: string;
+  scopes: string[];
+}
+
 export function relayConfigFromEnv(env: Record<string, string | undefined>): RelayConfig;
 export function isValidSlug(slug: unknown): boolean;
-export function tenantDbName(slug: string): string;
+export function tenantSecret(masterSecret: string, slug: string): string;
 export function redirectUri(cfg: RelayConfig, provider: Provider): string;
 export function buildAuthUrl(cfg: RelayConfig, provider: Provider, state: string): string;
-export function encryptToken(keyBase64: string, plaintext: string): Buffer;
-export function readEnvValue(text: string, name: string): string | null;
 export function ensureOpsSchema(opsQuery: Query): Promise<void>;
 export function connectInit(
   deps: { opsQuery: Query; cfg: RelayConfig },
@@ -23,13 +28,12 @@ export function connectInit(
   headerSecret: string | undefined,
 ): Promise<{ status: number; body: { authUrl: string } & Record<string, unknown> }>;
 export function completeCallback(
-  deps: {
-    opsQuery: Query;
-    tenantQuery: (slug: string) => Query;
-    tenantKey: (slug: string) => Promise<string | null>;
-    fetchImpl: typeof fetch;
-    cfg: RelayConfig;
-  },
+  deps: { opsQuery: Query; fetchImpl: typeof fetch; cfg: RelayConfig },
   provider: string,
   query: URLSearchParams,
 ): Promise<string>;
+export function claimResult(
+  deps: { opsQuery: Query; cfg: RelayConfig },
+  body: unknown,
+  headerSecret: string | undefined,
+): Promise<{ status: number; body: ClaimedMailbox | { error: string } }>;

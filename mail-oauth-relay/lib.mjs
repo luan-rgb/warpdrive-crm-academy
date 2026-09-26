@@ -1,7 +1,14 @@
 // Pure logic of the mail OAuth relay (see server.mjs for why the relay exists). Everything that
-// touches the outside world is passed in (database query functions, fetch, the tenant's
-// encryption key), so relay.test.ts runs it against real Postgres databases.
-import { createCipheriv, randomBytes, timingSafeEqual } from "node:crypto";
+// touches the outside world is passed in (database query function, fetch), so relay.test.ts runs
+// it against a real Postgres database.
+import {
+  createCipheriv,
+  createDecipheriv,
+  createHash,
+  createHmac,
+  randomBytes,
+  timingSafeEqual,
+} from "node:crypto";
 
 // Keep in sync with src/constants/mailOAuth.ts (the tenant side refreshes with the same scopes).
 const GOOGLE = {
@@ -33,6 +40,8 @@ const MICROSOFT = {
 const PROVIDERS = { google: GOOGLE, microsoft: MICROSOFT };
 
 const STATE_TTL = "15 minutes";
+// How long a finished consent waits for the tenant app to claim it.
+const RESULT_TTL = "10 minutes";
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function relayConfigFromEnv(env) {
@@ -53,10 +62,6 @@ export function relayConfigFromEnv(env) {
 // A slug becomes a database name and an env file path, so only DNS-label characters get through.
 export function isValidSlug(slug) {
   return typeof slug === "string" && /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(slug);
-}
-
-export function tenantDbName(slug) {
-  return `aluno_${slug.replaceAll("-", "_")}`;
 }
 
 export function redirectUri(cfg, provider) {
@@ -83,27 +88,35 @@ export function buildAuthUrl(cfg, provider, state) {
   return u.toString();
 }
 
-// Same AES-256-GCM envelope as src/features/email/crypto.ts: iv(12) || tag(16) || ciphertext.
-export function encryptToken(keyBase64, plaintext) {
-  const key = Buffer.from(keyBase64, "base64");
-  if (key.length !== 32) throw new Error("tenant TOKEN_ENCRYPTION_KEY is not 32 bytes");
+// Tenants never hold the relay's master secret, only HMAC(master, slug): a leaked tenant env can
+// then speak for that tenant alone. scripts/provision-tenant.sh derives the same value.
+export function tenantSecret(masterSecret, slug) {
+  return createHmac("sha256", masterSecret).update(slug).digest("hex");
+}
+
+// A finished consent waits in warpdrive_ops until the tenant claims it; the refresh token is kept
+// sealed (AES-256-GCM, key derived from the master secret) so the ops database never holds it in
+// plain text.
+function sealKey(cfg) {
+  return createHash("sha256").update(`mail-oauth-relay:at-rest:${cfg.relaySecret}`).digest();
+}
+
+function seal(cfg, plaintext) {
   const iv = randomBytes(12);
-  const cipher = createCipheriv("aes-256-gcm", key, iv);
+  const cipher = createCipheriv("aes-256-gcm", sealKey(cfg), iv);
   const ct = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
   return Buffer.concat([iv, cipher.getAuthTag(), ct]);
 }
 
-export function readEnvValue(text, name) {
-  for (const raw of text.split(/\r?\n/)) {
-    const line = raw.trim();
-    if (line.startsWith("#") || !line.startsWith(`${name}=`)) continue;
-    return line.slice(name.length + 1).replace(/^(['"])(.*)\1$/, "$2");
-  }
-  return null;
+function unseal(cfg, packed) {
+  const decipher = createDecipheriv("aes-256-gcm", sealKey(cfg), packed.subarray(0, 12));
+  decipher.setAuthTag(packed.subarray(12, 28));
+  return Buffer.concat([decipher.update(packed.subarray(28)), decipher.final()]).toString("utf8");
 }
 
-function secretMatches(expected, given) {
-  if (typeof given !== "string" || expected.length === 0) return false;
+function secretMatches(masterSecret, slug, given) {
+  if (typeof given !== "string" || masterSecret.length === 0 || !isValidSlug(slug)) return false;
+  const expected = tenantSecret(masterSecret, slug);
   const a = Buffer.from(expected);
   const b = Buffer.from(given);
   return a.length === b.length && timingSafeEqual(a, b);
@@ -116,27 +129,31 @@ export async function ensureOpsSchema(opsQuery) {
        tenant_slug text NOT NULL,
        user_id uuid NOT NULL,
        provider text NOT NULL,
-       created_at timestamptz NOT NULL DEFAULT now(),
        expires_at timestamptz NOT NULL,
        consumed_at timestamptz
      )`,
     [],
   );
+  // Columns for the claim step (added after the first deploy, hence IF NOT EXISTS).
+  for (const column of [
+    "ticket text UNIQUE",
+    "result_email text",
+    "result_sealed bytea",
+    "completed_at timestamptz",
+    "claimed_at timestamptz",
+  ]) {
+    await opsQuery(`ALTER TABLE mail_oauth_requests ADD COLUMN IF NOT EXISTS ${column}`, []);
+  }
 }
 
-// POST /connect-init, called server-to-server by a tenant app (never the browser). The shared
-// secret stops anyone who can reach the relay from minting states that would bind THEIR mailbox
-// to someone else's CRM user.
+// POST /connect-init, called server-to-server by a tenant app (never the browser). The tenant's
+// derived secret stops anyone who can reach the relay from minting states for a tenant.
 export async function connectInit({ opsQuery, cfg }, body, headerSecret) {
-  if (!secretMatches(cfg.relaySecret, headerSecret))
-    return { status: 401, body: { error: "unauthorized" } };
   const { tenant_slug: slug, user_id: userId, provider } = body ?? {};
-  if (
-    !isValidSlug(slug) ||
-    typeof userId !== "string" ||
-    !UUID_RE.test(userId) ||
-    !(provider in PROVIDERS)
-  ) {
+  if (!isValidSlug(slug)) return { status: 400, body: { error: "invalid_request" } };
+  if (!secretMatches(cfg.relaySecret, slug, headerSecret))
+    return { status: 401, body: { error: "unauthorized" } };
+  if (typeof userId !== "string" || !UUID_RE.test(userId) || !(provider in PROVIDERS)) {
     return { status: 400, body: { error: "invalid_request" } };
   }
   if (cfg[provider].clientId === "")
@@ -190,8 +207,13 @@ async function fetchEmail(fetchImpl, provider, accessToken) {
 
 // GET /{provider}/callback. Returns the URL to redirect the browser to; never throws for an
 // operational failure (the student always lands back on a page that says what happened).
+//
+// The relay does NOT bind the mailbox itself: whoever opens a consent link may not be the CRM user
+// who asked for it (a link forwarded to someone else would otherwise attach THEIR mailbox to the
+// sender's account). It parks the result behind a single-use ticket and sends the browser to the
+// tenant, which only claims it for the logged-in user who started the connection.
 export async function completeCallback(deps, provider, query) {
-  const { opsQuery, tenantQuery, tenantKey, fetchImpl, cfg } = deps;
+  const { opsQuery, fetchImpl, cfg } = deps;
   const home = `https://${cfg.baseDomain}/`;
   const state = query.get("state");
   if (!(provider in PROVIDERS) || state === null) return home;
@@ -200,12 +222,13 @@ export async function completeCallback(deps, provider, query) {
   const { rows } = await opsQuery(
     `UPDATE mail_oauth_requests SET consumed_at = now()
      WHERE state = $1 AND provider = $2 AND consumed_at IS NULL AND expires_at > now()
-     RETURNING tenant_slug, user_id`,
+     RETURNING tenant_slug`,
     [state, provider],
   );
   const request = rows[0];
   if (request === undefined) return home;
-  const back = (qs) => `https://${request.tenant_slug}.${cfg.baseDomain}/settings/email-sync?${qs}`;
+  const tenantHome = `https://${request.tenant_slug}.${cfg.baseDomain}`;
+  const back = (qs) => `${tenantHome}/settings/email-sync?${qs}`;
 
   const code = query.get("code");
   if (code === null) return back("connect_error=denied");
@@ -218,31 +241,45 @@ export async function completeCallback(deps, provider, query) {
   const email = await fetchEmail(fetchImpl, provider, tokens.access_token);
   if (email === null) return back("connect_error=identity");
 
-  const key = await tenantKey(request.tenant_slug);
-  if (key === null) return back("connect_error=tenant");
-  const enc = encryptToken(key, tokens.refresh_token);
-  const p = PROVIDERS[provider];
-  try {
-    await tenantQuery(request.tenant_slug)(
-      `INSERT INTO email_accounts (user_id, email_address, provider, refresh_token_enc, scopes, status)
-       VALUES ($1, $2, $3, $4, $5::jsonb, 'connected')
-       ON CONFLICT (user_id) DO UPDATE SET
-         email_address = EXCLUDED.email_address,
-         provider = EXCLUDED.provider,
-         refresh_token_enc = EXCLUDED.refresh_token_enc,
-         scopes = EXCLUDED.scopes,
-         imap_settings = NULL,
-         imap_password_enc = NULL,
-         last_history_id = NULL,
-         status = 'connected',
-         last_error_id = NULL,
-         updated_at = now()`,
-      [request.user_id, email, p.storedAs, enc, JSON.stringify(p.scopes)],
-    );
-  } catch (e) {
-    // email_address is unique per tenant: the address is already connected by another user.
-    if (e?.code === "23505") return back("connect_error=taken");
-    throw e;
+  const ticket = randomBytes(32).toString("base64url");
+  await opsQuery(
+    `UPDATE mail_oauth_requests
+     SET ticket = $2, result_email = $3, result_sealed = $4, completed_at = now()
+     WHERE state = $1`,
+    [state, ticket, email, seal(cfg, tokens.refresh_token)],
+  );
+  return `${tenantHome}/api/mail-oauth/complete?ticket=${ticket}`;
+}
+
+// POST /claim {tenant_slug, user_id, ticket}, server-to-server from the tenant app. Succeeds once,
+// only for the tenant and user the connection was started for, within RESULT_TTL.
+export async function claimResult({ opsQuery, cfg }, body, headerSecret) {
+  const { tenant_slug: slug, user_id: userId, ticket } = body ?? {};
+  if (!isValidSlug(slug)) return { status: 400, body: { error: "invalid_request" } };
+  if (!secretMatches(cfg.relaySecret, slug, headerSecret))
+    return { status: 401, body: { error: "unauthorized" } };
+  if (typeof userId !== "string" || !UUID_RE.test(userId) || typeof ticket !== "string") {
+    return { status: 400, body: { error: "invalid_request" } };
   }
-  return back(`connected=${p.storedAs}`);
+  const { rows } = await opsQuery(
+    `UPDATE mail_oauth_requests SET claimed_at = now()
+     WHERE ticket = $1 AND tenant_slug = $2 AND user_id = $3 AND claimed_at IS NULL
+       AND completed_at > now() - interval '${RESULT_TTL}'
+     RETURNING provider, result_email, result_sealed`,
+    [ticket, slug, userId],
+  );
+  const row = rows[0];
+  if (row === undefined) return { status: 404, body: { error: "not_found" } };
+  // The sealed token is only needed once.
+  await opsQuery("UPDATE mail_oauth_requests SET result_sealed = NULL WHERE ticket = $1", [ticket]);
+  const p = PROVIDERS[row.provider];
+  return {
+    status: 200,
+    body: {
+      provider: p.storedAs,
+      email: row.result_email,
+      refreshToken: unseal(cfg, row.result_sealed),
+      scopes: p.scopes,
+    },
+  };
 }

@@ -71,8 +71,9 @@ services:
     restart: unless-stopped
     # Internal-only, same shape as Caddy above: nginx (host) owns 80/443 and proxy_passes ONLY
     # /api/mail-oauth/google/callback and /api/mail-oauth/microsoft/callback here (prefix stripped).
-    # /connect-init stays reachable only from tenant apps on tenants-net. Free replacement for the
-    # old Nylas relay: see mail-oauth-relay/server.mjs and docs/PROJETO.md.
+    # /connect-init and /claim stay reachable only from tenant apps on tenants-net. The relay never
+    # touches tenant databases or keys: the tenant app claims each finished consent and stores it.
+    # Free replacement for the old Nylas relay: see mail-oauth-relay/server.mjs and docs/PROJETO.md.
     ports:
       - "127.0.0.1:8881:8081"
     environment:
@@ -83,12 +84,9 @@ services:
       GMAIL_OAUTH_CLIENT_SECRET: ${GMAIL_OAUTH_CLIENT_SECRET:-}
       MICROSOFT_OAUTH_CLIENT_ID: ${MICROSOFT_OAUTH_CLIENT_ID:-}
       MICROSOFT_OAUTH_CLIENT_SECRET: ${MICROSOFT_OAUTH_CLIENT_SECRET:-}
+      # Only for its own bookkeeping database (warpdrive_ops).
       SHARED_POSTGRES_ADMIN_USER: ${SHARED_POSTGRES_ADMIN_USER:?set SHARED_POSTGRES_ADMIN_USER}
       SHARED_POSTGRES_ADMIN_PASSWORD: ${SHARED_POSTGRES_ADMIN_PASSWORD:?set SHARED_POSTGRES_ADMIN_PASSWORD}
-    # Read-only: the relay reads each tenant's TOKEN_ENCRYPTION_KEY so the refresh token it stores
-    # is encrypted exactly as the tenant app would have encrypted it.
-    volumes:
-      - ./envs:/envs:ro
     networks: [tenants-net]
     depends_on:
       postgres:

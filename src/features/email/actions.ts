@@ -171,11 +171,14 @@ export async function connectGmailStart(): Promise<{ url: string }> {
 
 // Start a free Gmail/Outlook connect (Settings > Email sync). Google and Microsoft only accept one
 // fixed redirect_uri, which the shared mail-oauth-relay owns; this asks the relay for the consent
-// URL (the relay also mints and later checks the single-use state), so no state cookie is set
-// here. Reconnect is the same call: the relay rebinds by user_id.
+// URL (the relay mints and later checks the single-use state). The browser returns through
+// /api/mail-oauth/complete, which binds the mailbox only for this same logged-in user.
 export async function connectMailboxStart(
   provider: OAuthMailProvider,
+  csrfToken: string | null = null,
 ): Promise<ActionResult<{ url: string }>> {
+  const csrf = await guardCsrf(csrfToken);
+  if (!csrf.ok) return clientErr(new AppError("E_PERM_001", "csrf check failed", {}));
   const ctx = await createContext();
   if (ctx.actor === null) return clientErr(new AppError("E_PERM_001", "unauthenticated", {}));
   // A server action argument is client input even when typed: validate it at the boundary.

@@ -1,22 +1,16 @@
 // Tests for the central mail OAuth relay (mail-oauth-relay/lib.mjs). The tenant and ops databases
 // are real Postgres databases from the shared test harness (makeTestDb), never mocks.
-import { sql } from "drizzle-orm";
 import { afterEach, describe, expect, it } from "vitest";
-import { decryptToken } from "@/features/email/crypto";
 import { makeTestDb, type TestDb } from "@/test/db";
 import {
   buildAuthUrl,
+  claimResult,
   completeCallback,
   connectInit,
-  encryptToken,
   ensureOpsSchema,
   isValidSlug,
-  readEnvValue,
-  tenantDbName,
+  tenantSecret,
 } from "./lib.mjs";
-
-// Same key vitest.setup.ts gives the app, so decryptToken can read what the relay wrote.
-const TENANT_KEY = Buffer.alloc(32, 1).toString("base64");
 
 const CFG = {
   baseDomain: "crm.example.com",
@@ -30,17 +24,17 @@ afterEach(async () => {
   for (const t of open.splice(0)) await t.close();
 });
 
+const USER_ID = "11111111-1111-4111-8111-111111111111";
+const OTHER_USER_ID = "22222222-2222-4222-8222-222222222222";
+// Each tenant holds only its own derived secret, never the relay's master secret.
+const ALUNO_SECRET = tenantSecret(CFG.relaySecret, "aluno");
+
 async function dbs() {
   const ops = await makeTestDb();
-  const tenant = await makeTestDb();
-  open.push(ops, tenant);
+  open.push(ops);
   const opsQuery = (text: string, params: unknown[]) => ops.pool.query(text, params);
   await ensureOpsSchema(opsQuery);
-  const r = await tenant.db.execute(
-    sql`INSERT INTO users (email, name, google_sub) VALUES ('aluno@x.com','A','sub-a') RETURNING id`,
-  );
-  const userId = (r.rows[0] as { id: string }).id;
-  return { ops, tenant, opsQuery, userId };
+  return { ops, opsQuery, userId: USER_ID };
 }
 
 function json(status: number, body: unknown): Response {
@@ -73,24 +67,17 @@ function providerFetch(opts: { email: string; refresh?: string | null }) {
 }
 
 describe("pure helpers", () => {
-  it("only accepts tenant slugs that are safe as a database and file name", () => {
+  it("only accepts tenant slugs that are safe as a subdomain", () => {
     expect(isValidSlug("estrategistacrm")).toBe(true);
     expect(isValidSlug("joao-silva")).toBe(true);
     expect(isValidSlug("../etc")).toBe(false);
     expect(isValidSlug("a b")).toBe(false);
     expect(isValidSlug("")).toBe(false);
-    expect(tenantDbName("joao-silva")).toBe("aluno_joao_silva");
   });
 
-  it("reads one key from an env file, ignoring comments and quotes", () => {
-    const text = "# c\nFOO=1\nTOKEN_ENCRYPTION_KEY='abc='\nBAR=2\n";
-    expect(readEnvValue(text, "TOKEN_ENCRYPTION_KEY")).toBe("abc=");
-    expect(readEnvValue(text, "MISSING")).toBeNull();
-  });
-
-  it("encrypts in the exact envelope the app decrypts", () => {
-    const packed = encryptToken(TENANT_KEY, "refresh-token");
-    expect(decryptToken(packed)).toEqual({ ok: true, value: "refresh-token" });
+  it("derives a different secret per tenant, so one tenant cannot act for another", () => {
+    expect(tenantSecret(CFG.relaySecret, "aluno")).toMatch(/^[0-9a-f]{64}$/);
+    expect(tenantSecret(CFG.relaySecret, "aluno")).not.toBe(tenantSecret(CFG.relaySecret, "outro"));
   });
 
   it("builds a Google consent URL that asks for offline Gmail access, with no domain lock", () => {
@@ -117,14 +104,14 @@ describe("pure helpers", () => {
 });
 
 describe("connectInit", () => {
-  it("refuses callers without the shared relay secret", async () => {
+  it("refuses callers without this tenant's secret", async () => {
     const { opsQuery, userId } = await dbs();
-    const r = await connectInit(
-      { opsQuery, cfg: CFG },
-      { tenant_slug: "aluno", user_id: userId, provider: "google" },
-      "wrong",
-    );
-    expect(r.status).toBe(401);
+    const body = { tenant_slug: "aluno", user_id: userId, provider: "google" };
+    expect((await connectInit({ opsQuery, cfg: CFG }, body, "wrong")).status).toBe(401);
+    // The master secret itself and another tenant's secret are refused too.
+    expect((await connectInit({ opsQuery, cfg: CFG }, body, CFG.relaySecret)).status).toBe(401);
+    const other = tenantSecret(CFG.relaySecret, "outro");
+    expect((await connectInit({ opsQuery, cfg: CFG }, body, other)).status).toBe(401);
   });
 
   it("rejects an unsafe slug or unknown provider", async () => {
@@ -132,13 +119,13 @@ describe("connectInit", () => {
     const bad = await connectInit(
       { opsQuery, cfg: CFG },
       { tenant_slug: "../x", user_id: userId, provider: "google" },
-      CFG.relaySecret,
+      tenantSecret(CFG.relaySecret, "../x"),
     );
     expect(bad.status).toBe(400);
     const badProvider = await connectInit(
       { opsQuery, cfg: CFG },
       { tenant_slug: "aluno", user_id: userId, provider: "yahoo" },
-      CFG.relaySecret,
+      ALUNO_SECRET,
     );
     expect(badProvider.status).toBe(400);
   });
@@ -148,7 +135,7 @@ describe("connectInit", () => {
     const r = await connectInit(
       { opsQuery, cfg: CFG },
       { tenant_slug: "aluno", user_id: userId, provider: "microsoft" },
-      CFG.relaySecret,
+      ALUNO_SECRET,
     );
     expect(r.status).toBe(200);
     const state = new URL(r.body.authUrl).searchParams.get("state");
@@ -161,32 +148,29 @@ describe("connectInit", () => {
   });
 });
 
-describe("completeCallback", () => {
+describe("completeCallback + claimResult", () => {
   async function start(provider: "google" | "microsoft") {
     const ctx = await dbs();
     const init = await connectInit(
       { opsQuery: ctx.opsQuery, cfg: CFG },
       { tenant_slug: "aluno", user_id: ctx.userId, provider },
-      CFG.relaySecret,
+      ALUNO_SECRET,
     );
     const state = new URL(init.body.authUrl).searchParams.get("state") ?? "";
     return { ...ctx, state };
   }
 
   function deps(ctx: Awaited<ReturnType<typeof start>>, fetchImpl: typeof fetch) {
-    return {
-      opsQuery: ctx.opsQuery,
-      tenantQuery: (slug: string) => {
-        expect(slug).toBe("aluno");
-        return (text: string, params: unknown[]) => ctx.tenant.pool.query(text, params);
-      },
-      tenantKey: () => Promise.resolve(TENANT_KEY),
-      fetchImpl,
-      cfg: CFG,
-    };
+    return { opsQuery: ctx.opsQuery, fetchImpl, cfg: CFG };
   }
 
-  it("Google: stores the encrypted refresh token on the student's mailbox and redirects home", async () => {
+  function ticketOf(location: string): string {
+    const u = new URL(location);
+    expect(u.origin + u.pathname).toBe("https://aluno.crm.example.com/api/mail-oauth/complete");
+    return u.searchParams.get("ticket") ?? "";
+  }
+
+  it("hands the result to the tenant only for the user who started the connection", async () => {
     const ctx = await start("google");
     const p = providerFetch({ email: "Aluno@Gmail.com" });
     const location = await completeCallback(
@@ -194,42 +178,80 @@ describe("completeCallback", () => {
       "google",
       new URLSearchParams({ code: "c", state: ctx.state }),
     );
-    expect(location).toBe("https://aluno.crm.example.com/settings/email-sync?connected=gmail");
-    const row = (
-      await ctx.tenant.pool.query(
-        "SELECT provider, email_address, refresh_token_enc, status FROM email_accounts WHERE user_id=$1",
-        [ctx.userId],
-      )
-    ).rows[0] as {
-      provider: string;
-      email_address: string;
-      refresh_token_enc: Buffer;
-      status: string;
-    };
-    expect(row.provider).toBe("gmail");
-    expect(row.email_address).toBe("aluno@gmail.com");
-    expect(row.status).toBe("connected");
-    expect(decryptToken(row.refresh_token_enc)).toEqual({ ok: true, value: "rt-1" });
+    const ticket = ticketOf(location);
+    expect(ticket).toMatch(/^[\w-]{40,}$/);
     expect(p.calls[0]?.body).toContain(
       "redirect_uri=https%3A%2F%2Fcrm.example.com%2Fapi%2Fmail-oauth%2Fgoogle%2Fcallback",
     );
+
+    // The refresh token is never stored in plain text while it waits to be claimed.
+    const stored = (await ctx.ops.pool.query("SELECT * FROM mail_oauth_requests")).rows[0];
+    expect(JSON.stringify(stored)).not.toContain("rt-1");
+
+    const claimDeps = { opsQuery: ctx.opsQuery, cfg: CFG };
+    // Someone else logged in to the same tenant (the victim of a forwarded link) cannot claim it.
+    const wrongUser = await claimResult(
+      claimDeps,
+      { tenant_slug: "aluno", user_id: OTHER_USER_ID, ticket },
+      ALUNO_SECRET,
+    );
+    expect(wrongUser.status).toBe(404);
+    // Another tenant cannot claim it either.
+    const wrongTenant = await claimResult(
+      claimDeps,
+      { tenant_slug: "outro", user_id: ctx.userId, ticket },
+      tenantSecret(CFG.relaySecret, "outro"),
+    );
+    expect(wrongTenant.status).toBe(404);
+
+    const claimed = await claimResult(
+      claimDeps,
+      { tenant_slug: "aluno", user_id: ctx.userId, ticket },
+      ALUNO_SECRET,
+    );
+    expect(claimed).toEqual({
+      status: 200,
+      body: {
+        provider: "gmail",
+        email: "aluno@gmail.com",
+        refreshToken: "rt-1",
+        scopes: expect.any(Array),
+      },
+    });
+    const again = await claimResult(
+      claimDeps,
+      { tenant_slug: "aluno", user_id: ctx.userId, ticket },
+      ALUNO_SECRET,
+    );
+    expect(again.status).toBe(404);
   });
 
-  it("Microsoft: stores an outlook mailbox", async () => {
+  it("Microsoft: the claimed mailbox is an outlook one", async () => {
     const ctx = await start("microsoft");
     const p = providerFetch({ email: "aluno@outlook.com" });
-    const location = await completeCallback(
-      deps(ctx, p.fetchImpl as typeof fetch),
-      "microsoft",
-      new URLSearchParams({ code: "c", state: ctx.state }),
+    const ticket = ticketOf(
+      await completeCallback(
+        deps(ctx, p.fetchImpl as typeof fetch),
+        "microsoft",
+        new URLSearchParams({ code: "c", state: ctx.state }),
+      ),
     );
-    expect(location).toBe("https://aluno.crm.example.com/settings/email-sync?connected=outlook");
-    const row = (
-      await ctx.tenant.pool.query("SELECT provider FROM email_accounts WHERE user_id=$1", [
-        ctx.userId,
-      ])
-    ).rows[0] as { provider: string };
-    expect(row.provider).toBe("outlook");
+    const claimed = await claimResult(
+      { opsQuery: ctx.opsQuery, cfg: CFG },
+      { tenant_slug: "aluno", user_id: ctx.userId, ticket },
+      ALUNO_SECRET,
+    );
+    expect(claimed.body).toMatchObject({ provider: "outlook", email: "aluno@outlook.com" });
+  });
+
+  it("claim needs this tenant's secret", async () => {
+    const ctx = await start("google");
+    const r = await claimResult(
+      { opsQuery: ctx.opsQuery, cfg: CFG },
+      { tenant_slug: "aluno", user_id: ctx.userId, ticket: "x" },
+      "wrong",
+    );
+    expect(r.status).toBe(401);
   });
 
   it("a state can be used once only", async () => {
@@ -253,7 +275,7 @@ describe("completeCallback", () => {
     expect(p.calls).toEqual([]);
   });
 
-  it("the user declining consent sends them back with an error, storing nothing", async () => {
+  it("the user declining consent sends them back with an error", async () => {
     const ctx = await start("google");
     const p = providerFetch({ email: "aluno@gmail.com" });
     const location = await completeCallback(
@@ -262,9 +284,6 @@ describe("completeCallback", () => {
       new URLSearchParams({ error: "access_denied", state: ctx.state }),
     );
     expect(location).toBe("https://aluno.crm.example.com/settings/email-sync?connect_error=denied");
-    const n = (await ctx.tenant.pool.query("SELECT count(*)::int AS n FROM email_accounts"))
-      .rows[0];
-    expect(n).toEqual({ n: 0 });
   });
 
   it("no refresh token (offline access not granted) is an error, not a half-working mailbox", async () => {
@@ -278,23 +297,5 @@ describe("completeCallback", () => {
     expect(location).toBe(
       "https://aluno.crm.example.com/settings/email-sync?connect_error=no_refresh_token",
     );
-  });
-
-  it("an address already connected by another user of the tenant is reported", async () => {
-    const ctx = await start("google");
-    const other = await ctx.tenant.db.execute(
-      sql`INSERT INTO users (email, name, google_sub) VALUES ('b@x.com','B','sub-b') RETURNING id`,
-    );
-    await ctx.tenant.pool.query(
-      "INSERT INTO email_accounts (user_id, email_address, status) VALUES ($1, 'aluno@gmail.com', 'connected')",
-      [(other.rows[0] as { id: string }).id],
-    );
-    const p = providerFetch({ email: "aluno@gmail.com" });
-    const location = await completeCallback(
-      deps(ctx, p.fetchImpl as typeof fetch),
-      "google",
-      new URLSearchParams({ code: "c", state: ctx.state }),
-    );
-    expect(location).toBe("https://aluno.crm.example.com/settings/email-sync?connect_error=taken");
   });
 });

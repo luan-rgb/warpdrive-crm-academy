@@ -106,12 +106,12 @@ export function EmailSyncClient({
   const health = mailboxDisplayHealth(mailbox, now);
 
   // Gmail/Outlook: ask the shared relay for a consent URL and hand the browser off to Google or
-  // Microsoft. The relay stores the token and sends the student back here. Reconnect is the same
-  // flow: the relay rebinds by user, so the same account row (and its mail history) is reused.
+  // Microsoft. The student comes back through /api/mail-oauth/complete, which stores the mailbox.
+  // Reconnect is the same flow and reuses the same account row (and its mail history).
   async function startOAuth(provider: "gmail" | "outlook"): Promise<void> {
     setPending(true);
     setError(null);
-    const r = await connectMailboxStart(provider).catch(() => null);
+    const r = await connectMailboxStart(provider, readCsrfToken()).catch(() => null);
     if (r?.ok === true) {
       window.location.href = r.value.url;
       return;

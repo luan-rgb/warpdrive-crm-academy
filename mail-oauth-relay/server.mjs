@@ -3,34 +3,29 @@
 //
 // Why a separate service: Google and Microsoft only accept a fixed, pre-registered redirect_uri
 // per OAuth client, and every student has their own subdomain. So one service outside any tenant
-// owns the single callback URL for each provider, and routes each completed consent back to the
-// right tenant database with the shared Postgres admin credentials (the same cross-database access
-// scripts/hotmart-lifecycle.sh uses). It encrypts the refresh token with THAT tenant's own
-// TOKEN_ENCRYPTION_KEY, read from the tenant env file mounted read-only at ENVS_DIR, so the tenant
-// app decrypts it exactly like a token it stored itself.
+// owns the single callback URL for each provider. It never writes to a tenant: a finished consent
+// waits here behind a single-use ticket, and the tenant app claims it only for the logged-in user
+// who started the connection, then encrypts and stores the token with its own key.
 //
 // Routes:
 //   POST /connect-init   {tenant_slug, user_id, provider} + x-relay-secret -> {authUrl}
-//                        server-to-server from a tenant app only (not exposed by nginx).
+//   POST /claim          {tenant_slug, user_id, ticket} + x-relay-secret -> mailbox + token
+//                        both server-to-server from a tenant app only (not exposed by nginx);
+//                        x-relay-secret is HMAC(master secret, tenant slug).
 //   GET  /google/callback, /microsoft/callback   the public redirect_uri targets.
 //   GET  /health
-import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import path from "node:path";
 import pg from "pg";
 import {
+  claimResult,
   completeCallback,
   connectInit,
   ensureOpsSchema,
-  isValidSlug,
-  readEnvValue,
   relayConfigFromEnv,
-  tenantDbName,
 } from "./lib.mjs";
 
 const { Pool } = pg;
 const PORT = Number(process.env.PORT ?? 8081);
-const ENVS_DIR = process.env.ENVS_DIR ?? "/envs";
 const cfg = relayConfigFromEnv(process.env);
 
 const pgBase = {
@@ -40,28 +35,6 @@ const pgBase = {
 };
 const opsPool = new Pool({ ...pgBase, database: "warpdrive_ops", max: 2 });
 const opsQuery = (text, params) => opsPool.query(text, params);
-
-// One small cached pool per tenant database.
-const tenantPools = new Map();
-function tenantQuery(slug) {
-  const database = tenantDbName(slug);
-  let pool = tenantPools.get(database);
-  if (pool === undefined) {
-    pool = new Pool({ ...pgBase, database, max: 2 });
-    tenantPools.set(database, pool);
-  }
-  return (text, params) => pool.query(text, params);
-}
-
-async function tenantKey(slug) {
-  if (!isValidSlug(slug)) return null;
-  try {
-    const text = await readFile(path.join(ENVS_DIR, `aluno-${slug}.env`), "utf8");
-    return readEnvValue(text, "TOKEN_ENCRYPTION_KEY");
-  } catch {
-    return null;
-  }
-}
 
 function json(res, status, body) {
   res.writeHead(status, { "content-type": "application/json" });
@@ -101,10 +74,20 @@ async function handle(req, res) {
       const r = await connectInit({ opsQuery, cfg }, body, req.headers["x-relay-secret"]);
       return json(res, r.status, r.body);
     }
+    if (req.method === "POST" && url.pathname === "/claim") {
+      let body;
+      try {
+        body = await readJsonBody(req);
+      } catch {
+        return json(res, 400, { error: "invalid_json" });
+      }
+      const r = await claimResult({ opsQuery, cfg }, body, req.headers["x-relay-secret"]);
+      return json(res, r.status, r.body);
+    }
     const cb = req.method === "GET" ? CALLBACK.exec(url.pathname) : null;
     if (cb !== null) {
       const location = await completeCallback(
-        { opsQuery, tenantQuery, tenantKey, fetchImpl: fetch, cfg },
+        { opsQuery, fetchImpl: fetch, cfg },
         cb[1],
         url.searchParams,
       );

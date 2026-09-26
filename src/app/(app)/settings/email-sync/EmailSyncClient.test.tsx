@@ -9,7 +9,8 @@ const connectImapAction = vi.fn();
 const refresh = vi.fn();
 
 vi.mock("@/features/email/actions", () => ({
-  connectMailboxStart: (provider: string) => connectMailboxStart(provider),
+  connectMailboxStart: (provider: string, csrf: string | null) =>
+    connectMailboxStart(provider, csrf),
   disconnectMailboxAction: (csrf: string | null, input: unknown) =>
     disconnectMailboxAction(csrf, input),
 }));
@@ -65,7 +66,7 @@ describe("EmailSyncClient", () => {
     await waitFor(() =>
       expect(window.location.href).toBe("https://accounts.google.com/o/oauth2/v2/auth?x=1"),
     );
-    expect(connectMailboxStart).toHaveBeenCalledWith("gmail");
+    expect(connectMailboxStart).toHaveBeenCalledWith("gmail", "csrf-token");
   });
 
   it("Outlook asks for the Microsoft consent URL", async () => {
@@ -76,7 +77,7 @@ describe("EmailSyncClient", () => {
     render(<EmailSyncClient mailbox={null} oauthProviders={BOTH} notice={null} />);
     fireEvent.click(screen.getByRole("button", { name: "Conectar Outlook" }));
     await waitFor(() => expect(window.location.href).toBe("https://login.microsoftonline.com/x"));
-    expect(connectMailboxStart).toHaveBeenCalledWith("outlook");
+    expect(connectMailboxStart).toHaveBeenCalledWith("outlook", "csrf-token");
   });
 
   it("a failed consent request re-enables the buttons and says so", async () => {

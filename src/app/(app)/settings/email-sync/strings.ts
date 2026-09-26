@@ -41,6 +41,8 @@ export const EMAIL_SYNC_STRINGS = {
     exchange: "O provedor recusou a conexão. Tente novamente em alguns minutos.",
     identity: "Não foi possível confirmar o endereço de e-mail da conta. Tente novamente.",
     tenant: "Não foi possível concluir a conexão neste CRM. Avise o suporte.",
+    claim:
+      "Esta conexão foi iniciada por outro usuário ou expirou. Entre com a sua conta e clique em conectar de novo.",
   } as Record<string, string>,
   genericErrorNotice: "Não foi possível conectar a caixa de e-mail. Tente novamente.",
   providerLabels: { gmail: "Gmail", outlook: "Outlook", imap: "IMAP/SMTP" },
