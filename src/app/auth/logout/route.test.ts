@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { env } from "@/config/env";
 
 vi.mock("@/db/client", () => ({ db: {} }));
 const logoutCore = vi.fn(() => Promise.resolve());
@@ -30,8 +31,8 @@ describe("/auth/logout", () => {
   });
 
   // A link or <img> on any page could otherwise sign the user out of every session.
-  it("does not log out on a GET", async () => {
-    const res = await GET();
+  it("does not log out on a GET", () => {
+    const res = GET();
     expect(logoutCore).not.toHaveBeenCalled();
     expect(res.headers.get("set-cookie") ?? "").not.toContain("wd_sid=;");
   });
@@ -46,7 +47,7 @@ describe("/auth/logout", () => {
     const res = await POST(
       post("tok", {
         "sec-fetch-site": "same-origin",
-        origin: new URL(process.env.BASE_URL ?? "http://localhost:3000").origin,
+        origin: new URL(env.BASE_URL).origin,
       }),
     );
     expect(logoutCore).toHaveBeenCalledTimes(1);
