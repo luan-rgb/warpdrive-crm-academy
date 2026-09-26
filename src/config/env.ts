@@ -7,6 +7,7 @@ const SECRET_FILE_VARS = [
   "GOOGLE_OAUTH_CLIENT_SECRET",
   "GMAIL_OAUTH_CLIENT_SECRET",
   "MICROSOFT_OAUTH_CLIENT_SECRET",
+  "MAIL_OAUTH_RELAY_SECRET",
   "WS_TICKET_SECRET",
   "TOKEN_ENCRYPTION_KEY",
   "MINIO_SECRET_KEY",
@@ -38,12 +39,6 @@ const base = z.object({
   // Optional (empty disables magic-link sign-in, see auth/magicLink.ts and magicLinkEmail.ts).
   RESEND_API_KEY: z.string().default(""),
   MAGIC_LINK_FROM_EMAIL: z.string().email().or(z.literal("")).default(""),
-  // Optional (empty disables Gmail/Outlook mailbox connect, see features/email/nylasClient.ts).
-  // Unlike a per-student Google OAuth client, Nylas's hosted auth uses one fixed redirect_uri
-  // regardless of which tenant the flow is for, so one Nylas app can serve every tenant.
-  NYLAS_API_KEY: z.string().default(""),
-  NYLAS_CLIENT_ID: z.string().default(""),
-  NYLAS_REGION: z.enum(["us", "eu"]).default("us"),
   // Free direct mailbox connect (src/features/email/clientFactory.ts). One Google OAuth client
   // and one Microsoft Entra app serve every tenant: Google and Microsoft only accept a fixed
   // redirect_uri, so the OAuth dance runs in the central mail-oauth-relay service and tenants
@@ -54,8 +49,9 @@ const base = z.object({
   GMAIL_OAUTH_CLIENT_SECRET: z.string().default(""),
   MICROSOFT_OAUTH_CLIENT_ID: z.string().default(""),
   MICROSOFT_OAUTH_CLIENT_SECRET: z.string().default(""),
-  // Internal URL of the relay's connect-init endpoint (shared Docker network).
+  // Internal URL of the relay (shared Docker network) and the secret its connect-init requires.
   MAIL_OAUTH_RELAY_URL: z.string().url().default("http://shared-mail-oauth-relay:8081"),
+  MAIL_OAUTH_RELAY_SECRET: z.string().default(""),
   BASE_URL: z.string().url(),
   DATABASE_URL: z.string().min(1),
   WS_TICKET_SECRET: z.string().min(32),

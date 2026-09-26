@@ -24,13 +24,15 @@ x-tenant-env: &tenant-env
   # Optional: empty disables magic-link sign-in (src/features/auth/magicLink.ts).
   RESEND_API_KEY: ${RESEND_API_KEY:-}
   MAGIC_LINK_FROM_EMAIL: ${MAGIC_LINK_FROM_EMAIL:-}
-  # Optional: empty disables Gmail/Outlook mailbox connect (src/features/email/nylasClient.ts).
-  # One Nylas application shared by every tenant, same rationale as the magic-link vars above:
-  # Nylas's hosted auth uses one fixed redirect_uri regardless of tenant, unlike a per-tenant
-  # Google OAuth client, so there is no per-tenant credential to inject here.
-  NYLAS_API_KEY: ${NYLAS_API_KEY:-}
-  NYLAS_CLIENT_ID: ${NYLAS_CLIENT_ID:-}
-  NYLAS_REGION: ${NYLAS_REGION:-us}
+  # Free mailbox connect (src/features/email/clientFactory.ts): one Google OAuth client and one
+  # Microsoft Entra app shared by every tenant. The OAuth redirect itself lands on the shared
+  # mail-oauth-relay; tenants only need the ids/secrets to refresh tokens, plus the relay secret
+  # to ask it for a consent URL. Empty disables that provider (IMAP/SMTP needs none of these).
+  GMAIL_OAUTH_CLIENT_ID: ${GMAIL_OAUTH_CLIENT_ID:-}
+  GMAIL_OAUTH_CLIENT_SECRET: ${GMAIL_OAUTH_CLIENT_SECRET:-}
+  MICROSOFT_OAUTH_CLIENT_ID: ${MICROSOFT_OAUTH_CLIENT_ID:-}
+  MICROSOFT_OAUTH_CLIENT_SECRET: ${MICROSOFT_OAUTH_CLIENT_SECRET:-}
+  MAIL_OAUTH_RELAY_SECRET: ${MAIL_OAUTH_RELAY_SECRET:-}
   BASE_URL: ${BASE_URL:?set BASE_URL}
   DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL}
   WS_TICKET_SECRET: ${WS_TICKET_SECRET:?set WS_TICKET_SECRET}

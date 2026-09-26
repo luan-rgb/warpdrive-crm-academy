@@ -18,6 +18,7 @@ import type { GmailClient } from "./gmailClient";
 import { assertMailboxOwner } from "./mailboxOwnership";
 import { buildAuthUrl, GMAIL_OAUTH_STATE_COOKIE } from "./oauth";
 import { resolveProductionClient } from "./productionClient";
+import { type OAuthMailProvider, requestConsentUrl, tenantSlugFromBaseUrl } from "./relayConnect";
 import { sendEmail as orchestrateSend, type SendEmailInput, sendEmailInput } from "./send";
 import { isFutureScheduledSend } from "./sendScheduling";
 import { trashThread } from "./threadTrash";
@@ -168,32 +169,33 @@ export async function connectGmailStart(): Promise<{ url: string }> {
   return { url: buildAuthUrl({ userId: ctx.session.userId, state }) };
 }
 
-// Gmail/Outlook via Nylas (src/features/email/nylasClient.ts): unlike connectGmailStart above,
-// no per-request state cookie here, because the redirect the user follows never comes back to
-// THIS tenant directly — Nylas's hosted auth has one fixed redirect_uri for every tenant (see
-// docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md), so the callback lands on
-// the shared-nylas-relay service instead, which is also where the single-use state is minted and
-// checked. This action's only job is asking that service for the URL to send the browser to.
-export async function connectNylasStart(
-  provider: "google" | "microsoft",
-): Promise<{ url: string }> {
+// Start a free Gmail/Outlook connect (Settings > Email sync). Google and Microsoft only accept one
+// fixed redirect_uri, which the shared mail-oauth-relay owns; this asks the relay for the consent
+// URL (the relay also mints and later checks the single-use state), so no state cookie is set
+// here. Reconnect is the same call: the relay rebinds by user_id.
+export async function connectMailboxStart(
+  provider: OAuthMailProvider,
+): Promise<ActionResult<{ url: string }>> {
   const ctx = await createContext();
-  if (ctx.session === null) {
-    throw new AppError("E_AUTH_001", "connectNylasStart called without a session", {});
+  if (ctx.actor === null) return clientErr(new AppError("E_PERM_001", "unauthenticated", {}));
+  // A server action argument is client input even when typed: validate it at the boundary.
+  const parsedProvider = z.enum(["gmail", "outlook"]).safeParse(provider);
+  if (!parsedProvider.success) {
+    return clientErr(new AppError("E_MAIL_007", "unknown mail provider", {}));
   }
-  const tenantSlug = new URL(env.BASE_URL).hostname.split(".")[0] ?? "";
-
-  const res = await fetch("http://shared-nylas-relay:8081/connect-init", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ tenant_slug: tenantSlug, user_id: ctx.session.userId, provider }),
-    signal: AbortSignal.timeout(10_000),
-  });
-  if (!res.ok) {
-    throw new AppError("E_NYLAS_001", "connect-init failed", { status: res.status });
-  }
-  const body = (await res.json()) as { authUrl: string };
-  return { url: body.authUrl };
+  return toClientResult(
+    await requestConsentUrl(
+      {
+        relayUrl: env.MAIL_OAUTH_RELAY_URL,
+        secret: env.MAIL_OAUTH_RELAY_SECRET,
+        tenantSlug: tenantSlugFromBaseUrl(env.BASE_URL),
+        userId: ctx.actor.id,
+        provider: parsedProvider.data,
+      },
+      fetch,
+      AbortSignal.timeout(10_000),
+    ),
+  );
 }
 
 const disconnectMailboxInput = z.object({ accountId: z.string().uuid() });

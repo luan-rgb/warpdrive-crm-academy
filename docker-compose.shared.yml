@@ -65,22 +65,30 @@ services:
       minio:
         condition: service_started
 
-  nylas-relay:
-    build: ./nylas-relay
-    container_name: shared-nylas-relay
+  mail-oauth-relay:
+    build: ./mail-oauth-relay
+    container_name: shared-mail-oauth-relay
     restart: unless-stopped
-    # Internal-only, same shape as Caddy above: nginx (host) owns 80/443 and proxy_passes
-    # /api/nylas/* here directly (never reaches Caddy/any tenant). See nylas-relay/server.mjs
-    # and docs/superpowers/specs/2026-09-05-nylas-email-integration-design.md.
+    # Internal-only, same shape as Caddy above: nginx (host) owns 80/443 and proxy_passes ONLY
+    # /api/mail-oauth/google/callback and /api/mail-oauth/microsoft/callback here (prefix stripped).
+    # /connect-init stays reachable only from tenant apps on tenants-net. Free replacement for the
+    # old Nylas relay: see mail-oauth-relay/server.mjs and docs/PROJETO.md.
     ports:
       - "127.0.0.1:8881:8081"
     environment:
-      NYLAS_API_KEY: ${NYLAS_API_KEY:?set NYLAS_API_KEY}
-      NYLAS_CLIENT_ID: ${NYLAS_CLIENT_ID:?set NYLAS_CLIENT_ID}
-      NYLAS_REGION: ${NYLAS_REGION:-us}
       BASE_DOMAIN: ${BASE_DOMAIN:?set BASE_DOMAIN}
+      MAIL_OAUTH_RELAY_SECRET: ${MAIL_OAUTH_RELAY_SECRET:?set MAIL_OAUTH_RELAY_SECRET}
+      # Empty disables that provider's button (connect-init answers 503).
+      GMAIL_OAUTH_CLIENT_ID: ${GMAIL_OAUTH_CLIENT_ID:-}
+      GMAIL_OAUTH_CLIENT_SECRET: ${GMAIL_OAUTH_CLIENT_SECRET:-}
+      MICROSOFT_OAUTH_CLIENT_ID: ${MICROSOFT_OAUTH_CLIENT_ID:-}
+      MICROSOFT_OAUTH_CLIENT_SECRET: ${MICROSOFT_OAUTH_CLIENT_SECRET:-}
       SHARED_POSTGRES_ADMIN_USER: ${SHARED_POSTGRES_ADMIN_USER:?set SHARED_POSTGRES_ADMIN_USER}
       SHARED_POSTGRES_ADMIN_PASSWORD: ${SHARED_POSTGRES_ADMIN_PASSWORD:?set SHARED_POSTGRES_ADMIN_PASSWORD}
+    # Read-only: the relay reads each tenant's TOKEN_ENCRYPTION_KEY so the refresh token it stores
+    # is encrypted exactly as the tenant app would have encrypted it.
+    volumes:
+      - ./envs:/envs:ro
     networks: [tenants-net]
     depends_on:
       postgres:

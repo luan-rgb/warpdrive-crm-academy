@@ -123,16 +123,18 @@ export const ERROR_IDS = {
   GMAIL_MAIL_LABEL_INPUT_INVALID: "E_GMAIL_024", // create-mail-label action input failed Zod validation (U6)
   GMAIL_MAIL_LABEL_UNKNOWN: "E_GMAIL_025", // thread-labels write referenced a key absent from the mail_labels catalog (integrity: would persist an invisible, unremovable label)
   GMAIL_MESSAGE_NOT_FOUND: "E_GMAIL_026", // single message not found OR its thread not visible (404-on-invisible, mailbox privacy)
-  // NYLAS (src/features/email/nylasClient.ts: the Gmail/Outlook connect path, see
-  // docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md)
-  NYLAS_API_FAILED: "E_NYLAS_001", // Nylas API call failed (non-2xx) or response failed schema validation
-  NYLAS_NOT_YET_IMPLEMENTED: "E_NYLAS_002", // sendRaw/trashThread: checkpoint 4, not built yet
+  // NYLAS: RETIRED 2026-09-26 with the Nylas integration (replaced by the free direct
+  // Gmail/Outlook/IMAP clients, E_MAIL_*). Kept searchable; never reuse.
+  NYLAS_API_FAILED: "E_NYLAS_001", // RETIRED 2026-09-26: Nylas API call failed (non-2xx) or response failed schema validation
+  NYLAS_NOT_YET_IMPLEMENTED: "E_NYLAS_002", // RETIRED 2026-09-26: sendRaw/trashThread: checkpoint 4, not built yet
   // MAIL (provider-neutral mailbox plumbing: src/features/email/clientFactory.ts and the
   // Outlook/IMAP clients; Gmail keeps its historical E_GMAIL_* ids)
   MAIL_CREDENTIALS_MISSING: "E_MAIL_001", // account row has no usable stored credential for its provider
   MAIL_ACCOUNT_NOT_FOUND: "E_MAIL_002", // email_accounts row not found for the id being resolved
   MAIL_GRAPH_FAILED: "E_MAIL_003", // Microsoft Graph call failed (non-2xx) or response failed schema validation
   MAIL_IMAP_FAILED: "E_MAIL_004", // IMAP/SMTP operation failed (connection, protocol, message not found, SMTP reject)
+  MAIL_RELAY_UNAVAILABLE: "E_MAIL_007", // mail-oauth-relay refused or could not be reached when starting a Gmail/Outlook connect
+  MAIL_NYLAS_RETIRED: "E_MAIL_008", // mailbox was connected through the retired Nylas integration and must be reconnected (set by migration 0084)
   MAIL_IMAP_INPUT_INVALID: "E_MAIL_006", // IMAP/SMTP connect form input failed Zod validation
   MAIL_IMAP_VERIFY_FAILED: "E_MAIL_005", // IMAP/SMTP credential check failed while connecting a mailbox (context.stage names the side)
   // OAUTH

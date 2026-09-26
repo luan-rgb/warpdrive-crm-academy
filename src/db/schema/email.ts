@@ -37,7 +37,8 @@ export const emailTrackingEventType = pgEnum(
   EMAIL_TRACKING_EVENT_TYPE,
 );
 
-// Per-user Gmail OAuth connection. Tokens stored as encrypted bytea, never plaintext.
+// Per-user mailbox connection (Gmail, Outlook or IMAP/SMTP). Credentials stored as encrypted
+// bytea, never plaintext.
 export const emailAccounts = pgTable("email_accounts", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id")
@@ -52,12 +53,6 @@ export const emailAccounts = pgTable("email_accounts", {
   // envelope as refresh_token_enc.
   imapSettings: jsonb("imap_settings"),
   imapPasswordEnc: bytea("imap_password_enc"),
-  // Nylas grant id (src/features/email/nylasClient.ts): a stable, non-expiring handle to the
-  // connected mailbox. Unlike refresh_token_enc, this is never itself a bearer credential for
-  // the mailbox (every call is authenticated with OUR OWN NYLAS_API_KEY, this just says which
-  // grant), so it isn't encrypted; Nylas also handles the underlying provider token refresh
-  // itself, which is why there is no nylas equivalent of last_history_id-driven token renewal.
-  nylasGrantId: text("nylas_grant_id"),
   scopes: jsonb("scopes").notNull().default("[]"),
   lastHistoryId: text("last_history_id"),
   watchExpiresAt: timestamp("watch_expires_at", { withTimezone: true }),

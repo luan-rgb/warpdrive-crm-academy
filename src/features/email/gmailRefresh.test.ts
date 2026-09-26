@@ -91,7 +91,7 @@ describe("makeRefresh provider routing", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn((url: string, init: RequestInit) => {
-        box.calls.push({ url, body: new URLSearchParams(String(init.body)) });
+        box.calls.push({ url, body: new URLSearchParams(init.body as URLSearchParams) });
         return Promise.resolve(
           jsonResponse(200, { access_token: "at", expires_in: 3600, refresh_token: "rotated" }),
         );
