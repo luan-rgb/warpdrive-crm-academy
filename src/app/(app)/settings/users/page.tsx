@@ -27,6 +27,7 @@ export default async function UsersPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="settings.users"
         title={STRINGS.settings.users}
         description={STRINGS.settings.usersDescription}
       />

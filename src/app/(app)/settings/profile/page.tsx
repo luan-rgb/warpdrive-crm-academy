@@ -33,6 +33,7 @@ export default async function ProfilePage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="settings.profile"
         title={STRINGS.settings.profile}
         description={STRINGS.settings.profileDescription}
       />

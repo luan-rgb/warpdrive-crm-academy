@@ -139,6 +139,7 @@ export function EmailSyncClient({
         icon={<Mail className="size-4" aria-hidden="true" />}
         title={S.cardTitle}
         description={S.cardDescription}
+        help="email.sync"
       />
       <SettingsCardBody className="space-y-2">
         <NoticeBanner notice={notice} />

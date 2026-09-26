@@ -50,7 +50,11 @@ const ENGLISH_WORDS = new Set(
     "enter such join call remote content drafts saved scheduled no-date allow deny request connection " +
     "application access revoke later anyone reports verified start end source origin expected actions " +
     "unavailable could't couldn't run type contact primary similar already has have undo redo done " +
-    "condition field operator more remove required invalid missing optional anyone reload"
+    "condition field operator more remove required invalid missing optional anyone reload " +
+    "list calendar board archive archived inbox sort view export import send reply forward " +
+    "trash help overview summary details history timeline notification notifications profile " +
+    "team teams user users goal goals product products template templates signature " +
+    "signatures sign log logout login password submit confirm continue finish previous"
   ).split(" "),
 );
 
@@ -209,10 +213,10 @@ function visit(sf: ts.SourceFile, out: UiText[], allStrings: boolean): void {
   walk(sf);
 }
 
-const SKIP_DIRS = new Set(["node_modules", "test", "mcp", "demo"]);
+const SKIP_DIRS = new Set(["node_modules", "test", "testing", "mcp", "demo"]);
 // Wire-protocol code: header names ("To", "Date"), MIME and OData syntax, never shown as copy.
 const PROTOCOL_FILE =
-  /features\/email\/(mime|mimeParse|imap\w*|outlook\w*|gmail\w*|resyncTestHarness|draftRow)\.ts$|Fixtures\.ts$|Sql\.ts$/;
+  /features\/email\/(mime|mimeParse|imap\w*|outlook\w*|gmail\w*|resyncTestHarness|draftRow)\.ts$|Fixtures\.ts$|Sql\.ts$|testCaller\.ts$|TestHelpers\.ts$/;
 
 function uiFiles(dir: string, acc: string[] = []): string[] {
   for (const e of readdirSync(dir, { withFileTypes: true })) {

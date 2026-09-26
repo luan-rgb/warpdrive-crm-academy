@@ -72,7 +72,12 @@ export function GoalsWidget({
 }): React.ReactNode {
   if (data.length === 0) {
     return (
-      <Panel title={STRINGS.dashboard.widgetGoals} isEmpty={false} emptyText="">
+      <Panel
+        help="dashboard.goals"
+        title={STRINGS.dashboard.widgetGoals}
+        isEmpty={false}
+        emptyText=""
+      >
         <EmptyState
           title={STRINGS.dashboard.emptyGoals}
           body={STRINGS.dashboard.emptyGoalsBody}
@@ -89,7 +94,12 @@ export function GoalsWidget({
     );
   }
   return (
-    <Panel title={STRINGS.dashboard.widgetGoals} isEmpty={false} emptyText="">
+    <Panel
+      help="dashboard.goals"
+      title={STRINGS.dashboard.widgetGoals}
+      isEmpty={false}
+      emptyText=""
+    >
       <div className="space-y-3">
         {data.map((row) => (
           <GoalRow key={row.goal.id} row={row} currency={currency} />

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import type { CalendarActivity } from "@/features/activities/calendar";
 import {
   type CalendarViewName,
@@ -60,6 +61,7 @@ export function CalendarClient({
             Mês
           </Link>
         </div>
+        <HelpTooltip topic="activity.calendar" />
         <div className="flex items-center gap-1">
           <Link
             aria-label="Anterior"

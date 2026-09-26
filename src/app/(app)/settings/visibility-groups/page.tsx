@@ -28,6 +28,7 @@ export default async function VisibilityGroupsPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="settings.visibility"
         title={STRINGS.settings.visibilityGroups}
         description={STRINGS.settings.visibilityGroupsDescription}
       />

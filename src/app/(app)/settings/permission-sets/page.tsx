@@ -30,6 +30,7 @@ export default async function PermissionSetsPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="settings.permissions"
         title={STRINGS.settings.permissionSets}
         description={STRINGS.settings.permissionSetsDescription}
       />

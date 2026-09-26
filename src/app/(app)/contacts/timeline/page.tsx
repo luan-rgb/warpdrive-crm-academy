@@ -18,6 +18,7 @@ export default async function ContactsTimelinePage(): Promise<React.ReactNode> {
   return (
     <main aria-label={STRINGS.contacts.timelineHeading} className="flex flex-col gap-4">
       <PageHeading
+        help="contact.timeline"
         crumbs={[
           { label: STRINGS.nav.contacts, href: "/contacts/people" },
           { label: STRINGS.contacts.timelineHeading },

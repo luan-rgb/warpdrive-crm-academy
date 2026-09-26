@@ -173,7 +173,12 @@ export function DealSidebar({
     ) : null,
 
     products: (
-      <CollapsibleSection key="products" title={sections.products} showFilter={false}>
+      <CollapsibleSection
+        key="products"
+        title={sections.products}
+        showFilter={false}
+        help="deal.products"
+      >
         <DealProductsPanel dealId={deal.id} />
       </CollapsibleSection>
     ),
@@ -188,6 +193,7 @@ export function DealSidebar({
       <CollapsibleSection
         key="source"
         title={sections.source}
+        help="deal.source"
         headerActions={sectionActions(sections.source, [dealFieldsItem], {
           bulkSectionId: "source",
         })}

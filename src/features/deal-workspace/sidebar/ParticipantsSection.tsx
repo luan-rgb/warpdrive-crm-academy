@@ -31,6 +31,7 @@ export function ParticipantsSection({
   return (
     <CollapsibleSection
       title={title}
+      help="deal.participants"
       showFilter={false}
       headerActions={() => (
         <button

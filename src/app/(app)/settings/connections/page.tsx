@@ -17,7 +17,11 @@ export default async function ConnectionsPage(): Promise<ReactNode> {
   const connections = await createCaller(ctx).oauth.listConnections();
   return (
     <SettingsPage>
-      <SettingsHeading title={S.connectedApps} description={S.connectedAppsDescription} />
+      <SettingsHeading
+        help="settings.connections"
+        title={S.connectedApps}
+        description={S.connectedAppsDescription}
+      />
       <ConnectionsClient
         connections={connections.map((row) => ({
           clientId: row.clientId,

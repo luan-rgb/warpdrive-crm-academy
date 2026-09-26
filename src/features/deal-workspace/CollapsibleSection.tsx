@@ -2,6 +2,8 @@
 import { ChevronDown, Filter } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
+import type { HelpTopic } from "@/constants/helpTexts";
 import { cn } from "@/lib/utils";
 import { HideEmptyContext } from "./sidebar/sectionFilter";
 
@@ -14,8 +16,11 @@ export function CollapsibleSection({
   headerActions,
   showFilter = true,
   children,
+  help,
 }: {
   title: string;
+  // The "?" beside the section title (src/constants/helpTexts.ts).
+  help?: HelpTopic;
   defaultOpen?: boolean;
   headerActions?: (ctx: { hideEmpty: boolean; showEmptyFields: () => void }) => React.ReactNode;
   // PD's Summary header carries only the kebab (no hide-empty funnel: its action-list rows are
@@ -43,6 +48,7 @@ export function CollapsibleSection({
           />
           {title}
         </button>
+        {help !== undefined ? <HelpTooltip topic={help} /> : null}
         {showFilter && (
           <button
             type="button"

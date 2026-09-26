@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
 import { useActionError } from "@/components/shell/ActionErrorProvider";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { addFormCustomFieldDefs } from "@/features/custom-fields/CustomFieldCreateFields";
 import { EditableHeading } from "@/features/inline-edit/EditableHeading";
 import type { InlineSaveResult } from "@/features/inline-edit/useInlineEditField";
@@ -128,6 +129,7 @@ export function LeadHeader({ lead }: { lead: LeadDetail }): React.ReactNode {
           >
             {converted ? "Convertido" : "Converter em negócio"}
           </button>
+          <HelpTooltip topic="lead.convert" className="self-center" />
           <button
             type="button"
             disabled={pending}

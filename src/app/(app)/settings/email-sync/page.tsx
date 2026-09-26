@@ -38,7 +38,11 @@ export default async function EmailSyncPage({
 
   return (
     <SettingsPage>
-      <SettingsHeading title={EMAIL_SYNC_STRINGS.title} description={EMAIL_SYNC_STRINGS.intro} />
+      <SettingsHeading
+        help="email.sync"
+        title={EMAIL_SYNC_STRINGS.title}
+        description={EMAIL_SYNC_STRINGS.intro}
+      />
       <EmailSyncClient
         mailbox={
           mailbox === null

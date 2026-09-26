@@ -13,7 +13,7 @@ export default async function NewAutomationPage(): Promise<ReactNode> {
   }
   return (
     <SettingsPage>
-      <SettingsHeading title="Nova automação" />
+      <SettingsHeading help="automation.list" title="Nova automação" />
       <AutomationWizard initialRule={null} />
     </SettingsPage>
   );
