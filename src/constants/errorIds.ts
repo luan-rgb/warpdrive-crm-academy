@@ -131,6 +131,7 @@ export const ERROR_IDS = {
   // Outlook/IMAP clients; Gmail keeps its historical E_GMAIL_* ids)
   MAIL_CREDENTIALS_MISSING: "E_MAIL_001", // account row has no usable stored credential for its provider
   MAIL_ACCOUNT_NOT_FOUND: "E_MAIL_002", // email_accounts row not found for the id being resolved
+  MAIL_GRAPH_FAILED: "E_MAIL_003", // Microsoft Graph call failed (non-2xx) or response failed schema validation
   // OAUTH
   OAUTH_INVALID_CLIENT: "E_OAUTH_001",
   OAUTH_INVALID_GRANT: "E_OAUTH_002",
