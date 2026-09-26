@@ -603,6 +603,13 @@
       "when": 1790396901974,
       "tag": "0085_base_currency_brl",
       "breakpoints": true
+    },
+    {
+      "idx": 86,
+      "version": "7",
+      "when": 1790401786304,
+      "tag": "0086_automations_conditions",
+      "breakpoints": true
     }
   ]
 }

@@ -74,6 +74,7 @@ describe("automation.manage gate", () => {
           pipelineId: null,
           trigger: "deal_created",
           triggerConfig: {},
+          conditions: [],
           actions: [{ actionType: "send_notification", config: {} }],
           isActive: true,
         },
@@ -112,6 +113,7 @@ describe("automations.list", () => {
           pipelineId: null,
           trigger: "deal_created",
           triggerConfig: {},
+          conditions: [],
           actions: [{ actionType: "send_notification", config: {} }],
           isActive: true,
         },
@@ -138,6 +140,7 @@ describe("automations.get", () => {
           pipelineId: null,
           trigger: "deal_created",
           triggerConfig: {},
+          conditions: [],
           actions: [{ actionType: "send_notification", config: { messageTemplate: "hi" } }],
           isActive: true,
         },
@@ -177,6 +180,7 @@ describe("automations.listRunsForRule", () => {
           pipelineId: null,
           trigger: "deal_created",
           triggerConfig: {},
+          conditions: [],
           actions: [{ actionType: "send_notification", config: {} }],
           isActive: true,
         },
@@ -194,6 +198,53 @@ describe("automations.listRunsForRule", () => {
       });
       expect(runs).toHaveLength(1);
       expect(runs[0]?.status).toBe("success");
+    });
+  });
+});
+
+describe("automations.listRunsForRule details", () => {
+  it("includes each action's outcome and the deal title, for the run history", async () => {
+    await withTestDb(async (db) => {
+      const user = await seedUser(db);
+      const dealId = await seedDeal(db, user.id);
+      const created = await createAutomationRule(
+        db,
+        user.id,
+        {
+          name: "Detalhes",
+          description: null,
+          pipelineId: null,
+          trigger: "deal_created",
+          triggerConfig: {},
+          conditions: [],
+          actions: [{ actionType: "send_notification", config: {} }],
+          isActive: true,
+        },
+        sig(),
+      );
+      if (!created.ok) throw new Error("setup failed");
+      const run = (
+        await db.execute(sql`
+          INSERT INTO automation_runs (rule_id, rule_name, deal_id, trigger, status)
+          VALUES (${created.value.id}, 'Detalhes', ${dealId}, 'deal_created', 'partial')
+          RETURNING id`)
+      ).rows[0] as { id: string };
+      await db.execute(sql`
+        INSERT INTO automation_run_actions (run_id, position, action_type, status, error_message)
+        VALUES (${run.id}, 0, 'send_email', 'error', 'E_AUTOMATION_004: sem caixa')`);
+
+      const rows = await makeCaller(db, user.id).automations.listRunsForRule({
+        ruleId: created.value.id,
+      });
+      expect(rows[0]?.dealTitle).toBe("Test Deal");
+      expect(rows[0]?.actions).toEqual([
+        {
+          position: 0,
+          actionType: "send_email",
+          status: "error",
+          errorMessage: "E_AUTOMATION_004: sem caixa",
+        },
+      ]);
     });
   });
 });

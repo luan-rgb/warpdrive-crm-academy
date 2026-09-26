@@ -19,6 +19,10 @@ export const AUTOMATION_TRIGGERS = [
   "deal_stage_changed",
   "deal_status_changed",
   "deal_field_changed",
+  // Activities linked to a deal (the run targets that deal). Only user-created/completed
+  // activities fire these: activities an automation creates never re-trigger automations.
+  "activity_created",
+  "activity_completed",
 ] as const;
 export type AutomationTrigger = (typeof AUTOMATION_TRIGGERS)[number];
 export const automationTrigger = pgEnum("automation_trigger", AUTOMATION_TRIGGERS);
@@ -28,6 +32,8 @@ export const AUTOMATION_ACTION_TYPES = [
   "send_notification",
   "send_email",
   "update_field",
+  "add_note",
+  "webhook",
 ] as const;
 export type AutomationActionType = (typeof AUTOMATION_ACTION_TYPES)[number];
 export const automationActionType = pgEnum("automation_action_type", AUTOMATION_ACTION_TYPES);
@@ -60,6 +66,8 @@ export const automationRules = pgTable("automation_rules", {
   //   deal_field_changed: { fieldKey: string }  (change-log field key: "title", "value",
   //     "custom_field:<key>", etc. — see src/constants/changeLogFields.ts)
   triggerConfig: jsonb("trigger_config").notNull().default(sql`'{}'::jsonb`),
+  // Optional AND-filters on the deal (features/automations/conditions.ts); [] = always fire.
+  conditions: jsonb("conditions").notNull().default(sql`'[]'::jsonb`),
   ownerId: uuid("owner_id")
     .notNull()
     .references(() => users.id),
@@ -85,6 +93,11 @@ export const automationRuleActions = pgTable(
     //   send_notification: { messageTemplate: string }
     //   send_email: { subjectTemplate: string, bodyTemplate: string }
     //   update_field: { fieldKey: string, value: string }
+    //     (fieldKey in AUTOMATION_UPDATE_FIELDS: title, value, stageId, ownerId,
+    //     expectedCloseDate)
+    //   send_notification may also carry { recipientId: string } (default: the deal owner)
+    //   add_note: { contentTemplate: string }
+    //   webhook: { url: string } (public http(s) URL; private/internal hosts are refused)
     actionConfig: jsonb("action_config").notNull().default(sql`'{}'::jsonb`),
   },
   (t) => [index("automation_rule_actions_rule_idx").on(t.ruleId, t.position)],

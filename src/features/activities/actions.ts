@@ -2,6 +2,7 @@
 
 import { ERROR_IDS } from "@/constants/errorIds";
 import { db } from "@/db/client";
+import { triggerActivityAutomations } from "@/features/automations/activityTriggers";
 import { guardCsrf } from "@/features/identity/actions/shared";
 import { SIG } from "@/features/identity/actions/sig";
 import { can } from "@/features/permissions/can";
@@ -32,6 +33,7 @@ export async function createActivityAction(
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
 
   await notifyOnActivityCreated(db, { activity: result.value, actorId: actor.id, signal: SIG() });
+  await triggerActivityAutomations(db, result.value, "activity_created", SIG());
 
   return { ok: true, value: { id: result.value.id } };
 }
@@ -49,6 +51,7 @@ export async function completeActivityAction(
   // Record-scoped: completeActivity gates via can(actor, "activity.complete", vis).
   const result = await completeActivity(db, actor, input.id, input.done, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
+  if (input.done) await triggerActivityAutomations(db, result.value, "activity_completed", SIG());
   return { ok: true, value: { id: result.value.id } };
 }
 

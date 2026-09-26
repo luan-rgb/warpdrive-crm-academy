@@ -3,13 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Switch } from "@/components/ui/Switch";
 import { Textarea } from "@/components/ui/Textarea";
+import type { HelpTopic } from "@/constants/helpTexts";
 import {
   AUTOMATION_ACTION_TYPES,
-  AUTOMATION_TRIGGERS,
   type AutomationActionType,
   type AutomationRule,
   type AutomationRuleAction,
@@ -20,22 +21,23 @@ import {
   setAutomationRuleActiveAction,
   updateAutomationRuleAction,
 } from "@/features/automations/actions";
+import type { AutomationCondition } from "@/features/automations/conditions";
 import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
+import { ActionEditor } from "./ActionEditor";
+import { ACTION_LABEL } from "./automationLabels";
+import { ConditionsEditor } from "./ConditionsEditor";
+import { TriggerSection } from "./TriggerSection";
+import type { WizardOption, WizardRefs } from "./wizardTypes";
 
-const TRIGGER_LABEL: Record<AutomationTrigger, string> = {
-  deal_created: "Negócio criado",
-  deal_stage_changed: "Etapa do negócio alterada",
-  deal_status_changed: "Negócio ganho ou perdido",
-  deal_field_changed: "Campo do negócio alterado",
-};
-
-const ACTION_LABEL: Record<AutomationActionType, string> = {
-  create_activity: "Criar atividade",
-  send_notification: "Enviar notificação",
-  send_email: "Enviar email",
-  update_field: "Atualizar campo",
-};
+function SectionTitle({ children, help }: { children: string; help: HelpTopic }): React.ReactNode {
+  return (
+    <div className="flex items-center gap-1">
+      <h3 className="text-sm font-medium">{children}</h3>
+      <HelpTooltip topic={help} />
+    </div>
+  );
+}
 
 interface DraftAction {
   // Stable client-only id (not persisted) so list rendering never keys off array index, which
@@ -57,8 +59,8 @@ export function AutomationWizard({
   // not the `pipelines.list` / `activityTypes.list` names the plan guessed.
   const pipelinesQuery = trpc.pipeline.list.useQuery();
   const activityTypesQuery = trpc.activities.listTypes.useQuery();
+  const usersQuery = trpc.identity.assignableUsers.useQuery();
   const pipelines = pipelinesQuery.data ?? [];
-  const activityTypes = activityTypesQuery.data ?? [];
 
   const [name, setName] = useState(initialRule?.rule.name ?? "");
   const [description, setDescription] = useState(initialRule?.rule.description ?? "");
@@ -69,7 +71,26 @@ export function AutomationWizard({
   const [triggerConfig, setTriggerConfig] = useState<Record<string, unknown>>(
     (initialRule?.rule.triggerConfig ?? {}) as Record<string, unknown>,
   );
+  const [conditions, setConditions] = useState<AutomationCondition[]>(
+    (initialRule?.rule.conditions ?? []) as AutomationCondition[],
+  );
   const [isActive, setIsActive] = useState(initialRule?.rule.isActive ?? true);
+
+  // Stages of the chosen pipeline, or of every pipeline (named "Funil / Etapa") when the rule
+  // applies to all of them.
+  const stages: WizardOption[] = pipelines
+    .filter((p) => pipelineId === "" || p.id === pipelineId)
+    .flatMap((p) =>
+      p.stages.map((st) => ({
+        value: st.id,
+        label: pipelineId === "" ? `${p.name} / ${st.name}` : st.name,
+      })),
+    );
+  const refs: WizardRefs = {
+    stages,
+    users: (usersQuery.data ?? []).map((u) => ({ value: u.id, label: u.name })),
+    activityTypes: (activityTypesQuery.data ?? []).map((t) => ({ value: t.id, label: t.name })),
+  };
   const [actions, setActions] = useState<DraftAction[]>(
     initialRule?.actions.map((a) => ({
       key: a.id,
@@ -101,6 +122,7 @@ export function AutomationWizard({
       pipelineId: pipelineId === "" ? null : pipelineId,
       trigger,
       triggerConfig,
+      conditions,
       actions: actions.map((a) => ({ actionType: a.actionType, config: a.config })),
     };
     const r =
@@ -115,7 +137,9 @@ export function AutomationWizard({
       setError(
         r.error.id === "E_AUTOMATION_003"
           ? "Adicione ao menos uma ação antes de salvar."
-          : "Não foi possível salvar a automação.",
+          : r.error.id === "E_AUTOMATION_001"
+            ? "Confira os campos: há uma condição ou ação incompleta."
+            : "Não foi possível salvar a automação.",
       );
       return;
     }
@@ -150,128 +174,53 @@ export function AutomationWizard({
       )}
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Gatilho</h3>
-        <Select
-          ariaLabel="Gatilho"
-          value={trigger}
-          onChange={(v) => {
-            setTrigger(v as AutomationTrigger);
+        <SectionTitle help="automation.trigger">Quando</SectionTitle>
+        <TriggerSection
+          trigger={trigger}
+          triggerConfig={triggerConfig}
+          onTrigger={(t) => {
+            setTrigger(t);
             setTriggerConfig({});
           }}
-          options={AUTOMATION_TRIGGERS.map((t) => ({ value: t, label: TRIGGER_LABEL[t] }))}
+          onConfig={setTriggerConfig}
+          stages={stages}
         />
-        {trigger === "deal_status_changed" && (
-          <Select
-            ariaLabel="Status"
-            value={(triggerConfig.toStatus ?? "") as string}
-            onChange={(v) => setTriggerConfig({ toStatus: v })}
-            options={[
-              { value: "won", label: "Ganho" },
-              { value: "lost", label: "Perdido" },
-            ]}
-          />
-        )}
-        {trigger === "deal_field_changed" && (
-          <Input
-            aria-label="Chave do campo"
-            placeholder="ex.: title (chave do campo)"
-            value={(triggerConfig.fieldKey ?? "") as string}
-            onChange={(e) => setTriggerConfig({ fieldKey: e.target.value })}
-          />
-        )}
       </div>
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Pipeline</h3>
+        <h3 className="text-sm font-medium">Funil</h3>
         <Select
-          ariaLabel="Pipeline"
+          ariaLabel="Funil"
           value={pipelineId}
           onChange={setPipelineId}
           options={[
-            { value: "", label: "Todos os pipelines" },
+            { value: "", label: "Todos os funis" },
             ...pipelines.map((p) => ({ value: p.id, label: p.name })),
           ]}
         />
       </div>
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Ações</h3>
+        <SectionTitle help="automation.conditions">Só executar se</SectionTitle>
+        <ConditionsEditor conditions={conditions} onChange={setConditions} refs={refs} />
+      </div>
+
+      <div className="space-y-2">
+        <SectionTitle help="automation.actions">Então</SectionTitle>
         {actions.map((action, i) => (
-          <div key={action.key} className="rounded border p-3 space-y-2">
+          <div key={action.key} className="space-y-2 rounded border p-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{ACTION_LABEL[action.actionType]}</span>
               <Button variant="ghost" onClick={() => removeAction(i)}>
                 Remover
               </Button>
             </div>
-            {action.actionType === "create_activity" && (
-              <>
-                <Select
-                  ariaLabel="Tipo de atividade"
-                  value={(action.config.activityTypeId ?? "") as string}
-                  onChange={(v) => updateActionConfig(i, { ...action.config, activityTypeId: v })}
-                  options={activityTypes.map((t) => ({ value: t.id, label: t.name }))}
-                />
-                <Input
-                  aria-label="Assunto"
-                  placeholder="Assunto"
-                  value={(action.config.subject ?? "") as string}
-                  onChange={(e) =>
-                    updateActionConfig(i, { ...action.config, subject: e.target.value })
-                  }
-                />
-              </>
-            )}
-            {action.actionType === "send_notification" && (
-              <Textarea
-                aria-label="Mensagem da notificação"
-                placeholder="Mensagem (use {{deal.title}}, {{deal.value}}, {{deal.owner}})"
-                value={(action.config.messageTemplate ?? "") as string}
-                onChange={(e) =>
-                  updateActionConfig(i, { ...action.config, messageTemplate: e.target.value })
-                }
-              />
-            )}
-            {action.actionType === "send_email" && (
-              <>
-                <Input
-                  aria-label="Assunto do email"
-                  placeholder="Assunto"
-                  value={(action.config.subjectTemplate ?? "") as string}
-                  onChange={(e) =>
-                    updateActionConfig(i, { ...action.config, subjectTemplate: e.target.value })
-                  }
-                />
-                <Textarea
-                  aria-label="Corpo do email"
-                  placeholder="Corpo"
-                  value={(action.config.bodyTemplate ?? "") as string}
-                  onChange={(e) =>
-                    updateActionConfig(i, { ...action.config, bodyTemplate: e.target.value })
-                  }
-                />
-              </>
-            )}
-            {action.actionType === "update_field" && (
-              <>
-                <Input
-                  aria-label="Chave do campo"
-                  placeholder="title"
-                  value={(action.config.fieldKey ?? "") as string}
-                  onChange={(e) =>
-                    updateActionConfig(i, { ...action.config, fieldKey: e.target.value })
-                  }
-                />
-                <Input
-                  aria-label="Novo valor"
-                  placeholder="Valor"
-                  value={(action.config.value ?? "") as string}
-                  onChange={(e) =>
-                    updateActionConfig(i, { ...action.config, value: e.target.value })
-                  }
-                />
-              </>
-            )}
+            <ActionEditor
+              actionType={action.actionType}
+              config={action.config}
+              onChange={(config) => updateActionConfig(i, config)}
+              refs={refs}
+            />
           </div>
         ))}
         <div className="flex flex-wrap gap-2">
