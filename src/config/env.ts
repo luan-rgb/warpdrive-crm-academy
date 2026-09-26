@@ -96,6 +96,23 @@ const base = z.object({
   DISABLE_UPDATE_CHECK: boolFromString.default(false),
 });
 
+// Session cookies are Secure and links in e-mails point at BASE_URL: a plain-http public URL in
+// production would break login and send people to an unencrypted address.
+function requireHttpsUrls(
+  v: { BASE_URL: string; MINIO_ENDPOINT: string },
+  ctx: z.RefinementCtx,
+): void {
+  for (const key of ["BASE_URL", "MINIO_ENDPOINT"] as const) {
+    if (!v[key].startsWith("https://")) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [key],
+        message: `${key} must be an https:// URL in production`,
+      });
+    }
+  }
+}
+
 // Production guardrails for the first-run bootstrap (ops spec E6).
 const schema = base.superRefine((v, ctx) => {
   if (v.MCP_ENABLED && Buffer.from(v.OAUTH_SIGNING_KEY, "base64").length !== 32) {
@@ -106,17 +123,7 @@ const schema = base.superRefine((v, ctx) => {
     });
   }
   if (v.NODE_ENV === "production") {
-    // Session cookies are Secure and links in e-mails point at BASE_URL: a plain-http public URL
-    // in production would break login and send people to an unencrypted address.
-    for (const key of ["BASE_URL", "MINIO_ENDPOINT"] as const) {
-      if (!v[key].startsWith("https://")) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: [key],
-          message: `${key} must be an https:// URL in production`,
-        });
-      }
-    }
+    requireHttpsUrls(v, ctx);
     if (v.ALLOW_FIRST_LOGIN_ADMIN) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

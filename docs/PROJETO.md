@@ -310,6 +310,69 @@ Ainda não existe em relação ao Pipedrive: atraso ("esperar N dias") dentro da
 gatilhos de pessoa/organização/lead, formulários web, Smart BCC e exportação CSV de negócios e
 contatos.
 
+## Segurança: revisão dos 19 pontos (2026-09-26)
+
+Revisão feita lendo o código inteiro contra a lista de 19 pontos. Cada correção tem teste que
+falhava antes e passa depois.
+
+| # | Ponto | Situação |
+|---|---|---|
+| 1 | `.env` exposta | Protegido: nenhum segredo chega ao navegador, nenhum `.env` real no git. Agora `envs/` também fica fora do build do Docker. |
+| 2 | Validação no frontend | Parcial, e está ok: é só experiência de uso; a proteção de verdade é a do servidor. |
+| 3 | Validação no backend | Corrigido: as ações que aceitavam entrada sem schema (criar organização, arquivar e mover negócios em massa, concluir atividade, fixar nota, imagem da fatura, limites do envio de e-mail) agora validam com Zod. |
+| 4 | SQL injection | Protegido: tudo parametrizado; colunas e operadores vêm de listas fixas. Scripts de servidor passaram a validar slug e e-mail. |
+| 5 | Autenticação fraca | Forte (link mágico e sessão com 256 bits, hash, expiração, uso único). Corrigido o relay de e-mail (abaixo). MFA: ver "Decisões para depois". |
+| 6 / 17 | IDOR / BOLA | Corrigido: faturas e produtos do negócio seguem a visibilidade do negócio (ler) e a permissão de editar (alterar); anotação só pode ser editada ou apagada pelo autor ou por um admin; o Claude (MCP) exige as mesmas permissões da tela para criar contato e atividade. |
+| 7 | Senhas no banco | Protegido: não existe senha de login; sessões e tokens ficam só como hash; senha IMAP e chaves de API criptografadas (AES-256-GCM). |
+| 8 | Força bruta | Corrigido: o IP real do visitante agora chega ao app atrás do nginx (antes todos os visitantes de um aluno contavam como um só); limite também por e-mail no link mágico; limite no MCP (300/min por usuário) e no formulário IMAP (10/hora por usuário). |
+| 9 | Bloquear durante envio | Protegido nos formulários. Corrigido o reenvio de e-mail depois de uma queda de conexão (não duplica mais). |
+| 10 | CSRF | Protegido. Corrigido: sair só por POST com token (um link externo não desloga mais ninguém) e as ações de conectar e-mail conferem o token. |
+| 11 | XSS | Protegido: e-mail recebido é limpo (DOMPurify) e exibido em iframe sem scripts; uploads sem HTML/SVG. |
+| 12 | Vazamento em erros | Corrigido: erro inesperado não devolve mais SQL e valores ao navegador (vira `E_INTERNAL_001`); logs registram só o tipo do erro. |
+| 13 | Configurações padrão | Corrigido: MinIO não sobe sem senha; área de administração do MinIO bloqueada no endereço público (403). A senha reserva do Postgres no modo servidor único foi mantida de propósito (instalações antigas dependem dela e não há porta exposta). |
+| 14 | SSRF | Corrigido: o formulário IMAP/SMTP não alcança mais servidores internos (Postgres, MinIO, relay, outros alunos) nem portas que não sejam de e-mail; o webhook das automações já era protegido. |
+| 15 | Dependências vulneráveis | Corrigido: Next.js 16.2.9 tinha falha crítica de execução de código sem login; atualizado para 16.3.6 e dependências indiretas corrigidas. `pnpm audit --prod`: 0 críticas, 0 altas (eram 2 e 22). |
+| 16 | HTTPS | Protegido (HSTS, cookies Secure). Agora a produção exige `https://` no endereço do CRM e do armazenamento. |
+| 18 | CORS | Protegido: nenhuma rota libera acesso de outros sites. |
+| 19 | Logs | Corrigido: a auditoria passou a registrar login (e tentativas falhas, sem guardar o e-mail tentado), saída, autorizações do Claude, conexão e desconexão de e-mail e exportação CSV, com limpeza automática depois de 1 ano. Logs do Docker com rotação (10 MB x 5). |
+
+**Relay de e-mail (achado mais sério, no código novo da Tarefa 1):** o link de consentimento do
+Google/Microsoft podia ser repassado para outra pessoa, e a caixa dela seria ligada à conta de quem
+gerou o link. Agora o relay não grava nada: guarda o resultado lacrado atrás de um ticket de uso
+único, e o próprio CRM só aceita se quem está logado é quem pediu a conexão. Bônus: o relay não
+tem mais acesso aos bancos nem às chaves dos alunos, e cada aluno tem o próprio segredo do relay.
+
+### O que fazer no servidor (uma vez, depois do deploy)
+
+1. **nginx** (bloco dos alunos, `*.crm.estrategistacrm.com.br`): garantir
+   `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` no `location` que manda para o
+   Caddy (porta 8880). Sem isso o limite de tentativas continua valendo para o aluno inteiro.
+2. **Caddy dos alunos** (`caddy/Caddyfile.tenants` no servidor, que foi copiado do `.example`):
+   - no bloco global `{ auto_https off }`, acrescentar
+     `servers { trusted_proxies static private_ranges` e `trusted_proxies_strict }` (igual ao
+     `caddy/Caddyfile.tenants.example`);
+   - em cada bloco de aluno já existente, trocar `reverse_proxy aluno-<slug>-app-1:3000` por
+     `reverse_proxy aluno-<slug>-app-1:3000 { header_up X-Forwarded-For {client_ip} }`
+     (alunos novos já nascem assim);
+   - no bloco `s3`, acrescentar `respond /minio/admin* 403` antes do `reverse_proxy`;
+   - recarregar: `docker exec shared-caddy caddy reload --config /etc/caddy/Caddyfile.tenants --adapter caddyfile`.
+3. **Segredo do relay por aluno:** rodar `scripts/sync-mail-oauth-env.sh --restart` (troca o
+   `MAIL_OAUTH_RELAY_SECRET` de cada aluno pelo derivado) e subir o relay de novo
+   (`docker compose -p tenants-shared -f docker-compose.shared.yml --env-file envs/shared.env up -d --build mail-oauth-relay`).
+4. **Backup:** guardar a pasta `envs/` (chaves) separada dos dumps do banco; hoje
+   `scripts/backup-tenants.sh` coloca os dois no mesmo arquivo, então quem pega um backup pega tudo.
+5. Conferir que o nginx não grava `?token=` (link mágico) nem `?code=` (OAuth) no access log.
+
+### Decisões para depois (não são falhas abertas)
+
+- **MFA:** o CRM não tem senha própria. O login é pelo Google (que tem verificação em duas etapas
+  própria) ou por link no e-mail. MFA dentro do CRM só faz sentido se um dia houver senha.
+- Tempo de inatividade da sessão (hoje 7 dias fixos), `script-src` com nonce no CSP, rotação da
+  chave de criptografia, detecção de reuso de refresh token do OAuth, convites que expiram.
+- Ver disponibilidade/carga de agenda de colegas (`availability`, `dayLoad`) e título do negócio
+  no histórico de automações continuam visíveis de propósito (recurso de colaboração; mostram só
+  "ocupado/livre", contagens por dia e o título para quem gerencia automações).
+
 ## O que ainda não existe / próximos passos possíveis
 
 - Script de **reativação** de tenant suspenso (hoje é manual, ver acima).
