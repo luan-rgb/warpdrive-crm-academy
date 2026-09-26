@@ -103,7 +103,7 @@ export const AgendaDayColumn = memo(function AgendaDayColumn({
           type="button"
           data-hour={hour}
           tabIndex={hour === focusHour ? 0 : -1}
-          aria-label={`Add activity on ${iso} at ${hourLabel(hour)}`}
+          aria-label={`Adicionar atividade em ${iso} às ${hourLabel(hour)}`}
           onClick={() => onOpenSlot(iso, hour)}
           onKeyDown={(e) => onKeyDown(e, hour)}
           className="absolute inset-x-0 border-t border-border/60 hover:bg-accent/30"

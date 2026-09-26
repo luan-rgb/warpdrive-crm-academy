@@ -51,13 +51,13 @@ describe("HistoryFeed dispatch", () => {
   it("renders created, stage, and activity blocks by kind", () => {
     const items: HistoryItem[] = [
       { kind: "activity", id: "a1", at: AT, activity: activity() },
-      { kind: "event", id: "s1", at: AT, label: "Stage: Demo → Proposal", actorName: "Nick" },
+      { kind: "event", id: "s1", at: AT, label: "Etapa: Demo → Proposal", actorName: "Nick" },
       { kind: "created", id: "deal-created", at: AT, actorName: "Nick" },
     ];
     render(<HistoryFeed items={items} emptyLabel="empty" />);
     expect(screen.getByText("Negócio criado")).toBeInTheDocument();
     // Stage change renders as an inline event row, same shape as a status change.
-    expect(screen.getByText("Stage: Demo → Proposal")).toBeInTheDocument();
+    expect(screen.getByText("Etapa: Demo → Proposal")).toBeInTheDocument();
     expect(screen.getByText("Discovery call")).toBeInTheDocument();
   });
 

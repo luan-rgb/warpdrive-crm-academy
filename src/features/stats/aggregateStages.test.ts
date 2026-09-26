@@ -36,7 +36,7 @@ describe("aggregateStageConversion", () => {
   // misreport both. The position is the only honest name left.
   test("falls back to the position when pipelines disagree on the name", () => {
     const out = aggregateStageConversion([[row(1, "Demo", 1)], [row(1, "Trial", 1)]]);
-    expect(out[0]?.name).toBe("Stage 2");
+    expect(out[0]?.name).toBe("Etapa 2");
   });
 
   // A median cannot be rebuilt from other medians, so aggregating drops it rather than
@@ -86,7 +86,7 @@ describe("aggregateStageSums", () => {
 
   test("falls back to the position when pipelines disagree on the name", () => {
     const out = aggregateStageSums([[sum(1, "Demo", 1, "1.00")], [sum(1, "Trial", 1, "1.00")]]);
-    expect(out[0]?.name).toBe("Stage 2");
+    expect(out[0]?.name).toBe("Etapa 2");
   });
 
   test("orders positions ascending", () => {

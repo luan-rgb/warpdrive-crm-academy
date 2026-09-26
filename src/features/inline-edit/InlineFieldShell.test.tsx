@@ -21,7 +21,7 @@ describe("InlineFieldShell (PD view-state mechanism)", () => {
     );
     fireEvent.click(screen.getByText("$1,500"));
     expect(onStartEdit).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Value" }));
     expect(onStartEdit).toHaveBeenCalledTimes(1);
   });
 
@@ -44,7 +44,7 @@ describe("InlineFieldShell (PD view-state mechanism)", () => {
 
   it("keeps the pencil keyboard-reachable: hidden via opacity (stays in tab order), revealed on focus", () => {
     render(<InlineFieldShell label="Value" editing={false} onStartEdit={vi.fn()} value="$1,500" />);
-    const pencil = screen.getByRole("button", { name: "Edit Value" });
+    const pencil = screen.getByRole("button", { name: "Editar Value" });
     // visibility:hidden/display:none would drop the button from the tab order and the
     // accessibility tree (codex P2); opacity keeps it focusable, focus-visible reveals it.
     expect(pencil).not.toHaveClass("invisible");
@@ -62,7 +62,7 @@ describe("InlineFieldShell (PD view-state mechanism)", () => {
     );
     expect(screen.getByRole("textbox", { name: "Value" })).toBeInTheDocument();
     expect(screen.queryByText("$1,500")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Edit Value" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Editar Value" })).not.toBeInTheDocument();
   });
 
   it("moves focus to the first enabled editor control when edit mode opens", () => {

@@ -67,7 +67,7 @@ function Row({
   return (
     <li className="flex items-center gap-3 px-3 py-2 hover:bg-muted/50">
       <Checkbox
-        label={`Mark "${a.subject}" done`}
+        label={`Marcar "${a.subject}" como concluída`}
         checked={a.done}
         onCheckedChange={() => onDone(a.id, a.done)}
       />
@@ -79,7 +79,7 @@ function Row({
       </span>
       {href !== null && (
         <Link href={href} className="text-sm text-primary hover:underline">
-          Open
+          Abrir
         </Link>
       )}
       <time className="w-32 shrink-0 text-right text-xs text-muted-foreground tabular-nums">
@@ -120,7 +120,7 @@ export function ActivityList({
     .filter((s) => s.rows.length > 0);
 
   if (sections.length === 0) {
-    return <p className="text-sm text-muted-foreground">No activities scheduled.</p>;
+    return <p className="text-sm text-muted-foreground">Nenhuma atividade agendada.</p>;
   }
 
   return (

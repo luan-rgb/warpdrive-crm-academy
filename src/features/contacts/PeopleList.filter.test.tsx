@@ -48,8 +48,8 @@ function openFilter(): void {
 }
 
 function addRow(index: number, value: string): void {
-  fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-  fireEvent.change(screen.getByLabelText(`Condition ${index} value`), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+  fireEvent.change(screen.getByLabelText(`Valor da condição ${index}`), { target: { value } });
 }
 
 describe("PeopleList filter round trip", () => {
@@ -71,8 +71,8 @@ describe("PeopleList filter round trip", () => {
     );
 
     openFilter();
-    expect(screen.getByLabelText("Condition 1 value")).toHaveValue("acme");
-    expect(screen.getByLabelText("Condition 2 value")).toHaveValue("globex");
+    expect(screen.getByLabelText("Valor da condição 1")).toHaveValue("acme");
+    expect(screen.getByLabelText("Valor da condição 2")).toHaveValue("globex");
     expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 });

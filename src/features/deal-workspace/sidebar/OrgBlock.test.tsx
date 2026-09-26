@@ -89,7 +89,7 @@ it("edits the Address as a composite of subfields, saving a merged address objec
   render(<OrgBlock org={org} />);
 
   // A populated Address renders a formatted value + a pencil to open the composite editor.
-  fireEvent.click(screen.getByRole("button", { name: "Edit Endereço" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Endereço" }));
   fireEvent.change(screen.getByLabelText("Cidade"), { target: { value: "Portland" } });
   fireEvent.change(screen.getByLabelText("Código postal"), { target: { value: "97201" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));

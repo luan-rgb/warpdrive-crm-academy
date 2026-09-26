@@ -145,7 +145,7 @@ export function LeadSidebar({
           fieldsItem("deal"),
         )}
       >
-        <FieldRow label="Criado em">{lead.createdAt.toLocaleDateString()}</FieldRow>
+        <FieldRow label="Criado em">{lead.createdAt.toLocaleDateString("pt-BR")}</FieldRow>
       </CollapsibleSection>
     </aside>
   );

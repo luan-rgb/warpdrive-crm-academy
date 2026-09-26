@@ -36,7 +36,7 @@ async function resolveTypeId(
       sql`lower(${activityTypes.key}) = lower(${key}) and ${activityTypes.archivedAt} is null`,
     );
   if (type === undefined) {
-    return err([{ field: "typeKey", message: `unknown activity type: ${key}` }]);
+    return err([{ field: "typeKey", message: `tipo de atividade desconhecido: ${key}` }]);
   }
   return ok(type.id);
 }

@@ -68,7 +68,7 @@ export async function commitRow(
 
       if (cand.outcome === "ambiguous") {
         return finalize(tx, rowId, "invalid", null, [
-          { field: "email", message: `ambiguous match: ${cand.count} existing contacts` },
+          { field: "email", message: `correspondência ambígua: ${cand.count} contatos existentes` },
         ]);
       }
 
@@ -119,7 +119,7 @@ async function applyOneUpdate(
   };
   if (can(actor, "contact.edit", record) === false) {
     return finalize(tx, rowId, "invalid", null, [
-      { field: "_", message: "not permitted to update" },
+      { field: "_", message: "sem permissão para atualizar" },
     ]);
   }
 

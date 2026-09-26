@@ -66,7 +66,7 @@ describe("AddLeadModal", () => {
     expect(screen.getByRole("dialog", { name: "Adicionar lead" })).toBeInTheDocument();
     expect(screen.getByLabelText("Pessoa de contato")).toBeInTheDocument();
     expect(screen.getByLabelText("Título do lead")).toBeInTheDocument();
-    expect(screen.getByLabelText("Phone 1")).toBeInTheDocument();
+    expect(screen.getByLabelText("Telefone 1")).toBeInTheDocument();
     // Leads have no pipeline / stage.
     expect(screen.queryByLabelText("Pipeline")).toBeNull();
     expect(screen.queryByRole("radiogroup", { name: "Pipeline stage" })).toBeNull();

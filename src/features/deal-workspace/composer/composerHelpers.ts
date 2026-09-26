@@ -128,9 +128,9 @@ export function todayLocalDateString(): string {
 }
 
 const LINK_FALLBACK: Record<LinkKind, string> = {
-  deal: "Deal",
-  person: "Person",
-  org: "Organization",
+  deal: "Negócio",
+  person: "Pessoa",
+  org: "Organização",
 };
 
 // Build the removable link chips from the composer's deal context (only non-null links).

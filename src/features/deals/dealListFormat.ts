@@ -5,7 +5,7 @@
 export function fmtDate(d: Date | string | null): string {
   if (d === null) return "";
   const dt = typeof d === "string" ? new Date(d) : d;
-  return dt.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  return dt.toLocaleDateString("pt-BR", { month: "short", day: "numeric", year: "numeric" });
 }
 
 // Expected close is a date-only column (YYYY-MM-DD). Parse the parts as a LOCAL date so a
@@ -19,7 +19,7 @@ export function fmtDateOnly(d: string | null | undefined): string {
   const m = Number(parts[1]);
   const day = Number(parts[2]);
   if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(day)) return "";
-  return new Date(y, m - 1, day).toLocaleDateString(undefined, {
+  return new Date(y, m - 1, day).toLocaleDateString("pt-BR", {
     month: "short",
     day: "numeric",
     year: "numeric",

@@ -210,7 +210,7 @@ export function ThreadList({
                 onClick={bulkMarkRead}
                 className="rounded-md border px-3 py-1 text-sm transition-transform hover:bg-accent active:scale-[0.96] disabled:opacity-50"
               >
-                Mark read
+                Marcar como lida
               </button>
               <button
                 type="button"
@@ -218,7 +218,7 @@ export function ThreadList({
                 onClick={bulkMarkUnread}
                 className="rounded-md border px-3 py-1 text-sm transition-transform hover:bg-accent active:scale-[0.96] disabled:opacity-50"
               >
-                Mark unread
+                Marcar como não lida
               </button>
             </div>
           </BulkActionBar>

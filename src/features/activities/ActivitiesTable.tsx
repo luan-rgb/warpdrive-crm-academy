@@ -161,11 +161,11 @@ export function ActivitiesTable(): React.ReactNode {
           onClick={() => setModalOpen(true)}
           className="rounded-md bg-action px-3 py-1.5 text-sm font-medium text-action-foreground transition-transform hover:opacity-90 active:scale-[0.96]"
         >
-          + Activity
+          + Atividade
         </button>
         {!loadFailed && !loadPending && (
           <span className="text-sm text-muted-foreground tabular-nums">
-            {rows.length} {rows.length === 1 ? "activity" : "activities"}
+            {rows.length} {rows.length === 1 ? "atividade" : "atividades"}
           </span>
         )}
       </div>

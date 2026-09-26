@@ -162,7 +162,7 @@ describe("board toolbar view restored from the saved preference", () => {
     });
     await user.click(screen.getByLabelText("Filtro"));
     await user.click(screen.getByRole("menuitem", { name: /Criar novo filtro/ }));
-    expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
     expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 

@@ -15,16 +15,16 @@ export async function GET(
   { params }: { params: Promise<{ batchId: string }> },
 ): Promise<Response> {
   const parsed = routeParams.safeParse(await params);
-  if (!parsed.success) return new NextResponse("Bad request", { status: 400 });
+  if (!parsed.success) return new NextResponse("Requisição inválida", { status: 400 });
   const { batchId } = parsed.data;
   const { actor } = await createContext();
-  if (actor === null) return new NextResponse("Unauthorized", { status: 401 });
-  if (!can(actor, "data.import")) return new NextResponse("Forbidden", { status: 403 });
+  if (actor === null) return new NextResponse("Não autorizado", { status: 401 });
+  if (!can(actor, "data.import")) return new NextResponse("Acesso negado", { status: 403 });
 
   const [batch] = await db.select().from(importBatches).where(eq(importBatches.id, batchId));
   // Owner or admin, matching loadOwnedBatch (the tRPC read surfaces admins can already reach).
   if (batch === undefined || (batch.createdBy !== actor.id && actor.type !== "admin")) {
-    return new NextResponse("Not found", { status: 404 });
+    return new NextResponse("Não encontrado", { status: 404 });
   }
 
   const rows = await db

@@ -173,7 +173,7 @@ describe("OrgDetailClient", () => {
   it("inline-saves the Organization section's Name through updateOrgAction", async () => {
     const { updateOrgAction } = await import("@/features/contacts/actions");
     render(<OrgDetailClient org={org as never} defs={[]} canMerge={true} baseCurrency="USD" />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("editor-name"), { target: { value: "Acme Corp" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 

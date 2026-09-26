@@ -51,23 +51,23 @@ function openLabelRow(config: ContactFilterConfig, fieldLabels: Record<string, s
     />,
   );
   fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-  fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-  fireEvent.click(screen.getByLabelText("Condition 1 field"));
-  fireEvent.click(screen.getByRole("option", { name: "Label" }));
+  fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+  fireEvent.click(screen.getByLabelText("Campo da condição 1"));
+  fireEvent.click(screen.getByRole("option", { name: "Etiqueta" }));
   return onApply;
 }
 
 describe("ContactFilterBuilder label condition", () => {
   it("gives the People Label field a Select value control, not a text box", () => {
     openLabelRow(PERSON_FILTER_CONFIG, PERSON_FILTER_LABELS);
-    const value = screen.getByLabelText("Condition 1 value");
+    const value = screen.getByLabelText("Valor da condição 1");
     expect(value.tagName).toBe("BUTTON");
     expect(value).toHaveAttribute("aria-expanded");
   });
 
   it("gives the Orgs Label field a Select fed by the organization catalog", () => {
     openLabelRow(ORG_FILTER_CONFIG, ORG_FILTER_LABELS);
-    const value = screen.getByLabelText("Condition 1 value");
+    const value = screen.getByLabelText("Valor da condição 1");
     expect(value.tagName).toBe("BUTTON");
     fireEvent.click(value);
     expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument();
@@ -76,14 +76,14 @@ describe("ContactFilterBuilder label condition", () => {
 
   it("offers applied-only names once, deduped against the catalog", () => {
     openLabelRow(PERSON_FILTER_CONFIG, PERSON_FILTER_LABELS);
-    fireEvent.click(screen.getByLabelText("Condition 1 value"));
+    fireEvent.click(screen.getByLabelText("Valor da condição 1"));
     expect(screen.getByRole("option", { name: "high priority" })).toBeInTheDocument();
     expect(screen.getAllByRole("option", { name: /^hot$/i })).toHaveLength(1);
   });
 
   it("applies every selected label as one is-any-of condition", () => {
     const onApply = openLabelRow(PERSON_FILTER_CONFIG, PERSON_FILTER_LABELS);
-    fireEvent.click(screen.getByLabelText("Condition 1 value"));
+    fireEvent.click(screen.getByLabelText("Valor da condição 1"));
     fireEvent.click(screen.getByRole("option", { name: "Hot" }));
     fireEvent.click(screen.getByRole("option", { name: "high priority" }));
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
@@ -116,8 +116,8 @@ describe("ContactFilterBuilder label condition", () => {
       />,
     );
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-    expect(screen.getByLabelText("Condition 1 value")).toHaveValue("acme");
-    expect(screen.getByLabelText("Condition 2 value")).toHaveValue("globex");
+    expect(screen.getByLabelText("Valor da condição 1")).toHaveValue("acme");
+    expect(screen.getByLabelText("Valor da condição 2")).toHaveValue("globex");
     expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 
@@ -131,9 +131,9 @@ describe("ContactFilterBuilder label condition", () => {
       />,
     );
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.click(screen.getByLabelText("Condition 1 field"));
-    fireEvent.click(screen.getByRole("option", { name: "Employees" }));
-    expect(screen.getByLabelText("Condition 1 value")).toHaveAttribute("type", "number");
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    fireEvent.click(screen.getByLabelText("Campo da condição 1"));
+    fireEvent.click(screen.getByRole("option", { name: "Funcionários" }));
+    expect(screen.getByLabelText("Valor da condição 1")).toHaveAttribute("type", "number");
   });
 });

@@ -32,7 +32,8 @@ export const activityCreateInput = z
     done: z.boolean().default(false),
   })
   .refine((v) => !(v.dealId !== null && v.leadId !== null), {
-    message: "An activity links at most one primary parent (deal or lead, not both)",
+    message:
+      "Uma atividade se vincula a no máximo um registro principal (negócio ou lead, não os dois)",
     path: ["leadId"],
   });
 
@@ -67,7 +68,7 @@ export const activityUpdateInput = z
     personId: z.string().uuid().nullable().optional(),
     orgId: z.string().uuid().nullable().optional(),
   })
-  .refine((v) => Object.keys(v).length > 1, { message: "no fields to update" });
+  .refine((v) => Object.keys(v).length > 1, { message: "Nenhum campo para atualizar" });
 
 export type ActivityUpdateInput = z.input<typeof activityUpdateInput>;
 

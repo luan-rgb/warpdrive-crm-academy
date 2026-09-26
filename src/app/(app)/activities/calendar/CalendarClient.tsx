@@ -37,7 +37,7 @@ export function CalendarClient({
   const nextIso = stepAnchorIso(view, anchorIso, 1);
   const todayIso = new Date().toISOString().slice(0, 10);
   const label =
-    view === "month" ? monthTitle(anchorIso) : `Week of ${weekTitle(dayIsos[0] ?? anchorIso)}`;
+    view === "month" ? monthTitle(anchorIso) : `Semana de ${weekTitle(dayIsos[0] ?? anchorIso)}`;
 
   return (
     // Not <main>: the app shell already owns that landmark, and a second one inside it hides the
@@ -50,14 +50,14 @@ export function CalendarClient({
             href={calendarHref("week", anchorIso)}
             className={tab(view === "week")}
           >
-            Week
+            Semana
           </Link>
           <Link
             aria-current={view === "month" ? "page" : undefined}
             href={calendarHref("month", anchorIso)}
             className={tab(view === "month")}
           >
-            Month
+            Mês
           </Link>
         </div>
         <div className="flex items-center gap-1">

@@ -174,7 +174,7 @@ export function AutomationWizard({
         {trigger === "deal_field_changed" && (
           <Input
             aria-label="Chave do campo"
-            placeholder="ex.: title"
+            placeholder="ex.: title (chave do campo)"
             value={(triggerConfig.fieldKey ?? "") as string}
             onChange={(e) => setTriggerConfig({ fieldKey: e.target.value })}
           />

@@ -76,7 +76,7 @@ export function AttachButton({
       size: file.size,
     });
     if (!requestResult.ok) {
-      return `Could not start upload for "${file.name}".`;
+      return `Não foi possível iniciar o envio de "${file.name}".`;
     }
     const { fileId, post } = requestResult.value;
 
@@ -88,13 +88,13 @@ export function AttachButton({
     form.append("file", file);
     const uploadResp = await fetch(post.url, { method: "POST", body: form });
     if (!uploadResp.ok) {
-      return `Upload failed for "${file.name}".`;
+      return `Falha no envio de "${file.name}".`;
     }
 
     // (3) Confirm the upload server-side.
     const confirmResult = await confirmUploadAction(csrfToken, fileId);
     if (!confirmResult.ok) {
-      return `Could not confirm upload for "${file.name}".`;
+      return `Não foi possível confirmar o envio de "${file.name}".`;
     }
 
     onAttached({ fileId, filename: file.name, size: file.size });

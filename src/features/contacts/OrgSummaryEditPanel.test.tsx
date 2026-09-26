@@ -31,7 +31,7 @@ const org = {
 describe("OrgSummaryEditPanel", () => {
   it("saves an edited Name", async () => {
     render(<OrgSummaryEditPanel org={org} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
@@ -47,7 +47,7 @@ describe("OrgSummaryEditPanel", () => {
 
   it("saves an edited City as the assembled address object", async () => {
     render(<OrgSummaryEditPanel org={org} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Cidade" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Cidade" }));
     fireEvent.change(screen.getByLabelText("Cidade"), { target: { value: "Berlin" } });
     fireEvent.keyDown(screen.getByLabelText("Cidade"), { key: "Enter" });
 
@@ -61,7 +61,7 @@ describe("OrgSummaryEditPanel", () => {
 
   it("clears an address field by sending undefined when the input is emptied", async () => {
     render(<OrgSummaryEditPanel org={org} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Região" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Região" }));
     fireEvent.change(screen.getByLabelText("Região"), { target: { value: "" } });
     fireEvent.keyDown(screen.getByLabelText("Região"), { key: "Enter" });
 
@@ -80,7 +80,7 @@ describe("OrgSummaryEditPanel", () => {
   it("calls onSaved instead of router.refresh when provided", async () => {
     const onSaved = vi.fn();
     render(<OrgSummaryEditPanel org={org} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
@@ -91,7 +91,7 @@ describe("OrgSummaryEditPanel", () => {
   it("surfaces a save failure via an inline error", async () => {
     updateOrgAction.mockResolvedValueOnce({ ok: false, error: { id: "E_CONTACT_002" } });
     render(<OrgSummaryEditPanel org={org} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
@@ -103,7 +103,7 @@ describe("OrgSummaryEditPanel", () => {
   it("does not refresh on a failed save (keeps the inline error visible)", async () => {
     updateOrgAction.mockResolvedValueOnce({ ok: false, error: { id: "E_CONTACT_002" } });
     render(<OrgSummaryEditPanel org={org} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "New" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 

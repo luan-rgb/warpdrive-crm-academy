@@ -111,7 +111,7 @@ describe("WeekAgendaGrid scroll position", () => {
     render(<WeekAgendaGrid dayIsos={dayIsos} activities={[offsite]} />);
     const box = scroller();
     expect(box.querySelector("[data-all-day-lane]")).not.toBeNull();
-    expect(box.contains(screen.getByRole("group", { name: "Wednesday 15 July 2026" }))).toBe(true);
+    expect(box.contains(screen.getByRole("group", { name: "Quarta-feira, 15 de julho de 2026" }))).toBe(true);
   });
 
   it("opens the hour grid on the working day rather than at midnight", () => {
@@ -223,7 +223,7 @@ describe("WeekAgendaGrid", () => {
   it("clicking an empty hour lane opens the add modal prefilled with that day + hour", () => {
     render(<WeekAgendaGrid dayIsos={dayIsos} activities={[]} />);
     expect(screen.queryByTestId("add-modal")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Add activity on 2026-07-15 at 14:00" }));
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar atividade em 2026-07-15 às 14:00" }));
     expect(screen.getByTestId("add-modal")).toBeInTheDocument();
     expect(screen.getByTestId("add-modal-date")).toHaveTextContent("2026-07-15");
     expect(screen.getByTestId("add-modal-time")).toHaveTextContent("14:00");

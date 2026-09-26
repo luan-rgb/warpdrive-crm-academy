@@ -100,7 +100,7 @@ export function LeadHeader({ lead }: { lead: LeadDetail }): React.ReactNode {
     <header className="mb-4 border-b pb-4">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <EditableHeading title={lead.title} label="lead title" onCommit={updateTitle} />
+          <EditableHeading title={lead.title} label="título do lead" onCommit={updateTitle} />
           {/* Owner is not duplicated here: PD's lead drawer shows it only as a sidebar field
               (Summary > Owner), so the header carries just labels + archived state. */}
           <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground empty:hidden">

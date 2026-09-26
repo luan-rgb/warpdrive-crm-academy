@@ -92,7 +92,7 @@ export function LeadsTable({
               {col.key === "sourceOrigin" && <SourceOriginInfo />}
             </th>
           ))}
-          <th className="px-3 py-2 font-semibold sr-only">Actions</th>
+          <th className="px-3 py-2 font-semibold sr-only">Ações</th>
         </tr>
       </thead>
       <tbody>

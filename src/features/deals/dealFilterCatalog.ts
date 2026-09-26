@@ -47,30 +47,30 @@ export function blankConditionRow(fields: readonly ConditionFieldOption[]): Cond
 export function dealFilterFields(sources: DealFilterCatalogSources = {}): DealFilterFieldOption[] {
   const { owners = [], stages = [], labelOptions = [] } = sources;
   return [
-    { field: "title", label: "Title", ops: OPS_BY_FIELD.title, input: { kind: "text" } },
-    { field: "orgName", label: "Organization", ops: OPS_BY_FIELD.orgName, input: { kind: "text" } },
-    { field: "value", label: "Value", ops: OPS_BY_FIELD.value, input: { kind: "number" } },
+    { field: "title", label: "Título", ops: OPS_BY_FIELD.title, input: { kind: "text" } },
+    { field: "orgName", label: "Organização", ops: OPS_BY_FIELD.orgName, input: { kind: "text" } },
+    { field: "value", label: "Valor", ops: OPS_BY_FIELD.value, input: { kind: "number" } },
     {
       field: "ownerId",
-      label: "Owner",
+      label: "Responsável",
       ops: OPS_BY_FIELD.ownerId,
       input: { kind: "select", options: named(owners) },
     },
     {
       field: "stageId",
-      label: "Stage",
+      label: "Etapa",
       ops: OPS_BY_FIELD.stageId,
       input: { kind: "select", options: named(stages) },
     },
     {
       field: "expectedCloseDate",
-      label: "Expected close",
+      label: "Data prevista de fechamento",
       ops: OPS_BY_FIELD.expectedCloseDate,
       input: { kind: "date" },
     },
     {
       field: "labels",
-      label: "Label",
+      label: "Etiqueta",
       ops: OPS_BY_FIELD.labels,
       input: { kind: "multiselect", options: labelOptions.map((n) => ({ value: n, label: n })) },
     },

@@ -56,19 +56,19 @@ describe("ConditionRows", () => {
   it("renders a DatePicker trigger, not a native date input, for a date field", () => {
     const { container } = renderRows([row({ field: "closes", op: "gt" })]);
     expect(container.querySelector('input[type="date"]')).toBeNull();
-    expect(screen.getByLabelText("Condition 1 value").tagName).toBe("BUTTON");
+    expect(screen.getByLabelText("Valor da condição 1").tagName).toBe("BUTTON");
   });
 
   it("clearing the date maps back to the empty string", () => {
     const { onRowsChange } = renderRows([row({ field: "closes", op: "gt", value: "2026-08-25" })]);
-    fireEvent.click(screen.getByLabelText("Condition 1 value"));
+    fireEvent.click(screen.getByLabelText("Valor da condição 1"));
     fireEvent.click(screen.getByRole("button", { name: "Limpar" }));
     expect(onRowsChange).toHaveBeenCalledWith([expect.objectContaining({ value: "" })]);
   });
 
   it("renders the design-system Input for a number field", () => {
     renderRows([row()]);
-    const input = screen.getByLabelText("Condition 1 value");
+    const input = screen.getByLabelText("Valor da condição 1");
     expect(input.tagName).toBe("INPUT");
     // The wrapper's focus ring is what a bare <input> did not have.
     expect(input).toHaveClass("focus-visible:ring-ring/50");
@@ -97,7 +97,7 @@ describe("ConditionRows", () => {
 
   it("adds a row seeded from the first field and its first operator", () => {
     const { onRowsChange } = renderRows([]);
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
     expect(onRowsChange).toHaveBeenCalledWith([
       expect.objectContaining({ field: "value", op: "gt", value: "" }),
     ]);
@@ -105,7 +105,7 @@ describe("ConditionRows", () => {
 
   it("hides the value control for an operator that takes no value", () => {
     renderRows([row({ op: "isEmpty" })]);
-    expect(screen.queryByLabelText("Condition 1 value")).toBeNull();
+    expect(screen.queryByLabelText("Valor da condição 1")).toBeNull();
   });
 
   it("keeps the value slot in place so the operator dropdown does not resize", () => {
@@ -128,7 +128,7 @@ describe("ConditionRows", () => {
 
   it("drops a typed value when the operator switches to one that takes none", () => {
     const { onRowsChange } = renderRows([row({ field: "title", op: "contains", value: "acme" })]);
-    fireEvent.click(screen.getByLabelText("Condition 1 operator"));
+    fireEvent.click(screen.getByLabelText("Operador da condição 1"));
     fireEvent.click(screen.getByRole("option", { name: FILTER_OP_LABELS.isEmpty }));
     expect(onRowsChange).toHaveBeenCalledWith([
       expect.objectContaining({ op: "isEmpty", value: "" }),
@@ -139,14 +139,14 @@ describe("ConditionRows", () => {
   it("renders a design-system multi-select for a multiselect field, not a native one", () => {
     const { container } = renderRows([row({ field: "labels", op: "eq", value: ["Hot"] })]);
     expect(container.querySelector("select")).toBeNull();
-    expect(screen.getByLabelText("Condition 1 value").tagName).toBe("BUTTON");
+    expect(screen.getByLabelText("Valor da condição 1").tagName).toBe("BUTTON");
     // The already-picked value shows as a chip.
     expect(screen.getByText("Hot")).toBeInTheDocument();
   });
 
   it("reports every picked value on a multiselect row", () => {
     const { onRowsChange } = renderRows([row({ field: "labels", op: "eq", value: ["Hot"] })]);
-    fireEvent.click(screen.getByLabelText("Condition 1 value"));
+    fireEvent.click(screen.getByLabelText("Valor da condição 1"));
     fireEvent.click(screen.getByRole("option", { name: /Cold/ }));
     expect(onRowsChange).toHaveBeenCalledWith([
       expect.objectContaining({ value: ["Hot", "Cold"] }),
@@ -164,7 +164,7 @@ describe("ConditionRows", () => {
   // does no layout, so the shrink classes are the only thing a test can hold here.
   it("lets the field and operator selects shrink instead of claiming the row", () => {
     renderRows([row()]);
-    for (const label of ["Condition 1 field", "Condition 1 operator"]) {
+    for (const label of ["Campo da condição 1", "Operador da condição 1"]) {
       expect(screen.getByLabelText(label)).toHaveClass("min-w-0", "flex-1");
     }
   });

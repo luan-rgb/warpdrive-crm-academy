@@ -8,7 +8,7 @@ import { ActivityChip } from "./calendarChip";
 // an interactive widget needing focus management and a semantic <table>; this is a static,
 // read-only display, so those specific rules are suppressed per element below.
 
-const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+const WEEKDAY_LABELS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"] as const;
 const MAX_CHIPS = 3;
 const WEEK_ROWS = [0, 1, 2, 3, 4, 5] as const;
 

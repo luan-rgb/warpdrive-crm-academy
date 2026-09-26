@@ -43,7 +43,7 @@ export function ContactOverviewSection({
       </FieldRow>
       <FieldRow label="Última atividade" empty={lastActivityAt === null}>
         {lastActivityAt !== null ? (
-          <span className="tabular-nums">{lastActivityAt.toLocaleDateString()}</span>
+          <span className="tabular-nums">{lastActivityAt.toLocaleDateString("pt-BR")}</span>
         ) : (
           "-"
         )}

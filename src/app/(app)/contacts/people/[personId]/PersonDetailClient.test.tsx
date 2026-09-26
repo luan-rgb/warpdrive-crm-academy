@@ -275,7 +275,7 @@ describe("PersonDetailClient composer + inline person section", () => {
         baseCurrency="USD"
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Primeiro nome" }));
     const input = screen.getByLabelText("editor-firstName");
     fireEvent.change(input, { target: { value: "Janet" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));

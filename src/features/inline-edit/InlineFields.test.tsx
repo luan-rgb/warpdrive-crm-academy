@@ -24,12 +24,12 @@ describe("InlineTextField (PD mechanism)", () => {
     // The value is NOT a click target; clicking it must not open the editor.
     fireEvent.click(screen.getByText("10"));
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Edit Value" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Editar Value" })).toBeInTheDocument();
   });
 
   it("pencil click opens the editor with a dirty-gated Save footer", () => {
     render(<InlineTextField label="Value" value="10" onSave={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Value" }));
     expect(screen.getByLabelText("Value")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Value"), { target: { value: "20" } });
@@ -39,14 +39,14 @@ describe("InlineTextField (PD mechanism)", () => {
   it("Save commits the draft; Cancel discards it", async () => {
     const onSave = vi.fn(() => Promise.resolve(ok(undefined)));
     render(<InlineTextField label="Value" value="10" onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Value" }));
     fireEvent.change(screen.getByLabelText("Value"), { target: { value: "20" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(onSave).toHaveBeenCalledWith("20");
     // Let the in-flight save settle (pending disables the editor controls) before re-editing.
     await waitFor(() => expect(screen.getByText("10")).toBeInTheDocument());
 
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Value" }));
     fireEvent.change(screen.getByLabelText("Value"), { target: { value: "99" } });
     fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(onSave).toHaveBeenCalledTimes(1);
@@ -56,7 +56,7 @@ describe("InlineTextField (PD mechanism)", () => {
   it("neither Escape nor blur closes or commits (PD: only Cancel/Save exit)", () => {
     const onSave = vi.fn(() => Promise.resolve(ok(undefined)));
     render(<InlineTextField label="Value" value="10" onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Value" }));
     const input = screen.getByLabelText("Value");
     fireEvent.change(input, { target: { value: "99" } });
     fireEvent.keyDown(input, { key: "Escape" });
@@ -69,7 +69,7 @@ describe("InlineTextField (PD mechanism)", () => {
   it("Enter commits when dirty", () => {
     const onSave = vi.fn(() => Promise.resolve(ok(undefined)));
     render(<InlineTextField label="Value" value="10" onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Value" }));
     const input = screen.getByLabelText("Value");
     fireEvent.keyDown(input, { key: "Enter" });
     expect(onSave).not.toHaveBeenCalled();
@@ -81,7 +81,7 @@ describe("InlineTextField (PD mechanism)", () => {
   it("shows an inline error when the save fails", async () => {
     const onSave = vi.fn(() => Promise.resolve(err("E_DEAL_002")));
     render(<InlineTextField label="Value" value="10" onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Value" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Value" }));
     fireEvent.change(screen.getByLabelText("Value"), { target: { value: "20" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(await screen.findByText(/não foi possível salvar/i)).toBeInTheDocument();
@@ -107,13 +107,13 @@ describe("InlineSelectField (PD mechanism)", () => {
     expect(screen.getByText("10%")).toBeInTheDocument();
     fireEvent.click(screen.getByText("10%"));
     expect(screen.queryByRole("button", { name: "Salvar" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Edit Probability" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Editar Probability" })).toBeInTheDocument();
   });
 
   it("picking an option does NOT autosave; Save commits it", () => {
     const onSave = vi.fn(() => Promise.resolve(ok(undefined)));
     render(<InlineSelectField label="Probability" value="a" options={options} onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Probability" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Probability" }));
     expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
     fireEvent.click(screen.getByLabelText("Probability"));
     fireEvent.click(screen.getByText("20%"));
@@ -127,7 +127,7 @@ describe("InlineSelectField (PD mechanism)", () => {
   it("Cancel discards the picked option", () => {
     const onSave = vi.fn(() => Promise.resolve(ok(undefined)));
     render(<InlineSelectField label="Probability" value="a" options={options} onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Probability" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Probability" }));
     fireEvent.click(screen.getByLabelText("Probability"));
     fireEvent.click(screen.getByText("20%"));
     fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
@@ -140,13 +140,13 @@ describe("InlineDateField (PD mechanism)", () => {
   it("renders the date as plain text with a pencil-only trigger", () => {
     render(<InlineDateField label="Expected close date" value="2026-07-04" onSave={vi.fn()} />);
     expect(screen.getByText("07/04/2026")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Edit Expected close date" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Editar Expected close date" })).toBeInTheDocument();
   });
 
   it("picking a day does NOT autosave; Save commits it", async () => {
     const onSave = vi.fn(() => Promise.resolve(ok(undefined)));
     render(<InlineDateField label="Expected close date" value="2026-07-04" onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Expected close date" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Expected close date" }));
     // Editor opens with the calendar already showing (PD behavior).
     fireEvent.click(await screen.findByText("15"));
     expect(onSave).not.toHaveBeenCalled();
@@ -159,7 +159,7 @@ describe("InlineDateField (PD mechanism)", () => {
   it("Cancel discards the picked day", async () => {
     const onSave = vi.fn(() => Promise.resolve(ok(undefined)));
     render(<InlineDateField label="Expected close date" value="2026-07-04" onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Expected close date" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Expected close date" }));
     fireEvent.click(await screen.findByText("15"));
     fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(onSave).not.toHaveBeenCalled();

@@ -38,7 +38,7 @@ describe("InlineOrgField", () => {
     );
     // The name is not itself a click-to-edit target; the editor appears only after the pencil.
     expect(screen.queryByLabelText("Organização")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Edit Organização" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Organização" }));
     expect(screen.getByLabelText("Organização")).toBeInTheDocument();
     // Dirty-gated: nothing chosen yet, so Save is disabled (PD: no autosave).
     expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
@@ -52,7 +52,7 @@ describe("InlineOrgField", () => {
 
   it("links the deal to a chosen existing org via updateDealAction (no create)", async () => {
     render(<InlineOrgField {...baseProps} org={{ id: "o1", name: "North Labs" }} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Organização" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Organização" }));
     fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Union" } });
     fireEvent.mouseDown(screen.getByRole("button", { name: "Union Dynamics" }));
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -80,7 +80,7 @@ describe("InlineOrgField", () => {
 
   it("Cancel discards the pending choice without calling any action", () => {
     render(<InlineOrgField {...baseProps} org={{ id: "o1", name: "North Labs" }} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Organização" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Organização" }));
     fireEvent.change(screen.getByLabelText("Organização"), { target: { value: "Union" } });
     fireEvent.mouseDown(screen.getByRole("button", { name: "Union Dynamics" }));
     fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));

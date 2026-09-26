@@ -34,7 +34,7 @@ export function activityRowTarget(row: ActivityParentLinks): ActivityRowTarget {
   // dealTitle comes from the deletedAt-filtered join, so a null title on a non-null dealId means
   // the deal is soft-deleted: linking to it would land on a 404 rather than a drawer.
   if (row.dealId !== null && row.dealTitle !== null) {
-    return record(row.dealId, row.dealTitle, "Deal", `/deals/${row.dealId}`, row.subject);
+    return record(row.dealId, row.dealTitle, "Negócio", `/deals/${row.dealId}`, row.subject);
   }
   // A lead is the other kind of primary parent (activities.lead_id, mutually exclusive with
   // deal_id), so it outranks the contacts the lead itself is linked to.
@@ -45,7 +45,7 @@ export function activityRowTarget(row: ActivityParentLinks): ActivityRowTarget {
     return record(
       row.personId,
       row.personName,
-      "Contact",
+      "Contato",
       `/contacts/people/${row.personId}`,
       row.subject,
     );
@@ -54,7 +54,7 @@ export function activityRowTarget(row: ActivityParentLinks): ActivityRowTarget {
     return record(
       row.orgId,
       row.orgName,
-      "Organization",
+      "Organização",
       `/contacts/orgs/${row.orgId}`,
       row.subject,
     );

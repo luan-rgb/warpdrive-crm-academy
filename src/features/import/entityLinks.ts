@@ -83,14 +83,14 @@ export async function resolveOrgLink(
 ): Promise<Result<EntityLink, RowError[]>> {
   const name = group.name;
   if (typeof name !== "string" || name === "") {
-    return err([{ field: "organization.name", message: "organization name is required" }]);
+    return err([{ field: "organization.name", message: "o nome da organização é obrigatório" }]);
   }
   const cand = await findCandidates(tx, actor, "organization", { name }, signal);
   if (cand.outcome === "ambiguous") {
     return err([
       {
         field: "organization.name",
-        message: `ambiguous organization "${name}": ${cand.count} matches`,
+        message: `organização ambígua "${name}": ${cand.count} correspondências`,
       },
     ]);
   }
@@ -128,7 +128,7 @@ export async function resolvePersonLink(
 ): Promise<Result<EntityLink, RowError[]>> {
   const name = group.name;
   if (typeof name !== "string" || name === "") {
-    return err([{ field: "person.name", message: "person name is required" }]);
+    return err([{ field: "person.name", message: "o nome da pessoa é obrigatório" }]);
   }
   const emails = group.emails;
   const hasEmail = Array.isArray(emails) && emails.length > 0;
@@ -138,7 +138,7 @@ export async function resolvePersonLink(
 
   if (cand.outcome === "ambiguous") {
     return err([
-      { field: "person.name", message: `ambiguous person "${name}": ${cand.count} matches` },
+      { field: "person.name", message: `pessoa ambígua "${name}": ${cand.count} correspondências` },
     ]);
   }
   if (cand.outcome === "one") return ok({ id: cand.candidateId, createdId: null });

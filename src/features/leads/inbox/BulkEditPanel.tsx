@@ -106,7 +106,7 @@ export function BulkEditPanel({
               }}
               className={ITEM}
             >
-              Clear labels
+              Limpar etiquetas
             </button>
           </>
         )}

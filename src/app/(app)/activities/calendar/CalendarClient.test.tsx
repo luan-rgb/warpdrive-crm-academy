@@ -67,7 +67,7 @@ it("de-emphasizes adjacent-month cells and marks today", () => {
 
 it("toggle + prev/next/today render as links carrying the right params", () => {
   render(<CalendarClient view="month" anchorIso="2026-06-15" dayIsos={dayIsos} activities={[]} />);
-  expect(screen.getByRole("link", { name: "Week" })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: "Semana" })).toHaveAttribute(
     "href",
     "/activities/calendar?view=week&d=2026-06-15",
   );
@@ -79,7 +79,7 @@ it("toggle + prev/next/today render as links carrying the right params", () => {
     "href",
     "/activities/calendar?view=month&d=2026-07-15",
   );
-  expect(screen.getByText("June 2026")).toBeInTheDocument();
+  expect(screen.getByText("Junho 2026")).toBeInTheDocument();
 });
 
 // An empty week rendered as a blank grid with no message at all.
@@ -115,7 +115,7 @@ it("renders the month grid when view=month (durability: same as a reloaded URL)"
 
 it("draws the header label and the adjacent-month tone from theme tokens", () => {
   render(<CalendarClient view="month" anchorIso="2026-06-15" dayIsos={dayIsos} activities={[]} />);
-  expect(screen.getByText("June 2026")).toHaveClass("text-foreground");
+  expect(screen.getByText("Junho 2026")).toHaveClass("text-foreground");
   // An adjacent month is de-emphasised by lowering the token's alpha, not by reaching for a
   // lighter fixed gray, so the cell follows Night with everything else.
   const julyCell = screen.getByTestId("cell-2026-07-01");

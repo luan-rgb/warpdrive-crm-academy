@@ -137,8 +137,8 @@ describe("conditionRowIssue", () => {
 
   it("reports a non-numeric value on a number field", () => {
     const issue = conditionRowIssue([{ field: "value", op: "gt", value: "ten" }], FIELDS);
-    expect(issue).toMatch(/Value/);
-    expect(issue).toMatch(/number/i);
+    expect(issue).toMatch(/Valor precisa ser um número/);
+    expect(issue).toMatch(/número/i);
   });
 
   it("reports an unparseable date", () => {
@@ -146,7 +146,7 @@ describe("conditionRowIssue", () => {
       [{ field: "expectedCloseDate", op: "gt", value: "not-a-date" }],
       FIELDS,
     );
-    expect(issue).toMatch(/Expected close/);
-    expect(issue).toMatch(/date/i);
+    expect(issue).toMatch(/Data prevista de fechamento precisa ser uma data/);
+    expect(issue).toMatch(/data/i);
   });
 });

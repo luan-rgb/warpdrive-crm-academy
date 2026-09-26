@@ -20,14 +20,14 @@ export async function GET(
 ): Promise<Response> {
   const { attachmentId } = await ctx.params;
   const { actor } = await createContext();
-  if (actor === null) return new Response("Unauthorized", { status: 401 });
+  if (actor === null) return new Response("Não autorizado", { status: 401 });
 
   const signal = AbortSignal.timeout(30_000);
   const resolveClient = (accountId: string, s: AbortSignal) =>
     resolveProductionClient(db, accountId, s);
 
   const r = await resolveAttachmentDownload(db, { resolveClient }, { actor, attachmentId }, signal);
-  if (!r.ok) return new Response("Not found", { status: 404 });
+  if (!r.ok) return new Response("Não encontrado", { status: 404 });
 
   return new Response(new Uint8Array(r.value.bytes), {
     headers: {

@@ -47,9 +47,9 @@ describe("UserMenu appearance", () => {
     render(<UserMenu userId="u1" userName="Ada" appearance="night" />);
     await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
 
-    expect(screen.getByRole("menuitemradio", { name: "Day" })).not.toBeChecked();
-    expect(screen.getByRole("menuitemradio", { name: "Night" })).toBeChecked();
-    expect(screen.getByRole("menuitemradio", { name: "System" })).not.toBeChecked();
+    expect(screen.getByRole("menuitemradio", { name: "Claro" })).not.toBeChecked();
+    expect(screen.getByRole("menuitemradio", { name: "Escuro" })).toBeChecked();
+    expect(screen.getByRole("menuitemradio", { name: "Sistema" })).not.toBeChecked();
   });
 
   // Radix unmounts the menu content on close, so state living inside it is reseeded from the
@@ -58,18 +58,18 @@ describe("UserMenu appearance", () => {
   it("still shows the pick after the menu is closed and reopened", async () => {
     render(<UserMenu userId="u1" userName="Ada" appearance="day" />);
     await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
-    await userEvent.click(screen.getByRole("menuitemradio", { name: "Night" }));
+    await userEvent.click(screen.getByRole("menuitemradio", { name: "Escuro" }));
     await waitFor(() => expect(setAppearanceAction).toHaveBeenCalledTimes(1));
 
     await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
-    expect(screen.getByRole("menuitemradio", { name: "Night" })).toBeChecked();
-    expect(screen.getByRole("menuitemradio", { name: "Day" })).not.toBeChecked();
+    expect(screen.getByRole("menuitemradio", { name: "Escuro" })).toBeChecked();
+    expect(screen.getByRole("menuitemradio", { name: "Claro" })).not.toBeChecked();
   });
 
   it("paints and persists the picked appearance", async () => {
     render(<UserMenu userId="u1" userName="Ada" appearance="day" />);
     await userEvent.click(screen.getByRole("button", { name: "Menu da conta" }));
-    await userEvent.click(screen.getByRole("menuitemradio", { name: "Night" }));
+    await userEvent.click(screen.getByRole("menuitemradio", { name: "Escuro" }));
 
     await waitFor(() => expect(setAppearanceAction).toHaveBeenCalledTimes(1));
     expect(setAppearanceAction).toHaveBeenCalledWith({ appearance: "night" }, "csrf");

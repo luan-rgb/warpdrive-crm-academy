@@ -145,7 +145,7 @@ export function useActivityComposer(props: ActivityComposerProps) {
       return;
     }
     if (effectiveTypeId === "") {
-      setError("Activity type unavailable");
+      setError("Tipo de atividade indisponível");
       return;
     }
     if (startDate.trim() === "") {
@@ -162,7 +162,9 @@ export function useActivityComposer(props: ActivityComposerProps) {
     if (!r.ok) {
       setPending(false);
       const verb = editing !== null ? "save" : "create";
-      setError(`Could not ${verb} activity (${r.error.id})`);
+      setError(
+        `Não foi possível ${verb === "create" ? "criar" : "salvar"} a atividade (${r.error.id})`,
+      );
       return;
     }
     await invalidateDayLoad();

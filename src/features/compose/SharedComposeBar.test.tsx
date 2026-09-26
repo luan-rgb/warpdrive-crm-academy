@@ -196,7 +196,7 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
     renderBar();
     await userEvent.click(screen.getByRole("tab", { name: "Email" }));
     expect(screen.queryByTestId("email-composer")).not.toBeInTheDocument();
-    expect(screen.getByText(/connect a gmail mailbox/i)).toBeInTheDocument();
+    expect(screen.getByText(/conecte sua caixa de e-mail/i)).toBeInTheDocument();
   });
 
   it("hides the Email and Files tabs for a lead scope, keeping only Activity and Notes", () => {

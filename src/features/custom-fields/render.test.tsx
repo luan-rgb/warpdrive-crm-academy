@@ -39,7 +39,7 @@ describe("formatCustomFieldDisplay", () => {
     );
   });
   it("renders an empty value as an em-dash-free placeholder", () => {
-    expect(formatCustomFieldDisplay(def({}), undefined)).toBe("(empty)");
+    expect(formatCustomFieldDisplay(def({}), undefined)).toBe("(vazio)");
   });
 });
 

@@ -28,12 +28,12 @@ interface Entry {
 // out of scope). Note opens a target-picker modal; Email routes to the standalone compose surface.
 const ENTRIES: Entry[] = [
   { key: "lead", label: "Lead", shortcut: "L" },
-  { key: "deal", label: "Deal", shortcut: "D" },
-  { key: "activity", label: "Activity", shortcut: "A" },
-  { key: "person", label: "Person", shortcut: "P" },
-  { key: "org", label: "Organization", shortcut: "O" },
-  { key: "note", label: "Note", shortcut: "N" },
-  { key: "email", label: "Email", shortcut: "E" },
+  { key: "deal", label: "Negócio", shortcut: "D" },
+  { key: "activity", label: "Atividade", shortcut: "A" },
+  { key: "person", label: "Pessoa", shortcut: "P" },
+  { key: "org", label: "Organização", shortcut: "O" },
+  { key: "note", label: "Nota", shortcut: "N" },
+  { key: "email", label: "E-mail", shortcut: "E" },
 ];
 
 // The global "+" quick-add next to the search box (Pipedrive parity): opens a menu whose entries

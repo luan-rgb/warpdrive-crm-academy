@@ -31,21 +31,21 @@ describe("CreateFilterModal", () => {
   it("renders a Create new filter dialog with one condition row", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
     expect(screen.getByRole("dialog", { name: "Criar novo filtro" })).not.toBeNull();
-    expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(1);
+    expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(1);
   });
 
   it("adds a condition row", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
   });
 
   // The saved-filter modal and the ad-hoc popover used to offer different deal fields. Both now
   // read the one catalog, so the saved side gets Stage, Expected close, Organization and Label.
   it("offers the whole deal catalog", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} stages={STAGES} />);
-    fireEvent.click(screen.getByLabelText("Condition 1 field"));
-    for (const label of ["Organization", "Stage", "Expected close", "Label"]) {
+    fireEvent.click(screen.getByLabelText("Campo da condição 1"));
+    for (const label of ["Organização", "Etapa", "Data prevista de fechamento", "Etiqueta"]) {
       expect(screen.getByRole("option", { name: label })).toBeInTheDocument();
     }
   });
@@ -54,9 +54,9 @@ describe("CreateFilterModal", () => {
     const { container } = render(
       <CreateFilterModal onClose={() => {}} onSave={() => {}} stages={STAGES} />,
     );
-    fireEvent.click(screen.getByLabelText("Condition 1 field"));
-    fireEvent.click(screen.getByRole("option", { name: "Expected close" }));
-    expect(screen.getByLabelText("Condition 1 value").tagName).toBe("BUTTON");
+    fireEvent.click(screen.getByLabelText("Campo da condição 1"));
+    fireEvent.click(screen.getByRole("option", { name: "Data prevista de fechamento" }));
+    expect(screen.getByLabelText("Valor da condição 1").tagName).toBe("BUTTON");
     expect(container.querySelector('input[type="date"]')).toBeNull();
   });
 
@@ -65,9 +65,9 @@ describe("CreateFilterModal", () => {
     const onSave = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} />);
     // Add a second row and leave it empty so it is dropped.
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
     fireEvent.change(screen.getByLabelText("Nome do filtro"), { target: { value: "Big deals" } });
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledTimes(1));
@@ -95,7 +95,7 @@ describe("CreateFilterModal", () => {
     createSavedFilterAction.mockResolvedValue({ ok: false, error: { id: "E_DEAL_008" } });
     const onSave = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} />);
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     await waitFor(() =>
       expect(screen.getByText("Uma dessas condições não é válida")).toBeInTheDocument(),
@@ -109,9 +109,9 @@ describe("CreateFilterModal", () => {
   // has no free-text entry, so the row never carries a malformed value through this UI.
   it("keeps the save available for a value the field accepts", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
-    fireEvent.click(screen.getByLabelText("Condition 1 field"));
-    fireEvent.click(screen.getByRole("option", { name: "Value" }));
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "1000" } });
+    fireEvent.click(screen.getByLabelText("Campo da condição 1"));
+    fireEvent.click(screen.getByRole("option", { name: "Valor" }));
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "1000" } });
     expect(screen.getByRole("button", { name: "Salvar" })).toBeEnabled();
   });
 
@@ -119,7 +119,7 @@ describe("CreateFilterModal", () => {
   it("offers the all/any combinator once there is more than one condition", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
     expect(screen.queryByLabelText("Combinador de correspondência")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
     expect(screen.getByLabelText("Combinador de correspondência")).toBeInTheDocument();
   });
 
@@ -127,9 +127,9 @@ describe("CreateFilterModal", () => {
     createSavedFilterAction.mockResolvedValue({ ok: true, value: { id: "srv-2" } });
     const onSave = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} />);
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
-    fireEvent.change(screen.getByLabelText("Condition 2 value"), { target: { value: "Corp" } });
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 2"), { target: { value: "Corp" } });
     fireEvent.click(screen.getByLabelText("Combinador de correspondência"));
     fireEvent.click(screen.getByRole("option", { name: "qualquer condição" }));
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -155,7 +155,7 @@ describe("CreateFilterModal", () => {
         }}
       />,
     );
-    expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
     expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
   });
 
@@ -168,12 +168,12 @@ describe("CreateFilterModal", () => {
 
   it("auto-populates the filter name from the conditions until the user edits it", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Acme" } });
     const nameInput = screen.getByLabelText<HTMLInputElement>("Nome do filtro");
-    expect(nameInput.value).toBe("Title contains Acme");
+    expect(nameInput.value).toBe("Título contém Acme");
     // Once the user types their own name, auto-population stops overwriting it.
     fireEvent.change(nameInput, { target: { value: "My filter" } });
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), {
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), {
       target: { value: "Acme Corp" },
     });
     expect(nameInput.value).toBe("My filter");
@@ -181,17 +181,17 @@ describe("CreateFilterModal", () => {
 
   it("names an owner condition after the owner, not their id", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} owners={OWNERS} />);
-    fireEvent.click(screen.getByLabelText("Condition 1 field"));
-    fireEvent.click(screen.getByRole("option", { name: "Owner" }));
-    fireEvent.click(screen.getByLabelText("Condition 1 value"));
+    fireEvent.click(screen.getByLabelText("Campo da condição 1"));
+    fireEvent.click(screen.getByRole("option", { name: "Responsável" }));
+    fireEvent.click(screen.getByLabelText("Valor da condição 1"));
     fireEvent.click(screen.getByRole("option", { name: "Ada King" }));
-    expect(screen.getByLabelText<HTMLInputElement>("Nome do filtro").value).toBe("Owner is Ada King");
+    expect(screen.getByLabelText<HTMLInputElement>("Nome do filtro").value).toBe("Responsável é Ada King");
   });
 
   it("previews the in-progress definition without saving it", () => {
     const onPreview = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} onPreview={onPreview} />);
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Visualizar" }));
     expect(onPreview).toHaveBeenCalledTimes(1);
     expect(onPreview.mock.calls[0]![0]).toEqual({
@@ -206,7 +206,7 @@ describe("CreateFilterModal", () => {
     const onApply = vi.fn();
     const onClose = vi.fn();
     render(<CreateFilterModal onClose={onClose} onSave={() => {}} onApply={onApply} />);
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     expect(onApply).toHaveBeenCalledTimes(1);
     expect(onApply.mock.calls[0]![0]).toEqual({

@@ -266,7 +266,7 @@ export function DealSidebar({
           <span className="tabular-nums">{overview.inactiveDays}</span> dias
         </FieldRow>
         <FieldRow label="Criado em">
-          <span className="tabular-nums">{deal.createdAt.toLocaleDateString()}</span>
+          <span className="tabular-nums">{deal.createdAt.toLocaleDateString("pt-BR")}</span>
         </FieldRow>
       </CollapsibleSection>
     ),

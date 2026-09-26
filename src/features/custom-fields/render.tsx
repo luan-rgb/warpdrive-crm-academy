@@ -9,7 +9,7 @@ import { assertNever } from "@/types/result";
 export { CustomFieldDetail, CustomFieldFormControl } from "./render.widgets";
 export type { CustomFieldDef };
 
-const EMPTY = "(empty)";
+const EMPTY = "(vazio)";
 
 function labelFor(def: CustomFieldDef, id: string): string {
   return def.options.find((o) => o.id === id)?.label ?? id;

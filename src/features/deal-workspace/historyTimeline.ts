@@ -48,7 +48,7 @@ export interface CreatedAnchor {
 function toChangeItem(c: ChangeLogEntry): HistoryItem {
   const label =
     c.field === CHANGE_FIELD_STAGE_ID
-      ? `Stage: ${formatValue(c.oldValue)} → ${formatValue(c.newValue)}`
+      ? `Etapa: ${formatValue(c.oldValue)} → ${formatValue(c.newValue)}`
       : formatChangeLabel(c);
   return {
     kind: "event",

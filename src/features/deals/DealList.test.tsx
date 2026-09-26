@@ -58,7 +58,7 @@ const props = {
 // Drive the bulk-stage flow end to end: tick a row's checkbox, pick a stage from the Move-to-stage
 // select, then affirm the confirmation the move now goes through.
 function selectRowAndMove(stageName: string): void {
-  fireEvent.click(screen.getByRole("checkbox", { name: "Select Acme renewal" }));
+  fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Acme renewal" }));
   fireEvent.click(screen.getByLabelText("Mover para etapa"));
   fireEvent.click(screen.getByRole("option", { name: stageName }));
   fireEvent.click(screen.getByRole("button", { name: "Mover negócios" }));
@@ -101,7 +101,7 @@ describe("DealList", () => {
     expect(screen.getByRole("columnheader", { name: "Data prevista de fechamento" })).toBeInTheDocument();
     const titleRow = screen.getByText("Acme renewal").closest("tr") as HTMLElement;
     // Date-only value must render in local time (no UTC off-by-one).
-    expect(within(titleRow).getByText("Aug 1, 2026")).toBeInTheDocument();
+    expect(within(titleRow).getByText("1 de ago. de 2026")).toBeInTheDocument();
   });
 
   it("still allows inline title edit via an explicit edit control", () => {
@@ -159,9 +159,9 @@ describe("DealList", () => {
     render(<DealList {...props} rows={many} total={60} />);
     // Only the first window (50) of the 60 rows is mounted; the rest wait behind Show more.
     expect(titleLinks()).toHaveLength(50);
-    fireEvent.click(screen.getByRole("button", { name: /show more/i }));
+    fireEvent.click(screen.getByRole("button", { name: /mostrar mais/i }));
     expect(titleLinks()).toHaveLength(60);
-    expect(screen.queryByRole("button", { name: /show more/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /mostrar mais/i })).not.toBeInTheDocument();
   });
 
   // A nine-column header, a select-all checkbox, a gear and a "0 deals - total value $0" footer

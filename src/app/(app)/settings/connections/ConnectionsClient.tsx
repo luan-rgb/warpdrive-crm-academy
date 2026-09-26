@@ -19,7 +19,7 @@ export interface ConnectionView {
 const S = STRINGS.settings;
 
 function formatDate(iso: string | null): string {
-  return iso === null ? S.connectedAppsNeverUsed : new Date(iso).toLocaleString();
+  return iso === null ? S.connectedAppsNeverUsed : new Date(iso).toLocaleString("pt-BR");
 }
 
 export function ConnectionsClient({

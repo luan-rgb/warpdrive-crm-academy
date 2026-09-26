@@ -31,7 +31,7 @@ export function EditableHeading({ title, label, onCommit }: EditableHeadingProps
         <input
           // biome-ignore lint/a11y/noAutofocus: inline edit focuses immediately on activation
           autoFocus
-          aria-label={`Edit ${label}`}
+          aria-label={`Editar ${label}`}
           value={f.draft}
           disabled={f.pending}
           onChange={(event) => f.setDraft(event.target.value)}

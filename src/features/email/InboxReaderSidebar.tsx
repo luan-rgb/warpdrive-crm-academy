@@ -40,7 +40,7 @@ export function InboxReaderSidebar({
     <aside aria-label="Detalhes da conversa" className="w-72 shrink-0 space-y-4 border-l p-4">
       <section>
         <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground tabular-nums">
-          {participants.length} people in this conversation
+          {participants.length} pessoas nesta conversa
         </h2>
         <div className="flex flex-wrap gap-1.5">
           {participants.map((email) => (

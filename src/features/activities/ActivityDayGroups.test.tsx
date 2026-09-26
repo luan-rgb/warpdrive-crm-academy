@@ -25,7 +25,7 @@ describe("ActivityDayGroups", () => {
       />,
     );
     // one header for Jul 4, one "No date" header
-    expect(screen.getByText(/No date/i)).toBeInTheDocument();
+    expect(screen.getByText(/Sem data/i)).toBeInTheDocument();
     expect(screen.getAllByRole("heading").length).toBe(2);
   });
 

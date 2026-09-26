@@ -10,9 +10,9 @@ import { APPEARANCE_VALUES, type Appearance } from "./appearance";
 import type { AppearanceChoice } from "./useAppearanceChoice";
 
 const LABELS: Record<Appearance, string> = {
-  day: "Day",
-  night: "Night",
-  system: "System",
+  day: "Claro",
+  night: "Escuro",
+  system: "Sistema",
 };
 
 const ICONS: Record<Appearance, typeof Sun> = {

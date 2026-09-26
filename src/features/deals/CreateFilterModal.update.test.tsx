@@ -55,7 +55,7 @@ describe("CreateFilterModal editing a saved filter", () => {
     const onSave = vi.fn();
     render(<CreateFilterModal onClose={() => {}} onSave={onSave} savedFilter={view()} />);
 
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Globex" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Globex" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar alterações" }));
 
     await waitFor(() => expect(updateSavedFilterAction).toHaveBeenCalledTimes(1));
@@ -111,7 +111,7 @@ describe("CreateFilterModal editing a saved filter", () => {
     render(<CreateFilterModal onClose={() => {}} onSave={() => {}} />);
     expect(screen.getByRole("dialog", { name: "Criar novo filtro" })).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "Acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "Acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(createSavedFilterAction).toHaveBeenCalledTimes(1));

@@ -23,7 +23,7 @@ const ROUTES: Record<"deal" | "person" | "organization" | "lead", (id: string) =
 // memoization and reset logic even when there is genuinely no data yet).
 const EMPTY_RESULTS: SearchResults = { deals: [], people: [], organizations: [], leads: [] };
 
-const SEARCH_ERROR = "Couldn't run that search. Try again.";
+const SEARCH_ERROR = "Não foi possível fazer essa busca. Tente novamente.";
 
 // -- SearchResultsList --
 // Pure presentational component: no tRPC, no hooks, safe to test in jsdom.

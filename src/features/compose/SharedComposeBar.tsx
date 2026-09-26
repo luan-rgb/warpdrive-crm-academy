@@ -253,11 +253,11 @@ export function SharedComposeBar({
               </div>
             ) : (
               <p className="px-3 py-4 text-sm text-muted-foreground text-pretty">
-                Connect a Gmail mailbox in the{" "}
-                <Link href="/inbox" className="text-primary hover:underline">
-                  Inbox
+                Conecte sua caixa de e-mail em{" "}
+                <Link href="/settings/email-sync" className="text-primary hover:underline">
+                  Sincronização de e-mail
                 </Link>{" "}
-                to send email from here.
+                para enviar e-mails daqui.
               </p>
             ))}
 

@@ -169,7 +169,7 @@ describe("ThreadList", () => {
   it("selecting a row reveals the bulk action bar with a count", () => {
     render(<ThreadList folder="inbox" />);
     expect(screen.queryByText(/selected/)).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Renewal" }));
     expect(screen.getByText("1 selected")).toBeInTheDocument();
   });
 
@@ -188,16 +188,16 @@ describe("ThreadList", () => {
 
   it("clicking a row checkbox does not also navigate to the thread", () => {
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Renewal" }));
     expect(push).not.toHaveBeenCalled();
   });
 
   it("bulk mark-read calls markThreadReadAction for the selected thread, then clears selection", async () => {
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Renewal" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
-    fireEvent.click(within(bulkBar).getByRole("button", { name: "Mark read" }));
+    fireEvent.click(within(bulkBar).getByRole("button", { name: "Marcar como lida" }));
 
     await vi.waitFor(() => expect(markReadMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
     await vi.waitFor(() => expect(invalidateUnreadCount).toHaveBeenCalled());
@@ -207,17 +207,17 @@ describe("ThreadList", () => {
   it("bulk mark-unread calls markThreadUnreadAction for the selected thread", async () => {
     markUnreadMock.mockResolvedValue({ ok: true, value: { threadId: "t1" } });
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Renewal" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
-    fireEvent.click(within(bulkBar).getByRole("button", { name: "Mark unread" }));
+    fireEvent.click(within(bulkBar).getByRole("button", { name: "Marcar como não lida" }));
 
     await vi.waitFor(() => expect(markUnreadMock).toHaveBeenCalledWith("csrf", { threadId: "t1" }));
   });
 
   it("bulk-archives the selected thread and invalidates the inbox + archive queries", async () => {
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Renewal" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     fireEvent.click(within(bulkBar).getByRole("button", { name: "Arquivar" }));
@@ -231,18 +231,18 @@ describe("ThreadList", () => {
   it("hides selection chrome entirely in the linked folder", () => {
     render(<ThreadList folder="linked" threads={[inboxRow]} />);
     expect(screen.queryByRole("checkbox", { name: "Selecionar todas as conversas" })).toBeNull();
-    expect(screen.queryByRole("checkbox", { name: "Select Renewal" })).toBeNull();
+    expect(screen.queryByRole("checkbox", { name: "Selecionar Renewal" })).toBeNull();
     expect(screen.queryByRole("toolbar", { name: "Ações em massa" })).toBeNull();
   });
 
   it("hides the bulk archive button but keeps mark read/unread for the sent folder", () => {
     render(<ThreadList folder="sent" threads={[inboxRow]} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Renewal" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
     expect(within(bulkBar).queryByRole("button", { name: /archive/i })).toBeNull();
-    expect(within(bulkBar).getByRole("button", { name: "Mark read" })).toBeInTheDocument();
-    expect(within(bulkBar).getByRole("button", { name: "Mark unread" })).toBeInTheDocument();
+    expect(within(bulkBar).getByRole("button", { name: "Marcar como lida" })).toBeInTheDocument();
+    expect(within(bulkBar).getByRole("button", { name: "Marcar como não lida" })).toBeInTheDocument();
   });
 
   it("disables the bulk action buttons while a bulk action is in flight", () => {
@@ -254,15 +254,15 @@ describe("ThreadList", () => {
         }),
     );
     render(<ThreadList folder="inbox" />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "Select Renewal" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar Renewal" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
-    const markReadButton = within(bulkBar).getByRole("button", { name: "Mark read" });
+    const markReadButton = within(bulkBar).getByRole("button", { name: "Marcar como lida" });
     fireEvent.click(markReadButton);
 
     expect(markReadButton).toBeDisabled();
     expect(within(bulkBar).getByRole("button", { name: "Arquivar" })).toBeDisabled();
-    expect(within(bulkBar).getByRole("button", { name: "Mark unread" })).toBeDisabled();
+    expect(within(bulkBar).getByRole("button", { name: "Marcar como não lida" })).toBeDisabled();
 
     resolveMarkRead({ ok: true, value: { threadId: "t1" } });
   });
@@ -285,12 +285,12 @@ describe("ThreadList", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "Selecionar todas as conversas" }));
 
     const bulkBar = screen.getByRole("toolbar", { name: "Ações em massa" });
-    fireEvent.click(within(bulkBar).getByRole("button", { name: "Mark read" }));
+    fireEvent.click(within(bulkBar).getByRole("button", { name: "Marcar como lida" }));
 
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/couldn't|could not|failed/i);
+    expect(alert).toHaveTextContent(/não foi possível/i);
     await vi.waitFor(() => expect(screen.getByText("1 selected")).toBeInTheDocument());
-    expect(screen.getByRole("checkbox", { name: "Select Follow up" })).toBeChecked();
-    expect(screen.getByRole("checkbox", { name: "Select Renewal" })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Selecionar Follow up" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Selecionar Renewal" })).not.toBeChecked();
   });
 });

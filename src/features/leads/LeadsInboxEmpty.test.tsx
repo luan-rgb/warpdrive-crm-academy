@@ -71,8 +71,8 @@ describe("LeadsInbox empty states", () => {
     render(<LeadsInbox />);
 
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "zzz" } });
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "zzz" } });
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     const empty = screen.getByRole("status");
