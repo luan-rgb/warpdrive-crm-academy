@@ -1,8 +1,10 @@
 {
-  "name": "nylas-relay",
+  "name": "mail-oauth-relay",
   "private": true,
   "type": "module",
-  "scripts": { "start": "node server.mjs" },
+  "scripts": {
+    "start": "node server.mjs"
+  },
   "dependencies": {
     "pg": "^8.13.1"
   }
