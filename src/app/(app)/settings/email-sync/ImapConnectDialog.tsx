@@ -154,7 +154,12 @@ export function ImapConnectDialog({
       onConnected();
       return;
     }
-    setError(r?.error.id === "E_MAIL_006" ? S.invalid : S.loginFailed);
+    const failures: Record<string, string> = {
+      E_MAIL_006: S.invalid,
+      E_MAIL_010: S.hostBlocked,
+      E_RATE_001: S.rateLimited,
+    };
+    setError(failures[r?.error.id ?? ""] ?? S.loginFailed);
   }
 
   const presetOptions = [

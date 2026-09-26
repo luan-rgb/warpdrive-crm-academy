@@ -137,6 +137,8 @@ export const ERROR_IDS = {
   MAIL_RELAY_UNAVAILABLE: "E_MAIL_007", // mail-oauth-relay refused or could not be reached when starting a Gmail/Outlook connect
   MAIL_NYLAS_RETIRED: "E_MAIL_008", // mailbox was connected through the retired Nylas integration and must be reconnected (set by migration 0084)
   MAIL_IMAP_INPUT_INVALID: "E_MAIL_006", // IMAP/SMTP connect form input failed Zod validation
+  RATE_LIMITED: "E_RATE_001", // a signed-in user or client exceeded a per-key allowance (src/constants/rateLimits.ts)
+  MAIL_HOST_BLOCKED: "E_MAIL_010", // IMAP/SMTP host resolves to an internal address, does not resolve, or uses a non-mail port
   MAIL_RELAY_CLAIM_REFUSED: "E_MAIL_009", // relay refused a mailbox claim: wrong user or tenant, expired, or already claimed ticket
   MAIL_IMAP_VERIFY_FAILED: "E_MAIL_005", // IMAP/SMTP credential check failed while connecting a mailbox (context.stage names the side)
   // OAUTH

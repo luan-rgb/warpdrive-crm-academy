@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { isPublicAddress, runWebhook } from "./webhookRunner";
+import { isPublicAddress } from "@/lib/net/publicAddress";
+import { runWebhook } from "./webhookRunner";
 
 const sig = () => new AbortController().signal;
 const DEAL = { id: "d1", ownerId: "u1" };

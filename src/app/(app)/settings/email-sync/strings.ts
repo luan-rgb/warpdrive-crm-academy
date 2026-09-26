@@ -70,5 +70,8 @@ export const EMAIL_SYNC_STRINGS = {
     loginFailed:
       "Não conseguimos entrar no servidor. Confira servidor, porta, usuário e senha. Muitos provedores exigem uma senha de app.",
     invalid: "Preencha todos os campos corretamente.",
+    hostBlocked:
+      "Esse servidor ou porta não é permitido. Use o endereço público do seu provedor e uma porta de e-mail (IMAP 993 ou 143, SMTP 465, 587, 25 ou 2525).",
+    rateLimited: "Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.",
   },
 } as const;

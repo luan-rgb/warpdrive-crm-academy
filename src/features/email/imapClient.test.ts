@@ -77,7 +77,7 @@ afterAll(async () => {
 
 describe("createImapClient against a real IMAP/SMTP server", () => {
   it("lists recent mail and returns it in the Gmail shape the sync pipeline reads", async () => {
-    const client = createImapClient(cfg, { allowInsecure: true });
+    const client = createImapClient(cfg, { allowInsecure: true, allowPrivateHosts: true });
     try {
       const list = await client.listMessages({ signal: signal() });
       expect(list.ok).toBe(true);
@@ -108,13 +108,13 @@ describe("createImapClient against a real IMAP/SMTP server", () => {
   });
 
   it("a fresh client (as every server action builds) still finds a message by its id", async () => {
-    const lister = createImapClient(cfg, { allowInsecure: true });
+    const lister = createImapClient(cfg, { allowInsecure: true, allowPrivateHosts: true });
     const list = await lister.listMessages({ signal: signal() });
     await lister.close();
     const id = list.ok ? list.value.messages[0]?.id : undefined;
     expect(id).toBeDefined();
 
-    const fresh = createImapClient(cfg, { allowInsecure: true });
+    const fresh = createImapClient(cfg, { allowInsecure: true, allowPrivateHosts: true });
     try {
       const msg = await fresh.getMessage({ id: id ?? "", signal: signal() });
       expect(msg.ok).toBe(true);
@@ -124,7 +124,7 @@ describe("createImapClient against a real IMAP/SMTP server", () => {
   });
 
   it("an unknown message id is reported as gone (404), not as a transient failure", async () => {
-    const client = createImapClient(cfg, { allowInsecure: true });
+    const client = createImapClient(cfg, { allowInsecure: true, allowPrivateHosts: true });
     try {
       const msg = await client.getMessage({
         id: `mid:${Buffer.from("<nope@x>").toString("base64url")}`,
@@ -138,7 +138,7 @@ describe("createImapClient against a real IMAP/SMTP server", () => {
   });
 
   it("sends a reply over SMTP, files it in Sent, and keeps it in the same conversation", async () => {
-    const client = createImapClient(cfg, { allowInsecure: true });
+    const client = createImapClient(cfg, { allowInsecure: true, allowPrivateHosts: true });
     try {
       const mime = buildMime({
         from: USER,
@@ -190,7 +190,7 @@ describe("createImapClient against a real IMAP/SMTP server", () => {
 
   it("trashThread moves the whole conversation to Trash", async () => {
     await deliverInbound("<t1@cliente.com.br>", "Para apagar");
-    const client = createImapClient(cfg, { allowInsecure: true });
+    const client = createImapClient(cfg, { allowInsecure: true, allowPrivateHosts: true });
     try {
       const list = await client.listMessages({ signal: signal() });
       const target = list.ok
@@ -213,18 +213,43 @@ describe("createImapClient against a real IMAP/SMTP server", () => {
 
 describe("verifyImapSmtp", () => {
   it("accepts working credentials", async () => {
-    const r = await verifyImapSmtp(cfg, signal(), { allowInsecure: true });
+    const r = await verifyImapSmtp(cfg, signal(), { allowInsecure: true, allowPrivateHosts: true });
     expect(r.ok).toBe(true);
   });
 
   it("reports which side failed", async () => {
     const r = await verifyImapSmtp({ ...cfg, smtp: { ...cfg.smtp, port: 1 } }, signal(), {
       allowInsecure: true,
+      allowPrivateHosts: true,
     });
     expect(r.ok).toBe(false);
     if (!r.ok) {
       expect(r.error.id).toBe("E_MAIL_005");
       expect(r.error.context?.stage).toBe("smtp");
     }
+  });
+});
+
+describe("internal hosts and ports", () => {
+  const base = {
+    username: "u@example.com",
+    password: "p",
+    imap: { host: "127.0.0.1", port: 993, secure: true },
+    smtp: { host: "smtp.example.com", port: 465, secure: true },
+  };
+
+  it("never connects to an internal address, even if it listens on a mail port", async () => {
+    const r = await verifyImapSmtp(base, signal());
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.id).toBe("E_MAIL_010");
+  });
+
+  it("only allows mail ports, so the form cannot probe other services", async () => {
+    const r = await verifyImapSmtp(
+      { ...base, imap: { host: "93.184.216.34", port: 5432, secure: true } },
+      signal(),
+    );
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.id).toBe("E_MAIL_010");
   });
 });

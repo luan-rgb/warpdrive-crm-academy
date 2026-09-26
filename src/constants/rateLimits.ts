@@ -31,6 +31,12 @@ export const RATE_LIMITS = {
   // and prefetch images for all of them. Exceeding this does not fail the request, it only
   // skips the recording (see the tracking routes), so a high ceiling costs nothing.
   emailTracking: { limit: 240, windowMs: MINUTE },
+  // Per signed-in user, not per IP. Each attempt logs in to two remote servers with the given
+  // credentials; a person fixing a typo needs a few tries, a credential-stuffing script needs many.
+  imapConnect: { limit: 10, windowMs: HOUR },
+  // Per OAuth access token holder (MCP client). A busy assistant session makes a few calls a
+  // second at most; the ceiling stops a runaway loop from hammering the database.
+  mcp: { limit: 300, windowMs: MINUTE },
 } as const;
 
 export type RateLimitName = keyof typeof RATE_LIMITS;

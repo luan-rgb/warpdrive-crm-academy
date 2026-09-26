@@ -1,7 +1,9 @@
+import { lookup as dnsLookup } from "node:dns/promises";
 import { ImapFlow } from "imapflow";
 import { simpleParser } from "mailparser";
 import { createTransport } from "nodemailer";
 import { AppError } from "@/constants/errorIds";
+import { resolvePublicHost } from "@/lib/net/publicAddress";
 import { err, ok, type Result } from "@/types/result";
 import type { GmailClient } from "./gmailClient";
 import type { MessageList } from "./gmailSchemas";
@@ -33,6 +35,30 @@ export interface ImapClientOptions {
   // Test-only: GreenMail speaks neither TLS nor STARTTLS. Production always requires one of them,
   // so a password is never sent in clear text.
   allowInsecure?: boolean;
+  // Test-only: GreenMail runs on a private Docker address and a non-standard port.
+  allowPrivateHosts?: boolean;
+}
+
+// The only ports a mailbox may use. Anything else (5432, 9000, 3000...) is another service on the
+// shared Docker network, and the connect form would become a port scanner.
+const MAIL_PORTS = { imap: new Set([143, 993]), smtp: new Set([25, 465, 587, 2525]) };
+
+// Resolve the configured host once, refuse internal addresses and non-mail ports, and return the
+// checked IP to connect to (TLS still validates the certificate against the original host name).
+async function safeEndpoint(
+  side: "imap" | "smtp",
+  endpoint: { host: string; port: number },
+  opts: ImapClientOptions,
+): Promise<Result<string, AppError>> {
+  if (opts.allowPrivateHosts === true) return ok(endpoint.host);
+  if (!MAIL_PORTS[side].has(endpoint.port)) {
+    return err(
+      new AppError("E_MAIL_010", "port is not a mail port", { side, port: endpoint.port }),
+    );
+  }
+  const resolved = await resolvePublicHost(endpoint.host, (h) => dnsLookup(h, { all: true }));
+  if (!resolved.ok) return err(new AppError("E_MAIL_010", resolved.error.message, { side }));
+  return resolved;
 }
 
 export interface ImapMailClient extends GmailClient {
@@ -53,9 +79,10 @@ function describe(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
 }
 
-function openImap(cfg: ImapConfig, opts: ImapClientOptions): ImapFlow {
+function openImap(cfg: ImapConfig, opts: ImapClientOptions, address: string): ImapFlow {
   return new ImapFlow({
-    host: cfg.imap.host,
+    host: address,
+    servername: cfg.imap.host,
     port: cfg.imap.port,
     secure: cfg.imap.secure,
     doSTARTTLS: cfg.imap.secure || opts.allowInsecure === true ? undefined : true,
@@ -68,9 +95,10 @@ function openImap(cfg: ImapConfig, opts: ImapClientOptions): ImapFlow {
   });
 }
 
-function smtpTransport(cfg: ImapConfig, opts: ImapClientOptions) {
+function smtpTransport(cfg: ImapConfig, opts: ImapClientOptions, address: string) {
   return createTransport({
-    host: cfg.smtp.host,
+    host: address,
+    tls: { servername: cfg.smtp.host },
     port: cfg.smtp.port,
     secure: cfg.smtp.secure,
     requireTLS: !cfg.smtp.secure && opts.allowInsecure !== true,
@@ -110,7 +138,9 @@ export function createImapClient(cfg: ImapConfig, opts: ImapClientOptions = {}):
     if (idleTimer !== null) clearTimeout(idleTimer);
     try {
       session ??= (async () => {
-        const c = openImap(cfg, opts);
+        const address = await safeEndpoint("imap", cfg.imap, opts);
+        if (!address.ok) throw address.error;
+        const c = openImap(cfg, opts, address.value);
         await c.connect();
         return c;
       })();
@@ -343,8 +373,10 @@ export function createImapClient(cfg: ImapConfig, opts: ImapClientOptions = {}):
           .map((v) => v.address)
           .filter((v): v is string => typeof v === "string");
       const outgoing = stripBccHeader(mime);
+      const smtpAddress = await safeEndpoint("smtp", cfg.smtp, opts);
+      if (!smtpAddress.ok) return smtpAddress;
       try {
-        await smtpTransport(cfg, opts).sendMail({
+        await smtpTransport(cfg, opts, smtpAddress.value).sendMail({
           envelope: {
             from: addrs(mail.from)[0] ?? cfg.username,
             to: [...addrs(mail.to), ...addrs(mail.cc), ...addrs(mail.bcc)],
@@ -406,7 +438,12 @@ export async function verifyImapSmtp(
   opts: ImapClientOptions = {},
 ): Promise<Result<void, AppError>> {
   signal.throwIfAborted();
-  const imap = openImap(cfg, opts);
+  const imapAddress = await safeEndpoint("imap", cfg.imap, opts);
+  if (!imapAddress.ok) return imapAddress;
+  const smtpAddress = await safeEndpoint("smtp", cfg.smtp, opts);
+  if (!smtpAddress.ok) return smtpAddress;
+  signal.throwIfAborted();
+  const imap = openImap(cfg, opts, imapAddress.value);
   try {
     await imap.connect();
     await imap.logout();
@@ -418,7 +455,7 @@ export async function verifyImapSmtp(
     );
   }
   signal.throwIfAborted();
-  const smtp = smtpTransport(cfg, opts);
+  const smtp = smtpTransport(cfg, opts, smtpAddress.value);
   try {
     await smtp.verify();
   } catch (e) {

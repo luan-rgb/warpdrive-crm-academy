@@ -226,4 +226,16 @@ describe("IMAP/SMTP dialog", () => {
     expect(await screen.findByText(/Não conseguimos entrar/)).toBeInTheDocument();
     expect(refresh).not.toHaveBeenCalled();
   });
+  it("explains a blocked server (internal host or non-mail port) instead of a login failure", async () => {
+    connectImapAction.mockResolvedValue({ ok: false, error: { id: "E_MAIL_010" } });
+    openDialog();
+    fireEvent.change(await screen.findByLabelText("E-mail"), { target: { value: "a@b.com" } });
+    fireEvent.change(screen.getByLabelText("Senha"), { target: { value: "x" } });
+    fireEvent.change(screen.getByLabelText("Servidor IMAP"), {
+      target: { value: "shared-postgres" },
+    });
+    fireEvent.change(screen.getByLabelText("Servidor SMTP"), { target: { value: "smtp.b.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Testar e conectar" }));
+    expect(await screen.findByText(/servidor ou porta não é permitido/)).toBeInTheDocument();
+  });
 });

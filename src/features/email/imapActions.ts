@@ -3,6 +3,7 @@
 import { AppError } from "@/constants/errorIds";
 import { db } from "@/db/client";
 import { guardCsrf } from "@/features/identity/actions/shared";
+import { checkRateLimitFor } from "@/server/rateLimitGuard";
 import { createContext } from "@/server/trpc/context";
 import { type ActionResult, clientErr, toClientResult } from "@/types/actionResult";
 import { verifyImapSmtp } from "./imapClient";
@@ -21,6 +22,9 @@ export async function connectImapAction(
 
   const ctx = await createContext();
   if (ctx.actor === null) return clientErr(new AppError("E_PERM_001", "unauthenticated", {}));
+  if (!checkRateLimitFor("imapConnect", ctx.actor.id).allowed) {
+    return clientErr(new AppError("E_RATE_001", "too many imap connect attempts", {}));
+  }
 
   return toClientResult(
     await connectImapMailbox(db, {
