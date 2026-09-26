@@ -113,10 +113,11 @@ export const SETTINGS_STRINGS = {
     "Gerencie padrões do workspace, catálogos de atividades, motivos de perda e etiquetas.",
   emailSync: "Sincronização de e-mail",
   connectedApps: "Apps conectados",
-  connectedAppsDescription: "Revise e revogue apps que podem acessar o Warpdrive como sua conta.",
+  connectedAppsDescription:
+    "Integrações ativas neste CRM e apps autorizados a acessar o Warpdrive como sua conta.",
   connectedAppsList: "Apps autorizados",
   connectedAppsListDescription: "Cada app usa suas permissões atuais no CRM.",
-  connectedAppsEmpty: "Nenhum app conectado ainda.",
+  connectedAppsEmpty: "Nenhum app autorizado ainda. Conecte o Claude usando o endereço MCP acima.",
   connectedAppsRevoke: "Revogar",
   connectedAppsRevoking: "Revogando...",
   connectedAppsRevokeError: "Não foi possível revogar esta conexão. Tente novamente.",
