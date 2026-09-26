@@ -40,6 +40,7 @@ function makeDeps(over: Partial<Deps>): Deps {
     onSent: vi.fn(),
     draftIdRef: { current: undefined },
     inFlightRef: { current: null },
+    pendingSendKeyRef: { current: undefined },
     ...over,
   };
 }

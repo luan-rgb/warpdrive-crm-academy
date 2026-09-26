@@ -11,13 +11,13 @@ const FIELDS = dealFilterFields({
 describe("describeRows", () => {
   it("names a text condition with the field label and the operator label", () => {
     expect(describeRows([{ field: "title", op: "contains", value: "Acme" }], FIELDS)).toBe(
-      "Title contains Acme",
+      "Título contém Acme",
     );
   });
 
   it("resolves an owner id to the owner's name", () => {
     expect(describeRows([{ field: "ownerId", op: "eq", value: "u1" }], FIELDS)).toBe(
-      "Owner is Ada King",
+      "Responsável é Ada King",
     );
   });
 
@@ -30,7 +30,7 @@ describe("describeRows", () => {
         ],
         FIELDS,
       ),
-    ).toBe("Stage is Qualified and Label is not Hot");
+    ).toBe("Etapa é Qualified e Etiqueta não é Hot");
   });
 
   it("skips rows with no value and returns an empty string when nothing is set", () => {
@@ -39,7 +39,7 @@ describe("describeRows", () => {
 
   it("renders a valueless condition with no trailing value", () => {
     expect(describeRows([{ field: "value", op: "isEmpty", value: "" }], FIELDS)).toBe(
-      "Value is empty",
+      "Valor está vazio",
     );
     expect(
       describeRows(
@@ -49,13 +49,13 @@ describe("describeRows", () => {
         ],
         FIELDS,
       ),
-    ).toBe("Title is not empty and Value greater than 60000");
+    ).toBe("Título não está vazio e Valor maior que 60000");
   });
 
   // "Label is Hot,Cold" reads as one label named "Hot,Cold"; the condition means either one.
   it("reads a multi-label condition as a list of alternatives", () => {
     expect(describeRows([{ field: "labels", op: "eq", value: ["Hot", "Cold"] }], FIELDS)).toBe(
-      "Label is Hot or Cold",
+      "Etiqueta é Hot ou Cold",
     );
   });
 
@@ -69,7 +69,7 @@ describe("describeRows", () => {
         FIELDS,
         "or",
       ),
-    ).toBe("Title contains Acme or Value greater than 60000");
+    ).toBe("Título contém Acme ou Valor maior que 60000");
   });
 
   it("skips a multi-value row with nothing picked", () => {
@@ -77,6 +77,8 @@ describe("describeRows", () => {
   });
 
   it("falls back to the raw value when the id matches no option", () => {
-    expect(describeRows([{ field: "ownerId", op: "eq", value: "u9" }], FIELDS)).toBe("Owner is u9");
+    expect(describeRows([{ field: "ownerId", op: "eq", value: "u9" }], FIELDS)).toBe(
+      "Responsável é u9",
+    );
   });
 });

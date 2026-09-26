@@ -27,7 +27,7 @@ describe("sendGmail (system-send primitive)", () => {
     expect(mime).toContain("To: you@y.com");
     // Domain comes from env.GOOGLE_WORKSPACE_DOMAIN (example.com in the test env, per
     // vitest.setup.ts); deriveMessageId is <accountId.idempotencyKey@domain>.
-    expect(mime).toMatch(/Message-ID: <acc-1\..*@example\.com>/);
+    expect(mime).toMatch(/Message-ID: <acc-1\..*@gunsnation\.com>/);
   });
 
   it("threads the reply when threadId is supplied", async () => {

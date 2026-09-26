@@ -40,7 +40,7 @@ describe("resolveNewOrgId", () => {
     createOrgAction.mockResolvedValue({ ok: false, error: { id: "E_PERM_001" } });
     const state = { ...initialEntityCreateState(), orgMode: "new" as const, newOrgName: "Acme" };
     expect(await resolveNewOrgId(state, "csrf")).toEqual({
-      error: "Could not create organization (E_PERM_001)",
+      error: "Não foi possível criar a organização (E_PERM_001)",
     });
   });
 });

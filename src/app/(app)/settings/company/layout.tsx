@@ -21,6 +21,7 @@ export default function CompanyLayout({ children }: { children: ReactNode }): Re
   return (
     <SettingsPage>
       <SettingsHeading
+        help="settings.company"
         title={STRINGS.settings.companySettings}
         description={STRINGS.settings.companySettingsDescription}
       />

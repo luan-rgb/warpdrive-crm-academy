@@ -1,4 +1,5 @@
 import type { Client, Notification } from "pg";
+import { safeErrorSummary } from "@/lib/safeError";
 import type { NotifyEvent } from "./payload";
 import { parseNotifyPayload } from "./payload";
 
@@ -66,7 +67,10 @@ export function createRelay(client: Client): Relay {
       try {
         await client.query(`UNLISTEN ${quoteIdent(channel)}`);
       } catch (e) {
-        console.warn(`ws relay: UNLISTEN ${channel} failed (client likely closing)`, e);
+        console.warn(
+          `ws relay: UNLISTEN ${channel} failed (client likely closing)`,
+          safeErrorSummary(e),
+        );
       }
     }
   }

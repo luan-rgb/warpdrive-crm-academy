@@ -12,7 +12,7 @@ export const metadata = { title: STRINGS.dashboard.title };
 export default async function DashboardPage(): Promise<React.ReactNode> {
   const ctx = await createContext();
   if (ctx.actor === null) {
-    return <main>Unauthorized</main>;
+    return <main>Acesso não autorizado</main>;
   }
 
   const canViewOthers = can(ctx.actor, "stats.viewOthers");

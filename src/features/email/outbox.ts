@@ -6,7 +6,13 @@ import type { Db } from "@/db/client";
 import type { StorageClient } from "@/features/files/storage";
 import { err, ok, type Result } from "@/types/result";
 import type { GmailClient } from "./gmailClient";
-import { buildMime, deriveMessageId, type MimeAttachment, toRawBase64 } from "./mime";
+import {
+  buildMime,
+  deriveMessageId,
+  type MimeAttachment,
+  messageIdDomain,
+  toRawBase64,
+} from "./mime";
 import { claim, loadAttempt, loadSendInputs, type SendPayload, stamp } from "./outboxClaim";
 import { markSent, reconcile, type SendOutcome } from "./outboxReconcile";
 
@@ -33,10 +39,13 @@ export async function enqueueSend(
     scheduledAt?: Date | null;
   },
 ): Promise<Result<{ attemptId: string; replay: boolean }, AppError>> {
+  const acct = (
+    await db.execute(sql`SELECT email_address FROM email_accounts WHERE id=${args.accountId}`)
+  ).rows[0] as { email_address: string } | undefined;
   const header = deriveMessageId({
     accountId: args.accountId,
     idempotencyKey: args.idempotencyKey,
-    domain: env.GOOGLE_WORKSPACE_DOMAIN,
+    domain: messageIdDomain(acct?.email_address ?? "", env.GOOGLE_WORKSPACE_DOMAIN),
   });
   await db.execute(sql`
     INSERT INTO email_send_attempts (idempotency_key, message_id_header, account_id, thread_id, payload, status, scheduled_at)

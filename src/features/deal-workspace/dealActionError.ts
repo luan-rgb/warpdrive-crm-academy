@@ -19,6 +19,10 @@ const CONTENT: Record<string, DealActionErrorContent> = {
     title: "Você não tem permissão",
     body: "Somente o dono do negócio (ou um admin) pode fazer essa alteração. Peça ao dono para atualizar ou transferir o negócio.",
   },
+  [ERROR_IDS.NOTE_NOT_AUTHOR]: {
+    title: "Você não tem permissão",
+    body: "Somente quem escreveu a nota (ou um admin) pode editá-la ou excluí-la.",
+  },
   [ERROR_IDS.DEAL_PRECONDITION]: {
     title: "Este negócio mudou em outro lugar",
     body: "Este negócio mudou enquanto você editava. Recarregamos os dados, tente sua alteração novamente.",

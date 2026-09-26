@@ -14,7 +14,7 @@ export function ProgressBar({
       <Progress
         value={pct}
         label="Progresso da importação"
-        aria-valuetext={`${processed} of ${total} (${pct}%)`}
+        aria-valuetext={`${processed} de ${total} (${pct}%)`}
       />
       <p className="text-xs tabular-nums text-muted-foreground">
         {processed} / {total} ({pct}%)

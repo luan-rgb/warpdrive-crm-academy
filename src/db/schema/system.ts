@@ -34,6 +34,11 @@ export const auditTargetEnum = pgEnum("audit_target", [
   "deal",
   "person",
   "organization",
+  // Security events (src/features/identity/securityAudit.ts).
+  "session",
+  "oauth_client",
+  "mailbox",
+  "export",
 ]);
 
 // Singleton: exactly one row, guarded by CHECK (id = true).
@@ -41,7 +46,7 @@ export const settings = pgTable(
   "settings",
   {
     id: boolean("id").primaryKey().default(true),
-    baseCurrency: text("base_currency").notNull().default("USD"),
+    baseCurrency: text("base_currency").notNull().default("BRL"),
     companyName: text("company_name"),
     defaultPipelineId: uuid("default_pipeline_id"),
     defaultVisibilityLevels: jsonb("default_visibility_levels")

@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import type { EMAIL_ACCOUNT_STATUS } from "@/constants/email";
+import type { EMAIL_ACCOUNT_STATUS, EmailProvider } from "@/constants/email";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
 import type { Db } from "@/db/client";
 import { err, ok, type Result } from "@/types/result";
@@ -28,6 +28,7 @@ export type MailboxStatus = (typeof EMAIL_ACCOUNT_STATUS)[number];
 export interface ActorMailboxStatus {
   id: string;
   emailAddress: string;
+  provider: EmailProvider;
   status: MailboxStatus;
   lastSyncAt: Date | null;
   lastErrorId: string | null;
@@ -45,13 +46,14 @@ export async function getActorMailboxStatus(
   signal.throwIfAborted();
   const row = (
     await db.execute(sql`
-      SELECT id, email_address, status, last_sync_at, last_error_id
+      SELECT id, email_address, provider, status, last_sync_at, last_error_id
       FROM email_accounts WHERE user_id=${actorId}
     `)
   ).rows[0] as
     | {
         id: string;
         email_address: string;
+        provider: EmailProvider;
         status: MailboxStatus;
         last_sync_at: string | Date | null;
         last_error_id: string | null;
@@ -64,6 +66,7 @@ export async function getActorMailboxStatus(
   return {
     id: row.id,
     emailAddress: row.email_address,
+    provider: row.provider,
     status: row.status,
     lastSyncAt,
     lastErrorId: row.last_error_id,

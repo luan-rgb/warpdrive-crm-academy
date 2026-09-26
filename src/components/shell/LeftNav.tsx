@@ -183,7 +183,7 @@ export function LeftNav({ initialExpanded = false }: LeftNavProps = {}): React.R
         )}
       >
         <Chevron expanded={expanded} />
-        {expanded && <span className="text-sm font-medium">Collapse</span>}
+        {expanded && <span className="text-sm font-medium">Recolher</span>}
       </button>
     </nav>
   );

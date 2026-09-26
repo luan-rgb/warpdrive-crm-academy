@@ -26,13 +26,15 @@ export { sendGmail } from "./sendSystem";
 export const sendEmailInput = z.object({
   accountId: z.string().uuid(),
   idempotencyKey: z.string().uuid(),
-  to: z.array(z.string().email()).min(1),
-  cc: z.array(z.string().email()).optional(),
-  bcc: z.array(z.string().email()).optional(),
-  subject: z.string(),
-  bodyHtml: z.string(),
-  threadId: z.string().optional(),
-  inReplyToGmailMessageId: z.string().optional(),
+  // Ceilings far above real use (Gmail caps a message at 100 recipients per field in practice and
+  // 25 MB overall); they only stop a scripted client from making the server build absurd MIME.
+  to: z.array(z.string().email()).min(1).max(100),
+  cc: z.array(z.string().email()).max(100).optional(),
+  bcc: z.array(z.string().email()).max(100).optional(),
+  subject: z.string().max(998),
+  bodyHtml: z.string().max(5_000_000),
+  threadId: z.string().max(256).optional(),
+  inReplyToGmailMessageId: z.string().max(256).optional(),
   // Back-compat: trackingEnabled maps to both trackOpens and trackLinks.
   trackingEnabled: z.boolean().optional(),
   trackOpens: z.boolean().optional(),

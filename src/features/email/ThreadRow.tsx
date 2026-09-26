@@ -108,7 +108,7 @@ export function ThreadRow({
       {canSelectInFolder(folder) && (
         <div className="flex items-center px-2 py-2.5">
           <Checkbox
-            label={`Select ${subject}`}
+            label={`Selecionar ${subject}`}
             checked={selected}
             onCheckedChange={() => onToggleSelected(thread.id)}
           />

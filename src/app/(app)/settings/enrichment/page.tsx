@@ -50,7 +50,7 @@ export default async function EnrichmentSettingsPage(): Promise<ReactNode> {
 
   return (
     <SettingsPage>
-      <SettingsHeading title={S.title} description={S.description} />
+      <SettingsHeading help="settings.enrichment" title={S.title} description={S.description} />
       <EnrichmentClient
         providers={config.providers.map((p) => ({
           provider: p.provider,

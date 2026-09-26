@@ -4,11 +4,9 @@ import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import {
-  connectGmailStart,
-  connectNylasStart,
-  disconnectMailboxAction,
-} from "@/features/email/actions";
+import type { EmailProvider } from "@/constants/email";
+import { connectMailboxStart, disconnectMailboxAction } from "@/features/email/actions";
+import { formatDateTimePtBr } from "@/lib/formatDate";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import {
   SettingsCard,
@@ -16,32 +14,87 @@ import {
   SettingsCardFooter,
   SettingsCardHeader,
 } from "../SettingsSurface";
+import { ConnectOptions } from "./ConnectOptions";
 import { mailboxDisplayHealth, mailboxDotClass, mailboxStatusLabel } from "./statusLabel";
 import { EMAIL_SYNC_STRINGS } from "./strings";
 
 const S = EMAIL_SYNC_STRINGS;
 
+// Set when a mailbox connected through the retired Nylas integration was migrated (0084 migration).
+const NYLAS_RETIRED_ERROR = "E_MAIL_008";
+
 export interface MailboxView {
   id: string;
   emailAddress: string;
+  provider: EmailProvider;
   status: "connected" | "disconnected" | "error";
   lastSyncAtIso: string | null;
   lastErrorId: string | null;
 }
 
+// What the student sees after the relay sends them back (?connected= / ?connect_error=).
+export type ConnectNotice = { kind: "connected" | "error"; code: string } | null;
+
 function formatSync(iso: string | null): string {
   if (iso === null) return S.neverSynced;
-  return S.lastSynced(new Date(iso).toLocaleString());
+  return S.lastSynced(formatDateTimePtBr(new Date(iso)));
+}
+
+function NoticeBanner({ notice }: { notice: ConnectNotice }): React.ReactNode {
+  if (notice === null) return null;
+  if (notice.kind === "connected") {
+    return (
+      <p className="rounded-md border border-success/40 bg-success/10 p-2 text-sm">
+        {S.connectedNotice}
+      </p>
+    );
+  }
+  return (
+    <p className="rounded-md border border-destructive/40 bg-destructive/10 p-2 text-sm">
+      {S.errorNotices[notice.code] ?? S.genericErrorNotice}
+    </p>
+  );
+}
+
+function MailboxDetails({
+  mailbox,
+  health,
+}: {
+  mailbox: MailboxView;
+  health: ReturnType<typeof mailboxDisplayHealth>;
+}): React.ReactNode {
+  return (
+    <>
+      <p className="text-sm text-muted-foreground">
+        {S.connectedAs(mailbox.emailAddress, S.providerLabels[mailbox.provider])}
+      </p>
+      <p className="text-sm text-muted-foreground">{formatSync(mailbox.lastSyncAtIso)}</p>
+      {health === "stalled" ? (
+        <p className="rounded-md border border-warning/40 bg-warning/10 p-2 text-sm">
+          {S.stalledHint}
+        </p>
+      ) : null}
+      {mailbox.lastErrorId === NYLAS_RETIRED_ERROR ? (
+        <p className="rounded-md border border-warning/40 bg-warning/10 p-2 text-sm">
+          {S.nylasRetired}
+        </p>
+      ) : mailbox.lastErrorId !== null ? (
+        <p className="text-sm text-red-600">
+          {S.lastErrorLabel}: {mailbox.lastErrorId}
+        </p>
+      ) : null}
+    </>
+  );
 }
 
 export function EmailSyncClient({
   mailbox,
-  googleConfigured,
-  nylasConfigured,
+  oauthProviders,
+  notice,
 }: {
   mailbox: MailboxView | null;
-  googleConfigured: boolean;
-  nylasConfigured: boolean;
+  oauthProviders: { gmail: boolean; outlook: boolean };
+  notice: ConnectNotice;
 }): React.ReactNode {
   const router = useRouter();
   const [now, setNow] = useState<Date | null>(null);
@@ -52,37 +105,19 @@ export function EmailSyncClient({
   const connected = mailbox !== null && mailbox.status === "connected";
   const health = mailboxDisplayHealth(mailbox, now);
 
-  // Connect a fresh mailbox or reconnect a disconnected/error one: both mint a consent URL
-  // server-side (which also sets the single-use OAuth state cookie) and hand off to Google.
-  // The OAuth callback rebinds the row, so reconnect reuses the same account, not a duplicate.
-  async function startConnect(): Promise<void> {
+  // Gmail/Outlook: ask the shared relay for a consent URL and hand the browser off to Google or
+  // Microsoft. The student comes back through /api/mail-oauth/complete, which stores the mailbox.
+  // Reconnect is the same flow and reuses the same account row (and its mail history).
+  async function startOAuth(provider: "gmail" | "outlook"): Promise<void> {
     setPending(true);
     setError(null);
-    try {
-      const { url } = await connectGmailStart();
-      window.location.href = url;
-    } catch {
-      // Minting the consent URL failed (dead session or transient error): un-stick the button
-      // and surface a retry hint rather than leaving it disabled on "Connecting..." forever.
-      setPending(false);
-      setError(S.actionError);
+    const r = await connectMailboxStart(provider, readCsrfToken()).catch(() => null);
+    if (r?.ok === true) {
+      window.location.href = r.value.url;
+      return;
     }
-  }
-
-  // Same idea as startConnect, but via Nylas (src/features/email/nylasClient.ts): works for any
-  // student's own Gmail or Outlook, not just accounts in one Google Workspace domain, and needs
-  // no per-tenant setup (see the design doc). The reconnect callback also rebinds by user_id, so
-  // this is safe to offer for reconnect too, not just a first-time connect.
-  async function startConnectNylas(provider: "google" | "microsoft"): Promise<void> {
-    setPending(true);
-    setError(null);
-    try {
-      const { url } = await connectNylasStart(provider);
-      window.location.href = url;
-    } catch {
-      setPending(false);
-      setError(S.actionError);
-    }
+    setPending(false);
+    setError(S.actionError);
   }
 
   async function disconnect(): Promise<void> {
@@ -102,10 +137,12 @@ export function EmailSyncClient({
     <SettingsCard>
       <SettingsCardHeader
         icon={<Mail className="size-4" aria-hidden="true" />}
-        title="Conexão do Gmail"
-        description="Conecte uma caixa de email para sincronizar mensagens e atividades."
+        title={S.cardTitle}
+        description={S.cardDescription}
+        help="email.sync"
       />
-      <SettingsCardBody>
+      <SettingsCardBody className="space-y-2">
+        <NoticeBanner notice={notice} />
         <div className="mb-1 flex items-center gap-2">
           <span
             data-status={mailbox?.status ?? "none"}
@@ -115,99 +152,37 @@ export function EmailSyncClient({
           <span className="text-sm font-medium">{mailboxStatusLabel(mailbox, now)}</span>
         </div>
         {mailbox !== null ? (
-          <>
-            <p className="text-sm text-muted-foreground">{S.connectedAs(mailbox.emailAddress)}</p>
-            <p className="text-sm text-muted-foreground">{formatSync(mailbox.lastSyncAtIso)}</p>
-            {health === "stalled" ? (
-              <p className="rounded-md border border-warning/40 bg-warning/10 p-2 text-sm">
-                {S.stalledHint}
-              </p>
-            ) : null}
-            {mailbox.lastErrorId !== null ? (
-              <p className="text-sm text-red-600">
-                {S.lastErrorLabel}: {mailbox.lastErrorId}
-              </p>
-            ) : null}
-          </>
+          <MailboxDetails mailbox={mailbox} health={health} />
         ) : (
           <p className="text-sm text-muted-foreground">{S.notConnected}</p>
         )}
-      </SettingsCardBody>
-
-      <SettingsCardFooter className="flex-wrap gap-2">
-        {error !== null ? (
-          <span className="mr-auto w-full text-sm text-red-600">{error}</span>
-        ) : null}
-        {connected ? (
-          <Button
-            type="button"
-            variant="outline"
-            disabled={pending}
-            onClick={() => void disconnect()}
-          >
-            {pending ? S.disconnecting : S.disconnect}
-          </Button>
-        ) : (
-          <ConnectButtons
+        {connected ? null : (
+          <ConnectOptions
             pending={pending}
-            hasMailbox={mailbox !== null}
-            googleConfigured={googleConfigured}
-            nylasConfigured={nylasConfigured}
-            onGoogle={() => void startConnect()}
-            onNylas={(provider) => void startConnectNylas(provider)}
+            oauthProviders={oauthProviders}
+            onOAuth={(p) => void startOAuth(p)}
+            onImapConnected={() => router.refresh()}
           />
         )}
-      </SettingsCardFooter>
-    </SettingsCard>
-  );
-}
+      </SettingsCardBody>
 
-// Split out from the main render (kept the component's cognitive complexity under the project's
-// lint budget): which connect buttons show at all depends only on which providers this
-// deployment has configured (nylasConfigured / googleConfigured), never on connection state
-// (the caller only renders this in the not-connected branch).
-function ConnectButtons({
-  pending,
-  hasMailbox,
-  googleConfigured,
-  nylasConfigured,
-  onGoogle,
-  onNylas,
-}: {
-  pending: boolean;
-  hasMailbox: boolean;
-  googleConfigured: boolean;
-  nylasConfigured: boolean;
-  onGoogle: () => void;
-  onNylas: (provider: "google" | "microsoft") => void;
-}): React.ReactNode {
-  return (
-    <>
-      {nylasConfigured && (
-        <>
-          <Button type="button" disabled={pending} onClick={() => onNylas("google")}>
-            {pending ? S.connecting : hasMailbox ? S.reconnect : S.connect}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={pending}
-            onClick={() => onNylas("microsoft")}
-          >
-            {pending ? S.connecting : S.connectOutlook}
-          </Button>
-        </>
-      )}
-      {googleConfigured && (
-        <Button
-          type="button"
-          variant={nylasConfigured ? "outline" : "default"}
-          disabled={pending}
-          onClick={onGoogle}
-        >
-          {pending ? S.connecting : hasMailbox ? S.reconnect : S.connect}
-        </Button>
-      )}
-    </>
+      {error !== null || connected ? (
+        <SettingsCardFooter className="flex-wrap gap-2">
+          {error !== null ? (
+            <span className="mr-auto w-full text-sm text-red-600">{error}</span>
+          ) : null}
+          {connected ? (
+            <Button
+              type="button"
+              variant="outline"
+              disabled={pending}
+              onClick={() => void disconnect()}
+            >
+              {pending ? S.disconnecting : S.disconnect}
+            </Button>
+          ) : null}
+        </SettingsCardFooter>
+      ) : null}
+    </SettingsCard>
   );
 }

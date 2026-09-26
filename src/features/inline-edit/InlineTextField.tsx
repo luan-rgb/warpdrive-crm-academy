@@ -11,6 +11,8 @@ interface InlineTextFieldProps {
   value: string;
   onSave: InlineSaveFn<string>;
   placeholder?: string;
+  // How the value reads at rest (e.g. money as "R$ 25.000"); the editor always gets the raw value.
+  display?: (value: string) => string;
 }
 
 const DEFAULT_PLACEHOLDER = "+ Adicionar";
@@ -24,6 +26,7 @@ export function InlineTextField({
   value,
   onSave,
   placeholder = DEFAULT_PLACEHOLDER,
+  display,
 }: InlineTextFieldProps): React.ReactNode {
   const f = useInlineEditField(value);
   const dirty = f.draft !== value;
@@ -60,7 +63,7 @@ export function InlineTextField({
         label={label}
         editing={f.editing}
         onStartEdit={f.start}
-        value={value === "" ? null : value}
+        value={value === "" ? null : (display?.(value) ?? value)}
         emptyPrompt={placeholder}
       >
         {editor}

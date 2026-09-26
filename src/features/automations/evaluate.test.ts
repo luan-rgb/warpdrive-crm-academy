@@ -1,6 +1,7 @@
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { expect, it } from "vitest";
 import type { Db } from "@/db/client";
+import { deals } from "@/db/schema/deals";
 import { withTestDb } from "@/db/testing";
 import { seedPipelineWithStages, seedUser } from "@/db/testing/factories";
 import { matchAutomationRules } from "./evaluate";
@@ -239,5 +240,49 @@ it("does not match an inactive rule", async () => {
     const matched = await matchAutomationRules(db, "deal_created", null, deal as never, sig());
 
     expect(matched).toHaveLength(0);
+  });
+});
+
+it("skips a rule whose conditions the deal does not meet, and matches once it does", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const { pipeline, stages } = await seedPipelineWithStages(db, ["Open"]);
+    const stage = stages[0];
+    if (stage === undefined) throw new Error("no stage");
+    const ruleId = await seedRule(db, user.id, { trigger: "deal_created" });
+    await db.execute(sql`
+      UPDATE automation_rules
+      SET conditions = ${JSON.stringify([{ field: "value", op: "gt", value: "10000" }])}::jsonb
+      WHERE id = ${ruleId}`);
+    const seeded = await seedDeal(db, user.id, pipeline.id, stage.id);
+    await db.execute(sql`UPDATE deals SET value = 5000 WHERE id = ${seeded.id}`);
+    const [small] = await db.select().from(deals).where(eq(deals.id, seeded.id));
+    if (small === undefined) throw new Error("no deal");
+
+    expect(await matchAutomationRules(db, "deal_created", null, small, sig())).toEqual([]);
+    const matched = await matchAutomationRules(
+      db,
+      "deal_created",
+      null,
+      { ...small, value: "20000.00" },
+      sig(),
+    );
+    expect(matched.map((r) => r.id)).toEqual([ruleId]);
+  });
+});
+
+it("an activity trigger matches any activity event on a deal in scope", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const { pipeline, stages } = await seedPipelineWithStages(db, ["Open"]);
+    const stage = stages[0];
+    if (stage === undefined) throw new Error("no stage");
+    const ruleId = await seedRule(db, user.id, { trigger: "activity_completed" });
+    const seeded = await seedDeal(db, user.id, pipeline.id, stage.id);
+    const [deal] = await db.select().from(deals).where(eq(deals.id, seeded.id));
+    if (deal === undefined) throw new Error("no deal");
+
+    const matched = await matchAutomationRules(db, "activity_completed", deal, deal, sig());
+    expect(matched.map((r) => r.id)).toEqual([ruleId]);
   });
 });

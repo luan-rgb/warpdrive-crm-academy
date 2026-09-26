@@ -47,10 +47,10 @@ RUN NODE_ENV=production \
     GOOGLE_OAUTH_CLIENT_ID=build \
     GOOGLE_OAUTH_CLIENT_SECRET=build \
     GOOGLE_WORKSPACE_DOMAIN=build.example.com \
-    BASE_URL=http://localhost:3000 \
+    BASE_URL=https://localhost:3000 \
     WS_TICKET_SECRET=build_placeholder_ws_ticket_secret_0123456789 \
     WS_PUBLIC_URL=ws://localhost:8080 \
-    MINIO_ENDPOINT=http://localhost:9000 \
+    MINIO_ENDPOINT=https://localhost:9000 \
     MINIO_ACCESS_KEY=build \
     MINIO_SECRET_KEY=build \
     TOKEN_ENCRYPTION_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA= \

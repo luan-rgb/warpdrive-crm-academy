@@ -5,6 +5,7 @@ import { db } from "@/db/client";
 import { guardCsrf } from "@/features/identity/actions/shared";
 import { SIG } from "@/features/identity/actions/sig";
 import { scrubInaccessible } from "@/features/notifications/scrub";
+import { safeErrorSummary } from "@/lib/safeError";
 import { createContext } from "@/server/trpc/context";
 import { updateDeal } from "./dealActions";
 import { notifyOnDealUpdate } from "./notifyHelpers";
@@ -43,7 +44,7 @@ export async function updateDealAction(
         signal: SIG(),
       });
     } catch (err: unknown) {
-      console.warn("updateDealAction: notifyOnDealUpdate failed (deferred)", { err });
+      console.warn("updateDealAction: notifyOnDealUpdate failed (deferred)", safeErrorSummary(err));
     }
   });
 
@@ -56,7 +57,10 @@ export async function updateDealAction(
       entityId: result.value.id,
       signal: SIG(),
     }).catch((err: unknown) => {
-      console.warn("updateDealAction: scrubInaccessible failed (best-effort)", { err });
+      console.warn(
+        "updateDealAction: scrubInaccessible failed (best-effort)",
+        safeErrorSummary(err),
+      );
     });
   }
 

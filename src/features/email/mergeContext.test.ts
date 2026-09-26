@@ -66,7 +66,7 @@ describe("buildMergeContext + applyMergeFields", () => {
       expect(ctx["person.name"]).toBe("Sofia Ramirez");
       expect(ctx["person.first_name"]).toBe("Sofia");
       expect(ctx["deal.title"]).toBe("Acme Expansion");
-      expect(ctx["deal.value"]).toBe("25000");
+      expect(ctx["deal.value"]).toBe("R$\u00a025.000");
       expect(ctx["org.name"]).toBe("Corp Inc");
 
       const subject = applyMergeFields("Proposal for {{person.name}}", ctx);

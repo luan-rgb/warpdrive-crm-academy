@@ -29,13 +29,13 @@ function renderEditor(save = vi.fn(() => Promise.resolve({ ok: true }))) {
 
 it("opens every stored email at once, not just the primary", () => {
   renderEditor();
-  expect(screen.getByLabelText("Email 1")).toHaveValue("pat@ottawa.ca");
-  expect(screen.getByLabelText("Email 2")).toHaveValue("pat@gmail.com");
+  expect(screen.getByLabelText("E-mail 1")).toHaveValue("pat@ottawa.ca");
+  expect(screen.getByLabelText("E-mail 2")).toHaveValue("pat@gmail.com");
 });
 
 it("saves the whole email array when a non-primary address changes", async () => {
   const save = renderEditor();
-  fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "pat@home.ca" } });
+  fireEvent.change(screen.getByLabelText("E-mail 2"), { target: { value: "pat@home.ca" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(save).toHaveBeenCalled());
@@ -65,9 +65,9 @@ it("locks the contact rows while the bulk save is in flight", async () => {
       }),
   );
   renderEditor(save);
-  fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "pat@home.ca" } });
+  fireEvent.change(screen.getByLabelText("E-mail 2"), { target: { value: "pat@home.ca" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
-  await waitFor(() => expect(screen.getByLabelText("Email 2")).toBeDisabled());
+  await waitFor(() => expect(screen.getByLabelText("E-mail 2")).toBeDisabled());
   release();
 });

@@ -1,6 +1,7 @@
 // Custom-field render dispatch: maps each field type to a display string and a UI widget.
 // Adding a new field type forces a case here via assertNever (compile-time exhaustiveness).
 import { DEFAULT_BASE_CURRENCY } from "@/constants/currency";
+import { formatCurrencyExact } from "@/lib/formatCurrency";
 import type { CustomFieldDef } from "@/types/customFields";
 import { assertNever } from "@/types/result";
 
@@ -8,7 +9,7 @@ import { assertNever } from "@/types/result";
 export { CustomFieldDetail, CustomFieldFormControl } from "./render.widgets";
 export type { CustomFieldDef };
 
-const EMPTY = "(empty)";
+const EMPTY = "(vazio)";
 
 function labelFor(def: CustomFieldDef, id: string): string {
   return def.options.find((o) => o.id === id)?.label ?? id;
@@ -17,10 +18,7 @@ function labelFor(def: CustomFieldDef, id: string): string {
 // Callers pass the tenant base currency (settings.base_currency via readBaseCurrency);
 // DEFAULT_BASE_CURRENCY is only the final fallback when a caller has none.
 function formatMoney(n: number, currency = DEFAULT_BASE_CURRENCY): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency,
-  }).format(n);
+  return formatCurrencyExact(n, currency);
 }
 
 // Shared blank-value notion for custom fields (undefined/null/""/empty array), used both to

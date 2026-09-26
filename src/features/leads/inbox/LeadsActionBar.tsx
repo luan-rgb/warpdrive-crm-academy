@@ -1,6 +1,7 @@
 "use client";
 import { Archive, Ellipsis, Inbox } from "lucide-react";
 import type React from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import type { LeadNextActivityBucket } from "../schemas";
 import { AddLeadButton } from "./AddLeadButton";
 import { ColumnMenu } from "./ColumnMenu";
@@ -87,6 +88,7 @@ export function LeadsActionBar(props: LeadsActionBarProps): React.ReactNode {
           <Archive aria-hidden="true" className="h-4 w-4" />
         </ToggleIcon>
       </div>
+      <HelpTooltip topic="lead.inbox" />
 
       <AddLeadButton
         baseCurrency={props.baseCurrency}

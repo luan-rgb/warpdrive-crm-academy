@@ -70,10 +70,10 @@ export function conditionRowIssue(
     const def = fields.find((f) => f.field === r.field);
     if (def === undefined) continue;
     if (def.input.kind === "number" && Number.isNaN(Number(value))) {
-      return `${def.label} needs a number.`;
+      return `${def.label} precisa ser um número.`;
     }
     if (def.input.kind === "date" && Number.isNaN(Date.parse(value))) {
-      return `${def.label} needs a date.`;
+      return `${def.label} precisa ser uma data.`;
     }
   }
   return null;

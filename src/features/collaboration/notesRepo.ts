@@ -109,8 +109,18 @@ export async function togglePin(
   });
 }
 
-// Edit a note body in place. Visibility-gated like togglePin: any actor who can see
-// the parent may edit. (Author-only restriction is an open product question.)
+// Seeing the parent record is enough to read and pin a note, but rewriting or deleting someone
+// else's words is not: only the author or an admin may do that.
+function assertNoteAuthor(actor: AuthUser, note: Note): Result<void, AppError> {
+  if (actor.type === "admin" || note.authorId === actor.id) return ok(undefined);
+  return err(
+    new AppError(ERROR_IDS.NOTE_NOT_AUTHOR, "only the author may change this note", {
+      noteId: note.id,
+    }),
+  );
+}
+
+// Edit a note body in place. Visibility-gated, then author-gated (assertNoteAuthor).
 export async function updateNote(
   db: Db,
   actor: AuthUser,
@@ -137,6 +147,8 @@ export async function updateNote(
       signal,
     );
     if (v.ok === false) return v;
+    const owned = assertNoteAuthor(actor, current);
+    if (!owned.ok) return owned;
 
     const [row] = await tx
       .update(notes)
@@ -179,6 +191,8 @@ export async function softDeleteNote(
       signal,
     );
     if (v.ok === false) return v;
+    const owned = assertNoteAuthor(actor, current);
+    if (!owned.ok) return owned;
 
     const [row] = await tx
       .update(notes)

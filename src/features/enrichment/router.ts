@@ -39,7 +39,7 @@ export const enrichmentRouter = router({
   // configuration, not something a regular user has any business reading.
   config: protectedProcedure.query(async ({ ctx }): Promise<EnrichmentConfig> => {
     if (ctx.actor.type !== "admin") {
-      throw new TRPCError({ code: "FORBIDDEN", message: "admin required" });
+      throw new TRPCError({ code: "FORBIDDEN", message: "Apenas administradores" });
     }
     const signal = SIG();
     return {

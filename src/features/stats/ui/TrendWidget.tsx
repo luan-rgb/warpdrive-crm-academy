@@ -46,6 +46,7 @@ export function WonTrendWidget({
   return (
     <Panel
       title={STRINGS.dashboard.widgetWonTrend}
+      help="dashboard.wonTrend"
       isEmpty={!hasWins}
       emptyText={STRINGS.dashboard.emptyWonTrend}
     >

@@ -6,7 +6,7 @@ import type { Result } from "@/types/result";
 // Shared by all three bulk actions: no per-cause copy since the user just needs to know some of the
 // selected threads need retrying, not why (each action already has its own specific server-side
 // AppError id for anyone digging into logs).
-export const BULK_ACTION_ERROR = "Couldn't update some threads. Please try again.";
+export const BULK_ACTION_ERROR = "Não foi possível atualizar algumas conversas. Tente novamente.";
 
 // Runs `action` for every id in parallel and returns the ids whose action failed, so the caller can
 // keep exactly those selected instead of silently dropping the partial failure (mirrors PeopleList's

@@ -193,20 +193,12 @@ export async function syncMailbox(
   return ok({ applied });
 }
 
-// Nylas-connected accounts have no historyId-style cursor to poll (see
-// docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md: Nylas is push/webhook
-// oriented, Gmail's pull-based historyList has no equivalent). Rather than build a separate
-// webhook receiver + cross-tenant delivery mechanism, this just re-fetches the account's most
-// recent messages on the SAME polling cadence syncMailbox already runs on, and feeds all of
-// their ids through applyMessageIds every tick: that function is already idempotent (ON
-// CONFLICT DO NOTHING on both unique keys, ready for "a redelivered list is a no-op" by design),
-// so re-applying an already-stored message costs a no-op upsert, not a duplicate. Simpler and
-// lower-risk than teaching a new push-delivery path to reuse this same tested logic from
-// outside this process; latency is bounded by the poll interval (worker.ts's schedule) rather
-// than instant, which is an acceptable tradeoff for now, not a hidden defect. Whole-thread trash
-// reconciliation (applyTrashTransitions) is skipped: see the ponytail note on getThread in
-// nylasClient.ts for why that isn't wired up yet either.
-export async function syncNylasMailbox(
+// Sync for providers with no history cursor (Outlook via Graph, generic IMAP): each tick lists the
+// most recent messages, applies only the ones not stored yet (applyMessageIds is idempotent anyway,
+// the filter just avoids re-downloading every recent message every 90s), then reconciles the
+// trash/spam state of every conversation that gained a message. Trash changes on messages that were
+// already stored are not observed here; CRM-initiated trash goes through trashThread directly.
+export async function syncPolledMailbox(
   db: Db,
   args: { accountId: string; gmail: GmailClient; signal: AbortSignal },
 ): Promise<Result<{ applied: number }, AppError>> {
@@ -223,15 +215,43 @@ export async function syncNylasMailbox(
   const list = await args.gmail.listMessages({ signal: args.signal });
   if (!list.ok) return list;
 
-  const applied = await applyMessageIds(
-    { db, accountId: args.accountId, owner: owner.value, gmail: args.gmail, signal: args.signal },
+  const fresh = await unknownMessageIds(
+    db,
+    args.accountId,
     list.value.messages.map((m) => m.id),
   );
+  args.signal.throwIfAborted();
+  const touched = new Set<string>();
+  const applied = await applyMessageIds(
+    {
+      db,
+      accountId: args.accountId,
+      owner: owner.value,
+      gmail: args.gmail,
+      signal: args.signal,
+      touchedThreadIds: touched,
+    },
+    fresh,
+  );
   if (!applied.ok) return applied;
+  const trashed = await applyTrashTransitions(db, args.accountId, touched, args.gmail, args.signal);
+  if (!trashed.ok) return trashed;
 
   await db.execute(sql`
     UPDATE email_accounts SET last_sync_at=now(), last_error_id=NULL WHERE id=${args.accountId}
   `);
   args.signal.throwIfAborted();
   return ok({ applied: applied.value });
+}
+
+async function unknownMessageIds(db: Db, accountId: string, ids: string[]): Promise<string[]> {
+  if (ids.length === 0) return [];
+  const known = await db.execute(sql`
+    SELECT gmail_message_id FROM email_messages
+    WHERE account_id=${accountId} AND gmail_message_id IN ${ids}
+  `);
+  const seen = new Set(
+    (known.rows as { gmail_message_id: string }[]).map((r) => r.gmail_message_id),
+  );
+  return [...new Set(ids)].filter((id) => !seen.has(id));
 }

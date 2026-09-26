@@ -100,7 +100,7 @@ describe("Composer (deal context)", () => {
       <Composer accountId="a1" fromAddress="sender@example.com" context={{ kind: "inbox" }} />,
     );
     // The To label is present but no email address chips exist.
-    expect(screen.getByText("To")).toBeInTheDocument();
+    expect(screen.getByText("Para")).toBeInTheDocument();
     // No chips: no Remove buttons, no email-looking text in chip spans.
     expect(screen.queryByRole("button", { name: /^remove/i })).not.toBeInTheDocument();
   });

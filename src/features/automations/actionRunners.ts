@@ -1,44 +1,24 @@
 import { and, eq } from "drizzle-orm";
-import { BOARD_EVENT, dealChannel } from "@/constants/boardChannels";
 import { ERROR_IDS } from "@/constants/errorIds";
 import type { Db } from "@/db/client";
-import type { AutomationRuleAction, AutomationRunActionStatus } from "@/db/schema/automations";
+import type { AutomationRuleAction } from "@/db/schema/automations";
 import { deals } from "@/db/schema/deals";
 import { emailAccounts } from "@/db/schema/email";
 import { users } from "@/db/schema/identity";
 import { persons } from "@/db/schema/persons";
 import { createActivity } from "@/features/activities/repo";
-import { recordChange } from "@/features/collaboration/changeLog";
+import { createNote } from "@/features/collaboration/notesRepo";
 import { sendGmail } from "@/features/email/sendSystem";
 import { toPermSetUser } from "@/features/mcp/actorContext";
+import { enqueueEmailNotification } from "@/features/notifications/emailDispatch";
 import { createNotification } from "@/features/notifications/produce";
 import { hydrateActor } from "@/server/hydrateActor";
-import { publishBoardEvent } from "@/server/realtime/events";
+import { type ActionOutcome, type DealRef, failed, succeeded as ok } from "./actionOutcome";
 import { renderTemplate } from "./template";
+import { runUpdateField } from "./updateFieldRunner";
+import { defaultWebhookDeps, runWebhook } from "./webhookRunner";
 
-export interface ActionOutcome {
-  status: AutomationRunActionStatus;
-  errorMessage: string | null;
-  resultSummary: Record<string, unknown> | null;
-}
-
-// The minimum a caller must know about a deal to run an action against it. actionRunners.test.ts
-// seeds only { id, ownerId } directly (it does not go through the job.ts full-row select), so this
-// stays the parameter type rather than the full deals row: any action that needs more (title,
-// value, personId) re-reads it from `deal.id` itself instead of trusting what the caller passed.
-// A full deals row (as job.ts passes) satisfies this shape structurally with no cast needed.
-export interface DealRef {
-  id: string;
-  ownerId: string;
-}
-
-function ok(resultSummary: Record<string, unknown>): ActionOutcome {
-  return { status: "success", errorMessage: null, resultSummary };
-}
-
-function failed(errorId: string, message: string): ActionOutcome {
-  return { status: "error", errorMessage: `${errorId}: ${message}`, resultSummary: null };
-}
+export type { ActionOutcome, DealRef } from "./actionOutcome";
 
 interface DealTemplateContext {
   title: string;
@@ -74,7 +54,10 @@ async function runCreateActivity(
 ): Promise<ActionOutcome> {
   const actor = await hydrateActor(db, deal.ownerId, signal);
   if (actor === null) {
-    return failed(ERROR_IDS.AUTOMATION_NOT_FOUND, "deal owner is missing or inactive");
+    return failed(
+      ERROR_IDS.AUTOMATION_NOT_FOUND,
+      "o responsável pelo negócio não existe ou está inativo",
+    );
   }
   const result = await createActivity(
     db,
@@ -99,16 +82,20 @@ async function runSendNotification(
 ): Promise<ActionOutcome> {
   const ctx = await loadDealTemplateContext(db, deal, signal);
   if (ctx === null) {
-    return failed(ERROR_IDS.DEAL_NOT_FOUND, "deal no longer exists");
+    return failed(ERROR_IDS.DEAL_NOT_FOUND, "o negócio não existe mais");
   }
   const message = renderTemplate(
     typeof config.messageTemplate === "string" ? config.messageTemplate : "",
     ctx,
   );
+  const recipientId =
+    typeof config.recipientId === "string" && config.recipientId !== ""
+      ? config.recipientId
+      : deal.ownerId;
   const result = await createNotification(
     db,
     {
-      recipientId: deal.ownerId,
+      recipientId,
       type: "automation",
       entityType: "deal",
       entityId: deal.id,
@@ -121,6 +108,14 @@ async function runSendNotification(
   if ("suppressed" in result.value) {
     return ok({ suppressed: true });
   }
+  // Same path as every other notification: the e-mail copy follows the recipient's preferences.
+  await enqueueEmailNotification(
+    db,
+    result.value.notificationId,
+    recipientId,
+    "automation",
+    signal,
+  );
   return ok({ notificationId: result.value.notificationId });
 }
 
@@ -137,17 +132,17 @@ async function runSendEmail(
   if (account === undefined) {
     return failed(
       ERROR_IDS.AUTOMATION_EMAIL_ACCOUNT_MISSING,
-      "deal owner has no connected Gmail account",
+      "o responsável pelo negócio não tem uma caixa de e-mail conectada",
     );
   }
   const ctx = await loadDealTemplateContext(db, deal, signal);
   if (ctx === null) {
-    return failed(ERROR_IDS.DEAL_NOT_FOUND, "deal no longer exists");
+    return failed(ERROR_IDS.DEAL_NOT_FOUND, "o negócio não existe mais");
   }
   if (ctx.personId === null) {
     return failed(
       ERROR_IDS.AUTOMATION_EMAIL_RECIPIENT_MISSING,
-      "deal has no linked person to email",
+      "o negócio não tem uma pessoa de contato para receber o e-mail",
     );
   }
   const [person] = await db
@@ -157,7 +152,7 @@ async function runSendEmail(
   if (person?.primaryEmail == null) {
     return failed(
       ERROR_IDS.AUTOMATION_EMAIL_RECIPIENT_MISSING,
-      "linked person has no primary email",
+      "a pessoa de contato não tem e-mail principal",
     );
   }
   const result = await sendGmail(
@@ -179,68 +174,34 @@ async function runSendEmail(
   return ok({ messageId: result.value.gmailMessageId });
 }
 
-// Phase 1 supports the same scalar deal columns deal_field_changed can trigger on. Custom
-// fields ("custom_field:<key>") are out of scope for this action until a real use case
-// justifies the extra jsonb-merge path (documented in the spec's Non-goals).
-// Exported so schemas.ts can reject an unsupported fieldKey at save time instead of letting it
-// fail silently here at execution time (single source of truth, no duplicated literal).
-export const AUTOMATION_UPDATE_FIELD_ALLOWED: Record<string, string> = { title: "title" };
-
-async function runUpdateField(
+async function runAddNote(
   db: Db,
   deal: DealRef,
   config: Record<string, unknown>,
   signal: AbortSignal,
 ): Promise<ActionOutcome> {
-  signal.throwIfAborted();
-  const fieldKey = typeof config.fieldKey === "string" ? config.fieldKey : "";
-  const value = config.value;
-  const column = AUTOMATION_UPDATE_FIELD_ALLOWED[fieldKey];
-  if (column === undefined) {
-    return failed(ERROR_IDS.AUTOMATION_INPUT_INVALID, `unsupported update_field key: ${fieldKey}`);
-  }
-  const [before] = await db.select({ title: deals.title }).from(deals).where(eq(deals.id, deal.id));
-  if (before === undefined) {
-    return failed(ERROR_IDS.DEAL_NOT_FOUND, "deal no longer exists");
-  }
-  // Deliberately does NOT call updateDeal(): that function's own trailing evaluateAutomations
-  // calls would let this same rule (or another watching the same field) re-fire for every
-  // execution, since nothing here changes what triggered this run. Recursion is prevented by
-  // construction (this path never calls evaluateAutomations at all) rather than by a
-  // skip-automations flag threaded through updateDeal()'s signature, keeping the change
-  // confined to this file. recordChange + publishBoardEvent are still called directly (not via
-  // updateDeal) so the field change gets the same deal-history entry and live board update a
-  // normal user edit would get; writing the column with neither would leave the UI showing a
-  // stale title until a manual refresh.
-  await db.transaction(async (tx) => {
-    await tx
-      .update(deals)
-      .set({ title: String(value) })
-      .where(eq(deals.id, deal.id));
-    await recordChange(
-      tx,
-      {
-        entityType: "deal",
-        entityId: deal.id,
-        field: fieldKey,
-        oldValue: before.title,
-        newValue: value,
-        actorId: deal.ownerId,
-      },
-      signal,
+  const actor = await hydrateActor(db, deal.ownerId, signal);
+  if (actor === null) {
+    return failed(
+      ERROR_IDS.AUTOMATION_NOT_FOUND,
+      "o responsável pelo negócio não existe ou está inativo",
     );
-    await publishBoardEvent(
-      tx,
-      {
-        channel: dealChannel(deal.id),
-        type: BOARD_EVENT.dealUpdated,
-        actorId: deal.ownerId,
-        data: { dealId: deal.id },
-      },
-      signal,
-    );
-  });
-  return ok({ fieldKey, value });
+  }
+  const ctx = await loadDealTemplateContext(db, deal, signal);
+  if (ctx === null) return failed(ERROR_IDS.DEAL_NOT_FOUND, "o negócio não existe mais");
+  const body = renderTemplate(
+    typeof config.contentTemplate === "string" ? config.contentTemplate : "",
+    ctx,
+  ).trim();
+  if (body === "") return failed(ERROR_IDS.AUTOMATION_INPUT_INVALID, "a anotação está vazia");
+  const result = await createNote(
+    db,
+    actor,
+    { entityType: "deal", entityId: deal.id, body, pinned: false },
+    signal,
+  );
+  if (!result.ok) return failed(result.error.id, result.error.message);
+  return ok({ noteId: result.value.id });
 }
 
 export async function runAction(
@@ -260,5 +221,9 @@ export async function runAction(
       return runSendEmail(db, deal, config, signal);
     case "update_field":
       return runUpdateField(db, deal, config, signal);
+    case "add_note":
+      return runAddNote(db, deal, config, signal);
+    case "webhook":
+      return runWebhook(deal, config, signal, defaultWebhookDeps(db));
   }
 }

@@ -10,18 +10,19 @@ import { db } from "@/db/client";
 import { makeStorageClient } from "@/features/files/storage";
 import { guardCsrf } from "@/features/identity/actions/shared";
 import { SIG } from "@/features/identity/actions/sig";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { createContext } from "@/server/trpc/context";
 import { type ActionResult, clientErr, toClientResult } from "@/types/actionResult";
 import { err, ok, type Result } from "@/types/result";
 import { softDisconnectMailbox } from "./disconnect";
-import { createGmailClient, type GmailClient } from "./gmailClient";
-import { makeRefresh } from "./gmailRefresh";
+import type { GmailClient } from "./gmailClient";
 import { assertMailboxOwner } from "./mailboxOwnership";
 import { buildAuthUrl, GMAIL_OAUTH_STATE_COOKIE } from "./oauth";
+import { resolveProductionClient } from "./productionClient";
+import { type OAuthMailProvider, requestConsentUrl, tenantSlugFromBaseUrl } from "./relayConnect";
 import { sendEmail as orchestrateSend, type SendEmailInput, sendEmailInput } from "./send";
 import { isFutureScheduledSend } from "./sendScheduling";
 import { trashThread } from "./threadTrash";
-import { ensureAccessToken } from "./tokens";
 
 // Stub Gmail client for the future-scheduled path: runSend enqueues + prepares the body
 // then returns before any Gmail I/O, so this is never invoked. Any call is a programmer
@@ -88,13 +89,10 @@ export async function sendEmail(
     );
   }
 
-  const token = await ensureAccessToken(db, {
-    accountId: input.accountId,
-    deps: { refresh: makeRefresh(signal) },
-  });
-  if (!token.ok) return clientErr(token.error);
+  const client = await resolveProductionClient(db, input.accountId, signal);
+  if (!client.ok) return clientErr(client.error);
 
-  const gmail = createGmailClient(token.value.token);
+  const gmail = client.value;
   return toClientResult(
     await orchestrateSend(db, {
       actorId: ctx.actor.id,
@@ -141,13 +139,10 @@ export async function trashThreadAction(
   if (acct === undefined)
     return err(new AppError(ERROR_IDS.GMAIL_THREAD_NOT_FOUND, "thread not found", {}));
 
-  const token = await ensureAccessToken(db, {
-    accountId: acct.id,
-    deps: { refresh: makeRefresh(signal) },
-  });
-  if (!token.ok) return token;
+  const client = await resolveProductionClient(db, acct.id, signal);
+  if (!client.ok) return client;
 
-  const gmail = createGmailClient(token.value.token);
+  const gmail = client.value;
   return trashThread(db, { actor: ctx.actor, threadId: parsed.data.threadId, gmail }, signal);
 }
 
@@ -175,32 +170,36 @@ export async function connectGmailStart(): Promise<{ url: string }> {
   return { url: buildAuthUrl({ userId: ctx.session.userId, state }) };
 }
 
-// Gmail/Outlook via Nylas (src/features/email/nylasClient.ts): unlike connectGmailStart above,
-// no per-request state cookie here, because the redirect the user follows never comes back to
-// THIS tenant directly — Nylas's hosted auth has one fixed redirect_uri for every tenant (see
-// docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md), so the callback lands on
-// the shared-nylas-relay service instead, which is also where the single-use state is minted and
-// checked. This action's only job is asking that service for the URL to send the browser to.
-export async function connectNylasStart(
-  provider: "google" | "microsoft",
-): Promise<{ url: string }> {
+// Start a free Gmail/Outlook connect (Settings > Email sync). Google and Microsoft only accept one
+// fixed redirect_uri, which the shared mail-oauth-relay owns; this asks the relay for the consent
+// URL (the relay mints and later checks the single-use state). The browser returns through
+// /api/mail-oauth/complete, which binds the mailbox only for this same logged-in user.
+export async function connectMailboxStart(
+  provider: OAuthMailProvider,
+  csrfToken: string | null = null,
+): Promise<ActionResult<{ url: string }>> {
+  const csrf = await guardCsrf(csrfToken);
+  if (!csrf.ok) return clientErr(new AppError("E_PERM_001", "csrf check failed", {}));
   const ctx = await createContext();
-  if (ctx.session === null) {
-    throw new AppError("E_AUTH_001", "connectNylasStart called without a session", {});
+  if (ctx.actor === null) return clientErr(new AppError("E_PERM_001", "unauthenticated", {}));
+  // A server action argument is client input even when typed: validate it at the boundary.
+  const parsedProvider = z.enum(["gmail", "outlook"]).safeParse(provider);
+  if (!parsedProvider.success) {
+    return clientErr(new AppError("E_MAIL_007", "unknown mail provider", {}));
   }
-  const tenantSlug = new URL(env.BASE_URL).hostname.split(".")[0] ?? "";
-
-  const res = await fetch("http://shared-nylas-relay:8081/connect-init", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ tenant_slug: tenantSlug, user_id: ctx.session.userId, provider }),
-    signal: AbortSignal.timeout(10_000),
-  });
-  if (!res.ok) {
-    throw new AppError("E_NYLAS_001", "connect-init failed", { status: res.status });
-  }
-  const body = (await res.json()) as { authUrl: string };
-  return { url: body.authUrl };
+  return toClientResult(
+    await requestConsentUrl(
+      {
+        relayUrl: env.MAIL_OAUTH_RELAY_URL,
+        secret: env.MAIL_OAUTH_RELAY_SECRET,
+        tenantSlug: tenantSlugFromBaseUrl(env.BASE_URL),
+        userId: ctx.actor.id,
+        provider: parsedProvider.data,
+      },
+      fetch,
+      AbortSignal.timeout(10_000),
+    ),
+  );
 }
 
 const disconnectMailboxInput = z.object({ accountId: z.string().uuid() });
@@ -232,5 +231,11 @@ export async function disconnectMailboxAction(
   if (!owner.ok) return owner;
 
   await softDisconnectMailbox(db, parsed.data.accountId, signal);
+  await recordSecurityEvent(db, {
+    actorId: ctx.actor.id,
+    targetType: "mailbox",
+    targetId: parsed.data.accountId,
+    action: "mailbox.disconnect",
+  });
   return ok({ disconnected: true });
 }

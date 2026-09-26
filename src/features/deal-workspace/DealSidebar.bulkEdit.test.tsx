@@ -165,7 +165,7 @@ it("inline-edits deal custom fields from inside the Organization section", async
 
   const organization = within(screen.getByRole("region", { name: "Organização" }));
   expect(screen.queryByRole("region", { name: "Details" })).not.toBeInTheDocument();
-  fireEvent.click(organization.getAllByRole("button", { name: "Edit Setor" }).at(-1)!);
+  fireEvent.click(organization.getAllByRole("button", { name: "Editar Setor" }).at(-1)!);
   fireEvent.change(organization.getByLabelText("Setor"), { target: { value: "Finance" } });
   fireEvent.click(organization.getByRole("button", { name: "Salvar" }));
 

@@ -83,7 +83,7 @@ function failureOf(reason: unknown): { kind: OutcomeKind; message: string } {
   if (name === "AbortError" || name === "TimeoutError") {
     return { kind: "timeout", message: "Timed out" };
   }
-  return { kind: "provider_error", message: "Unavailable" };
+  return { kind: "provider_error", message: "Indisponível" };
 }
 
 export interface OutcomeSummary {

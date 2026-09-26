@@ -38,6 +38,7 @@ export default async function GoalsSettingsPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="goal.list"
         title={SETTINGS_STRINGS.goals}
         description={SETTINGS_STRINGS.goalsDescription}
       />

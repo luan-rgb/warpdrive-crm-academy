@@ -19,6 +19,7 @@ export default async function ProductsSettingsPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="product.catalog"
         title={SETTINGS_STRINGS.products}
         description={SETTINGS_STRINGS.productsDescription}
       />

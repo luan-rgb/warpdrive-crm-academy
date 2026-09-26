@@ -1,6 +1,11 @@
 import { describe, expect, test } from "vitest";
 import { RATE_LIMITS } from "@/constants/rateLimits";
-import { checkRateLimit, resetRateLimitsForTest, tooManyRequestsResponse } from "./rateLimitGuard";
+import {
+  checkRateLimit,
+  checkRateLimitFor,
+  resetRateLimitsForTest,
+  tooManyRequestsResponse,
+} from "./rateLimitGuard";
 
 function headersFor(ip: string): Headers {
   return new Headers({ "x-forwarded-for": ip });
@@ -63,5 +68,16 @@ describe("tooManyRequestsResponse", () => {
   test("never advertises a zero-second wait, which reads as retry immediately", () => {
     const res = tooManyRequestsResponse({ allowed: false, retryAfterSeconds: 0 });
     expect(Number(res.headers.get("retry-after"))).toBeGreaterThan(0);
+  });
+});
+
+describe("checkRateLimitFor", () => {
+  test("limits a signed-in user's IMAP connect attempts per user, not per address", () => {
+    resetRateLimitsForTest();
+    for (let i = 0; i < RATE_LIMITS.imapConnect.limit; i++) {
+      expect(checkRateLimitFor("imapConnect", "user-a").allowed).toBe(true);
+    }
+    expect(checkRateLimitFor("imapConnect", "user-a").allowed).toBe(false);
+    expect(checkRateLimitFor("imapConnect", "user-b").allowed).toBe(true);
   });
 });

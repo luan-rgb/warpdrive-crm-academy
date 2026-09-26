@@ -18,7 +18,12 @@ export function DealPerformanceWidget({
     [STRINGS.dashboard.open, data.open],
   ];
   return (
-    <Panel title={STRINGS.dashboard.widgetDealPerformance} isEmpty={false} emptyText="">
+    <Panel
+      help="dashboard.performance"
+      title={STRINGS.dashboard.widgetDealPerformance}
+      isEmpty={false}
+      emptyText=""
+    >
       {/* Both numeric columns are their own grid track, so counts and money each line up on a
           single right edge instead of floating wherever justify-between put them. */}
       {rows.map(([label, b]) => (
@@ -46,6 +51,7 @@ export function FunnelWidget({
   return (
     <Panel
       title={STRINGS.dashboard.widgetFunnelConversion}
+      help="dashboard.funnel"
       isEmpty={data.length === 0}
       emptyText={STRINGS.dashboard.emptyFunnel}
     >
@@ -78,7 +84,12 @@ export function FunnelWidget({
 
 export function ActivitiesWidget({ data }: { data: ActivityCounters }) {
   return (
-    <Panel title={STRINGS.dashboard.widgetActivities} isEmpty={false} emptyText="">
+    <Panel
+      help="dashboard.activities"
+      title={STRINGS.dashboard.widgetActivities}
+      isEmpty={false}
+      emptyText=""
+    >
       <p className="tabular-nums">
         {STRINGS.dashboard.completed} {data.completed} / {STRINGS.dashboard.scheduled}{" "}
         {data.scheduled}
@@ -98,6 +109,7 @@ export function StageSumsWidget({ data, currency }: { data: StageSum[]; currency
   return (
     <Panel
       title={STRINGS.dashboard.widgetStageSums}
+      help="dashboard.stageSums"
       isEmpty={data.length === 0}
       emptyText={STRINGS.dashboard.emptyStageSums}
     >

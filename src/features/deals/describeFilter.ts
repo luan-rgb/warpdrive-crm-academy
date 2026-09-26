@@ -13,7 +13,7 @@ function optionLabel(def: ConditionFieldOption | undefined, value: string): stri
 // means "any of these", so its values read as alternatives.
 function valueLabel(def: ConditionFieldOption | undefined, value: RowValue): string {
   if (!Array.isArray(value)) return optionLabel(def, value);
-  return value.map((v) => optionLabel(def, v)).join(" or ");
+  return value.map((v) => optionLabel(def, v)).join(" ou ");
 }
 
 // A default filter name derived from the conditions, e.g. "Owner is Ada King and Value greater
@@ -31,5 +31,5 @@ export function describeRows(
       const prefix = `${def?.label ?? r.field} ${OP_LABELS[r.op] ?? r.op}`;
       return VALUELESS_OPS.has(r.op) ? prefix : `${prefix} ${valueLabel(def, r.value)}`;
     })
-    .join(combinator === "or" ? " or " : " and ");
+    .join(combinator === "or" ? " ou " : " e ");
 }

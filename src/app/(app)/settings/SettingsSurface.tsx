@@ -1,4 +1,6 @@
 import type React from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
+import type { HelpTopic } from "@/constants/helpTexts";
 import { cn } from "@/lib/utils";
 
 export function SettingsPage({
@@ -31,12 +33,14 @@ export function SettingsCardHeader({
   description,
   actions,
   className,
+  help,
 }: {
   icon?: React.ReactNode;
   title: React.ReactNode;
   description?: React.ReactNode;
   actions?: React.ReactNode;
   className?: string;
+  help?: HelpTopic;
 }): React.ReactElement {
   return (
     <div className={cn("flex items-start justify-between gap-4 border-b px-5 py-4", className)}>
@@ -47,7 +51,10 @@ export function SettingsCardHeader({
           </div>
         ) : null}
         <div className="min-w-0">
-          <h2 className="text-sm font-semibold text-balance">{title}</h2>
+          <div className="flex items-center gap-1">
+            <h2 className="text-sm font-semibold text-balance">{title}</h2>
+            {help !== undefined ? <HelpTooltip topic={help} /> : null}
+          </div>
           {description !== undefined ? (
             <p className="mt-0.5 text-sm text-pretty text-muted-foreground">{description}</p>
           ) : null}

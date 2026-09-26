@@ -138,7 +138,7 @@ it("shows an attachment indicator only when the thread has an attachment", () =>
 describe("ThreadRow U7 visual polish", () => {
   it("renders the row date at the larger font (A14: text-sm, not text-xs)", () => {
     render(<ThreadRow {...props} thread={{ ...thread, lastMessageAt: "2026-07-02T10:00:00Z" }} />);
-    const dateEl = screen.getByText(/Jul 2/);
+    const dateEl = screen.getByText(/2 de jul/);
     expect(dateEl).toHaveClass("text-sm");
     expect(dateEl).not.toHaveClass("text-xs");
   });

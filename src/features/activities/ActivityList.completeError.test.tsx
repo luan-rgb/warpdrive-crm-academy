@@ -44,7 +44,7 @@ describe("ActivityList done checkbox failure", () => {
     complete.mockResolvedValue({ ok: false, error: { id: "E_PERM_001" } });
     render(<ActivityList items={items} now={NOW} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: 'Mark "Call Acme" done' }));
+    fireEvent.click(screen.getByRole("checkbox", { name: 'Marcar "Call Acme" como concluída' }));
 
     await waitFor(() => {
       expect(reportError).toHaveBeenCalledWith("E_PERM_001");
@@ -56,7 +56,7 @@ describe("ActivityList done checkbox failure", () => {
     complete.mockResolvedValue({ ok: true, value: { id: "a1" } });
     render(<ActivityList items={items} now={NOW} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: 'Mark "Call Acme" done' }));
+    fireEvent.click(screen.getByRole("checkbox", { name: 'Marcar "Call Acme" como concluída' }));
 
     await waitFor(() => {
       expect(refresh).toHaveBeenCalled();

@@ -11,7 +11,7 @@ import { nextActivityState } from "./nextActivityState";
 export function fmtDate(d: Date | string | null): string {
   if (d === null) return "-";
   const dt = typeof d === "string" ? new Date(d) : d;
-  return dt.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  return dt.toLocaleDateString("pt-BR", { month: "short", day: "numeric", year: "numeric" });
 }
 
 function NextActivity({
@@ -25,7 +25,7 @@ function NextActivity({
     return (
       <span className="flex items-center gap-1 text-warning">
         <TriangleAlert aria-hidden="true" className="h-3.5 w-3.5" />
-        No activity
+        Nenhuma atividade
       </span>
     );
   }

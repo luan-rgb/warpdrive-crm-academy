@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { updateDealAction } from "@/features/deals/updateAction";
 import { InlineEditFooter } from "@/features/inline-edit/InlineEditFooter";
 import { InlineFieldShell } from "@/features/inline-edit/InlineFieldShell";
@@ -99,7 +100,10 @@ export function DealSummaryActionList({
 
   return (
     <div className="text-sm">
-      <ActionRow icon={<Wallet aria-hidden="true" className={ICON} />}>
+      <ActionRow
+        icon={<Wallet aria-hidden="true" className={ICON} />}
+        right={<HelpTooltip topic="deal.value" />}
+      >
         <InlineFieldShell
           label="Valor"
           editing={editingValue}
@@ -165,11 +169,17 @@ export function DealSummaryActionList({
         </ActionRow>
       )}
 
-      <ActionRow icon={<Tag aria-hidden="true" className={ICON} />}>
+      <ActionRow
+        icon={<Tag aria-hidden="true" className={ICON} />}
+        right={<HelpTooltip topic="deal.labels" />}
+      >
         <LabelRow dealId={deal.id} expectedUpdatedAt={expectedUpdatedAt} labels={deal.labels} />
       </ActionRow>
 
-      <ActionRow icon={<Flag aria-hidden="true" className={ICON} />}>
+      <ActionRow
+        icon={<Flag aria-hidden="true" className={ICON} />}
+        right={<HelpTooltip topic="deal.expectedClose" />}
+      >
         <InlineFieldShell
           label="Data prevista de fechamento"
           editing={editingDate}

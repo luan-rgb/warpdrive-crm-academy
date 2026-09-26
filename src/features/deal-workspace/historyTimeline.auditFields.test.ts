@@ -26,8 +26,8 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
       newValue: "2000",
     });
     expect(label).toContain("Valor");
-    expect(label).toContain("1000");
-    expect(label).toContain("2000");
+    expect(label).toContain("R$\u00a01.000");
+    expect(label).toContain("R$\u00a02.000");
   });
 
   it("labels an expected-close-date change", () => {
@@ -54,7 +54,7 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
       oldValue: null,
       newValue: "2000.00",
     });
-    expect(label).toBe("Valor: (nenhum) → 2000.00");
+    expect(label).toBe("Valor: (nenhum) → R$\u00a02.000");
   });
 
   it("labels a person link/unlink/change directionally without leaking the id", () => {
@@ -117,7 +117,7 @@ describe("formatChangeLabel: broadened deal audit fields (Wave 3 task 16)", () =
     const evt = items[0];
     expect(evt?.kind).toBe("event");
     if (evt?.kind === "event") {
-      expect(evt.label).toBe("Valor: 1000.00 → 2000.00");
+      expect(evt.label).toBe("Valor: R$\u00a01.000 → R$\u00a02.000");
       expect(evt.actorName).toBe("Nick");
     }
   });

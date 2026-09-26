@@ -7,6 +7,7 @@ import { notifyOnDealUpdate } from "@/features/deals/notifyHelpers";
 import type { ChangeOwnerInput, ChangeStageInput, DeleteDealInput } from "@/features/deals/schemas";
 import { guardCsrf } from "@/features/identity/actions/shared";
 import { SIG } from "@/features/identity/actions/sig";
+import { safeErrorSummary } from "@/lib/safeError";
 import { createContext } from "@/server/trpc/context";
 import { changeOwner } from "./changeOwner";
 import { changeStage } from "./changeStage";
@@ -51,7 +52,7 @@ export async function markWonAction(
         signal: SIG(),
       });
     } catch (err: unknown) {
-      console.warn("markWonAction: notifyOnDealUpdate failed (deferred)", { err });
+      console.warn("markWonAction: notifyOnDealUpdate failed (deferred)", safeErrorSummary(err));
     }
   });
 
@@ -85,7 +86,7 @@ export async function reopenDealAction(
         signal: SIG(),
       });
     } catch (err: unknown) {
-      console.warn("reopenDealAction: notifyOnDealUpdate failed (deferred)", { err });
+      console.warn("reopenDealAction: notifyOnDealUpdate failed (deferred)", safeErrorSummary(err));
     }
   });
 

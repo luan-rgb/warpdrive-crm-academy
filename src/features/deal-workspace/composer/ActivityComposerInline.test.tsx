@@ -115,12 +115,12 @@ it("maps Owner to assigneeId (a user) and Participants to guestPersonIds (person
 it("falls back to the deal's own person for participants when there is no org", () => {
   render(<ActivityComposerInline dealId="d1" personId="p9" orgId={null} onCreated={vi.fn()} />);
   // The deal's person is the sole candidate and is pre-selected, so it shows as a chip.
-  expect(screen.getByText("Deal contact")).toBeInTheDocument();
+  expect(screen.getByText("Contato do negócio")).toBeInTheDocument();
   // Opening the picker confirms it is the only option offered.
   fireEvent.click(screen.getByLabelText("Participantes"));
   const options = screen.getAllByRole("option");
   expect(options).toHaveLength(1);
-  expect(options[0]).toHaveTextContent("Deal contact");
+  expect(options[0]).toHaveTextContent("Contato do negócio");
 });
 
 it("uses the real person name for the no-org participant fallback when provided", () => {

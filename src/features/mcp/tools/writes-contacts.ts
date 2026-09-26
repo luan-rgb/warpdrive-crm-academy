@@ -13,6 +13,7 @@ import {
   type GetCtx,
   getToolActor,
   registerTool,
+  requireFlag,
   resultToTool,
   type ToolRegistry,
   toolError,
@@ -31,6 +32,8 @@ export function registerContactWriteTools(
     run: async (input, signal) => {
       const actor = getToolActor(getCtx);
       if (!actor.ok) return toolError(actor.error);
+      const denied = requireFlag(actor.value, "contact.create");
+      if (denied !== null) return denied;
       return resultToTool(
         await createPerson(db, await buildContactActor(db, actor.value, signal), input, signal),
       );
@@ -55,6 +58,8 @@ export function registerContactWriteTools(
     run: async (input, signal) => {
       const actor = getToolActor(getCtx);
       if (!actor.ok) return toolError(actor.error);
+      const denied = requireFlag(actor.value, "contact.create");
+      if (denied !== null) return denied;
       return resultToTool(
         await createOrg(db, await buildContactActor(db, actor.value, signal), input, signal),
       );

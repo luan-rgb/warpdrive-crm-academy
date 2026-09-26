@@ -29,7 +29,7 @@ describe("RecipientsRow", () => {
         onBccChange={noop}
       />,
     );
-    expect(screen.getByText("To")).toBeInTheDocument();
+    expect(screen.getByText("Para")).toBeInTheDocument();
   });
 
   it("hides Cc and Bcc until the expander is clicked", () => {

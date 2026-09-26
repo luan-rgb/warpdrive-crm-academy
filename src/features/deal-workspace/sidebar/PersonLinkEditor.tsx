@@ -19,9 +19,9 @@ import { findPersonMatches, type PersonMatchReason } from "./personMatch";
 // Why a suggestion showed up, in the user's terms. An email or phone is effectively an identity, so
 // say so plainly rather than the vaguer "similar contact" the create comboboxes use for names.
 const REASON_TEXT: Record<PersonMatchReason, string> = {
-  email: "already has this email",
-  phone: "already has this phone",
-  name: "has a similar name",
+  email: "já tem este e-mail",
+  phone: "já tem este telefone",
+  name: "tem um nome parecido",
 };
 
 interface Draft {
@@ -163,7 +163,7 @@ export function PersonLinkEditor({
       {!hidden.has("phones") && (
         <Field
           id={ids.phone}
-          label="Phone"
+          label="Telefone"
           value={draft.phone}
           onChange={(v) => set({ phone: v })}
         />

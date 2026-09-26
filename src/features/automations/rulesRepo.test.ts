@@ -41,6 +41,7 @@ it("creates a rule with its ordered actions", async () => {
         pipelineId: null,
         trigger: "deal_stage_changed",
         triggerConfig: { toStageId: null },
+        conditions: [],
         actions: [
           { actionType: "send_notification", config: { messageTemplate: "Deal moved" } },
           { actionType: "create_activity", config: { activityTypeId: "x", subject: "Follow up" } },
@@ -77,6 +78,7 @@ it("rejects creating a rule with zero actions", async () => {
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [],
         isActive: true,
       },
@@ -99,6 +101,7 @@ it("replaces a rule's actions on update", async () => {
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [{ actionType: "send_notification", config: { messageTemplate: "hi" } }],
         isActive: true,
       },
@@ -115,6 +118,7 @@ it("replaces a rule's actions on update", async () => {
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [
           { actionType: "create_activity", config: { activityTypeId: "x", subject: "Call" } },
         ],
@@ -145,6 +149,7 @@ it("toggles a rule's active flag", async () => {
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [{ actionType: "send_notification", config: {} }],
         isActive: true,
       },
@@ -170,6 +175,7 @@ it("lists rules and deletes one", async () => {
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [{ actionType: "send_notification", config: {} }],
         isActive: true,
       },
@@ -206,6 +212,7 @@ it("keeps a run's ruleName snapshot after its rule is deleted, with ruleId set t
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [{ actionType: "send_notification", config: {} }],
         isActive: true,
       },
@@ -239,5 +246,45 @@ it("returns AUTOMATION_NOT_FOUND for a missing rule id", async () => {
     const result = await getAutomationRule(db, "00000000-0000-0000-0000-000000000000", sig());
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.id).toBe("E_AUTOMATION_002");
+  });
+});
+
+it("persists conditions on create and replaces them on update", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const created = await createAutomationRule(
+      db,
+      user.id,
+      {
+        name: "Big deals",
+        description: null,
+        pipelineId: null,
+        trigger: "deal_created",
+        triggerConfig: {},
+        conditions: [{ field: "value", op: "gt", value: "10000" }],
+        actions: [{ actionType: "send_notification", config: { messageTemplate: "Grande!" } }],
+        isActive: true,
+      },
+      sig(),
+    );
+    expect(created.ok && created.value.conditions).toEqual([
+      { field: "value", op: "gt", value: "10000" },
+    ]);
+    if (!created.ok) return;
+    const updated = await updateAutomationRule(
+      db,
+      {
+        id: created.value.id,
+        name: "Big deals",
+        description: null,
+        pipelineId: null,
+        trigger: "deal_created",
+        triggerConfig: {},
+        conditions: [],
+        actions: [{ actionType: "send_notification", config: { messageTemplate: "Grande!" } }],
+      },
+      sig(),
+    );
+    expect(updated.ok && updated.value.conditions).toEqual([]);
   });
 });

@@ -8,7 +8,7 @@ import { readCsrfToken } from "@/utils/csrfCookie";
 import { cancelOutboxAction } from "./folderActions";
 
 function statusLabel(status: string, scheduledAt: string | null): string {
-  if (scheduledAt !== null) return `Agendado para ${new Date(scheduledAt).toLocaleString()}`;
+  if (scheduledAt !== null) return `Agendado para ${new Date(scheduledAt).toLocaleString("pt-BR")}`;
   if (status === "needs_review") return "Requer revisão";
   if (status === "sending") return "Enviando";
   return "Na fila para envio";

@@ -4,10 +4,9 @@ import type { AppError } from "@/constants/errorIds";
 import { db } from "@/db/client";
 import type { EmailAccountRow } from "@/types/email";
 import { ok, type Result } from "@/types/result";
-import { createGmailClient, type GmailClient } from "./gmailClient";
-import { makeRefresh } from "./gmailRefresh";
-import { buildMime, deriveMessageId, toRawBase64 } from "./mime";
-import { ensureAccessToken } from "./tokens";
+import type { GmailClient } from "./gmailClient";
+import { buildMime, deriveMessageId, messageIdDomain, toRawBase64 } from "./mime";
+import { resolveProductionClient } from "./productionClient";
 
 export interface SystemSendDeps {
   resolveClient: (
@@ -27,21 +26,15 @@ export interface SystemMessage {
   idempotencyKey?: string;
 }
 
-// Default dependency: resolve a fresh access token (ops B2) then build the real Gmail
-// client. This is the ONE justified production-db import: it is the default dep for a
+// Default dependency: build the real mailbox client for whatever provider the account uses.
+// This is the ONE justified production-db import: it is the default dep for a
 // fire-and-forget system primitive. The DI seam (deps.resolveClient) keeps tests fully
 // db-free (they inject a fake client and never reach this path).
-async function defaultResolveClient(
+function defaultResolveClient(
   account: EmailAccountRow,
   signal: AbortSignal,
 ): Promise<Result<GmailClient, AppError>> {
-  signal.throwIfAborted();
-  const token = await ensureAccessToken(db, {
-    accountId: account.id,
-    deps: { refresh: makeRefresh(signal) },
-  });
-  if (!token.ok) return token;
-  return ok(createGmailClient(token.value.token));
+  return resolveProductionClient(db, account.id, signal);
 }
 
 // System-send primitive: no outbox, no tracking, no interactive ownership check.
@@ -61,7 +54,7 @@ export async function sendGmail(
   const messageId = deriveMessageId({
     accountId: account.id,
     idempotencyKey: message.idempotencyKey ?? randomUUID(),
-    domain: env.GOOGLE_WORKSPACE_DOMAIN,
+    domain: messageIdDomain(account.emailAddress, env.GOOGLE_WORKSPACE_DOMAIN),
   });
   const mime = buildMime({
     from: account.emailAddress,

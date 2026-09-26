@@ -84,7 +84,9 @@ export function LabelRow({
         />
       </div>
       {stale ? (
-        <p className="mt-1 text-xs text-muted-foreground">Labels changed elsewhere; reloaded.</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          As etiquetas foram alteradas em outro lugar; recarregadas.
+        </p>
       ) : null}
     </div>
   );

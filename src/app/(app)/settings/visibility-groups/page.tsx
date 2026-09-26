@@ -28,6 +28,7 @@ export default async function VisibilityGroupsPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="settings.visibility"
         title={STRINGS.settings.visibilityGroups}
         description={STRINGS.settings.visibilityGroupsDescription}
       />
@@ -51,7 +52,7 @@ export default async function VisibilityGroupsPage(): Promise<ReactNode> {
                   </Link>
                 </td>
                 <td className={`${SETTINGS_TABLE_CELL} tabular-nums text-muted-foreground`}>
-                  {g.createdAt.toLocaleDateString()}
+                  {g.createdAt.toLocaleDateString("pt-BR")}
                 </td>
               </tr>
             ))}

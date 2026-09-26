@@ -34,34 +34,34 @@ const shape = z.object({
 // the dependency between two columns' values. The boundary is where they are rejected.
 export const goalInput = shape
   .refine((g) => (g.subject === "deal" ? DEAL_ACTIONS.includes(g.action) : true), {
-    message: "a deal goal counts deals added, won or lost",
+    message: "uma meta de negócios conta negócios adicionados, ganhos ou perdidos",
     path: ["action"],
   })
   .refine((g) => (g.subject === "activity" ? ACTIVITY_ACTIONS.includes(g.action) : true), {
-    message: "an activity goal counts activities added or completed",
+    message: "uma meta de atividades conta atividades adicionadas ou concluídas",
     path: ["action"],
   })
   // An activity carries no monetary value, so a value target on one has nothing to measure.
   .refine((g) => !(g.subject === "activity" && g.metric === "value"), {
-    message: "activities have no value to total",
+    message: "atividades não têm valor para somar",
     path: ["metric"],
   })
   .refine((g) => !(g.subject === "deal" && g.activityTypeId !== null), {
-    message: "an activity type does not narrow a deal goal",
+    message: "um tipo de atividade não se aplica a uma meta de negócios",
     path: ["activityTypeId"],
   })
   .refine((g) => (g.assigneeKind === "company") === (g.assigneeId === null), {
-    message: "a company goal has no assignee; a user or team goal needs one",
+    message: "uma meta da empresa não tem responsável; uma meta de usuário ou equipe precisa de um",
     path: ["assigneeId"],
   })
   // A count goal advances one whole deal or activity at a time, so a fractional target is a
   // quota that can never be met exactly.
   .refine((g) => g.metric !== "count" || Number.isInteger(Number(g.target)), {
-    message: "a count target must be a whole number",
+    message: "uma meta de quantidade precisa ser um número inteiro",
     path: ["target"],
   })
   .refine((g) => g.endsOn === null || g.endsOn >= g.startsOn, {
-    message: "a goal cannot end before it starts",
+    message: "uma meta não pode terminar antes de começar",
     path: ["endsOn"],
   });
 

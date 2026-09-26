@@ -19,6 +19,7 @@ export default async function AutomationsSettingsPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="automation.list"
         title={SETTINGS_STRINGS.automations}
         description={SETTINGS_STRINGS.automationsDescription}
       />

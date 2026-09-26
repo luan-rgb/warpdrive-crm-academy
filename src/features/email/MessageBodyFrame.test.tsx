@@ -63,7 +63,7 @@ describe("MessageBodyFrame", () => {
     const { getByRole } = render(
       <MessageBodyFrame html="<p>x</p>" allowRemote={false} onShowRemote={() => {}} />,
     );
-    expect(getByRole("button", { name: /show remote content/i })).toBeTruthy();
+    expect(getByRole("button", { name: /mostrar conteúdo externo/i })).toBeTruthy();
   });
 
   it("zeroes the document margin so the height-sized frame does not grow its own scrollbar", () => {
@@ -87,7 +87,7 @@ describe("MessageBodyFrame", () => {
     const { getByRole } = render(
       <MessageBodyFrame html="<p>x</p>" allowRemote={false} onShowRemote={() => {}} />,
     );
-    const button = getByRole("button", { name: /show remote content/i });
+    const button = getByRole("button", { name: /mostrar conteúdo externo/i });
     expect(button.className).toMatch(/inline-flex/);
     expect(button.className).toMatch(/rounded-md/);
   });

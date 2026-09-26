@@ -107,7 +107,7 @@ describe("activityRowTarget", () => {
     expect(t).toEqual({
       kind: "record",
       href: "/contacts/people/p1",
-      preview: { id: "p1", title: "Contact", subtitle: "Call Jane" },
+      preview: { id: "p1", title: "Contato", subtitle: "Call Jane" },
     });
   });
 });

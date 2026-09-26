@@ -1,4 +1,5 @@
 import type React from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { PILL_TAB, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HistoryFeed } from "@/features/deal-workspace/HistoryFeed";
 import { historyTabLabel } from "@/features/deal-workspace/historyTabCounts";
@@ -89,13 +90,16 @@ export function HistoryTypeTabs({
 }: HistoryTypeTabsProps): React.ReactNode {
   return (
     <Tabs value={tab} onValueChange={(v) => onTab(v as HistoryTab)}>
-      <TabsList className="flex-wrap gap-1">
-        {TABS.map((t) => (
-          <TabsTrigger key={t} value={t} className={PILL_TAB}>
-            {historyTabLabel(TAB_LABELS[t], counts[t])}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="flex items-center gap-1">
+        <TabsList className="flex-wrap gap-1">
+          {TABS.map((t) => (
+            <TabsTrigger key={t} value={t} className={PILL_TAB}>
+              {historyTabLabel(TAB_LABELS[t], counts[t])}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <HelpTooltip topic="deal.history" />
+      </div>
 
       <div className="pt-4">
         {/* History is a view of what is attached, not a compose surface: read-only so the

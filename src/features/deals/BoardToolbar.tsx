@@ -2,6 +2,7 @@
 import { Archive, Kanban, List, Pencil } from "lucide-react";
 import Link from "next/link";
 import type React from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { ICON_BUTTON } from "@/constants/formStyles";
 import { cn } from "@/lib/utils";
 import { BoardActionsMenu } from "./BoardActionsMenu";
@@ -76,12 +77,15 @@ export function BoardToolbar(props: BoardToolbarProps): React.ReactNode {
             Arquivados
           </Link>
         </div>
+        <HelpTooltip topic="pipeline.views" />
 
         {createSlot}
 
         <div className="ml-auto flex items-center gap-3">
           <BoardSummary totalValue={totalValue} dealCount={dealCount} />
+          <HelpTooltip topic="pipeline.board" />
           <PipelineSelect pipelineId={pipelineId} pipelines={pipelines} />
+          <HelpTooltip topic="pipeline.switcher" />
 
           <Link
             href={`/pipeline/${pipelineId}/edit`}
@@ -92,6 +96,7 @@ export function BoardToolbar(props: BoardToolbarProps): React.ReactNode {
           </Link>
 
           {filterSlot}
+          <HelpTooltip topic="pipeline.filters" />
           <BoardActionsMenu pipelineId={pipelineId} />
           {presence}
         </div>

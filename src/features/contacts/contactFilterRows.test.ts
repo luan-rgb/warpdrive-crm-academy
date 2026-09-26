@@ -11,8 +11,8 @@ import {
 
 describe("labels field metadata", () => {
   it("labels the field for both entities", () => {
-    expect(PERSON_FILTER_LABELS.labels).toBe("Label");
-    expect(ORG_FILTER_LABELS.labels).toBe("Label");
+    expect(PERSON_FILTER_LABELS.labels).toBe("Etiqueta");
+    expect(ORG_FILTER_LABELS.labels).toBe("Etiqueta");
   });
 
   // A dedicated kind so the builder renders a label picker instead of a free-text box: a raw
@@ -101,12 +101,12 @@ describe("rowsToDefinition", () => {
   });
 
   it("exposes human labels for every operator", () => {
-    expect(OP_LABELS.contains).toBe("contains");
+    expect(OP_LABELS.contains).toBe("contém");
     expect(OP_LABELS.eq).toBeDefined();
-    expect(OP_LABELS.startsWith).toBe("starts with");
-    expect(OP_LABELS.notContains).toBe("does not contain");
-    expect(OP_LABELS.isEmpty).toBe("is empty");
-    expect(OP_LABELS.isNotEmpty).toBe("is not empty");
+    expect(OP_LABELS.startsWith).toBe("começa com");
+    expect(OP_LABELS.notContains).toBe("não contém");
+    expect(OP_LABELS.isEmpty).toBe("está vazio");
+    expect(OP_LABELS.isNotEmpty).toBe("não está vazio");
   });
 
   // isEmpty takes no value, so the builder leaves the value box blank. Dropping the row would make

@@ -25,8 +25,8 @@ describe("ConditionRowsBuilder", () => {
       />,
     );
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "1000" } });
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "1000" } });
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     // Emits the raw row (default field = first field, default op = its first op) plus combinator.
@@ -60,10 +60,10 @@ describe("ConditionRowsBuilder", () => {
       />,
     );
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
     expect(container.querySelector('input[type="date"]')).toBeNull();
     expect(document.querySelector('input[type="date"]')).toBeNull();
-    expect(screen.getByLabelText("Condition 1 value").tagName).toBe("BUTTON");
+    expect(screen.getByLabelText("Valor da condição 1").tagName).toBe("BUTTON");
   });
 
   it("Clear resets and calls onClear", () => {

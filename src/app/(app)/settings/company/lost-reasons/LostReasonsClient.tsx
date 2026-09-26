@@ -4,6 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { useActionError } from "@/components/shell/ActionErrorProvider";
 import { Button } from "@/components/ui/Button";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Input } from "@/components/ui/Input";
 import { STRINGS } from "@/constants/strings";
 import {
@@ -90,6 +91,10 @@ export function LostReasonsClient({ rows: initial }: { rows: LostReasonRow[] }):
 
   return (
     <div className="space-y-4">
+      <p className="flex items-center gap-1 text-sm text-muted-foreground">
+        Opções mostradas ao marcar um negócio como perdido
+        <HelpTooltip topic="settings.lostReasons" />
+      </p>
       <ul className="divide-y overflow-hidden rounded-lg border bg-card shadow-sm">
         {rows.map((row, i) => (
           <li key={row.id} className="flex items-center gap-3 px-3 py-2">

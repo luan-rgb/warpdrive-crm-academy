@@ -1,0 +1,25 @@
+export const CONNECTIONS_STRINGS = {
+  emailTitle: "E-mail",
+  emailDescription: "Caixa sincronizada com o CRM para ler e enviar e-mails pelos negócios.",
+  emailNone: "Nenhuma caixa de e-mail conectada.",
+  emailConfigure: "Configurar e-mail",
+  emailConnect: "Conectar e-mail",
+  emailLastSync: (date: string) => `Última sincronização em ${date}`,
+  emailNeverSynced: "Ainda não sincronizou",
+  emailStatus: { connected: "Conectado", disconnected: "Desconectado", error: "Com erro" },
+  mcpTitle: "Claude e outros assistentes de IA (MCP)",
+  mcpDescription:
+    "Adicione este endereço como conector MCP no Claude para consultar e atualizar o CRM com as suas permissões.",
+  enrichmentTitle: "Enriquecimento",
+  enrichmentDescription: "Provedores que completam dados de pessoas e organizações.",
+  enrichmentActive: (active: number, total: number) => `${active} de ${total} provedores ativos`,
+  enrichmentConfigure: "Configurar enriquecimento",
+  webhooksTitle: "Webhooks das automações",
+  webhooksDescription:
+    "Automações que enviam os dados do negócio para outro sistema (Zapier, Make, n8n e similares).",
+  webhooksNone: "Nenhuma automação chama um webhook.",
+  webhooksCreate: "Criar automação",
+  webhookPaused: "pausada",
+  activeBadge: "Ativo",
+  inactiveBadge: "Inativo",
+} as const;

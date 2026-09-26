@@ -5,6 +5,9 @@ import { err, ok, type Result } from "@/types/result";
 // Secret vars may be supplied as <VAR>_FILE pointing at a Docker secret file.
 const SECRET_FILE_VARS = [
   "GOOGLE_OAUTH_CLIENT_SECRET",
+  "GMAIL_OAUTH_CLIENT_SECRET",
+  "MICROSOFT_OAUTH_CLIENT_SECRET",
+  "MAIL_OAUTH_RELAY_SECRET",
   "WS_TICKET_SECRET",
   "TOKEN_ENCRYPTION_KEY",
   "MINIO_SECRET_KEY",
@@ -36,12 +39,19 @@ const base = z.object({
   // Optional (empty disables magic-link sign-in, see auth/magicLink.ts and magicLinkEmail.ts).
   RESEND_API_KEY: z.string().default(""),
   MAGIC_LINK_FROM_EMAIL: z.string().email().or(z.literal("")).default(""),
-  // Optional (empty disables Gmail/Outlook mailbox connect, see features/email/nylasClient.ts).
-  // Unlike a per-student Google OAuth client, Nylas's hosted auth uses one fixed redirect_uri
-  // regardless of which tenant the flow is for, so one Nylas app can serve every tenant.
-  NYLAS_API_KEY: z.string().default(""),
-  NYLAS_CLIENT_ID: z.string().default(""),
-  NYLAS_REGION: z.enum(["us", "eu"]).default("us"),
+  // Free direct mailbox connect (src/features/email/clientFactory.ts). One Google OAuth client
+  // and one Microsoft Entra app serve every tenant: Google and Microsoft only accept a fixed
+  // redirect_uri, so the OAuth dance runs in the central mail-oauth-relay service and tenants
+  // only need the ids/secrets here to refresh tokens. Empty disables that provider's button.
+  // The Gmail client is kept apart from GOOGLE_OAUTH_* (sign-in) on purpose: sign-in is
+  // Workspace-domain-restricted, a student's mailbox is not.
+  GMAIL_OAUTH_CLIENT_ID: z.string().default(""),
+  GMAIL_OAUTH_CLIENT_SECRET: z.string().default(""),
+  MICROSOFT_OAUTH_CLIENT_ID: z.string().default(""),
+  MICROSOFT_OAUTH_CLIENT_SECRET: z.string().default(""),
+  // Internal URL of the relay (shared Docker network) and the secret its connect-init requires.
+  MAIL_OAUTH_RELAY_URL: z.string().url().default("http://shared-mail-oauth-relay:8081"),
+  MAIL_OAUTH_RELAY_SECRET: z.string().default(""),
   BASE_URL: z.string().url(),
   DATABASE_URL: z.string().min(1),
   WS_TICKET_SECRET: z.string().min(32),
@@ -86,6 +96,23 @@ const base = z.object({
   DISABLE_UPDATE_CHECK: boolFromString.default(false),
 });
 
+// Session cookies are Secure and links in e-mails point at BASE_URL: a plain-http public URL in
+// production would break login and send people to an unencrypted address.
+function requireHttpsUrls(
+  v: { BASE_URL: string; MINIO_ENDPOINT: string },
+  ctx: z.RefinementCtx,
+): void {
+  for (const key of ["BASE_URL", "MINIO_ENDPOINT"] as const) {
+    if (!v[key].startsWith("https://")) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [key],
+        message: `${key} must be an https:// URL in production`,
+      });
+    }
+  }
+}
+
 // Production guardrails for the first-run bootstrap (ops spec E6).
 const schema = base.superRefine((v, ctx) => {
   if (v.MCP_ENABLED && Buffer.from(v.OAUTH_SIGNING_KEY, "base64").length !== 32) {
@@ -96,6 +123,7 @@ const schema = base.superRefine((v, ctx) => {
     });
   }
   if (v.NODE_ENV === "production") {
+    requireHttpsUrls(v, ctx);
     if (v.ALLOW_FIRST_LOGIN_ADMIN) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

@@ -25,6 +25,7 @@ export default async function EmailSettingsPage(): Promise<ReactNode> {
   return (
     <SettingsPage className="max-w-3xl">
       <SettingsHeading
+        help="email.templates"
         title={STRINGS.settings.emailTemplates}
         description={EMAIL_SETTINGS_STRINGS.description}
       />

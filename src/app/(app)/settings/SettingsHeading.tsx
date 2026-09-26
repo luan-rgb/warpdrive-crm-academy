@@ -1,5 +1,6 @@
 import type React from "react";
 import { PageHeading } from "@/components/shell/PageHeading";
+import type { HelpTopic } from "@/constants/helpTexts";
 import { STRINGS } from "@/constants/strings";
 
 // A settings page heading: the shared PageHeading with the "Settings / X" breadcrumb prepended, so
@@ -8,10 +9,12 @@ export function SettingsHeading({
   title,
   description,
   actions,
+  help,
 }: {
   title: string;
   description?: React.ReactNode;
   actions?: React.ReactNode;
+  help?: HelpTopic;
 }): React.ReactNode {
   return (
     <PageHeading
@@ -19,6 +22,7 @@ export function SettingsHeading({
       title={title}
       description={description}
       actions={actions}
+      help={help}
     />
   );
 }
