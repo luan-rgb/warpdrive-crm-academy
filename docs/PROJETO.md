@@ -6,7 +6,7 @@ Este arquivo existe pra alguém (você, ou uma sessão futura do Claude) entende
 existe hoje, por que, e onde mexer** sem precisar reconstruir o histórico de decisões. Atualize-o
 sempre que algo aqui descrito mudar de verdade.
 
-Última atualização: 2026-09-26.
+Última atualização: 2026-09-27.
 
 ## O que é isto
 
@@ -309,6 +309,101 @@ cartões de enriquecimento e webhooks só aparecem para quem pode administrá-lo
 Ainda não existe em relação ao Pipedrive: atraso ("esperar N dias") dentro da automação,
 gatilhos de pessoa/organização/lead, formulários web, Smart BCC e exportação CSV de negócios e
 contatos.
+
+## Como subir esta versão na VPS (2026-09-27)
+
+Tudo desta rodada (e-mail grátis, pt-BR, BRL, ajuda, automações, Apps conectados, segurança) chega
+na VPS assim. Leva uns 45 minutos. Faça numa hora de pouco uso: cada aluno fica alguns segundos
+fora do ar enquanto o container dele é recriado.
+
+**1. GitHub:** no PR #3 clique em "Ready for review" e depois em "Merge" na `main`.
+
+**2. (Opcional, pode ficar para depois) Apps OAuth do Google e da Microsoft:** passos 1 e 2 da
+seção "E-mail gratuito" acima. Sem eles só a opção IMAP/SMTP aparece, e ela já funciona (Gmail
+inclusive, com senha de app).
+
+**3. Na VPS, por SSH:**
+
+```sh
+cd ~/warpdrive
+git fetch && git checkout main && git pull
+```
+
+**4. `envs/shared.env`:** acrescente `MAIL_OAUTH_RELAY_SECRET=` com o valor de
+`openssl rand -hex 32` (obrigatório, mesmo sem os apps OAuth) e, se fez o passo 2, os
+`GMAIL_OAUTH_CLIENT_ID/SECRET` e `MICROSOFT_OAUTH_CLIENT_ID/SECRET`. Pode apagar as linhas
+`NYLAS_*`.
+
+**5. nginx** (`sudo nano /etc/nginx/sites-available/warpdrive-tenants`):
+
+- No bloco do `crm.estrategistacrm.com.br`, troque a regra antiga `location /api/nylas/ { ... }`
+  por:
+  ```nginx
+  location ~ ^/api/mail-oauth/(google|microsoft)/callback$ {
+      proxy_pass http://127.0.0.1:8881/$1/callback$is_args$args;
+      proxy_set_header Host $host;
+  }
+  ```
+- No bloco dos alunos (`*.crm.estrategistacrm.com.br`, o que faz `proxy_pass` para a porta
+  8880), garanta que existam estas linhas dentro do `location /`:
+  ```nginx
+  proxy_set_header Host $host;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  ```
+- Aplique: `sudo nginx -t && sudo systemctl reload nginx`.
+
+**6. Caddy** (`nano caddy/Caddyfile.tenants`, arquivo fora do git):
+
+- O bloco global do topo passa a ser:
+  ```
+  {
+  	auto_https off
+  	servers {
+  		trusted_proxies static private_ranges
+  		trusted_proxies_strict
+  	}
+  }
+  ```
+- No bloco `http://s3.{$BASE_DOMAIN}`, antes do `reverse_proxy shared-minio:9000`, acrescente
+  `respond /minio/admin* 403`.
+- Em cada bloco de aluno já existente, troque a linha
+  `reverse_proxy aluno-<slug>-app-1:3000` por:
+  ```
+  	reverse_proxy aluno-<slug>-app-1:3000 {
+  		header_up X-Forwarded-For {client_ip}
+  	}
+  ```
+  (alunos criados daqui em diante já nascem assim).
+
+**7. Subir, primeiro só no seu CRM:**
+
+```sh
+scripts/update-all-tenants.sh --only estrategistacrm
+```
+
+Ele faz backup, sobe a stack compartilhada com o relay novo (e remove o `shared-nylas-relay`),
+gera o segredo do relay de cada aluno, reconstrói o seu CRM (as migrações 0083 a 0087 rodam
+sozinhas) e testa `/api/health`. Para ver os comandos sem executar nada: `--dry-run`.
+
+**8. Teste no seu CRM** (`https://estrategistacrm.crm.estrategistacrm.com.br`):
+entrar pelo link mágico e sair pelo menu; em Configurações > Sincronização de e-mail, reconectar a
+caixa (a antiga aparece como "precisa ser reconectada"), enviar e responder um e-mail; conferir
+valores em R$, textos em português, os "?" de ajuda, uma automação com condição e o histórico
+dela, e a página Apps conectados.
+
+**9. Todos os alunos:** `scripts/update-all-tenants.sh`. No fim ele lista `OK` ou `FALHOU` por
+aluno. Um `FALHOU` mostra o endereço; veja o log com
+`docker compose -p aluno-<slug> -f docker-compose.tenant.yml --env-file envs/aluno-<slug>.env logs app migrate`.
+
+**10. Backup das chaves:** guarde uma cópia da pasta `envs/` fora da VPS, separada dos backups
+do banco (ver "Segurança", abaixo).
+
+**Se algo der muito errado:** o script faz backup em `/opt/backups/warpdrive-tenants/` antes de
+mexer em qualquer coisa. Voltar só o código (`git checkout <commit anterior>` e o mesmo script)
+não basta: a migração 0084 apaga a coluna `nylas_grant_id`, que o código antigo lê nas telas de
+e-mail. Para voltar de verdade, restaure também o banco a partir do `postgres-<data>.sql.gz`
+desse backup. Por isso o passo 7 testa primeiro só no seu CRM.
 
 ## Segurança: revisão dos 19 pontos (2026-09-26)
 
