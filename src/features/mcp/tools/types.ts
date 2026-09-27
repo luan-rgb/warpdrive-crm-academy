@@ -3,6 +3,7 @@ import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { AppError, ERROR_IDS } from "@/constants/errorIds";
+import { can } from "@/features/permissions/can";
 import type { HydratedActor } from "@/server/hydrateActor";
 import type { AppContext } from "@/server/trpc/context";
 import { err, ok, type Result } from "@/types/result";
@@ -78,4 +79,14 @@ export function registerTool<S extends z.ZodObject>(
     (input, extra) => invoke(input, AbortSignal.any([extra.signal, AbortSignal.timeout(15_000)])),
   );
   registry.add(definition.name, invoke);
+}
+
+// MCP tools call the same repos as the UI actions, but the global create flags are checked in the
+// actions, not the repos, so each create tool must check them too.
+export function requireFlag(
+  actor: HydratedActor,
+  flag: "contact.create" | "activity.create",
+): CallToolResult | null {
+  if (can(actor, flag)) return null;
+  return toolError(new AppError(ERROR_IDS.PERM_DENIED, `missing permission ${flag}`, {}));
 }

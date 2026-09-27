@@ -28,5 +28,5 @@ export function EditableTitle({
     return r.ok ? { ok: true, value: undefined } : { ok: false, error: r.error.id };
   }
 
-  return <EditableHeading title={title} label="deal title" onCommit={commit} />;
+  return <EditableHeading title={title} label="título do negócio" onCommit={commit} />;
 }

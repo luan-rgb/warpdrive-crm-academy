@@ -7,6 +7,7 @@ export function ActivityTypesWidget({ data }: { data: ActivityTypeCount[] }) {
   return (
     <Panel
       title={STRINGS.dashboard.widgetActivityTypes}
+      help="dashboard.activityTypes"
       isEmpty={data.length === 0}
       emptyText={STRINGS.dashboard.emptyActivityTypes}
     >
@@ -38,6 +39,7 @@ export function LostReasonsWidget({
   return (
     <Panel
       title={STRINGS.dashboard.widgetLostReasons}
+      help="dashboard.lostReasons"
       isEmpty={data.length === 0}
       emptyText={STRINGS.dashboard.emptyLostReasons}
     >

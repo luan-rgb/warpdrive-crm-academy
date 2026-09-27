@@ -8,6 +8,7 @@ import { type ColumnSort, useColumnSort } from "@/components/data-table/useColum
 import { RENDER_WINDOW_STEP, useRenderWindow } from "@/components/data-table/useRenderWindow";
 import { useRowSelection } from "@/components/data-table/useRowSelection";
 import { useActionError } from "@/components/shell/ActionErrorProvider";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { useRecordPreview } from "@/features/navigation/recordPreviewStore";
 import { useRowCursor } from "@/features/shortcuts/useRowCursor";
 import { trpc } from "@/lib/trpc-client";
@@ -147,25 +148,26 @@ export function ActivitiesTable(): React.ReactNode {
         {/* View toggle: List (active) vs Calendar. */}
         <div className="inline-flex rounded-md border bg-card p-0.5 text-sm">
           <span className="rounded-sm bg-accent px-2 py-1 font-medium text-accent-foreground">
-            List
+            Lista
           </span>
           <Link
             href="/activities/calendar"
             className="rounded-sm px-2 py-1 text-muted-foreground hover:text-foreground"
           >
-            Calendar
+            Calendário
           </Link>
         </div>
+        <HelpTooltip topic="activity.list" />
         <button
           type="button"
           onClick={() => setModalOpen(true)}
           className="rounded-md bg-action px-3 py-1.5 text-sm font-medium text-action-foreground transition-transform hover:opacity-90 active:scale-[0.96]"
         >
-          + Activity
+          + Atividade
         </button>
         {!loadFailed && !loadPending && (
           <span className="text-sm text-muted-foreground tabular-nums">
-            {rows.length} {rows.length === 1 ? "activity" : "activities"}
+            {rows.length} {rows.length === 1 ? "atividade" : "atividades"}
           </span>
         )}
       </div>

@@ -28,6 +28,7 @@ export default async function PipelinesSettingsPage(): Promise<ReactNode> {
     <SettingsCard>
       <SettingsCardHeader
         title={STRINGS.settings.pipelines}
+        help="pipeline.stages"
         description={STRINGS.settings.pipelinesDescription}
         actions={<CreatePipelineButton label={STRINGS.settings.createPipeline} onCreated="edit" />}
       />

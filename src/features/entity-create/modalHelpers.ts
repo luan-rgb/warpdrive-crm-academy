@@ -38,7 +38,7 @@ export async function resolveNewOrgId(
     { name: state.newOrgName.trim(), address: null, customFields: state.orgCustomFields },
     csrf,
   );
-  if (!r.ok) return { error: `Could not create organization (${r.error.id})` };
+  if (!r.ok) return { error: `Não foi possível criar a organização (${r.error.id})` };
   return r.value.id;
 }
 
@@ -62,6 +62,6 @@ export async function resolveNewPersonId(
     },
     csrf,
   );
-  if (!r.ok) return { error: `Could not create person (${r.error.id})` };
+  if (!r.ok) return { error: `Não foi possível criar a pessoa (${r.error.id})` };
   return r.value.id;
 }

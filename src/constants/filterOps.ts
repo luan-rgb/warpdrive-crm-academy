@@ -17,17 +17,17 @@ export const FILTER_OP_KEYS = [
 export type FilterOpKey = (typeof FILTER_OP_KEYS)[number];
 
 export const FILTER_OP_LABELS: Record<FilterOpKey, string> = {
-  eq: "is",
-  neq: "is not",
-  contains: "contains",
-  notContains: "does not contain",
-  startsWith: "starts with",
-  gt: "greater than",
-  lt: "less than",
-  gte: "at least",
-  lte: "at most",
-  isEmpty: "is empty",
-  isNotEmpty: "is not empty",
+  eq: "é",
+  neq: "não é",
+  contains: "contém",
+  notContains: "não contém",
+  startsWith: "começa com",
+  gt: "maior que",
+  lt: "menor que",
+  gte: "pelo menos",
+  lte: "no máximo",
+  isEmpty: "está vazio",
+  isNotEmpty: "não está vazio",
 };
 
 // Operators that take no value. The builder hides the value control for them and the schemas skip

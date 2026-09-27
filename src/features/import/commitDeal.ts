@@ -32,7 +32,7 @@ async function resolvePipelineId(
         sql`lower(${pipelines.name}) = lower(${pipelineName}) and ${pipelines.isArchived} = false`,
       );
     if (pipe === undefined) {
-      return err([{ field: "pipeline", message: `unknown pipeline: ${pipelineName}` }]);
+      return err([{ field: "pipeline", message: `funil desconhecido: ${pipelineName}` }]);
     }
     return ok(pipe.id);
   }
@@ -50,7 +50,7 @@ async function resolvePipelineId(
     .orderBy(asc(pipelines.order))
     .limit(1);
   if (first === undefined) {
-    return err([{ field: "pipeline", message: "no pipeline available to import into" }]);
+    return err([{ field: "pipeline", message: "nenhum funil disponível para importar" }]);
   }
   return ok(first.id);
 }
@@ -72,7 +72,7 @@ async function resolveStageId(
         and(eq(stages.pipelineId, pipelineId), sql`lower(${stages.name}) = lower(${stageName})`),
       );
     if (stage === undefined) {
-      return err([{ field: "stage", message: `unknown stage: ${stageName}` }]);
+      return err([{ field: "stage", message: `etapa desconhecida: ${stageName}` }]);
     }
     return ok(stage.id);
   }
@@ -84,7 +84,7 @@ async function resolveStageId(
     .orderBy(asc(stages.order))
     .limit(1);
   if (first === undefined) {
-    return err([{ field: "stage", message: "pipeline has no stages" }]);
+    return err([{ field: "stage", message: "o funil não tem etapas" }]);
   }
   return ok(first.id);
 }

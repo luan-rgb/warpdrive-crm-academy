@@ -154,7 +154,7 @@ it("shows 'Set expected close date' as a CTA when unset, and the date when set",
   unmount();
 
   renderList({ expectedCloseDate: "2026-07-16" });
-  expect(screen.getByText("Jul 16, 2026")).toBeInTheDocument();
+  expect(screen.getByText("16 de jul. de 2026")).toBeInTheDocument();
   expect(screen.queryByText("Definir data prevista de fechamento")).not.toBeInTheDocument();
 });
 
@@ -184,7 +184,7 @@ it("edits the value ONLY via the pencil, with a dirty-gated Save footer (PD mech
   fireEvent.click(screen.getByText("US$ 58.000"));
   expect(screen.queryByLabelText("Valor")).not.toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Valor" }));
   const input = screen.getByLabelText<HTMLInputElement>("Valor");
   expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   fireEvent.change(input, { target: { value: "61000" } });
@@ -196,7 +196,7 @@ it("edits the value ONLY via the pencil, with a dirty-gated Save footer (PD mech
 
 it("edits the value typed in pt-BR notation (period thousands, comma decimal)", async () => {
   renderList();
-  fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Valor" }));
   const input = screen.getByLabelText<HTMLInputElement>("Valor");
   fireEvent.change(input, { target: { value: "10.000,50" } });
   expect(screen.getByRole("button", { name: "Salvar" })).not.toBeDisabled();
@@ -208,7 +208,7 @@ it("edits the value typed in pt-BR notation (period thousands, comma decimal)", 
 
 it("value editor: blur does not commit and Cancel discards (PD: only Cancel/Save exit)", () => {
   renderList();
-  fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Valor" }));
   const input = screen.getByLabelText<HTMLInputElement>("Valor");
   fireEvent.change(input, { target: { value: "99999" } });
   fireEvent.blur(input);

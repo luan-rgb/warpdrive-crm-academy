@@ -8,8 +8,8 @@ import {
 } from "./calendarView";
 
 it("weekTitle carries the month and year so navigation stays oriented", () => {
-  expect(weekTitle("2026-06-15")).toBe("Jun 15, 2026");
-  expect(weekTitle("2027-01-04")).toBe("Jan 4, 2027");
+  expect(weekTitle("2026-06-15")).toBe("15 de jun. de 2026");
+  expect(weekTitle("2027-01-04")).toBe("4 de jan. de 2027");
 });
 
 const TODAY = new Date("2026-07-03T12:00:00Z");
@@ -60,6 +60,10 @@ it("stepAnchorIso: week steps by 7 days, month by one clamped month", () => {
 });
 
 it("monthTitle formats the anchor month in UTC", () => {
-  expect(monthTitle("2026-06-15")).toBe("June 2026");
-  expect(monthTitle("2026-12-01")).toBe("December 2026");
+  expect(monthTitle("2026-06-15")).toBe("Junho 2026");
+  expect(monthTitle("2026-12-01")).toBe("Dezembro 2026");
+});
+
+it("monthTitle reads in Portuguese", () => {
+  expect(monthTitle("2026-03-10")).toBe("Março 2026");
 });

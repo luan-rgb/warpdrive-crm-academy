@@ -113,7 +113,9 @@ it("gives each section a kebab options menu but no misleading edit pencil", () =
   // dead control. Editing is via clicking a field inline or the header Edit button.
   render(<LeadSidebar lead={baseLead} owners={[]} person={null} org={null} />);
   const summary = within(screen.getByRole("region", { name: "Resumo" }));
-  expect(summary.queryByRole("button", { name: /Edit Summary section/i })).not.toBeInTheDocument();
+  expect(
+    summary.queryByRole("button", { name: /Editar Summary section/i }),
+  ).not.toBeInTheDocument();
   expect(summary.getByRole("button", { name: /opções de resumo/i })).toBeInTheDocument();
 });
 

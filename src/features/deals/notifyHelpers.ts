@@ -5,6 +5,7 @@ import { NOTIFY_STRINGS } from "@/constants/notifyStrings";
 import type { Db } from "@/db/client";
 import type { deals } from "@/db/schema";
 import { notifyDealFollowedUpdate, notifyDealWonLost } from "@/features/notifications/wire";
+import { safeErrorSummary } from "@/lib/safeError";
 
 type Deal = typeof deals.$inferSelect;
 
@@ -40,7 +41,7 @@ export async function notifyOnDealUpdate(db: Db, args: NotifyOnDealUpdateArgs): 
       });
     }
   } catch (err) {
-    console.warn("notifyOnDealUpdate: notification failed (best-effort)", { err });
+    console.warn("notifyOnDealUpdate: notification failed (best-effort)", safeErrorSummary(err));
   }
 }
 
@@ -62,6 +63,6 @@ export async function notifyOnDealMove(db: Db, args: NotifyOnDealMoveArgs): Prom
       signal,
     });
   } catch (err) {
-    console.warn("notifyOnDealMove: notification failed (best-effort)", { err });
+    console.warn("notifyOnDealMove: notification failed (best-effort)", safeErrorSummary(err));
   }
 }

@@ -25,7 +25,7 @@ export function BulkActionBar({
         onClick={onClear}
         className="ml-auto text-muted-foreground hover:text-foreground"
       >
-        Clear selection
+        Limpar seleção
       </Button>
     </div>
   );

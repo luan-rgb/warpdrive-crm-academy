@@ -19,6 +19,8 @@ import { CSRF_COOKIE, mintCsrfToken } from "@/features/auth/csrf";
 import { LOGIN_RETURN_COOKIE, safeLoginReturnPath } from "@/features/auth/loginReturn";
 import { createSession, SESSION_COOKIE, sessionCookieOptions } from "@/features/auth/session";
 import { verifyGoogleIdToken } from "@/features/auth/verifyGoogleIdToken";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
+import { safeErrorSummary } from "@/lib/safeError";
 
 const STATE_COOKIE = "wd_oauth_state";
 const NONCE_COOKIE = "wd_oauth_nonce";
@@ -38,6 +40,13 @@ const tokenResponseSchema = z.object({
 
 function loginError(reason: string): NextResponse {
   console.warn("[auth/callback] login rejected:", reason);
+  void recordSecurityEvent(db, {
+    actorId: null,
+    targetType: "session",
+    targetId: null,
+    action: "auth.login_failed",
+    detail: { method: "google", reason },
+  });
   return NextResponse.redirect(new URL("/login?error=auth_failed", env.BASE_URL));
 }
 
@@ -123,6 +132,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     if (sessionResult.ok === false) return loginError("session creation failed");
 
     const { sid, expiresAt } = sessionResult.value;
+    await recordSecurityEvent(db, {
+      actorId: upsertResult.value.userId,
+      targetType: "session",
+      targetId: null,
+      action: "auth.login",
+      detail: { method: "google" },
+    });
     const csrfToken = mintCsrfToken();
     const res = NextResponse.redirect(new URL(returnPath, env.BASE_URL));
     res.cookies.set(SESSION_COOKIE, sid, { ...sessionCookieOptions(), expires: expiresAt });
@@ -136,7 +152,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     });
     return res;
   } catch (e) {
-    console.error("[auth/callback] infra error during login:", e);
+    console.error("[auth/callback] infra error during login:", safeErrorSummary(e));
     return loginError("internal error");
   }
 }

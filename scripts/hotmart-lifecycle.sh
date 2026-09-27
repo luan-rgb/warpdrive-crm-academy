@@ -70,7 +70,7 @@ notify_admin_info() {
 # Lowercase, strip accents, collapse anything non [a-z0-9] into one hyphen, trim, cap length.
 slugify() {
   echo "$1" | iconv -f utf8 -t ascii//TRANSLIT 2>/dev/null | tr '[:upper:]' '[:lower:]' \
-    | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//' | cut -c1-24
+    | sed -E 's/[^a-z0-9]+/-/g; s/^-+//' | cut -c1-24 | sed -E 's/-+$//'
 }
 
 unique_slug() {

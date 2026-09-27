@@ -20,8 +20,13 @@ vi.mock("@/lib/trpc-client", () => ({
   },
 }));
 
-const sendEmailMock = vi.fn<() => Promise<{ ok: boolean }>>(() => Promise.resolve({ ok: true }));
-vi.mock("@/features/email/actions", () => ({ sendEmail: () => sendEmailMock() }));
+type SendInput = { idempotencyKey: string };
+const sendEmailMock = vi.fn<
+  (csrf: string | null, input: SendInput) => Promise<{ ok: boolean; error?: { id: string } }>
+>(() => Promise.resolve({ ok: true }));
+vi.mock("@/features/email/actions", () => ({
+  sendEmail: (csrf: string | null, input: SendInput) => sendEmailMock(csrf, input),
+}));
 
 vi.mock("@/utils/csrfCookie", () => ({ readCsrfToken: () => "csrf" }));
 
@@ -75,5 +80,45 @@ describe("Composer when the send action rejects", () => {
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(screen.getByText(COMPOSER_STRINGS.sendUnconfirmed)).toBeInTheDocument();
     expect(send).toBeEnabled();
+  });
+
+  // A lost answer (timeout, dropped connection) may mean the mail DID go out. Clicking Send again
+  // must reuse the same idempotency key so the server replays that send instead of sending twice.
+  it("retries a lost-answer send with the same idempotency key", async () => {
+    sendEmailMock
+      .mockImplementationOnce(() => Promise.reject(abortError()))
+      .mockImplementationOnce(() => Promise.resolve({ ok: true }));
+    render(
+      <Composer
+        accountId="a1"
+        context={{ kind: "deal", dealId: "d1", defaultTo: "recipient@x.com" }}
+      />,
+    );
+    const send = screen.getByRole("button", { name: /^enviar$/i });
+    fireEvent.click(send);
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
+    fireEvent.click(send);
+    await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(2));
+    const [first, second] = sendEmailMock.mock.calls.map((c) => c[1].idempotencyKey);
+    expect(second).toBe(first);
+  });
+
+  it("uses a fresh key after a definite failure, so a corrected retry is a new send", async () => {
+    sendEmailMock
+      .mockImplementationOnce(() => Promise.resolve({ ok: false, error: { id: "E_GMAIL_009" } }))
+      .mockImplementationOnce(() => Promise.resolve({ ok: true }));
+    render(
+      <Composer
+        accountId="a1"
+        context={{ kind: "deal", dealId: "d1", defaultTo: "recipient@x.com" }}
+      />,
+    );
+    const send = screen.getByRole("button", { name: /^enviar$/i });
+    fireEvent.click(send);
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
+    fireEvent.click(send);
+    await waitFor(() => expect(sendEmailMock).toHaveBeenCalledTimes(2));
+    const [first, second] = sendEmailMock.mock.calls.map((c) => c[1].idempotencyKey);
+    expect(second).not.toBe(first);
   });
 });

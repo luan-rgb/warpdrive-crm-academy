@@ -6,7 +6,7 @@ import { guardCsrf } from "@/features/identity/actions/shared";
 import { SIG } from "@/features/identity/actions/sig";
 import { createContext } from "@/server/trpc/context";
 import { softDeleteNote, togglePin, updateNote } from "./notesRepo";
-import { type NoteCreateInput, noteUpdateInput } from "./notesSchemas";
+import { type NoteCreateInput, noteUpdateInput, togglePinInput } from "./notesSchemas";
 import { createNoteWithMentions } from "./noteWithMentions";
 
 type ActionResult = { ok: true; value: { id: string } } | { ok: false; error: { id: string } };
@@ -38,7 +38,9 @@ export async function togglePinAction(
   const { actor } = await createContext();
   if (actor === null) return { ok: false, error: { id: ERROR_IDS.AUTH_SESSION_DEAD } };
 
-  const result = await togglePin(db, actor, input.noteId, input.pinned, SIG());
+  const parsed = togglePinInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: { id: ERROR_IDS.NOTE_INPUT_INVALID } };
+  const result = await togglePin(db, actor, parsed.data.noteId, parsed.data.pinned, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: { id: result.value.id } };
 }

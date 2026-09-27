@@ -3,6 +3,7 @@
 import type React from "react";
 import { useState } from "react";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Select } from "@/components/ui/Select";
 import { Tip } from "@/components/ui/tooltip";
 import { STRINGS } from "@/constants/strings";
@@ -122,6 +123,7 @@ export function Dashboard({
         <h1 className="text-balance text-display font-[450] leading-tight tracking-tight">
           {STRINGS.dashboard.title}
         </h1>
+        <HelpTooltip topic="dashboard.overview" />
         <Tip
           label={
             canViewOthers

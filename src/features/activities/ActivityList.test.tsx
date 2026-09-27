@@ -51,12 +51,12 @@ describe("ActivityList", () => {
     expect(screen.getByRole("region", { name: "Atrasadas" })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Próximas" })).toBeInTheDocument();
     // The overdue Call links to its deal.
-    expect(screen.getByRole("link", { name: "Open" })).toHaveAttribute("href", "/deals/d1");
+    expect(screen.getByRole("link", { name: "Abrir" })).toHaveAttribute("href", "/deals/d1");
   });
 
   it("completes an activity when its checkbox is toggled", () => {
     render(<ActivityList items={items} now={Date.now()} />);
-    fireEvent.click(screen.getByRole("checkbox", { name: 'Mark "Call Acme" done' }));
+    fireEvent.click(screen.getByRole("checkbox", { name: 'Marcar "Call Acme" como concluída' }));
     expect(complete).toHaveBeenCalledWith({ id: "a1", done: true });
   });
 });

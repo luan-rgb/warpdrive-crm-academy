@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import type { Db } from "@/db/client";
 import type { AuthUser } from "@/features/permissions/types";
+import { formatCurrency } from "@/lib/formatCurrency";
 import { canSeeLinkedDeal, canSeeLinkedPerson } from "./emailVisibility";
 import { resolveOutboundLink } from "./linking";
 
@@ -90,9 +91,9 @@ async function loadDeal(
   signal.throwIfAborted();
   if (d === undefined) return null;
   put(ctx, "deal.title", d.title);
-  // Postgres returns a numeric column as e.g. "25000.00"; normalize away insignificant
-  // decimals so {{deal.value}} reads "25000" rather than "25000.00".
-  put(ctx, "deal.value", d.value === null ? null : String(Number(d.value)));
+  // {{deal.value}} lands in an email to a customer, so it reads as money ("R$ 25.000"), never as
+  // the raw numeric column ("25000.00").
+  put(ctx, "deal.value", d.value === null ? null : formatCurrency(d.value));
   return d.org_id;
 }
 

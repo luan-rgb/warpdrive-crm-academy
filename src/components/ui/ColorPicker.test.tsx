@@ -29,15 +29,15 @@ it("accepts a valid custom hex value and rejects an invalid one inline", async (
   render(<ColorPicker value="#000000" onChange={onChange} ariaLabel="Text color" />);
 
   await userEvent.click(screen.getByRole("button", { name: "Text color" }));
-  const input = screen.getByRole("textbox", { name: "Custom hex color" });
+  const input = screen.getByRole("textbox", { name: "Cor hexadecimal personalizada" });
   await userEvent.clear(input);
   await userEvent.type(input, "nope");
-  await userEvent.click(screen.getByRole("button", { name: "Apply color" }));
-  expect(screen.getByRole("alert")).toHaveTextContent("6-digit hex");
+  await userEvent.click(screen.getByRole("button", { name: "Aplicar cor" }));
+  expect(screen.getByRole("alert")).toHaveTextContent("6 dígitos");
   expect(onChange).not.toHaveBeenCalled();
 
   await userEvent.clear(input);
   await userEvent.type(input, "#123abc");
-  await userEvent.click(screen.getByRole("button", { name: "Apply color" }));
+  await userEvent.click(screen.getByRole("button", { name: "Aplicar cor" }));
   expect(onChange).toHaveBeenCalledWith("#123abc");
 });

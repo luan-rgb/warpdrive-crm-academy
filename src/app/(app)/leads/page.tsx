@@ -21,7 +21,7 @@ function toLeadSort(field: string, dir: "asc" | "desc"): LeadSort | null {
 export default async function LeadsPage(): Promise<React.ReactNode> {
   const ctx = await createContext();
   if (ctx.actor === null) {
-    return <main>Unauthorized</main>;
+    return <main>Acesso não autorizado</main>;
   }
   const [baseCurrency, prefs] = await Promise.all([
     readBaseCurrency(db, AbortSignal.timeout(8000)),

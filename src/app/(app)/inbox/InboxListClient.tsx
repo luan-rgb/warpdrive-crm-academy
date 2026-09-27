@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { STRINGS } from "@/constants/strings";
 import { DraftsList } from "@/features/email/DraftsList";
 import type { InboxFilter } from "@/features/email/emailReads";
@@ -65,7 +66,10 @@ export function InboxListClient({ selfActorId, folder }: InboxListClientProps): 
   // no persistent reading pane; a row opens the thread on its own page inside the same shell.
   return (
     <main aria-label="Caixa de entrada" className="flex h-full min-h-0 flex-col">
-      <h1 className="shrink-0 border-b px-4 py-2 text-lg font-semibold">{STRINGS.inbox.title}</h1>
+      <div className="flex shrink-0 items-center gap-1.5 border-b px-4 py-2">
+        <h1 className="text-lg font-semibold">{STRINGS.inbox.title}</h1>
+        <HelpTooltip topic="email.inbox" />
+      </div>
       <section aria-label="Conversas" className="flex min-h-0 min-w-0 flex-1 flex-col">
         {listPane}
       </section>

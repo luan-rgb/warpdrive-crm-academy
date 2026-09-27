@@ -139,7 +139,7 @@ describe("DealWorkspaceClient", () => {
     // The open "Call Acme" activity sits in Focus with a mark-as-done checkbox. Completing it
     // bumps deals.updatedAt server-side (recomputeNextActivity), so the page must refresh or the
     // header's frozen expectedUpdatedAt would fail the next stage-change CAS ("changed elsewhere").
-    fireEvent.click(screen.getByRole("checkbox", { name: /mark as done/i }));
+    fireEvent.click(screen.getByRole("checkbox", { name: /marcar como concluída/i }));
     await waitFor(() => expect(refresh).toHaveBeenCalled());
   });
 
@@ -182,8 +182,13 @@ describe("DealWorkspaceClient compose bar", () => {
     // Pipedrive parity: the tab strip is always visible; the Activity tab starts as a
     // one-line prompt below it, and clicking the prompt expands the activity editor.
     expect(compose.getByRole("tablist")).toBeInTheDocument();
-    expect(compose.getByRole("tab", { name: "Atividade" })).toHaveAttribute("aria-selected", "true");
-    const prompt = compose.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." });
+    expect(compose.getByRole("tab", { name: "Atividade" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    const prompt = compose.getByRole("button", {
+      name: "Clique aqui para adicionar uma atividade...",
+    });
     fireEvent.click(prompt);
 
     expect(

@@ -90,7 +90,7 @@ export function CustomFieldCreateFields({
                   <span aria-hidden="true" className="ml-1 text-destructive">
                     *
                   </span>
-                  <span className="sr-only"> (required)</span>
+                  <span className="sr-only"> (obrigatório)</span>
                 </>
               ) : null}
             </div>

@@ -9,15 +9,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { formatCurrencyExact } from "@/lib/formatCurrency";
 import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import { addDealProductAction, removeDealProductAction, updateDealProductAction } from "./actions";
 
+// Tenants run in BRL (settings.base_currency), the helper's default.
 function money(v: string | number): string {
-  return new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(v));
+  return formatCurrencyExact(v);
 }
 
 function lineTotal(quantity: string, unitPrice: string, discountPercent: string): number {

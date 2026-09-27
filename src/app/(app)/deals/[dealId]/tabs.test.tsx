@@ -152,7 +152,7 @@ describe("WorkspaceTabs", () => {
   it("resolves stageId changelog ids to names and synthesizes a Deal created anchor", () => {
     renderTabs();
     // Stage change renders as an inline event row with resolved names, not raw ids.
-    expect(screen.getByText("Stage: Demo → Proposal")).toBeInTheDocument();
+    expect(screen.getByText("Etapa: Demo → Proposal")).toBeInTheDocument();
     expect(screen.queryByText("stage-proposal")).not.toBeInTheDocument();
     // Lazy "Negócio criado" anchor from deal.createdAt.
     expect(screen.getByText("Negócio criado")).toBeInTheDocument();
@@ -170,7 +170,7 @@ describe("WorkspaceTabs", () => {
       />,
     );
     expect(screen.queryByText("Negócio criado")).not.toBeInTheDocument();
-    expect(screen.getByText("Stage: Demo → Proposal")).toBeInTheDocument();
+    expect(screen.getByText("Etapa: Demo → Proposal")).toBeInTheDocument();
   });
 
   it("switches tabs via the onTab callback", async () => {

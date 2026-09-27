@@ -121,7 +121,7 @@ export const bulkUpdateLeadsInput = z.object({
         c.labels !== undefined ||
         c.archived !== undefined ||
         c.deleted !== undefined,
-      { message: "bulk change must set at least one field" },
+      { message: "a alteração em massa precisa definir pelo menos um campo" },
     ),
 });
 export type BulkUpdateLeadsInput = z.infer<typeof bulkUpdateLeadsInput>;

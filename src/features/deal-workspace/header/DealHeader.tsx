@@ -1,5 +1,6 @@
 "use client";
 import type React from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import type { DealBlockId } from "@/constants/dealBlocks";
 import { wsChannel } from "@/constants/wsChannels";
 import { DealCloseActions } from "@/features/deal-workspace/DealCloseActions";
@@ -88,6 +89,7 @@ export function DealHeader({
             lostReasonText={deal.lostReason}
             scheduleFollowUpAfterWon={scheduleFollowUpAfterWon}
           />
+          <HelpTooltip topic="deal.status" />
           <BlockVisibilityButton isHidden={isHidden} onToggle={toggle} />
           <DealActionsMenu
             dealId={deal.id}

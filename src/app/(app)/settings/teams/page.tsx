@@ -31,6 +31,7 @@ export default async function TeamsPage(): Promise<ReactNode> {
   return (
     <SettingsPage>
       <SettingsHeading
+        help="settings.teams"
         title={STRINGS.settings.teams}
         description={STRINGS.settings.teamsDescription}
       />

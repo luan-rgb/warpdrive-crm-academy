@@ -5,8 +5,8 @@ import { readCsrfToken } from "@/utils/csrfCookie";
 import { completeActivityAction, deleteActivityAction } from "./actions";
 import { useInvalidateDayLoad } from "./useInvalidateDayLoad";
 
-const BULK_MARK_DONE_ERROR = "Couldn't mark some activities done. Please try again.";
-const BULK_DELETE_ERROR = "Couldn't delete some activities. Please try again.";
+const BULK_MARK_DONE_ERROR = "Não foi possível concluir algumas atividades. Tente novamente.";
+const BULK_DELETE_ERROR = "Não foi possível excluir algumas atividades. Tente novamente.";
 
 // Runs the given per-id action across all selected ids, returning the ids that failed. Doesn't
 // swallow partial failures: callers keep failed ids selected and surface an error, mirroring the

@@ -4,6 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { useActionError } from "@/components/shell/ActionErrorProvider";
 import { Button } from "@/components/ui/Button";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Input } from "@/components/ui/Input";
 import { ERROR_IDS } from "@/constants/errorIds";
 import {
@@ -85,6 +86,10 @@ export function LabelsClient({ rows: initial }: { rows: Row[] }): React.ReactNod
 
   return (
     <div className="space-y-6">
+      <p className="flex items-center gap-1 text-sm text-muted-foreground">
+        Etiquetas por tipo de registro
+        <HelpTooltip topic="settings.labels" />
+      </p>
       {error !== null && <p className="text-sm text-red-600">{error}</p>}
       {LABEL_TARGETS.map((target) => {
         const group = rows.filter((r) => r.target === target);

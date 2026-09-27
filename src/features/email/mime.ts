@@ -18,6 +18,16 @@ export function deriveMessageId(args: {
   return `<${acc}.${key}@${args.domain}>`;
 }
 
+// The right-hand side of a Message-ID. RFC 5322 wants a domain the sender controls, and receiving
+// servers score an id whose domain matches the From address better, so it comes from the mailbox
+// address itself; the fallback covers a malformed address. Never empty: "<x@>" is invalid and some
+// servers (Graph, strict SMTP relays) reject or rewrite it, which would break threading.
+export function messageIdDomain(emailAddress: string, fallback: string): string {
+  const domain = emailAddress.trim().toLowerCase().split("@")[1] ?? "";
+  if (/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(domain)) return domain;
+  return fallback !== "" ? fallback : "warpdrive.localhost";
+}
+
 // Header-injection defense: collapse any CR/LF (and lone CR/LF) so an attacker cannot
 // terminate a header and inject a new one. Applied to every header VALUE built from
 // caller-supplied text (from/to/cc/subject). We strip rather than fold, since these

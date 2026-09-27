@@ -1,5 +1,8 @@
 import type React from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
+import type { HelpTopic } from "@/constants/helpTexts";
 import { STRINGS } from "@/constants/strings";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 // Every dashboard panel goes through here so an empty one says why it is empty. A heading
 // over dead space reads as a broken page, not as "there is nothing to show".
@@ -8,15 +11,20 @@ export function Panel({
   isEmpty,
   emptyText,
   children,
+  help,
 }: {
   title: string;
   isEmpty: boolean;
   emptyText: string;
   children: React.ReactNode;
+  help?: HelpTopic;
 }): React.ReactNode {
   return (
     <section className="rounded-lg border p-4">
-      <h2 className="mb-2 text-balance text-sm font-medium text-muted-foreground">{title}</h2>
+      <div className="mb-2 flex items-center gap-1">
+        <h2 className="text-balance text-sm font-medium text-muted-foreground">{title}</h2>
+        {help !== undefined ? <HelpTooltip topic={help} /> : null}
+      </div>
       {isEmpty && <p className="text-sm text-muted-foreground">{emptyText}</p>}
       {/* Rendered in both states: an empty panel may still carry an action, and swallowing
           children here made the "set up goals" link unreachable exactly when it was needed. */}
@@ -61,9 +69,5 @@ export function monthLabel(month: string): string {
 }
 
 export function money(v: string, currency: string): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(Number(v));
+  return formatCurrency(v, currency);
 }

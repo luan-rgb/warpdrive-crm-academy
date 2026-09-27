@@ -6,15 +6,13 @@ import { Button } from "@/components/ui/Button";
 import { SETTINGS_STRINGS } from "@/constants/settingsStrings";
 import type { Product } from "@/db/schema/products";
 import { archiveProductAction } from "@/features/products/actions";
+import { formatCurrencyExact } from "@/lib/formatCurrency";
 import { readCsrfToken } from "@/utils/csrfCookie";
 
 const S = SETTINGS_STRINGS;
 
 function priceText(price: string): string {
-  return new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(price));
+  return formatCurrencyExact(price);
 }
 
 interface Props {

@@ -175,7 +175,7 @@ function ContactCreateModal({
       <div className="min-w-0 space-y-4">
         <div className="space-y-1">
           <label htmlFor={nameId} className="block text-sm font-medium">
-            Name
+            Nome
           </label>
           <Input
             id={nameId}

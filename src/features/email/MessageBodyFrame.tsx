@@ -63,7 +63,7 @@ export function MessageBodyFrame(props: {
     <div>
       {!props.allowRemote && (
         <Button variant="outline" size="sm" className="mb-2" onClick={props.onShowRemote}>
-          Show remote content
+          Mostrar conteúdo externo
         </Button>
       )}
       <iframe

@@ -4,7 +4,7 @@ export interface ParticipantOption {
 }
 
 // Fallback label when the deal's person has no resolved name yet.
-const DEAL_CONTACT_FALLBACK = "Deal contact";
+const DEAL_CONTACT_FALLBACK = "Contato do negócio";
 
 // Build the participant candidate list for the activity composer.
 //

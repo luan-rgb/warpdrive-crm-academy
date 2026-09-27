@@ -15,8 +15,16 @@ SEED_ADMIN_EMAIL="${2:?usage: provision-tenant.sh <slug> <seed-admin-email> [--s
 SKIP_APP=false
 [[ "${3:-}" == "--skip-app" ]] && SKIP_APP=true
 
-if [[ ! "$SLUG" =~ ^[a-z0-9-]+$ ]]; then
-  echo "error: slug must be lowercase letters, digits, hyphens only (got: $SLUG)" >&2
+# Same rule as mail-oauth-relay's isValidSlug: a DNS label (it becomes a subdomain, a database
+# name and a file name), no leading/trailing hyphen, at most 63 characters.
+if [[ ! "$SLUG" =~ ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$ ]]; then
+  echo "error: slug must be a DNS label: lowercase letters, digits, inner hyphens (got: $SLUG)" >&2
+  exit 1
+fi
+# The address comes from the Hotmart buyer and is written into the env file with sed; only plain
+# address characters get through, so nothing can inject a line or a sed expression.
+if [[ ! "$SEED_ADMIN_EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+  echo "error: invalid seed admin email (got: $SEED_ADMIN_EMAIL)" >&2
   exit 1
 fi
 
@@ -44,6 +52,12 @@ WS_TICKET_SECRET="$(openssl rand -hex 32)"
 TOKEN_ENCRYPTION_KEY="$(openssl rand -base64 32)"
 OAUTH_SIGNING_KEY="$(openssl rand -base64 32)"
 ENV_FILE="envs/aluno-${SLUG}.env"
+# Each tenant gets HMAC(master, slug), never the relay's master secret (mail-oauth-relay/lib.mjs
+# tenantSecret): a leaked tenant env can then only speak to the relay for that one tenant.
+TENANT_RELAY_SECRET=""
+if [[ -n "${MAIL_OAUTH_RELAY_SECRET:-}" ]]; then
+  TENANT_RELAY_SECRET="$(printf '%s' "$SLUG" | openssl dgst -sha256 -hmac "$MAIL_OAUTH_RELAY_SECRET" | sed 's/^.*= //')"
+fi
 
 if [[ -f "$ENV_FILE" ]]; then
   echo "error: $ENV_FILE already exists, refusing to overwrite an existing tenant" >&2
@@ -104,9 +118,11 @@ sed \
   -e "s|__GOOGLE_WORKSPACE_DOMAIN__|${GOOGLE_WORKSPACE_DOMAIN}|g" \
   -e "s|__RESEND_API_KEY__|${RESEND_API_KEY:-}|g" \
   -e "s|__MAGIC_LINK_FROM_EMAIL__|${MAGIC_LINK_FROM_EMAIL:-}|g" \
-  -e "s|__NYLAS_API_KEY__|${NYLAS_API_KEY:-}|g" \
-  -e "s|__NYLAS_CLIENT_ID__|${NYLAS_CLIENT_ID:-}|g" \
-  -e "s|__NYLAS_REGION__|${NYLAS_REGION:-us}|g" \
+  -e "s|__GMAIL_OAUTH_CLIENT_ID__|${GMAIL_OAUTH_CLIENT_ID:-}|g" \
+  -e "s|__GMAIL_OAUTH_CLIENT_SECRET__|${GMAIL_OAUTH_CLIENT_SECRET:-}|g" \
+  -e "s|__MICROSOFT_OAUTH_CLIENT_ID__|${MICROSOFT_OAUTH_CLIENT_ID:-}|g" \
+  -e "s|__MICROSOFT_OAUTH_CLIENT_SECRET__|${MICROSOFT_OAUTH_CLIENT_SECRET:-}|g" \
+  -e "s|__MAIL_OAUTH_RELAY_SECRET__|${TENANT_RELAY_SECRET}|g" \
   -e "s|__SEED_ADMIN_EMAIL__|${SEED_ADMIN_EMAIL}|g" \
   envs/tenant.env.template > "$ENV_FILE"
 
@@ -131,7 +147,11 @@ echo "== adding Caddy site block for $SLUG =="
   echo "	}"
   echo "	@ws path /_ws*"
   echo "	reverse_proxy @ws aluno-${SLUG}-ws-1:8080"
-  echo "	reverse_proxy aluno-${SLUG}-app-1:3000"
+  # The real visitor (resolved via trusted_proxies in the global block) as the last X-F-F entry,
+  # which is the one src/server/rateLimit.ts keys on.
+  echo "	reverse_proxy aluno-${SLUG}-app-1:3000 {"
+  echo "		header_up X-Forwarded-For {client_ip}"
+  echo "	}"
   echo "}"
   echo "# END TENANT ${SLUG}"
 } >> caddy/Caddyfile.tenants

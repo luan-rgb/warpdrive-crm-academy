@@ -121,7 +121,9 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
 
   it("expands the activity composer from the prompt, and Cancel returns to the prompt", () => {
     renderBar();
-    fireEvent.click(screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
+    );
     expect(screen.getByTestId("activity-form")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
     expect(screen.queryByTestId("activity-form")).not.toBeInTheDocument();
@@ -133,7 +135,9 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
   it("collapses back to the Activity prompt after saving an activity", () => {
     const onActivityCreated = vi.fn();
     renderBar({ onActivityCreated });
-    fireEvent.click(screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Clique aqui para adicionar uma atividade..." }),
+    );
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(onActivityCreated).toHaveBeenCalled();
     expect(screen.queryByTestId("activity-form")).not.toBeInTheDocument();
@@ -196,7 +200,7 @@ describe("SharedComposeBar (Pipedrive default-state model)", () => {
     renderBar();
     await userEvent.click(screen.getByRole("tab", { name: "Email" }));
     expect(screen.queryByTestId("email-composer")).not.toBeInTheDocument();
-    expect(screen.getByText(/connect a gmail mailbox/i)).toBeInTheDocument();
+    expect(screen.getByText(/conecte sua caixa de e-mail/i)).toBeInTheDocument();
   });
 
   it("hides the Email and Files tabs for a lead scope, keeping only Activity and Notes", () => {

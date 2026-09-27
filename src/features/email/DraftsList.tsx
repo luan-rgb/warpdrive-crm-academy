@@ -27,7 +27,7 @@ export function DraftsList({
   }
 
   if (drafts.length === 0) {
-    return <div className="p-4 text-sm text-muted-foreground">No saved drafts.</div>;
+    return <div className="p-4 text-sm text-muted-foreground">Nenhum rascunho salvo.</div>;
   }
   return (
     <ul className="divide-y">
@@ -39,7 +39,7 @@ export function DraftsList({
             </p>
             <p className="truncate text-xs text-muted-foreground">{d.toEmails.join(", ")}</p>
             <p className="text-xs text-muted-foreground tabular-nums">
-              {new Date(d.updatedAt).toLocaleString()}
+              {new Date(d.updatedAt).toLocaleString("pt-BR")}
             </p>
           </button>
           <button

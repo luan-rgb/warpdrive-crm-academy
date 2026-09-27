@@ -108,7 +108,7 @@ export function ProfileClient(props: ProfileClientProps): React.ReactNode {
           />
           {nameError !== null && (
             <p role="alert" className="mt-1 text-xs text-destructive">
-              {`Could not save name (${nameError})`}
+              {`Não foi possível salvar o nome (${nameError})`}
             </p>
           )}
           <div className="mt-2 flex items-center gap-3">

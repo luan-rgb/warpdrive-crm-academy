@@ -5,10 +5,10 @@ import { AppError } from "@/constants/errorIds";
 import type { Db } from "@/db/client";
 import { err, ok, type Result } from "@/types/result";
 import { encryptToken } from "./crypto";
+import { PG_UNIQUE_VIOLATION, pgErrorCode } from "./pgErrors";
 
 // Postgres unique_violation. A second user binding an address already connected to
 // another user trips email_accounts.email_address UNIQUE.
-const PG_UNIQUE_VIOLATION = "23505";
 
 // openid + email are REQUIRED, not optional: the callback resolves the mailbox owner
 // via Google's userinfo endpoint (see route.ts), which returns email / email_verified /
@@ -65,21 +65,6 @@ export function stateMatches(fromQuery: string, fromCookie: string | undefined):
   const c = Buffer.from(fromCookie);
   if (q.length !== c.length) return false;
   return timingSafeEqual(q, c);
-}
-
-// Narrow an unknown thrown value to a Postgres error code. Drizzle wraps the pg
-// error in its own Error and hangs the original off `.cause`, so walk the cause
-// chain. Lets us catch the unique violation distinctly.
-function pgErrorCode(e: unknown): string | undefined {
-  let cur: unknown = e;
-  for (let depth = 0; depth < 5 && typeof cur === "object" && cur !== null; depth++) {
-    if ("code" in cur) {
-      const code = cur.code;
-      if (typeof code === "string") return code;
-    }
-    cur = "cause" in cur ? cur.cause : undefined;
-  }
-  return undefined;
 }
 
 // Security core: exchange the code, fetch the Google identity, and bind the

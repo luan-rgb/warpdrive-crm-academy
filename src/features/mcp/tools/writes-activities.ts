@@ -4,6 +4,7 @@ import type { Db } from "@/db/client";
 import { updateActivity } from "@/features/activities/activityUpdate";
 import { completeActivity, createActivity } from "@/features/activities/repo";
 import { activityCreateInput, activityUpdateInput } from "@/features/activities/schemas";
+import { triggerActivityAutomations } from "@/features/automations/activityTriggers";
 import { createNote } from "@/features/collaboration/notesRepo";
 import { noteCreateInput } from "@/features/collaboration/notesSchemas";
 import { toAuthUser, toPermSetUser } from "@/features/mcp/actorContext";
@@ -11,6 +12,7 @@ import {
   type GetCtx,
   getToolActor,
   registerTool,
+  requireFlag,
   resultToTool,
   type ToolRegistry,
   toolError,
@@ -31,7 +33,12 @@ export function registerActivityWriteTools(
     run: async (input, signal) => {
       const actor = getToolActor(getCtx);
       if (!actor.ok) return toolError(actor.error);
-      return resultToTool(await createActivity(db, toPermSetUser(actor.value), input, signal));
+      const denied = requireFlag(actor.value, "activity.create");
+      if (denied !== null) return denied;
+      const created = await createActivity(db, toPermSetUser(actor.value), input, signal);
+      if (created.ok)
+        await triggerActivityAutomations(db, created.value, "activity_created", signal);
+      return resultToTool(created);
     },
   });
   registerTool(server, registry, {
@@ -51,9 +58,17 @@ export function registerActivityWriteTools(
     run: async (input, signal) => {
       const actor = getToolActor(getCtx);
       if (!actor.ok) return toolError(actor.error);
-      return resultToTool(
-        await completeActivity(db, toPermSetUser(actor.value), input.id, input.done, signal),
+      const done = await completeActivity(
+        db,
+        toPermSetUser(actor.value),
+        input.id,
+        input.done,
+        signal,
       );
+      if (done.ok && input.done) {
+        await triggerActivityAutomations(db, done.value, "activity_completed", signal);
+      }
+      return resultToTool(done);
     },
   });
   registerTool(server, registry, {

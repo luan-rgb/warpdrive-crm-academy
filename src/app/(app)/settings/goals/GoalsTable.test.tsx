@@ -36,7 +36,7 @@ describe("GoalsTable", () => {
     expect(screen.getByText("200")).toBeInTheDocument();
   });
 
-  it("drops the empty cents from a whole-money target", () => {
+  it("shows a value target in reais, without empty cents", () => {
     render(
       <GoalsTable
         goals={[goal({ subject: "deal", action: "won", metric: "value", target: "20000.00" })]}
@@ -45,6 +45,6 @@ describe("GoalsTable", () => {
         onEdit={() => {}}
       />,
     );
-    expect(screen.getByText("20.000")).toBeInTheDocument();
+    expect(screen.getByText("R$ 20.000")).toBeInTheDocument();
   });
 });

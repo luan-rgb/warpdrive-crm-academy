@@ -42,7 +42,7 @@ describe("OrgFirmographicsPanel", () => {
   it("saves an edited Industry via updateOrgAction and calls onSaved", async () => {
     const onSaved = vi.fn();
     render(<OrgFirmographicsPanel org={org} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Setor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Setor" }));
     fireEvent.change(screen.getByLabelText("Setor"), { target: { value: "Fintech" } });
     fireEvent.keyDown(screen.getByLabelText("Setor"), { key: "Enter" });
 
@@ -58,7 +58,7 @@ describe("OrgFirmographicsPanel", () => {
 
   it("saves an edited Employees count as a number", async () => {
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Funcionários" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Funcionários" }));
     fireEvent.change(screen.getByLabelText("Funcionários"), { target: { value: "350" } });
     fireEvent.keyDown(screen.getByLabelText("Funcionários"), { key: "Enter" });
 
@@ -69,7 +69,7 @@ describe("OrgFirmographicsPanel", () => {
 
   it("clears Employees to null when the input is emptied", async () => {
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Funcionários" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Funcionários" }));
     fireEvent.change(screen.getByLabelText("Funcionários"), { target: { value: "" } });
     fireEvent.keyDown(screen.getByLabelText("Funcionários"), { key: "Enter" });
 
@@ -80,7 +80,7 @@ describe("OrgFirmographicsPanel", () => {
 
   it("saves an edited Website/domain", async () => {
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Site" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Site" }));
     fireEvent.change(screen.getByLabelText("Site"), { target: { value: "acme.io" } });
     fireEvent.keyDown(screen.getByLabelText("Site"), { key: "Enter" });
 
@@ -122,7 +122,7 @@ describe("OrgFirmographicsPanel", () => {
   it("surfaces a save failure via an inline error", async () => {
     updateOrgAction.mockResolvedValueOnce({ ok: false, error: { id: "E_CONTACT_002" } });
     render(<OrgFirmographicsPanel org={org} onSaved={vi.fn()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Setor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Setor" }));
     fireEvent.change(screen.getByLabelText("Setor"), { target: { value: "Fintech" } });
     fireEvent.keyDown(screen.getByLabelText("Setor"), { key: "Enter" });
 

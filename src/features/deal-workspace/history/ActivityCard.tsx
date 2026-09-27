@@ -16,13 +16,13 @@ import { ActivityCardMenu } from "./ActivityCardMenu";
 type EntityKey = { entityType: "deal" | "person" | "organization"; entityId: string };
 
 function formatDate(at: Date): string {
-  return at.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  return at.toLocaleDateString("pt-BR", { month: "short", day: "numeric", year: "numeric" });
 }
 
 // Completion stamp includes the time of day (Pipedrive shows "Done <date> <time>"): the user
 // wants to see WHEN an activity was actually completed, not just the day.
 function formatDateTime(at: Date): string {
-  return at.toLocaleString(undefined, {
+  return at.toLocaleString("pt-BR", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -184,7 +184,7 @@ export function ActivityCard({
               rel="noreferrer"
               className="mt-0.5 inline-flex items-center gap-1 text-xs text-primary hover:underline"
             >
-              Join video call
+              Entrar na videochamada
             </a>
           ) : null}
           {activity.location != null && activity.location !== "" && (

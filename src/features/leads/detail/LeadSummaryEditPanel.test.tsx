@@ -48,7 +48,7 @@ const owners = [
 describe("LeadSummaryEditPanel", () => {
   it("saves an edited Value with the CAS expectedUpdatedAt and the CSRF token", async () => {
     render(<LeadSummaryEditPanel lead={lead} owners={owners} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Valor" }));
     const input = screen.getByLabelText("Valor");
     fireEvent.change(input, { target: { value: "250" } });
     fireEvent.keyDown(input, { key: "Enter" });
@@ -86,7 +86,7 @@ describe("LeadSummaryEditPanel", () => {
 
   it("saves Owner via the select's dirty-gated Save with the CAS expectedUpdatedAt", async () => {
     render(<LeadSummaryEditPanel lead={lead} owners={owners} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Dono" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Dono" }));
     fireEvent.click(screen.getByLabelText("Dono"));
     fireEvent.click(screen.getByText("Ada Lovelace"));
     expect(updateLeadAction).not.toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe("LeadSummaryEditPanel", () => {
     render(
       <LeadSummaryEditPanel lead={{ ...lead, expectedCloseDate: "2026-07-04" }} owners={owners} />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Edit Data prevista de fechamento" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Data prevista de fechamento" }));
     // findByText: the calendar is a next/dynamic chunk that loads on open.
     fireEvent.click(await screen.findByText("15"));
     expect(updateLeadAction).not.toHaveBeenCalled();
@@ -123,7 +123,7 @@ describe("LeadSummaryEditPanel", () => {
   it("calls the onSaved callback instead of router.refresh when provided", async () => {
     const onSaved = vi.fn();
     render(<LeadSummaryEditPanel lead={lead} owners={owners} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Valor" }));
     fireEvent.change(screen.getByLabelText("Valor"), { target: { value: "300" } });
     fireEvent.keyDown(screen.getByLabelText("Valor"), { key: "Enter" });
 
@@ -134,7 +134,7 @@ describe("LeadSummaryEditPanel", () => {
   it("resyncs via router.refresh even when the save fails (stale CAS)", async () => {
     updateLeadAction.mockResolvedValueOnce({ ok: false, error: { id: "E_LEAD_007" } });
     render(<LeadSummaryEditPanel lead={lead} owners={owners} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Valor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Valor" }));
     fireEvent.change(screen.getByLabelText("Valor"), { target: { value: "300" } });
     fireEvent.keyDown(screen.getByLabelText("Valor"), { key: "Enter" });
 

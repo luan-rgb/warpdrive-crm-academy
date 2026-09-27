@@ -142,6 +142,8 @@ export function Composer({
   const draftIdRef = useRef<string | undefined>(draft?.id);
   // Shared in-flight save promise: lets send await a racing autosave before deleting the draft.
   const draftInFlightRef = useRef<Promise<void> | null>(null);
+  // Idempotency key carried over to the next Send only when the last attempt's outcome is unknown.
+  const pendingSendKeyRef = useRef<string | undefined>(undefined);
   useDraftAutosave({
     accountId,
     threadId: resolvedThreadId ?? null,
@@ -186,6 +188,7 @@ export function Composer({
     onSent,
     draftIdRef,
     inFlightRef: draftInFlightRef,
+    pendingSendKeyRef,
   });
 
   // AttachButton needs an entityId for the upload; use dealId in deal context,

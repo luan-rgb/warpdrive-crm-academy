@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/client";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { columnsFromKeys, leadRowsToCsv } from "@/features/leads/inbox/exportCsv";
 import { leadExportQuery } from "@/features/leads/inbox/exportQuery";
 import { listLeadsForExport } from "@/features/leads/leadRepo";
@@ -13,10 +14,10 @@ import type { DealVisibilitySession } from "@/types/session";
 export async function GET(req: NextRequest): Promise<Response> {
   const signal = AbortSignal.timeout(15_000);
   const { actor } = await createContext();
-  if (actor === null) return new NextResponse("Unauthorized", { status: 401 });
+  if (actor === null) return new NextResponse("Não autorizado", { status: 401 });
 
   const parsed = leadExportQuery.safeParse(Object.fromEntries(req.nextUrl.searchParams));
-  if (!parsed.success) return new NextResponse("Bad request", { status: 400 });
+  if (!parsed.success) return new NextResponse("Requisição inválida", { status: 400 });
   const q = parsed.data;
 
   const session: DealVisibilitySession = {
@@ -39,6 +40,13 @@ export async function GET(req: NextRequest): Promise<Response> {
       signal,
     );
     const csv = leadRowsToCsv(rows, columnsFromKeys(q.columns), currency);
+    await recordSecurityEvent(db, {
+      actorId: actor.id,
+      targetType: "export",
+      targetId: null,
+      action: "data.export",
+      detail: { entity: "leads", rows: rows.length },
+    });
     return new NextResponse(csv, {
       status: 200,
       headers: {
@@ -49,6 +57,6 @@ export async function GET(req: NextRequest): Promise<Response> {
   } catch {
     // Query params are already validated by safeParse above, so a throw here is an internal
     // failure (DB error or the 15s timeout), not bad input: report 500, not 400.
-    return new NextResponse("Export failed", { status: 500 });
+    return new NextResponse("Falha na exportação", { status: 500 });
   }
 }

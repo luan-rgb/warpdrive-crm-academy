@@ -35,6 +35,12 @@ export function checkRateLimit(name: RateLimitName, headers: Headers): RateLimit
   return limiterFor(name).check(clientKeyFromHeaders(headers), Date.now());
 }
 
+// For signed-in surfaces, key on something the server vouches for (a user id, a token id) rather
+// than the forwarded address.
+export function checkRateLimitFor(name: RateLimitName, key: string): RateLimitResult {
+  return limiterFor(name).check(key, Date.now());
+}
+
 // A Retry-After of 0 reads as "try again now", which is the opposite of the instruction, so the
 // floor is one second even when the window is about to roll over anyway.
 export function tooManyRequestsResponse(result: RateLimitResult): Response {

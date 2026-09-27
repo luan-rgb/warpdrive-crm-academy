@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { ERROR_IDS } from "@/constants/errorIds";
 import { guardCsrf } from "@/features/identity/actions/shared";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import { createContext } from "@/server/trpc/context";
 import { revokeAllForClientUser } from "./tokens";
 
@@ -25,5 +26,12 @@ export async function revokeConnectionAction(
   const signal = AbortSignal.timeout(10_000);
   await revokeAllForClientUser(ctx.db, parsed.data, ctx.actor.id, signal);
   signal.throwIfAborted();
+  await recordSecurityEvent(ctx.db, {
+    actorId: ctx.actor.id,
+    targetType: "oauth_client",
+    targetId: null,
+    action: "oauth.revoke",
+    detail: { clientId: parsed.data },
+  });
   return { ok: true };
 }

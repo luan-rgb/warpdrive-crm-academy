@@ -38,6 +38,22 @@ function sendCount(fake: FakeGmailClient): number {
 }
 
 describe("enqueueSend", () => {
+  it("derives the Message-ID domain from the sending mailbox, never an empty domain", async () => {
+    await withTestDb(async (db) => {
+      const acct = await seedAccount(db);
+      await db.execute(
+        sql`UPDATE email_accounts SET email_address='vendas@empresa.com.br' WHERE id=${acct}`,
+      );
+      await enqueueSend(db, { accountId: acct, idempotencyKey: KEY, payload });
+      const row = (
+        await db.execute(
+          sql`SELECT message_id_header FROM email_send_attempts WHERE account_id=${acct}`,
+        )
+      ).rows[0] as { message_id_header: string };
+      expect(row.message_id_header).toMatch(/@empresa\.com\.br>$/);
+    });
+  });
+
   it("is idempotent and reports replay for an already-sent row", async () => {
     await withTestDb(async (db) => {
       const acct = await seedAccount(db);

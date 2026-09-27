@@ -15,7 +15,7 @@ export function AgendaDayHeader({ iso, today }: { iso: string; today: boolean })
       )}
     >
       {isoToDayHeading(iso)}
-      {today && <span className="sr-only"> (today)</span>}
+      {today && <span className="sr-only"> (hoje)</span>}
     </div>
   );
 }

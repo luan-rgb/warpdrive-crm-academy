@@ -26,7 +26,7 @@ export function MultiCombobox({
   onChange,
   options,
   ariaLabel,
-  placeholder = "Select",
+  placeholder = "Selecione",
 }: MultiComboboxProps): React.ReactNode {
   const [open, setOpen] = useState(false);
   const selected = options.filter((o) => values.includes(o.value));
@@ -80,7 +80,7 @@ export function MultiCombobox({
           />
           <CommandList className="max-h-56 overflow-y-auto p-1">
             <CommandEmpty className="px-2 py-3 text-sm text-muted-foreground">
-              No match.
+              Nenhum resultado.
             </CommandEmpty>
             <CommandGroup>
               {options.map((o) => (

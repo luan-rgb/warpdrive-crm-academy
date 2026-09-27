@@ -73,7 +73,7 @@ export function ActivityRow({
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: propagation guard only */}
         <span className="inline-flex" onClick={(e) => e.stopPropagation()}>
           <Checkbox
-            label={`Select ${row.subject}`}
+            label={`Selecionar ${row.subject}`}
             checked={selected}
             onCheckedChange={() => onToggleSelect(row.id)}
           />
@@ -104,7 +104,7 @@ export function ActivityRow({
       <td className="px-3 py-2 text-muted-foreground">
         {row.dealId !== null ? (
           <Link href={`/deals/${row.dealId}`} onClick={(e) => e.stopPropagation()}>
-            {row.dealTitle ?? "Deal"}
+            {row.dealTitle ?? "Negócio"}
           </Link>
         ) : (
           "-"

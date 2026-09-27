@@ -179,7 +179,7 @@ describe("stats tRPC router", () => {
       // Both pipelines have one stage at position 0, and they are named differently, so the
       // merged row falls back to the position label rather than picking one pipeline's name.
       expect(out.funnel).toHaveLength(1);
-      expect(out.funnel[0]?.name).toBe("Stage 1");
+      expect(out.funnel[0]?.name).toBe("Etapa 1");
     });
   });
 

@@ -102,7 +102,7 @@ export function RangeControl({
     <fieldset className="m-0 space-y-2 border-0 p-0">
       <legend className="sr-only">{def.name}</legend>
       <label htmlFor={startId} className="block text-xs font-medium text-muted-foreground">
-        Start
+        Início
         <Input
           id={startId}
           type={inputType}
@@ -112,7 +112,7 @@ export function RangeControl({
         />
       </label>
       <label htmlFor={endId} className="block text-xs font-medium text-muted-foreground">
-        End
+        Fim
         <Input
           id={endId}
           type={inputType}
@@ -205,7 +205,8 @@ export function ReferenceControl({ def, value, onChange }: ControlProps) {
     options = (orgsQ.data ?? []).map((option) => ({ value: option.id, label: option.name }));
   }
 
-  const typeLabel = def.type === "user" ? "usuário" : def.type === "person" ? "pessoa" : "organização";
+  const typeLabel =
+    def.type === "user" ? "usuário" : def.type === "person" ? "pessoa" : "organização";
 
   return (
     <Combobox

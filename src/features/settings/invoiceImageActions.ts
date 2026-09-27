@@ -13,7 +13,7 @@ import {
   removeInvoiceImage,
   requestInvoiceImageUpload,
 } from "./invoiceImageService";
-import type { InvoiceImageKind } from "./invoiceImageStorage";
+import { type InvoiceImageKind, isInvoiceImageKind } from "./invoiceImageStorage";
 
 // Same gate as the other settings actions (permissions.manage or admin), not per-user auth: these
 // are settings singletons an admin/manager configures once for everyone, unlike an avatar.
@@ -33,6 +33,10 @@ export async function requestInvoiceImageUploadAction(
 ): Promise<Result<{ post: PresignedPost }, AppError>> {
   const g = await gate(csrfToken);
   if (!g.ok) return g;
+  // The kind names a storage key: a client-sent value must be one of the known kinds.
+  if (!isInvoiceImageKind(kind)) {
+    return err(new AppError(ERROR_IDS.INVOICE_IMAGE_INVALID, "unknown invoice image kind", {}));
+  }
   return requestInvoiceImageUpload(makeStorageClient(), kind, input, SIG());
 }
 
@@ -42,6 +46,10 @@ export async function confirmInvoiceImageUploadAction(
 ): Promise<Result<{ url: string }, AppError>> {
   const g = await gate(csrfToken);
   if (!g.ok) return g;
+  // The kind names a storage key: a client-sent value must be one of the known kinds.
+  if (!isInvoiceImageKind(kind)) {
+    return err(new AppError(ERROR_IDS.INVOICE_IMAGE_INVALID, "unknown invoice image kind", {}));
+  }
   return confirmInvoiceImageUpload(db, makeStorageClient(), kind, SIG());
 }
 
@@ -51,5 +59,9 @@ export async function removeInvoiceImageAction(
 ): Promise<Result<{ removed: true }, AppError>> {
   const g = await gate(csrfToken);
   if (!g.ok) return g;
+  // The kind names a storage key: a client-sent value must be one of the known kinds.
+  if (!isInvoiceImageKind(kind)) {
+    return err(new AppError(ERROR_IDS.INVOICE_IMAGE_INVALID, "unknown invoice image kind", {}));
+  }
   return removeInvoiceImage(db, makeStorageClient(), kind, SIG());
 }

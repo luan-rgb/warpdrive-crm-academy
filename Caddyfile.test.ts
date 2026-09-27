@@ -49,3 +49,32 @@ describe("Caddyfile storage vhost", () => {
     expect(s3).toMatch(/Strict-Transport-Security "max-age=31536000/);
   });
 });
+
+describe("Caddyfile storage vhost admin API", () => {
+  // MinIO's admin API (/minio/admin/*) lives on the same port as the S3 API and is guarded only
+  // by the root credentials. Nothing in the browser flow needs it, so the public host refuses it.
+  test("refuses MinIO admin paths on the public storage host", () => {
+    expect(vhost("s3.{$APP_DOMAIN} {")).toMatch(/respond \/minio\/admin\* 403/);
+  });
+});
+
+describe("multi-tenant Caddy (caddy/Caddyfile.tenants.example + provision-tenant.sh)", () => {
+  const tenants = readFileSync("caddy/Caddyfile.tenants.example", "utf8");
+  const provision = readFileSync("scripts/provision-tenant.sh", "utf8");
+
+  // Host nginx terminates TLS in front of this Caddy. Without trusting it, Caddy sees every
+  // visitor as nginx's address and the app's per-IP rate limits become one shared bucket per
+  // tenant (one abuser locks everyone out of magic-link login).
+  test("trusts the host proxy and resolves the real client from the right-most untrusted hop", () => {
+    expect(tenants).toMatch(/trusted_proxies static private_ranges/);
+    expect(tenants).toMatch(/trusted_proxies_strict/);
+  });
+
+  test("each tenant app receives the resolved client IP as the last forwarded-for entry", () => {
+    expect(provision).toMatch(/header_up X-Forwarded-For \{client_ip\}/);
+  });
+
+  test("refuses MinIO admin paths on the shared public storage host", () => {
+    expect(tenants).toMatch(/respond \/minio\/admin\* 403/);
+  });
+});

@@ -39,7 +39,7 @@ describe("buildParticipantOptions", () => {
 
   it("falls back to a placeholder name when the deal's person name is unknown", () => {
     const options = buildParticipantOptions([], "mia", undefined);
-    expect(options).toEqual([{ id: "mia", name: "Deal contact" }]);
+    expect(options).toEqual([{ id: "mia", name: "Contato do negócio" }]);
   });
 
   it("returns just the org people when there is no deal person", () => {

@@ -46,6 +46,7 @@ export default async function GroupDetailPage({
         &larr; {STRINGS.settings.visibilityGroups}
       </Link>
       <SettingsHeading
+        help="settings.visibility"
         title={group.name}
         description="Gerencie quem pertence a este grupo de visibilidade."
       />

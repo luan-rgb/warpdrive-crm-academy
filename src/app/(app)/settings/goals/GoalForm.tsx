@@ -131,8 +131,8 @@ export function GoalForm({
         value={subject}
         onChange={chooseSubject}
         options={[
-          { value: "deal", label: "Deals" },
-          { value: "activity", label: "Activities" },
+          { value: "deal", label: "Negócios" },
+          { value: "activity", label: "Atividades" },
         ]}
       />
       <Select
@@ -148,10 +148,10 @@ export function GoalForm({
         options={
           subject === "deal"
             ? [
-                { value: "count", label: "Count" },
-                { value: "value", label: "Value" },
+                { value: "count", label: "Quantidade" },
+                { value: "value", label: "Valor" },
               ]
-            : [{ value: "count", label: "Count" }]
+            : [{ value: "count", label: "Quantidade" }]
         }
       />
       <Select
@@ -163,7 +163,7 @@ export function GoalForm({
         }}
         options={[
           { value: "company", label: "Toda a empresa" },
-          { value: "team", label: "A team" },
+          { value: "team", label: "Uma equipe" },
           { value: "user", label: "Uma pessoa" },
         ]}
       />
@@ -172,7 +172,7 @@ export function GoalForm({
           ariaLabel={S.goalAssignee}
           value={assigneeId}
           onChange={setAssigneeId}
-          options={[{ value: ANY, label: "Select" }, ...assigneeOptions]}
+          options={[{ value: ANY, label: "Selecione" }, ...assigneeOptions]}
         />
       )}
       <Select

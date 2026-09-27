@@ -6,7 +6,7 @@
 import type { StageConversionRow, StageSum } from "@/types/stats";
 
 function positionLabel(order: number): string {
-  return `Stage ${order + 1}`;
+  return `Etapa ${order + 1}`;
 }
 
 function mergedName(names: Set<string>, order: number): string {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildMime, deriveMessageId, toRawBase64 } from "./mime";
+import { buildMime, deriveMessageId, messageIdDomain, toRawBase64 } from "./mime";
 
 describe("deriveMessageId", () => {
   it("derives a deterministic account-scoped Message-ID", () => {
@@ -225,5 +225,16 @@ describe("toRawBase64", () => {
     // base64url is URL-safe: no +, /, or = padding.
     expect(raw).not.toMatch(/[+/=]/);
     expect(Buffer.from(raw, "base64url").toString("utf8")).toBe(original);
+  });
+});
+
+describe("messageIdDomain", () => {
+  it("uses the sending mailbox's own domain (what receiving servers expect)", () => {
+    expect(messageIdDomain("vendas@Empresa.com.br", "")).toBe("empresa.com.br");
+  });
+
+  it("falls back when the address has no usable domain, and never yields an empty one", () => {
+    expect(messageIdDomain("broken", "example.com")).toBe("example.com");
+    expect(messageIdDomain("broken", "")).toBe("warpdrive.localhost");
   });
 });

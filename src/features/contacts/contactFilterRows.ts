@@ -22,17 +22,17 @@ export const OP_LABELS: Record<ContactFilterOp, string> = FILTER_OP_LABELS;
 
 // Human field labels for the field dropdown, per entity (keys match the backend config fields).
 export const PERSON_FILTER_LABELS: Record<string, string> = {
-  name: "Name",
-  primaryEmail: "Email",
-  ownerId: "Owner",
-  labels: "Label",
+  name: "Nome",
+  primaryEmail: "E-mail",
+  ownerId: "Responsável",
+  labels: "Etiqueta",
 };
 export const ORG_FILTER_LABELS: Record<string, string> = {
-  name: "Name",
-  industry: "Industry",
-  employeeCount: "Employees",
-  ownerId: "Owner",
-  labels: "Label",
+  name: "Nome",
+  industry: "Setor",
+  employeeCount: "Funcionários",
+  ownerId: "Responsável",
+  labels: "Etiqueta",
 };
 
 // Field value input kind, derived from the backend config (no separate source of truth). "label"

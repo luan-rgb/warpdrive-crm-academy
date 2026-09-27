@@ -118,7 +118,7 @@ export function AddLeadModal({
       }
       const result = await createLeadAction({ ...parsed.input, personId, orgId }, csrf);
       if (!result.ok) {
-        setError(`Could not create lead (${result.error.id})`);
+        setError(`Não foi possível criar o lead (${result.error.id})`);
         return;
       }
       onCreated();

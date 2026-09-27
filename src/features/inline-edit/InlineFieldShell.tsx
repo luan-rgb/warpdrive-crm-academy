@@ -85,7 +85,7 @@ export function InlineFieldShell({
       </ValueElement>
       <button
         type="button"
-        aria-label={`Edit ${label}`}
+        aria-label={`Editar ${label}`}
         onClick={onStartEdit}
         // opacity (not visibility) so the button stays in the tab order and the
         // accessibility tree; focus-visible reveals it for keyboard users.

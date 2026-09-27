@@ -81,14 +81,14 @@ describe("AgendaDayColumn", () => {
 
   it("collapses the activities past the lane cap into a counted more-chip", () => {
     renderColumn(fiveAtNine());
-    expect(screen.getByRole("button", { name: "Show 4 more activities" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Mostrar mais 4 atividades" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Activity e" })).toBeNull();
   });
 
   it("gives the more-chip a pixel floor so the count itself is never what gets clipped", () => {
     // 30% of a 180px column is 54px, which rendered "+5 more" as "+5 ...".
     renderColumn(fiveAtNine());
-    const block = screen.getByRole("button", { name: "Show 4 more activities" }).parentElement;
+    const block = screen.getByRole("button", { name: "Mostrar mais 4 atividades" }).parentElement;
     expect(block).toHaveClass("w-[min(max(30%,5rem),60%)]", "right-0");
   });
 
@@ -97,7 +97,7 @@ describe("AgendaDayColumn", () => {
     // the neighbour and the surviving chip collapses to nothing, hiding an activity that is not in
     // the more-chip's own list.
     renderColumn(fiveAtNine());
-    const block = screen.getByRole("button", { name: "Show 4 more activities" }).parentElement;
+    const block = screen.getByRole("button", { name: "Mostrar mais 4 atividades" }).parentElement;
     expect(block?.className).toContain(",60%)]");
   });
 
@@ -111,7 +111,7 @@ describe("AgendaDayColumn", () => {
   it("lists what the more-chip stands for, so nothing is unreachable from the calendar", () => {
     const items = fiveAtNine();
     const { onOpenActivity } = renderColumn(items);
-    fireEvent.click(screen.getByRole("button", { name: "Show 4 more activities" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mostrar mais 4 atividades" }));
     fireEvent.click(screen.getByRole("button", { name: /Activity e/ }));
     expect(onOpenActivity).toHaveBeenCalledWith(items[4]);
   });
@@ -123,7 +123,7 @@ describe("AgendaDayColumn", () => {
       mk("c", new Date(2026, 6, 15, 9, 0), 60),
       mk("d", new Date(2026, 6, 15, 11, 0), 60),
     ]);
-    const trigger = screen.getByRole("button", { name: "Show 3 more activities" });
+    const trigger = screen.getByRole("button", { name: "Mostrar mais 3 atividades" });
     expect(trigger.parentElement?.style.pointerEvents).toBe("none");
     expect(trigger.style.pointerEvents).toBe("auto");
   });
@@ -133,7 +133,9 @@ describe("AgendaDayColumn", () => {
     // user walked 24 empty hours before reaching anything real.
     renderColumn([mk("real", new Date(2026, 6, 15, 14, 0), 60)]);
     const chip = screen.getByRole("button", { name: "Activity real" });
-    const firstSlot = screen.getByRole("button", { name: "Add activity on 2026-07-15 at 00:00" });
+    const firstSlot = screen.getByRole("button", {
+      name: "Adicionar atividade em 2026-07-15 às 00:00",
+    });
     expect(chip.compareDocumentPosition(firstSlot) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
@@ -143,16 +145,18 @@ describe("AgendaDayColumn", () => {
       .getAllByRole("button")
       .filter((b) => b.getAttribute("tabindex") !== "-1");
     expect(tabbable).toHaveLength(1);
-    expect(tabbable[0]).toHaveAccessibleName("Add activity on 2026-07-15 at 08:00");
+    expect(tabbable[0]).toHaveAccessibleName("Adicionar atividade em 2026-07-15 às 08:00");
   });
 
   it("walks the hours with the arrow keys once a lane has focus", () => {
     renderColumn([]);
-    const start = screen.getByRole("button", { name: "Add activity on 2026-07-15 at 08:00" });
+    const start = screen.getByRole("button", {
+      name: "Adicionar atividade em 2026-07-15 às 08:00",
+    });
     start.focus();
     fireEvent.keyDown(start, { key: "ArrowDown" });
     expect(
-      screen.getByRole("button", { name: "Add activity on 2026-07-15 at 09:00" }),
+      screen.getByRole("button", { name: "Adicionar atividade em 2026-07-15 às 09:00" }),
     ).toHaveFocus();
     fireEvent.keyDown(document.activeElement as Element, { key: "ArrowUp" });
     expect(start).toHaveFocus();
@@ -160,7 +164,9 @@ describe("AgendaDayColumn", () => {
 
   it("stops at the ends of the day rather than wrapping around midnight", () => {
     renderColumn([]);
-    const first = screen.getByRole("button", { name: "Add activity on 2026-07-15 at 00:00" });
+    const first = screen.getByRole("button", {
+      name: "Adicionar atividade em 2026-07-15 às 00:00",
+    });
     first.focus();
     fireEvent.keyDown(first, { key: "ArrowUp" });
     expect(first).toHaveFocus();

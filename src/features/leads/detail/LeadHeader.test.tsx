@@ -93,8 +93,8 @@ describe("LeadHeader PD lead-drawer parity", () => {
     });
     render(<LeadHeader lead={LEAD} />);
 
-    await user.click(screen.getByRole("button", { name: "Edit lead title" }));
-    const input = screen.getByRole("textbox", { name: "Edit lead title" });
+    await user.click(screen.getByRole("button", { name: "Editar título do lead" }));
+    const input = screen.getByRole("textbox", { name: "Editar título do lead" });
     await user.clear(input);
     await user.type(input, "Acme enterprise lead");
     await user.click(screen.getByRole("button", { name: "Salvar" }));
@@ -117,8 +117,8 @@ describe("LeadHeader PD lead-drawer parity", () => {
     const { updateLeadAction } = await import("../leadServerActions");
     render(<LeadHeader lead={LEAD} />);
 
-    await user.click(screen.getByRole("button", { name: "Edit lead title" }));
-    const input = screen.getByRole("textbox", { name: "Edit lead title" });
+    await user.click(screen.getByRole("button", { name: "Editar título do lead" }));
+    const input = screen.getByRole("textbox", { name: "Editar título do lead" });
     await user.clear(input);
     await user.type(input, "Do not save");
     await user.click(screen.getByRole("button", { name: "Cancelar" }));
@@ -135,8 +135,8 @@ describe("LeadHeader error surfacing", () => {
     vi.mocked(updateLeadAction).mockResolvedValue({ ok: false, error: { id: "E_LEAD_007" } });
     render(<LeadHeader lead={LEAD} />);
 
-    await user.click(screen.getByRole("button", { name: "Edit lead title" }));
-    const input = screen.getByRole("textbox", { name: "Edit lead title" });
+    await user.click(screen.getByRole("button", { name: "Editar título do lead" }));
+    const input = screen.getByRole("textbox", { name: "Editar título do lead" });
     await user.clear(input);
     await user.type(input, "Conflicting update");
     await user.click(screen.getByRole("button", { name: "Salvar" }));

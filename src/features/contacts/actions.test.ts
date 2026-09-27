@@ -32,14 +32,15 @@ vi.mock("@/server/trpc/context", () => ({
   }),
 }));
 
-const { updatePerson, updateOrg } = vi.hoisted(() => ({
+const { updatePerson, updateOrg, createOrg } = vi.hoisted(() => ({
   updatePerson: vi.fn(() => Promise.resolve({ ok: true as const, value: { id: "p1" } })),
   updateOrg: vi.fn(() => Promise.resolve({ ok: true as const, value: { id: "o1" } })),
+  createOrg: vi.fn(() => Promise.resolve({ ok: true as const, value: { id: "o2" } })),
 }));
 vi.mock("./personsRepo", () => ({ updatePerson, createPerson: vi.fn() }));
-vi.mock("./orgsRepo", () => ({ updateOrg, createOrg: vi.fn() }));
+vi.mock("./orgsRepo", () => ({ updateOrg, createOrg }));
 
-import { updateOrgAction, updatePersonAction } from "./actions";
+import { createOrgAction, updateOrgAction, updatePersonAction } from "./actions";
 
 const VALID_TOKEN = "csrf-test-token";
 
@@ -106,5 +107,17 @@ describe("updatePersonAction validation boundary", () => {
     );
     expect(r.ok).toBe(true);
     expect(updatePerson).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("createOrgAction validation boundary", () => {
+  test("rejects a missing or non-string name without calling createOrg", async () => {
+    setSameOrigin();
+    for (const input of [{}, { name: 5 }, { name: "" }]) {
+      const r = await createOrgAction(input as never, VALID_TOKEN);
+      expect(r.ok).toBe(false);
+      if (!r.ok) expect(r.error.id).toBe("E_CONTACT_010");
+    }
+    expect(createOrg).not.toHaveBeenCalled();
   });
 });

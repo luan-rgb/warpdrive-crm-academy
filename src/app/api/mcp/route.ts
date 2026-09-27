@@ -4,6 +4,7 @@ import { env } from "@/config/env";
 import { db } from "@/db/client";
 import { authenticateMcp } from "@/features/mcp/auth";
 import { registerMcpTools } from "@/features/mcp/server";
+import { checkRateLimitFor, tooManyRequestsResponse } from "@/server/rateLimitGuard";
 import type { AppContext } from "@/server/trpc/context";
 
 export const runtime = "nodejs";
@@ -31,6 +32,11 @@ async function handleAuthenticatedRequest(req: Request): Promise<Response> {
       headers: { "WWW-Authenticate": `Bearer resource_metadata="${resourceMetadataUrl}"` },
     });
   }
+
+  // Keyed on the authenticated user, not the address: MCP clients are often hosted services that
+  // share egress IPs across many customers.
+  const limit = checkRateLimitFor("mcp", ctx.actor?.id ?? "anonymous");
+  if (!limit.allowed) return tooManyRequestsResponse(limit);
 
   const handler = createMcpHandler(
     (server) => registerMcpTools(server, () => ctx, db),

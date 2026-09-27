@@ -48,8 +48,8 @@ describe("OAuth consent screen", () => {
 
   it("still renders both decisions", () => {
     renderConsent();
-    expect(screen.getByRole("button", { name: /deny/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /allow/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /recusar/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /permitir/i })).toBeInTheDocument();
   });
 
   // A loopback redirect is the normal shape for a desktop MCP client, and showing a bare

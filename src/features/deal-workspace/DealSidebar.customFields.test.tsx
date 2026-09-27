@@ -88,7 +88,7 @@ it("inline-edits a text custom field through the deal update action (customField
     />,
   );
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit Notes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Notes" }));
   expect(screen.getByLabelText("Notes")).toHaveFocus();
   fireEvent.change(screen.getByLabelText("Notes"), { target: { value: "world" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -123,7 +123,7 @@ it("renders an empty custom field with the same dash and hover-pencil mechanism 
   expect(row).not.toBeNull();
   expect(within(row as HTMLElement).getByText("-")).toBeInTheDocument();
   expect(
-    within(row as HTMLElement).getByRole("button", { name: "Edit linkedin" }),
+    within(row as HTMLElement).getByRole("button", { name: "Editar linkedin" }),
   ).toBeInTheDocument();
   expect(
     within(row as HTMLElement).queryByRole("button", { name: "+ Adicionar" }),

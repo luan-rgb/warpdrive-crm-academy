@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import type { InvoiceTaxMode } from "@/db/schema/invoices";
+import { formatCurrencyExact } from "@/lib/formatCurrency";
 import { trpc } from "@/lib/trpc-client";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import {
@@ -19,12 +20,7 @@ import {
 } from "./actions";
 
 function money(v: string | number, currency: string): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(v));
+  return formatCurrencyExact(v, currency);
 }
 
 function lineBase(quantity: string, unitPrice: string, discountPercent: string): number {

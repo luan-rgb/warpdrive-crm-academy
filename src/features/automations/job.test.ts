@@ -36,6 +36,7 @@ it("writes a success run when every action succeeds", async () => {
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [{ actionType: "send_notification", config: { messageTemplate: "hi" } }],
         isActive: true,
       },
@@ -89,6 +90,7 @@ it("update_field targeting the field its own trigger watches does not re-fire th
         pipelineId: null,
         trigger: "deal_field_changed",
         triggerConfig: { fieldKey: "title" },
+        conditions: [],
         actions: [
           { actionType: "update_field", config: { fieldKey: "title", value: "Automated" } },
         ],
@@ -128,6 +130,7 @@ it("writes a partial run when one action fails and later actions still run", asy
         pipelineId: null,
         trigger: "deal_created",
         triggerConfig: {},
+        conditions: [],
         actions: [
           { actionType: "send_email", config: { subjectTemplate: "Hi", bodyTemplate: "Hi" } },
           { actionType: "send_notification", config: { messageTemplate: "hi" } },

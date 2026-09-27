@@ -105,7 +105,7 @@ describe("DealPersonSection with no linked person", () => {
 
   it("suggests an existing person from a phone typed without its country code", async () => {
     renderSection({ bulkEditing: true });
-    await userEvent.type(screen.getByLabelText("Phone"), "619-555-0134");
+    await userEvent.type(screen.getByLabelText("Telefone"), "619-555-0134");
     expect(await screen.findByText(/Steve Tomkiel/)).toBeInTheDocument();
   });
 

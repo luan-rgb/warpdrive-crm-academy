@@ -256,7 +256,7 @@ export function DealListClient({
       {footer.filtered ? (
         <p
           role="status"
-          aria-label="filtered count"
+          aria-label="contagem filtrada"
           className="px-1 py-2 text-sm text-muted-foreground"
         >
           Exibindo {footer.total} {footer.total === 1 ? "negócio filtrado" : "negócios filtrados"}

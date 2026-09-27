@@ -44,6 +44,7 @@ export function ForecastWidget({
   return (
     <Panel
       title={STRINGS.dashboard.widgetForecast}
+      help="dashboard.forecast"
       isEmpty={!hasForecast}
       emptyText={STRINGS.dashboard.emptyForecast}
     >

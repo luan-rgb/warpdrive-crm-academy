@@ -98,7 +98,7 @@ export function ConditionRows({
         return (
           <div key={row.id} className="flex items-center gap-1.5">
             <Select
-              ariaLabel={`Condition ${i + 1} field`}
+              ariaLabel={`Campo da condição ${i + 1}`}
               value={row.field}
               onChange={(v) => {
                 const nextDef = fields.find((f) => f.field === v);
@@ -108,7 +108,7 @@ export function ConditionRows({
               triggerClassName="min-w-0 flex-1"
             />
             <Select
-              ariaLabel={`Condition ${i + 1} operator`}
+              ariaLabel={`Operador da condição ${i + 1}`}
               value={row.op}
               onChange={(v) => patch(i, { op: v, value: VALUELESS_OPS.has(v) ? "" : row.value })}
               options={(def?.ops ?? []).map((o) => ({ value: o, label: opLabels[o] ?? o }))}
@@ -120,7 +120,7 @@ export function ConditionRows({
               {VALUELESS_OPS.has(row.op) ? null : (
                 <ConditionValue
                   input={def?.input}
-                  ariaLabel={`Condition ${i + 1} value`}
+                  ariaLabel={`Valor da condição ${i + 1}`}
                   value={row.value}
                   onChange={(v) => patch(i, { value: v })}
                 />
@@ -143,7 +143,7 @@ export function ConditionRows({
         onClick={addRow}
         className="w-full rounded-md border border-dashed px-2 py-1.5 text-sm text-muted-foreground hover:border-ring hover:text-foreground"
       >
-        + Add condition
+        + Adicionar condição
       </button>
     </>
   );

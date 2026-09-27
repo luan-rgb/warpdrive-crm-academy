@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Input } from "@/components/ui/Input";
 import { Select, type SelectOption } from "@/components/ui/Select";
 import { Switch } from "@/components/ui/Switch";
@@ -111,6 +112,10 @@ export function ActivityTypesClient({
 
   return (
     <div className="space-y-4">
+      <p className="flex items-center gap-1 text-sm text-muted-foreground">
+        Tipos disponíveis ao criar uma atividade
+        <HelpTooltip topic="activity.types" />
+      </p>
       <ul className="divide-y overflow-hidden rounded-lg border bg-card shadow-sm">
         {rows.map((row, i) => (
           <li key={row.id} className="flex items-center gap-3 px-3 py-2">

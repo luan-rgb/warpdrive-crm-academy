@@ -40,7 +40,7 @@ export function ColumnMenu({
     >
       {() => (
         <div>
-          <p className="px-2 py-1 text-xs font-medium uppercase text-muted-foreground">Columns</p>
+          <p className="px-2 py-1 text-xs font-medium uppercase text-muted-foreground">Colunas</p>
           <ColumnMenuSortableList order={order} onToggle={onToggle} onReorder={onReorder} />
           {hidden.length > 0 && (
             <>

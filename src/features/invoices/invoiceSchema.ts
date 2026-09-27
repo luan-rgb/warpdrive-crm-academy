@@ -4,7 +4,7 @@ import { INVOICE_STATUS, INVOICE_TAX_MODE } from "@/db/schema/invoices";
 const percent = z
   .string()
   .regex(/^\d+(\.\d{1,2})?$/)
-  .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "must be between 0 and 100" });
+  .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "deve estar entre 0 e 100" });
 
 export const createInvoiceInputSchema = z.object({
   dealId: z.string().uuid(),
@@ -34,7 +34,7 @@ export const deleteInvoiceInputSchema = z.object({ id: z.string().uuid() });
 const money = z
   .string()
   .regex(/^\d+(\.\d{1,2})?$/)
-  .refine((v) => Number(v) >= 0, { message: "must not be negative" });
+  .refine((v) => Number(v) >= 0, { message: "não pode ser negativo" });
 
 export const addInvoiceLineItemInputSchema = z.object({
   invoiceId: z.string().uuid(),

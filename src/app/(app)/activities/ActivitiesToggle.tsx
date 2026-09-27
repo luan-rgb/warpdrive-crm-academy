@@ -12,20 +12,20 @@ export function ActivitiesToggle({ active }: { active: "list" | "calendar" }): R
     <div className="mb-3 inline-flex rounded-md border bg-card p-0.5">
       {active === "list" ? (
         <span className={cn(segment, on)} aria-current="page">
-          List
+          Lista
         </span>
       ) : (
         <Link href="/activities/list" className={cn(segment, off)}>
-          List
+          Lista
         </Link>
       )}
       {active === "calendar" ? (
         <span className={cn(segment, on)} aria-current="page">
-          Calendar
+          Calendário
         </span>
       ) : (
         <Link href="/activities/calendar" className={cn(segment, off)}>
-          Calendar
+          Calendário
         </Link>
       )}
     </div>

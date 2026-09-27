@@ -50,6 +50,9 @@ export interface ComposerSendDeps {
   // In-flight autosave promise shared with useDraftAutosave; awaited before delete so a save
   // that is still running at send time cannot leave an orphaned draft behind.
   inFlightRef: { current: Promise<void> | null };
+  // Set when a send's outcome is unknown (the action rejected): the retry reuses the key so the
+  // server's (account, idempotency key) uniqueness turns a possible duplicate into a replay.
+  pendingSendKeyRef: { current: string | undefined };
 }
 
 export function buildSendHandlers(deps: ComposerSendDeps) {
@@ -77,6 +80,7 @@ export function buildSendHandlers(deps: ComposerSendDeps) {
     onSent,
     draftIdRef,
     inFlightRef,
+    pendingSendKeyRef,
   } = deps;
 
   // Delete the autosaved draft once its message is sent, and clear the shared ref so the
@@ -92,10 +96,10 @@ export function buildSendHandlers(deps: ComposerSendDeps) {
     }
   }
 
-  function buildInput(scheduledSendAt?: Date) {
+  function buildInput(idempotencyKey: string, scheduledSendAt?: Date) {
     return {
       accountId,
-      idempotencyKey: crypto.randomUUID(),
+      idempotencyKey,
       to: toList,
       cc: ccList.length > 0 ? ccList : undefined,
       bcc: bccList.length > 0 ? bccList : undefined,
@@ -192,12 +196,16 @@ export function buildSendHandlers(deps: ComposerSendDeps) {
     scheduledAt?: Date,
   ): Promise<{ ok: true } | { ok: false; msg: string }> {
     const scheduled = scheduledAt !== undefined;
+    const key = pendingSendKeyRef.current ?? crypto.randomUUID();
+    pendingSendKeyRef.current = undefined;
     try {
-      const result = await sendEmail(readCsrfToken(), buildInput(scheduledAt));
+      const result = await sendEmail(readCsrfToken(), buildInput(key, scheduledAt));
       return result.ok ? { ok: true } : failed(result.error.id, scheduled);
     } catch (e) {
       if (unstable_isUnrecognizedActionError(e)) return failed(ERROR_IDS.UI_STALE_BUILD, scheduled);
       console.warn("send action rejected without returning a Result", e);
+      // The mail may have gone out: the next click must be the same send, not a second one.
+      pendingSendKeyRef.current = key;
       return failed(ERROR_IDS.UI_ACTION_UNCONFIRMED, scheduled);
     }
   }

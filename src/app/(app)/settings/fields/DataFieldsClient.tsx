@@ -91,7 +91,11 @@ export function DataFieldsClient({
 
   return (
     <SettingsPage>
-      <SettingsHeading title={S.dataFields} description={DATA_FIELDS_STRINGS.description} />
+      <SettingsHeading
+        help="field.custom"
+        title={S.dataFields}
+        description={DATA_FIELDS_STRINGS.description}
+      />
 
       <div className="block">
         <span className="mb-1 block text-sm font-medium">{S.entity}</span>

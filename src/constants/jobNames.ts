@@ -16,6 +16,7 @@ export const EMAIL_JOB_RETRY_LIMIT = 8;
 // Hourly reaper that clears files rows stuck in status='uploading' plus their
 // orphaned MinIO objects. Fixed queue name, cron-scheduled.
 export const PGBOSS_QUEUE_FILE_REAPER = "file.reaper";
+export const PGBOSS_QUEUE_AUDIT_RETENTION = "audit.retention";
 
 // Notification email delivery: payload is { notificationId: string }.
 // Task 7 registers the worker that consumes this queue.

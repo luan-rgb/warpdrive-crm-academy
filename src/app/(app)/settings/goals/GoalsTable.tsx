@@ -8,6 +8,7 @@ import type { Goal } from "@/db/schema/goals";
 import { deleteGoalAction } from "@/features/goals/actions";
 import { goalLabel } from "@/features/goals/goalLabel";
 import { goalNumberText } from "@/features/goals/goalTargetText";
+import { formatCurrency } from "@/lib/formatCurrency";
 import { readCsrfToken } from "@/utils/csrfCookie";
 
 const S = SETTINGS_STRINGS;
@@ -71,7 +72,11 @@ export function GoalsTable({ goals, assigneeNames, onChanged, onEdit }: Props): 
                   ? "Toda a empresa"
                   : (assigneeNames[g.assigneeId] ?? g.assigneeKind)}
               </td>
-              <td className="px-3 py-2 tabular-nums">{goalNumberText(g.target, g.metric)}</td>
+              <td className="px-3 py-2 tabular-nums">
+                {g.metric === "value"
+                  ? formatCurrency(g.target)
+                  : goalNumberText(g.target, g.metric)}
+              </td>
               <td className="px-3 py-2 tabular-nums">{g.startsOn}</td>
               <td className="px-3 py-2 text-right">
                 <span className="inline-flex gap-1">

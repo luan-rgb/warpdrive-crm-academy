@@ -3,7 +3,7 @@
 // args) produces different HTML on the server vs the browser and causes a hydration mismatch (and a
 // date shift near midnight). Pin the locale and time zone so both sides always agree.
 export function formatCreatedOn(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString("pt-BR", {
     timeZone: "UTC",
     year: "numeric",
     month: "short",

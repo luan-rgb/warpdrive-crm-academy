@@ -3,9 +3,11 @@
 import type { z } from "zod";
 import { ERROR_IDS } from "@/constants/errorIds";
 import { db } from "@/db/client";
+import { authorizeDealAccess, type DealTarget } from "@/features/deals/dealAccess";
 import { guardCsrf } from "@/features/identity/actions/shared";
 import { SIG } from "@/features/identity/actions/sig";
 import { can } from "@/features/permissions/can";
+import type { HydratedActor } from "@/server/hydrateActor";
 import { createContext } from "@/server/trpc/context";
 import {
   addInvoiceLineItemInputSchema,
@@ -30,13 +32,23 @@ type ActionResult<T> = { ok: true; value: T } | { ok: false; error: { id: string
 // as products' gateProductManage).
 async function gateInvoiceManage(
   csrfToken: string | null,
-): Promise<{ ok: true } | { ok: false; error: { id: string } }> {
+): Promise<{ ok: true; actor: HydratedActor } | { ok: false; error: { id: string } }> {
   const csrfOk = await guardCsrf(csrfToken);
   if (!csrfOk.ok) return { ok: false, error: { id: "E_AUTH_CSRF" } };
   const { actor } = await createContext();
   if (actor === null) return { ok: false, error: { id: ERROR_IDS.AUTH_SESSION_DEAD } };
   if (!can(actor, "invoice.manage")) return { ok: false, error: { id: ERROR_IDS.PERM_DENIED } };
-  return { ok: true };
+  return { ok: true, actor };
+}
+
+// invoice.manage is a role flag; the invoice's deal must also be editable by this actor, or any
+// invoice manager could read and rewrite invoices on deals hidden from them.
+async function gateDeal(
+  actor: HydratedActor,
+  target: DealTarget,
+): Promise<{ ok: true } | { ok: false; error: { id: string } }> {
+  const access = await authorizeDealAccess(db, actor, target, "edit", SIG());
+  return access.ok ? { ok: true } : { ok: false, error: { id: access.error.id } };
 }
 
 export async function createInvoiceAction(
@@ -47,6 +59,8 @@ export async function createInvoiceAction(
   if (!g.ok) return g;
   const parsed = createInvoiceInputSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: { id: ERROR_IDS.INVOICE_INPUT_INVALID } };
+  const allowed = await gateDeal(g.actor, { dealId: parsed.data.dealId });
+  if (!allowed.ok) return allowed;
   const result = await createInvoiceFromDeal(db, parsed.data, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: result.value };
@@ -60,6 +74,8 @@ export async function updateInvoiceStatusAction(
   if (!g.ok) return g;
   const parsed = updateInvoiceStatusInputSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: { id: ERROR_IDS.INVOICE_INPUT_INVALID } };
+  const allowed = await gateDeal(g.actor, { invoiceId: parsed.data.id });
+  if (!allowed.ok) return allowed;
   const result = await updateInvoiceStatus(db, parsed.data, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: result.value };
@@ -73,6 +89,8 @@ export async function deleteInvoiceAction(
   if (!g.ok) return g;
   const parsed = deleteInvoiceInputSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: { id: ERROR_IDS.INVOICE_INPUT_INVALID } };
+  const allowed = await gateDeal(g.actor, { invoiceId: parsed.data.id });
+  if (!allowed.ok) return allowed;
   const result = await deleteInvoice(db, parsed.data.id, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: result.value };
@@ -86,6 +104,8 @@ export async function addInvoiceLineItemAction(
   if (!g.ok) return g;
   const parsed = addInvoiceLineItemInputSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: { id: ERROR_IDS.INVOICE_INPUT_INVALID } };
+  const allowed = await gateDeal(g.actor, { invoiceId: parsed.data.invoiceId });
+  if (!allowed.ok) return allowed;
   const result = await addInvoiceLineItem(db, parsed.data, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: result.value };
@@ -99,6 +119,8 @@ export async function updateInvoiceLineItemAction(
   if (!g.ok) return g;
   const parsed = updateInvoiceLineItemInputSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: { id: ERROR_IDS.INVOICE_INPUT_INVALID } };
+  const allowed = await gateDeal(g.actor, { invoiceLineId: parsed.data.id });
+  if (!allowed.ok) return allowed;
   const result = await updateInvoiceLineItem(db, parsed.data, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: result.value };
@@ -112,6 +134,8 @@ export async function removeInvoiceLineItemAction(
   if (!g.ok) return g;
   const parsed = removeInvoiceLineItemInputSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: { id: ERROR_IDS.INVOICE_INPUT_INVALID } };
+  const allowed = await gateDeal(g.actor, { invoiceLineId: parsed.data.id });
+  if (!allowed.ok) return allowed;
   const result = await removeInvoiceLineItem(db, parsed.data.id, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: result.value };

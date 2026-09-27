@@ -83,7 +83,7 @@ it("does NOT report a failure when the write succeeded but router.refresh throws
   });
   render(<PersonBlock person={{ ...blankPerson, firstName: "Mia" }} />);
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Primeiro nome" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Mira" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -141,7 +141,7 @@ it("surfaces a permission-specific message when the edit is denied (E_PERM_001)"
   updatePersonAction.mockResolvedValueOnce({ ok: false, error: { id: "E_PERM_001" } });
   render(<PersonBlock person={{ ...blankPerson, firstName: "Mia" }} />);
 
-  fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Primeiro nome" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Mira" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
@@ -214,8 +214,8 @@ it("shows an address held only in the primary_email column alongside the array",
 
 it("edits a non-primary email and saves the whole array", async () => {
   render(<PersonBlock person={multiPointPerson} />);
-  fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
-  fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "pat@home.ca" } });
+  fireEvent.click(screen.getByRole("button", { name: "Editar Email" }));
+  fireEvent.change(screen.getByLabelText("E-mail 2"), { target: { value: "pat@home.ca" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
@@ -235,9 +235,9 @@ it("adds a second email without dropping the first", async () => {
     emails: [{ label: "work", value: "one@acme.com", primary: true }],
   } as unknown as Person;
   render(<PersonBlock person={person} />);
-  fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
-  fireEvent.click(screen.getByRole("button", { name: "+ Adicionar email" }));
-  fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "two@acme.com" } });
+  fireEvent.click(screen.getByRole("button", { name: "Editar Email" }));
+  fireEvent.click(screen.getByRole("button", { name: "+ Adicionar e-mail" }));
+  fireEvent.change(screen.getByLabelText("E-mail 2"), { target: { value: "two@acme.com" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());
@@ -252,8 +252,8 @@ it("adds a second email without dropping the first", async () => {
 
 it("promotes a non-primary email so the derived primary_email follows it", async () => {
   render(<PersonBlock person={multiPointPerson} />);
-  fireEvent.click(screen.getByRole("button", { name: "Edit Email" }));
-  fireEvent.click(screen.getByRole("radio", { name: "Tornar email 2 principal" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Email" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Tornar e-mail 2 principal" }));
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
   await waitFor(() => expect(updatePersonAction).toHaveBeenCalled());

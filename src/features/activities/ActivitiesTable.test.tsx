@@ -211,7 +211,7 @@ describe("ActivitiesTable", () => {
   it("opens the Add activity modal from + Activity", () => {
     useQuery.mockReturnValue({ data: [], refetch });
     render(<ActivitiesTable />);
-    fireEvent.click(screen.getByRole("button", { name: "+ Activity" }));
+    fireEvent.click(screen.getByRole("button", { name: "+ Atividade" }));
     expect(screen.getByTestId("activity-modal")).toBeInTheDocument();
   });
 

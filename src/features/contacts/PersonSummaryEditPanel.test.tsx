@@ -73,7 +73,7 @@ const orgOptions = [
 describe("PersonSummaryEditPanel", () => {
   it("saves an edited Name", async () => {
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     const input = screen.getByLabelText("Nome");
     fireEvent.change(input, { target: { value: "Jane Smith" } });
     fireEvent.keyDown(input, { key: "Enter" });
@@ -90,7 +90,7 @@ describe("PersonSummaryEditPanel", () => {
 
   it("saves the Primary email through setPrimaryPoint", async () => {
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit E-mail principal" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar E-mail principal" }));
     const input = screen.getByLabelText("E-mail principal");
     fireEvent.change(input, { target: { value: "new@acme.com" } });
     fireEvent.keyDown(input, { key: "Enter" });
@@ -108,7 +108,7 @@ describe("PersonSummaryEditPanel", () => {
 
   it("saves the Primary phone through setPrimaryPoint", async () => {
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Telefone principal" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Telefone principal" }));
     const input = screen.getByLabelText("Telefone principal");
     fireEvent.change(input, { target: { value: "+14155550199" } });
     fireEvent.keyDown(input, { key: "Enter" });
@@ -128,7 +128,7 @@ describe("PersonSummaryEditPanel", () => {
 
   it("saves Organization via the select's dirty-gated Save (PD mechanism, no autosave)", async () => {
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Organização" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Organização" }));
     fireEvent.click(screen.getByLabelText("Organização"));
     fireEvent.click(screen.getByText("Globex"));
     expect(updatePersonAction).not.toHaveBeenCalled();
@@ -144,7 +144,7 @@ describe("PersonSummaryEditPanel", () => {
 
   it("has no CAS/expectedUpdatedAt field in the save payload (last-write-wins)", async () => {
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Smith" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
@@ -159,7 +159,7 @@ describe("PersonSummaryEditPanel", () => {
   it("calls the onSaved callback instead of router.refresh when provided", async () => {
     const onSaved = vi.fn();
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Smith" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
@@ -170,7 +170,7 @@ describe("PersonSummaryEditPanel", () => {
   it("surfaces a permission-specific save failure via an inline error", async () => {
     updatePersonAction.mockResolvedValueOnce({ ok: false, error: { id: "E_PERM_001" } });
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Smith" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
@@ -184,7 +184,7 @@ describe("PersonSummaryEditPanel", () => {
   it("does not refresh on a failed save (keeps the inline error visible)", async () => {
     updatePersonAction.mockResolvedValueOnce({ ok: false, error: { id: "E_PERM_001" } });
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Smith" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 
@@ -196,7 +196,7 @@ describe("PersonSummaryEditPanel", () => {
     const onSaved = vi.fn();
     updatePersonAction.mockResolvedValueOnce({ ok: false, error: { id: "E_PERM_001" } });
     render(<PersonSummaryEditPanel person={person} orgOptions={orgOptions} onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit Nome" }));
+    fireEvent.click(screen.getByRole("button", { name: "Editar Nome" }));
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Smith" } });
     fireEvent.keyDown(screen.getByLabelText("Nome"), { key: "Enter" });
 

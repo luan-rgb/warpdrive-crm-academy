@@ -22,6 +22,7 @@ export default async function OrgsListPage(): Promise<React.ReactNode> {
   return (
     <main aria-label={STRINGS.contacts.orgsHeading} className="flex flex-col gap-4">
       <PageHeading
+        help="org.list"
         crumbs={[
           { label: STRINGS.nav.contacts, href: "/contacts/people" },
           { label: STRINGS.contacts.orgsHeading },

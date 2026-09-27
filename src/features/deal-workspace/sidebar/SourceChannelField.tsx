@@ -13,7 +13,7 @@ import { readCsrfToken } from "@/utils/csrfCookie";
 import { FieldRow } from "./FieldRow";
 
 const SOURCE_CHANNEL_OPTIONS: SelectOption[] = [
-  { value: "", label: "None" },
+  { value: "", label: "Nenhum" },
   ...Object.entries(SOURCE_CHANNELS).map(([value, channel]) => ({
     value,
     label: channel.name,

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { AUTOMATION_ACTION_TYPES, AUTOMATION_TRIGGERS } from "@/db/schema/automations";
-import { AUTOMATION_UPDATE_FIELD_ALLOWED } from "./actionRunners";
+import { automationConditionsSchema } from "./conditions";
+import { AUTOMATION_UPDATE_FIELDS, isAutomationUpdateField } from "./updateFields";
 
 // One action within a rule's ordered action list. `config` shape is validated loosely here
 // (a record) — the job handler validates the shape it needs per actionType at execution time,
@@ -13,7 +14,8 @@ export const automationRuleActionInputSchema = z.object({
 export type AutomationRuleActionInput = z.infer<typeof automationRuleActionInputSchema>;
 
 // Cross-field checks that would otherwise fail silently: an update_field action whose fieldKey
-// runUpdateField does not support saves fine and only errors at execution time
+// runUpdateField does not support (or a webhook with no usable URL) saves fine and only errors at
+// execution time
 // (E_AUTOMATION_001 in a run-actions row nothing surfaces to the user); a deal_field_changed
 // trigger with a blank/missing fieldKey saves a rule that can never fire. Shared by
 // create/update since both schemas carry the same trigger/triggerConfig/actions shape.
@@ -31,20 +33,28 @@ function refineTriggerAndActionConfigs(
       ctx.addIssue({
         code: "custom",
         path: ["triggerConfig", "fieldKey"],
-        message: "deal_field_changed requires a non-empty triggerConfig.fieldKey",
+        message: "o gatilho de campo alterado precisa de um campo",
       });
     }
   }
 
   input.actions.forEach((action, i) => {
-    if (action.actionType !== "update_field") return;
-    const fieldKey = action.config.fieldKey;
-    if (typeof fieldKey !== "string" || !(fieldKey in AUTOMATION_UPDATE_FIELD_ALLOWED)) {
+    if (action.actionType === "update_field" && !isAutomationUpdateField(action.config.fieldKey)) {
       ctx.addIssue({
         code: "custom",
         path: ["actions", i, "config", "fieldKey"],
-        message: `update_field actionConfig.fieldKey must be one of: ${Object.keys(AUTOMATION_UPDATE_FIELD_ALLOWED).join(", ")}`,
+        message: `campo não suportado; use um de: ${Object.keys(AUTOMATION_UPDATE_FIELDS).join(", ")}`,
       });
+    }
+    if (action.actionType === "webhook") {
+      const url = action.config.url;
+      if (typeof url !== "string" || !/^https?:\/\/[^\s/]+/i.test(url)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["actions", i, "config", "url"],
+          message: "informe um endereço http:// ou https://",
+        });
+      }
     }
   });
 }
@@ -56,6 +66,7 @@ export const createAutomationRuleInputSchema = z
     pipelineId: z.string().uuid().nullable().default(null),
     trigger: z.enum(AUTOMATION_TRIGGERS),
     triggerConfig: z.record(z.string(), z.unknown()).default({}),
+    conditions: automationConditionsSchema.default([]),
     actions: z.array(automationRuleActionInputSchema).min(1),
     isActive: z.boolean().default(true),
   })
@@ -70,6 +81,7 @@ export const updateAutomationRuleInputSchema = z
     pipelineId: z.string().uuid().nullable().default(null),
     trigger: z.enum(AUTOMATION_TRIGGERS),
     triggerConfig: z.record(z.string(), z.unknown()).default({}),
+    conditions: automationConditionsSchema.default([]),
     actions: z.array(automationRuleActionInputSchema).min(1),
   })
   .superRefine(refineTriggerAndActionConfigs);

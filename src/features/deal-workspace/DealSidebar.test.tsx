@@ -148,7 +148,7 @@ it("renders org firmographics and saves an edit via updateOrgAction", async () =
   );
   expect(screen.getByText("Setor")).toBeInTheDocument(); // firmographic row present
   expect(screen.getByText("Site")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Edit Site" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Site" }));
   fireEvent.change(screen.getByLabelText("editor-website"), { target: { value: "new.com" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() =>
@@ -170,7 +170,7 @@ it("renders first/last name and saves via updatePersonAction", async () => {
     />,
   );
   expect(screen.getByText("Primeiro nome")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Edit Primeiro nome" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar Primeiro nome" }));
   fireEvent.change(screen.getByLabelText("editor-firstName"), { target: { value: "Maria" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   await vi.waitFor(() =>

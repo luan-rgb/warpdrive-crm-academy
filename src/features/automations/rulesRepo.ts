@@ -57,6 +57,7 @@ export async function createAutomationRule(
         pipelineId: input.pipelineId,
         trigger: input.trigger,
         triggerConfig: input.triggerConfig,
+        conditions: input.conditions,
         ownerId,
         isActive: input.isActive,
       })
@@ -97,6 +98,7 @@ export async function updateAutomationRule(
         pipelineId: input.pipelineId,
         trigger: input.trigger,
         triggerConfig: input.triggerConfig,
+        conditions: input.conditions,
       })
       .where(eq(automationRules.id, input.id))
       .returning();

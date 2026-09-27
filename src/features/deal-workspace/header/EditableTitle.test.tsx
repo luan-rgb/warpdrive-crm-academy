@@ -22,8 +22,8 @@ const props = { dealId: "d1", title: "Acme", expectedUpdatedAt: "2026-07-02T00:0
 it("saves a changed title via the shared inline-edit footer", () => {
   render(<EditableTitle {...props} />);
   expect(screen.getByRole("heading", { name: "Acme" })).toHaveClass("text-display");
-  fireEvent.click(screen.getByRole("button", { name: "Edit deal title" }));
-  const input = screen.getByRole("textbox", { name: "Edit deal title" });
+  fireEvent.click(screen.getByRole("button", { name: "Editar título do negócio" }));
+  const input = screen.getByRole("textbox", { name: "Editar título do negócio" });
   fireEvent.change(input, { target: { value: "Acme Corp" } });
   fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
   expect(updateDealAction).toHaveBeenCalledWith(
@@ -34,11 +34,11 @@ it("saves a changed title via the shared inline-edit footer", () => {
 
 it("does not call the action for an unchanged or empty title", () => {
   render(<EditableTitle {...props} />);
-  fireEvent.click(screen.getByRole("button", { name: "Edit deal title" }));
+  fireEvent.click(screen.getByRole("button", { name: "Editar título do negócio" }));
   expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
-  fireEvent.click(screen.getByRole("button", { name: "Edit deal title" }));
-  const input2 = screen.getByRole("textbox", { name: "Edit deal title" });
+  fireEvent.click(screen.getByRole("button", { name: "Editar título do negócio" }));
+  const input2 = screen.getByRole("textbox", { name: "Editar título do negócio" });
   fireEvent.change(input2, { target: { value: "   " } });
   expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
   expect(updateDealAction).not.toHaveBeenCalled();
@@ -46,8 +46,8 @@ it("does not call the action for an unchanged or empty title", () => {
 
 it("reverts through the shared Cancel action without calling the mutation", () => {
   render(<EditableTitle {...props} />);
-  fireEvent.click(screen.getByRole("button", { name: "Edit deal title" }));
-  const input = screen.getByRole("textbox", { name: "Edit deal title" });
+  fireEvent.click(screen.getByRole("button", { name: "Editar título do negócio" }));
+  const input = screen.getByRole("textbox", { name: "Editar título do negócio" });
   fireEvent.change(input, { target: { value: "Changed" } });
   fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
   expect(updateDealAction).not.toHaveBeenCalled();

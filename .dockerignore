@@ -5,6 +5,9 @@
 .env
 .env.*
 !.env.example
+# Multi-tenant secrets: shared Postgres/MinIO root passwords and every tenant's encryption key.
+# Never part of a build context, even of a stage that is later discarded.
+envs/
 .git
 .gitignore
 node_modules

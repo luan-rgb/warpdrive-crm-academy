@@ -14,9 +14,17 @@ import { CSRF_COOKIE, mintCsrfToken } from "@/features/auth/csrf";
 import { LOGIN_RETURN_COOKIE, safeLoginReturnPath } from "@/features/auth/loginReturn";
 import { verifyMagicLink } from "@/features/auth/magicLink";
 import { SESSION_COOKIE, sessionCookieOptions } from "@/features/auth/session";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 
 function loginError(reason: string): NextResponse {
   console.warn("[auth/magic-link/verify] rejected:", reason);
+  void recordSecurityEvent(db, {
+    actorId: null,
+    targetType: "session",
+    targetId: null,
+    action: "auth.login_failed",
+    detail: { method: "magic_link", reason },
+  });
   return NextResponse.redirect(new URL("/login?error=auth_failed", env.BASE_URL));
 }
 
@@ -33,6 +41,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   jar.delete(LOGIN_RETURN_COOKIE);
 
   const { sid, expiresAt } = result.value;
+  await recordSecurityEvent(db, {
+    actorId: result.value.userId,
+    targetType: "session",
+    targetId: null,
+    action: "auth.login",
+    detail: { method: "magic_link" },
+  });
   const csrfToken = mintCsrfToken();
   const res = NextResponse.redirect(new URL(returnPath, env.BASE_URL));
   res.cookies.set(SESSION_COOKIE, sid, { ...sessionCookieOptions(), expires: expiresAt });

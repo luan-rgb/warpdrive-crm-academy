@@ -1,31 +1,16 @@
 import { sql } from "drizzle-orm";
-import { env } from "@/config/env";
 import { SYNC_JITTER_MODULO_SECONDS } from "@/constants/email";
 import type { AppError } from "@/constants/errorIds";
 import type { Db } from "@/db/client";
 import { db as prodDb } from "@/db/client";
 import { makeStorageClient } from "@/features/files/storage";
 import { err, ok, type Result } from "@/types/result";
-import { createGmailClient, type GmailClient } from "./gmailClient";
-import { makeRefresh } from "./gmailRefresh";
-import { createNylasClient } from "./nylasClient";
+import { loadProvider } from "./clientFactory";
+import type { GmailClient } from "./gmailClient";
 import { processSendAttempt } from "./outbox";
-import { syncMailbox, syncNylasMailbox } from "./sync";
-import { ensureAccessToken } from "./tokens";
+import { resolveProductionClient } from "./productionClient";
+import { syncMailbox, syncPolledMailbox } from "./sync";
 import { performWorkerSendCrm } from "./workerSendCrm";
-
-// Which provider an email_account uses (see docs/superpowers/specs/
-// 2026-09-25-nylas-email-integration-design.md): decides both which client to build and which
-// sync strategy applies (syncMailbox's historyId polling vs syncNylasMailbox's recent-messages
-// re-fetch). A single small lookup shared by resolveClient and runSyncJob, rather than each
-// running its own query for the same fact.
-async function loadNylasGrantId(db: Db, accountId: string): Promise<string | null> {
-  const rows = await db.execute(
-    sql`SELECT nylas_grant_id FROM email_accounts WHERE id=${accountId}`,
-  );
-  const row = rows.rows[0] as { nylas_grant_id: string | null } | undefined;
-  return row?.nylas_grant_id ?? null;
-}
 
 // Deterministic per-mailbox jitter (seconds) to spread sync starts and avoid a
 // thundering herd. FNV-1a over the accountId bytes mod SYNC_JITTER_MODULO_SECONDS:
@@ -40,33 +25,17 @@ export function jitterFor(accountId: string): number {
   return hash % SYNC_JITTER_MODULO_SECONDS;
 }
 
-// Resolve a fresh Gmail client for an account (default dep). Injectable so tests pass a
+// Resolve a fresh mailbox client for an account (default dep). Injectable so tests pass a
 // fake transport with no real OAuth. Never logs tokens.
 export interface SyncDeps {
   resolveClient: (accountId: string, signal: AbortSignal) => Promise<Result<GmailClient, AppError>>;
 }
 
-async function defaultResolveClient(
+function defaultResolveClient(
   accountId: string,
   signal: AbortSignal,
 ): Promise<Result<GmailClient, AppError>> {
-  signal.throwIfAborted();
-  const nylasGrantId = await loadNylasGrantId(prodDb, accountId);
-  if (nylasGrantId !== null) {
-    return ok(
-      createNylasClient({
-        apiKey: env.NYLAS_API_KEY,
-        grantId: nylasGrantId,
-        region: env.NYLAS_REGION,
-      }),
-    );
-  }
-  const token = await ensureAccessToken(prodDb, {
-    accountId,
-    deps: { refresh: makeRefresh(signal) },
-  });
-  if (!token.ok) return token;
-  return ok(createGmailClient(token.value.token));
+  return resolveProductionClient(prodDb, accountId, signal);
 }
 
 const defaultSyncDeps: SyncDeps = { resolveClient: defaultResolveClient };
@@ -83,10 +52,11 @@ export async function runSyncJob(
   const client = await deps.resolveClient(args.accountId, args.signal);
   if (!client.ok) return stampError(db, args.accountId, client.error, args.signal);
 
-  const nylasGrantId = await loadNylasGrantId(db, args.accountId);
+  // Gmail has a history cursor; Outlook and IMAP are polled (see syncPolledMailbox).
+  const provider = await loadProvider(db, args.accountId);
   const synced =
-    nylasGrantId !== null
-      ? await syncNylasMailbox(db, {
+    provider !== "gmail"
+      ? await syncPolledMailbox(db, {
           accountId: args.accountId,
           gmail: client.value,
           signal: args.signal,

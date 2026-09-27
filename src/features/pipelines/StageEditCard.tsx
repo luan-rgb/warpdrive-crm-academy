@@ -2,6 +2,7 @@
 import type React from "react";
 import { useId } from "react";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Input } from "@/components/ui/Input";
 import { DEFAULT_ROTTING_DAYS } from "@/constants/pipelineDefaults";
 import type { StageRow } from "./stageDiff";
@@ -62,6 +63,7 @@ export function StageEditCard({
             onCheckedChange={(v) => onChange({ rottingDays: v ? DEFAULT_ROTTING_DAYS : null })}
           />
           <span className="font-medium">Estagnar em (dias)</span>
+          <HelpTooltip topic="pipeline.rotting" />
         </div>
         {rottingEnabled && (
           <Input

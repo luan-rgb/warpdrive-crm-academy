@@ -98,8 +98,10 @@ describe("BoardFilterControl", () => {
 
     await openBuilder(user, /Editar filtro/);
 
-    expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(2);
-    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent("qualquer condição");
+    expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(2);
+    expect(screen.getByLabelText("Combinador de correspondência")).toHaveTextContent(
+      "qualquer condição",
+    );
   });
 
   it("opens a blank builder when no saved filter is selected", async () => {
@@ -109,7 +111,7 @@ describe("BoardFilterControl", () => {
 
     await openBuilder(user);
 
-    expect(screen.getAllByLabelText(/Condition \d+ field/)).toHaveLength(1);
+    expect(screen.getAllByLabelText(/Campo da condição \d+/)).toHaveLength(1);
     expect(screen.queryByLabelText("Combinador de correspondência")).toBeNull();
   });
 });
@@ -156,7 +158,7 @@ describe("BoardFilterControl menu split", () => {
     renderControl(null, { onApplyDefinition });
 
     await openBuilder(user);
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "acme" } });
     await user.click(screen.getByRole("button", { name: "Aplicar" }));
 
     expect(onApplyDefinition).toHaveBeenCalledWith(

@@ -34,7 +34,8 @@ export const ERROR_IDS = {
   DEAL_MERGE_SAME: "E_DEAL_010", // mergeDeals: source and target are the same deal
   DEAL_DUPLICATE_INPUT_INVALID: "E_DEAL_011", // duplicateDeal action input failed Zod validation
   DEAL_CONVERT_INPUT_INVALID: "E_DEAL_012", // convertDealToLead action input failed Zod validation
-  DEAL_MERGE_INPUT_INVALID: "E_DEAL_013", // mergeDeals action input failed Zod validation
+  DEAL_MERGE_INPUT_INVALID: "E_DEAL_013",
+  DEAL_BULK_INPUT_INVALID: "E_DEAL_014", // bulk archive/stage action input failed Zod validation (ids, batch size, flags) // mergeDeals action input failed Zod validation
   // LEAD
   LEAD_NOT_FOUND: "E_LEAD_001", // lead not found or not visible (404-on-invisible)
   LEAD_ARCHIVE_FORBIDDEN: "E_LEAD_002", // archive denied: lead not visible/owned by actor
@@ -70,6 +71,8 @@ export const ERROR_IDS = {
   CONTACT_CREATE_INPUT_INVALID: "E_CONTACT_010", // createPersonAction input failed Zod validation
   // NOTE
   NOTE_NOT_FOUND: "E_NOTE_001", // note not found or soft-deleted
+  NOTE_NOT_AUTHOR: "E_NOTE_002",
+  NOTE_INPUT_INVALID: "E_NOTE_003", // note pin/edit action input failed Zod validation // only the note author (or an admin) may edit or delete it
   // IMPORT
   IMPORT_ROW_GONE: "E_IMPORT_001", // import row vanished before commit could claim it
   IMPORT_BATCH_NOT_FOUND: "E_IMPORT_002", // import batch not found or not owned (404-on-invisible)
@@ -88,7 +91,8 @@ export const ERROR_IDS = {
   ACTIVITY_FORBIDDEN: "E_ACTIVITY_002", // visible but action flag missing (403-shape)
   ACTIVITY_TYPE_IN_USE: "E_ACTIVITY_003", // delete blocked: activity type is a system row or still referenced by an activity
   ACTIVITY_TYPE_KEY_EXISTS: "E_ACTIVITY_004", // create blocked: an activity type with that key already exists
-  ACTIVITY_UPDATE_INPUT_INVALID: "E_ACTIVITY_005", // edit action input failed Zod validation
+  ACTIVITY_UPDATE_INPUT_INVALID: "E_ACTIVITY_005",
+  ACTIVITY_COMPLETE_INPUT_INVALID: "E_ACTIVITY_008", // completeActivityAction input failed Zod validation // edit action input failed Zod validation
   ACTIVITY_TYPE_INVALID: "E_ACTIVITY_006", // patched typeId is missing or archived (activity WAS found)
   ACTIVITY_END_BEFORE_START: "E_ACTIVITY_007", // multi-day endAt is earlier than the start (dueAt)
   // LABEL
@@ -123,10 +127,24 @@ export const ERROR_IDS = {
   GMAIL_MAIL_LABEL_INPUT_INVALID: "E_GMAIL_024", // create-mail-label action input failed Zod validation (U6)
   GMAIL_MAIL_LABEL_UNKNOWN: "E_GMAIL_025", // thread-labels write referenced a key absent from the mail_labels catalog (integrity: would persist an invisible, unremovable label)
   GMAIL_MESSAGE_NOT_FOUND: "E_GMAIL_026", // single message not found OR its thread not visible (404-on-invisible, mailbox privacy)
-  // NYLAS (src/features/email/nylasClient.ts: the Gmail/Outlook connect path, see
-  // docs/superpowers/specs/2026-09-25-nylas-email-integration-design.md)
-  NYLAS_API_FAILED: "E_NYLAS_001", // Nylas API call failed (non-2xx) or response failed schema validation
-  NYLAS_NOT_YET_IMPLEMENTED: "E_NYLAS_002", // sendRaw/trashThread: checkpoint 4, not built yet
+  // NYLAS: RETIRED 2026-09-26 with the Nylas integration (replaced by the free direct
+  // Gmail/Outlook/IMAP clients, E_MAIL_*). Kept searchable; never reuse.
+  NYLAS_API_FAILED: "E_NYLAS_001", // RETIRED 2026-09-26: Nylas API call failed (non-2xx) or response failed schema validation
+  NYLAS_NOT_YET_IMPLEMENTED: "E_NYLAS_002", // RETIRED 2026-09-26: sendRaw/trashThread: checkpoint 4, not built yet
+  // MAIL (provider-neutral mailbox plumbing: src/features/email/clientFactory.ts and the
+  // Outlook/IMAP clients; Gmail keeps its historical E_GMAIL_* ids)
+  MAIL_CREDENTIALS_MISSING: "E_MAIL_001", // account row has no usable stored credential for its provider
+  MAIL_ACCOUNT_NOT_FOUND: "E_MAIL_002", // email_accounts row not found for the id being resolved
+  MAIL_GRAPH_FAILED: "E_MAIL_003", // Microsoft Graph call failed (non-2xx) or response failed schema validation
+  MAIL_IMAP_FAILED: "E_MAIL_004", // IMAP/SMTP operation failed (connection, protocol, message not found, SMTP reject)
+  MAIL_RELAY_UNAVAILABLE: "E_MAIL_007", // mail-oauth-relay refused or could not be reached when starting a Gmail/Outlook connect
+  MAIL_NYLAS_RETIRED: "E_MAIL_008", // mailbox was connected through the retired Nylas integration and must be reconnected (set by migration 0084)
+  MAIL_IMAP_INPUT_INVALID: "E_MAIL_006", // IMAP/SMTP connect form input failed Zod validation
+  INTERNAL_UNEXPECTED: "E_INTERNAL_001", // unexpected server failure; details are logged server-side only, never sent to the client
+  RATE_LIMITED: "E_RATE_001", // a signed-in user or client exceeded a per-key allowance (src/constants/rateLimits.ts)
+  MAIL_HOST_BLOCKED: "E_MAIL_010", // IMAP/SMTP host resolves to an internal address, does not resolve, or uses a non-mail port
+  MAIL_RELAY_CLAIM_REFUSED: "E_MAIL_009", // relay refused a mailbox claim: wrong user or tenant, expired, or already claimed ticket
+  MAIL_IMAP_VERIFY_FAILED: "E_MAIL_005", // IMAP/SMTP credential check failed while connecting a mailbox (context.stage names the side)
   // OAUTH
   OAUTH_INVALID_CLIENT: "E_OAUTH_001",
   OAUTH_INVALID_GRANT: "E_OAUTH_002",

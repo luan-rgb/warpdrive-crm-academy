@@ -8,6 +8,7 @@ import {
 import type { Deal } from "@/db/schema/deals";
 import { requireBoss } from "@/jobs/requireBoss";
 import type { DbOrTx } from "@/server/realtime/channelVersions";
+import { automationConditionsSchema, dealMatchesConditions } from "./conditions";
 
 // One changed field, in the same shape logDealUpdateChanges already computes (field key
 // matches src/constants/changeLogFields.ts, e.g. "title" or "custom_field:<key>").
@@ -38,7 +39,18 @@ function triggerMatchesConfig(
     }
     case "deal_field_changed":
       return fieldChanges.some((c) => c.field === triggerConfig.fieldKey);
+    // The activity itself is the event; which deal it belongs to already scoped the call.
+    case "activity_created":
+    case "activity_completed":
+      return true;
   }
+}
+
+// Conditions are validated on save; a row that somehow fails validation (hand-edited jsonb) never
+// fires rather than firing unfiltered.
+function ruleConditionsMet(rule: AutomationRule, deal: Deal): boolean {
+  const parsed = automationConditionsSchema.safeParse(rule.conditions);
+  return parsed.success && dealMatchesConditions(deal, parsed.data);
 }
 
 // Every active automation_rules row matching this deal mutation. Pure DB read, no pg-boss
@@ -69,14 +81,15 @@ export async function matchAutomationRules(
     );
   signal.throwIfAborted();
 
-  return rules.filter((rule) =>
-    triggerMatchesConfig(
-      trigger,
-      rule.triggerConfig as Record<string, unknown>,
-      dealBefore,
-      dealAfter,
-      fieldChanges,
-    ),
+  return rules.filter(
+    (rule) =>
+      triggerMatchesConfig(
+        trigger,
+        rule.triggerConfig as Record<string, unknown>,
+        dealBefore,
+        dealAfter,
+        fieldChanges,
+      ) && ruleConditionsMet(rule, dealAfter),
   );
 }
 

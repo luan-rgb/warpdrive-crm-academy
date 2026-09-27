@@ -5,7 +5,7 @@ import type { ActivityTableRow } from "./activityRows";
 import { isoToDayHeading } from "./dayHeading";
 import { localDayIso } from "./weekAgenda";
 
-const NO_DATE_HEADING = "No date";
+const NO_DATE_HEADING = "Sem data";
 
 interface Props {
   rows: ActivityTableRow[];

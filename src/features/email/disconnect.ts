@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm";
 import type { Db } from "@/db/client";
 
 // User-initiated soft disconnect of the actor's mailbox (Settings > Email sync). Mirrors the
-// revocation path in tokens.ts (status -> disconnected, refresh_token_enc -> NULL) but, unlike
+// revocation path in tokens.ts (status -> disconnected, credentials -> NULL) but, unlike
 // a revocation, a deliberate disconnect is clean, so it clears last_error_id rather than
 // recording one. NEVER hard-deletes the row: email_threads / email_messages /
 // email_send_attempts FK to email_accounts, so a delete would orphan or cascade real mail
@@ -16,7 +16,8 @@ export async function softDisconnectMailbox(
   signal.throwIfAborted();
   await db.execute(sql`
     UPDATE email_accounts
-    SET status='disconnected', refresh_token_enc=NULL, last_error_id=NULL, updated_at=now()
+    SET status='disconnected', refresh_token_enc=NULL, imap_password_enc=NULL, last_error_id=NULL,
+        updated_at=now()
     WHERE id=${accountId}
   `);
 }

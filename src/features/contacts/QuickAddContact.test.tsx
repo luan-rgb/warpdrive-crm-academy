@@ -42,7 +42,7 @@ describe("QuickAddContact", () => {
   it("creates a person with the entered name", () => {
     render(<QuickAddContact kind="person" />);
     fireEvent.click(screen.getByRole("button", { name: "+ Pessoa" }));
-    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Jane Roe" } });
+    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Jane Roe" } });
     expect(screen.getByRole("heading", { name: "Adicionar pessoa" })).toBeInTheDocument();
     expect(screen.getByRole("dialog")).toHaveClass("max-w-3xl", "p-0");
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
@@ -52,7 +52,7 @@ describe("QuickAddContact", () => {
   it("creates an organization with the entered name", () => {
     render(<QuickAddContact kind="org" />);
     fireEvent.click(screen.getByRole("button", { name: "+ Organização" }));
-    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Acme Inc" } });
+    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Acme Inc" } });
     expect(screen.getByRole("heading", { name: "Adicionar organização" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
     expect(createOrg).toHaveBeenCalledWith(expect.objectContaining({ name: "Acme Inc" }));

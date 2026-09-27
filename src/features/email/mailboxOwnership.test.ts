@@ -91,6 +91,7 @@ describe("getActorMailboxStatus", () => {
       expect(box?.status).toBe("connected");
       expect(box?.lastSyncAt?.toISOString()).toBe("2026-07-01T10:00:00.000Z");
       expect(box?.lastErrorId).toBeNull();
+      expect(box?.provider).toBe("gmail");
     });
   });
 

@@ -27,7 +27,7 @@ export function AllDayLane({
     <div
       data-all-day-lane
       role="group"
-      aria-label={`All day, ${dayLabel}`}
+      aria-label={`Dia inteiro, ${dayLabel}`}
       className="overflow-hidden border-l border-border px-0.5"
       style={{ height: rows * ALL_DAY_ROW_HEIGHT_PX }}
     >

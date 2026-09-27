@@ -24,7 +24,9 @@ const TABS: { key: Tab; label: string }[] = [
 
 function EmailList({ emails }: { emails: LeadTimelineEmail[] }): React.ReactNode {
   if (emails.length === 0) {
-    return <p className="text-sm text-muted-foreground">No emails linked to this lead yet.</p>;
+    return (
+      <p className="text-sm text-muted-foreground">Nenhum e-mail vinculado a este lead ainda.</p>
+    );
   }
   return (
     <ul className="space-y-2">

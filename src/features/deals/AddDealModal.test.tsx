@@ -106,8 +106,8 @@ describe("AddDealModal", () => {
     // Stage chevron radios.
     expect(screen.getByRole("radio", { name: "Qualified" })).toBeInTheDocument();
     // Right column person contact rows.
-    expect(screen.getByLabelText("Phone 1")).toBeInTheDocument();
-    expect(screen.getByLabelText("Email 1")).toBeInTheDocument();
+    expect(screen.getByLabelText("Telefone 1")).toBeInTheDocument();
+    expect(screen.getByLabelText("E-mail 1")).toBeInTheDocument();
     // Manager-only fields hidden (no users/groups).
     expect(screen.queryByLabelText("Responsável")).toBeNull();
     expect(screen.queryByLabelText("Visível para")).toBeNull();

@@ -9,7 +9,7 @@ it("describes current progress without announcing every poll update", () => {
 
   expect(screen.getByRole("progressbar", { name: "Progresso da importação" })).toHaveAttribute(
     "aria-valuetext",
-    "25 of 100 (25%)",
+    "25 de 100 (25%)",
   );
   expect(screen.getByText("25 / 100 (25%)")).not.toHaveAttribute("aria-live");
 });

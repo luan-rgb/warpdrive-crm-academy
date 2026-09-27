@@ -248,7 +248,7 @@ export function DealList(props: DealListProps) {
             ))}
             {onUnarchive ? (
               <th scope="col" className="px-3 py-2 font-semibold">
-                Actions
+                Ações
               </th>
             ) : null}
           </tr>
@@ -261,7 +261,7 @@ export function DealList(props: DealListProps) {
             >
               <td className="w-10 px-3 py-2">
                 <Checkbox
-                  label={`Select ${row.title}`}
+                  label={`Selecionar ${row.title}`}
                   checked={selected.has(row.id)}
                   onCheckedChange={() => toggleOne(row.id)}
                 />
@@ -297,7 +297,7 @@ export function DealList(props: DealListProps) {
                   onClick={rowWindow.showMore}
                   className="rounded-md border px-4 py-1.5 text-sm transition-transform hover:bg-accent active:scale-[0.96]"
                 >
-                  Show more ({rowWindow.remaining} more)
+                  Mostrar mais ({rowWindow.remaining} restantes)
                 </button>
               </td>
             </tr>
@@ -306,7 +306,7 @@ export function DealList(props: DealListProps) {
         <tfoot>
           <tr className="border-t bg-muted/60 font-medium text-foreground">
             <td colSpan={bodyColSpan} className="px-3 py-2 tabular-nums">
-              {total} {total === 1 ? "deal" : "deals"} &middot; total value{" "}
+              {total} {total === 1 ? "negócio" : "negócios"} &middot; valor total{" "}
               {formatCurrency(totalValue)}
             </td>
           </tr>

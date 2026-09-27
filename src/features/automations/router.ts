@@ -1,8 +1,9 @@
 import { TRPCError } from "@trpc/server";
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import { ERROR_IDS } from "@/constants/errorIds";
-import { automationRuns } from "@/db/schema/automations";
+import { automationRunActions, automationRuns } from "@/db/schema/automations";
+import { deals } from "@/db/schema/deals";
 import { can } from "@/features/permissions/can";
 import { protectedProcedure, router } from "@/server/trpc/trpc";
 import { getAutomationRule, listAutomationRules } from "./rulesRepo";
@@ -30,14 +31,53 @@ export const automationsRouter = router({
       return result.value;
     }),
 
+  // The rule's run history (settings page): each run with its deal and every action's outcome,
+  // so a user can see why an automation did or did not do something.
   listRunsForRule: automationProcedure
     .input(z.object({ ruleId: z.string().uuid() }))
-    .query(({ ctx, input }) =>
-      ctx.db
-        .select()
+    .query(async ({ ctx, input }) => {
+      const runs = await ctx.db
+        .select({
+          id: automationRuns.id,
+          dealId: automationRuns.dealId,
+          dealTitle: deals.title,
+          trigger: automationRuns.trigger,
+          status: automationRuns.status,
+          startedAt: automationRuns.startedAt,
+          finishedAt: automationRuns.finishedAt,
+        })
         .from(automationRuns)
+        .leftJoin(deals, eq(deals.id, automationRuns.dealId))
         .where(eq(automationRuns.ruleId, input.ruleId))
         .orderBy(desc(automationRuns.startedAt))
-        .limit(100),
-    ),
+        .limit(100);
+      if (runs.length === 0) return [];
+      const actionRows = await ctx.db
+        .select({
+          runId: automationRunActions.runId,
+          position: automationRunActions.position,
+          actionType: automationRunActions.actionType,
+          status: automationRunActions.status,
+          errorMessage: automationRunActions.errorMessage,
+        })
+        .from(automationRunActions)
+        .where(
+          inArray(
+            automationRunActions.runId,
+            runs.map((r) => r.id),
+          ),
+        )
+        .orderBy(asc(automationRunActions.position));
+      return runs.map((r) => ({
+        ...r,
+        actions: actionRows
+          .filter((a) => a.runId === r.id)
+          .map((a) => ({
+            position: a.position,
+            actionType: a.actionType,
+            status: a.status,
+            errorMessage: a.errorMessage,
+          })),
+      }));
+    }),
 });

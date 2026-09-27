@@ -55,6 +55,10 @@ s3.{$APP_DOMAIN} {
 		-Server
 	}
 
+	# MinIO's admin API shares this port and is guarded only by the root credentials; the browser
+	# never needs it, so the public host refuses it outright.
+	respond /minio/admin* 403
+
 	# Deliberately no request_body cap: presigned uploads land here, and MAX_FILE_BYTES is
 	# deploy-configurable. MinIO enforces the real ceiling through the presigned POST policy's
 	# content-length-range, which the app pins per upload (see storage.presignPost).

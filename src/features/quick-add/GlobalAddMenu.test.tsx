@@ -48,11 +48,11 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    for (const label of ["Lead", "Deal", "Activity", "Person", "Organization"]) {
+    for (const label of ["Lead", "Negócio", "Atividade", "Pessoa", "Organização"]) {
       expect(screen.getByRole("menuitem", { name: new RegExp(label) })).toBeInTheDocument();
     }
     // Deal is enabled when a pipeline exists.
-    expect(screen.getByRole("menuitem", { name: /Deal/ })).not.toHaveAttribute("data-disabled");
+    expect(screen.getByRole("menuitem", { name: /Negócio/ })).not.toHaveAttribute("data-disabled");
     // Shortcut hints present.
     expect(screen.getByText("D")).toBeInTheDocument();
     expect(screen.getByText("L")).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    await user.click(screen.getByRole("menuitem", { name: /Activity/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Atividade/ }));
     expect(screen.getByTestId("activity-modal")).toBeInTheDocument();
   });
 
@@ -73,7 +73,7 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    await user.click(screen.getByRole("menuitem", { name: /Deal/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Negócio/ }));
     expect(screen.getByTestId("deal-modal")).toBeInTheDocument();
   });
 
@@ -82,7 +82,7 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    await user.click(screen.getByRole("menuitem", { name: /Person/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Pessoa/ }));
     expect(screen.getByTestId("contact-modal-person")).toBeInTheDocument();
   });
 
@@ -91,7 +91,7 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [], isSuccess: true });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    expect(screen.getByRole("menuitem", { name: /Deal/ })).toHaveAttribute("data-disabled");
+    expect(screen.getByRole("menuitem", { name: /Negócio/ })).toHaveAttribute("data-disabled");
   });
 
   // A loading or errored pipeline query (data still undefined) must not read as "no pipelines":
@@ -101,7 +101,7 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: undefined, isSuccess: false });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    expect(screen.getByRole("menuitem", { name: /Deal/ })).not.toHaveAttribute("data-disabled");
+    expect(screen.getByRole("menuitem", { name: /Negócio/ })).not.toHaveAttribute("data-disabled");
   });
 
   it("opens the Lead modal via the L shortcut while the menu is open", async () => {
@@ -118,7 +118,15 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    for (const label of ["Lead", "Deal", "Activity", "Person", "Organization", "Note", "Email"]) {
+    for (const label of [
+      "Lead",
+      "Negócio",
+      "Atividade",
+      "Pessoa",
+      "Organização",
+      "Nota",
+      "E-mail",
+    ]) {
       expect(screen.getByRole("menuitem", { name: new RegExp(label) })).toBeInTheDocument();
     }
   });
@@ -128,7 +136,7 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    await user.click(screen.getByRole("menuitem", { name: /Note/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Nota/ }));
     expect(screen.getByTestId("note-modal")).toBeInTheDocument();
   });
 
@@ -137,7 +145,7 @@ describe("GlobalAddMenu", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     await user.click(screen.getByRole("button", { name: "Adicionar rapidamente" }));
-    await user.click(screen.getByRole("menuitem", { name: /Email/ }));
+    await user.click(screen.getByRole("menuitem", { name: /E-mail/ }));
     expect(push).toHaveBeenCalledWith("/inbox/compose");
   });
 });
@@ -147,14 +155,14 @@ describe("GlobalAddMenu open shortcut", () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     fireEvent.keyDown(window, { key: "." });
-    expect(await screen.findByRole("menuitem", { name: /Deal/ })).toBeInTheDocument();
+    expect(await screen.findByRole("menuitem", { name: /Negócio/ })).toBeInTheDocument();
   });
 
   it("opens the menu when + is pressed", async () => {
     useQuery.mockReturnValue({ data: [PIPE] });
     render(<GlobalAddMenu />);
     fireEvent.keyDown(window, { key: "+" });
-    expect(await screen.findByRole("menuitem", { name: /Deal/ })).toBeInTheDocument();
+    expect(await screen.findByRole("menuitem", { name: /Negócio/ })).toBeInTheDocument();
   });
 
   it("stays closed when . is typed into a text field", () => {
@@ -164,7 +172,7 @@ describe("GlobalAddMenu open shortcut", () => {
     document.body.append(input);
     fireEvent.keyDown(input, { key: "." });
     input.remove();
-    expect(screen.queryByRole("menuitem", { name: /Deal/ })).toBeNull();
+    expect(screen.queryByRole("menuitem", { name: /Negócio/ })).toBeNull();
   });
 
   it("stays closed when a dialog is already open", () => {
@@ -175,6 +183,6 @@ describe("GlobalAddMenu open shortcut", () => {
     document.body.append(dialog);
     fireEvent.keyDown(window, { key: "." });
     dialog.remove();
-    expect(screen.queryByRole("menuitem", { name: /Deal/ })).toBeNull();
+    expect(screen.queryByRole("menuitem", { name: /Negócio/ })).toBeNull();
   });
 });

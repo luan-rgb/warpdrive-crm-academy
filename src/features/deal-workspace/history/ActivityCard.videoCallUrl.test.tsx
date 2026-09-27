@@ -42,11 +42,11 @@ function makeActivity(over: Partial<CalendarActivity> = {}): CalendarActivity {
 it("renders a video call link when the activity has a videoCallUrl", () => {
   const url = "https://meet.example.com/abc-defg-hij";
   render(<ActivityCard activity={makeActivity({ videoCallUrl: url })} at={AT} />);
-  const link = screen.getByRole("link", { name: /video call/i });
+  const link = screen.getByRole("link", { name: /videochamada/i });
   expect(link).toHaveAttribute("href", url);
 });
 
 it("omits the video call link when there is no videoCallUrl", () => {
   render(<ActivityCard activity={makeActivity({ videoCallUrl: null })} at={AT} />);
-  expect(screen.queryByRole("link", { name: /video call/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole("link", { name: /videochamada/i })).not.toBeInTheDocument();
 });

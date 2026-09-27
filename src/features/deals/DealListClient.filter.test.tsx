@@ -71,8 +71,8 @@ describe("DealListClient inline filter", () => {
 
     // Apply "Title contains acme" via the inline builder (default field=title, first op=contains).
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
     await waitFor(() =>
@@ -96,21 +96,21 @@ describe("DealListClient inline filter", () => {
 
     const filterTrigger = (): HTMLElement => screen.getByRole("button", { name: "Filtro" });
     fireEvent.click(filterTrigger());
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 
-    await waitFor(() => expect(screen.queryByLabelText("Condition 1 value")).toBeNull());
+    await waitFor(() => expect(screen.queryByLabelText("Valor da condição 1")).toBeNull());
 
     // Reopen, retype, then close without applying.
     fireEvent.click(filterTrigger());
-    expect(screen.getByLabelText<HTMLInputElement>("Condition 1 value").value).toBe("acme");
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "corp" } });
+    expect(screen.getByLabelText<HTMLInputElement>("Valor da condição 1").value).toBe("acme");
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "corp" } });
     fireEvent.click(filterTrigger());
-    await waitFor(() => expect(screen.queryByLabelText("Condition 1 value")).toBeNull());
+    await waitFor(() => expect(screen.queryByLabelText("Valor da condição 1")).toBeNull());
 
     fireEvent.click(filterTrigger());
-    expect(screen.getByLabelText<HTMLInputElement>("Condition 1 value").value).toBe("acme");
+    expect(screen.getByLabelText<HTMLInputElement>("Valor da condição 1").value).toBe("acme");
   });
 
   it("drops the applied conditions when the filter menu clears them", async () => {
@@ -118,8 +118,8 @@ describe("DealListClient inline filter", () => {
     renderClient();
 
     fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-    fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-    fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "acme" } });
+    fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+    fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "acme" } });
     fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
     await waitFor(() => expect(screen.getByLabelText("Filtro")).toHaveTextContent("1"));
 

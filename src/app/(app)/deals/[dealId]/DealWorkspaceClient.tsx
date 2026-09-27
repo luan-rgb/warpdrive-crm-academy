@@ -13,6 +13,7 @@ import { DealHeader } from "@/features/deal-workspace/header/DealHeader";
 import { useBlockVisibility } from "@/features/deal-workspace/header/useBlockVisibility";
 import type { DealWorkspace } from "@/features/deal-workspace/summaryRepo";
 import type { DraftSummary } from "@/features/email/draftRepo";
+import { formatCurrency } from "@/lib/formatCurrency";
 import { trpc } from "@/lib/trpc-client";
 import { WorkspaceTabs } from "./tabs";
 
@@ -150,7 +151,9 @@ export function DealWorkspaceClient({
                   // Display values for the email composer's "Insert field" menu (EMAIL-21).
                   orgName: org?.name,
                   dealTitle: deal.title,
-                  dealValue: deal.value ?? undefined,
+                  // Inserted into an email body, so it reads as money, not the raw decimal.
+                  dealValue:
+                    deal.value === null ? undefined : formatCurrency(deal.value, baseCurrency),
                   participantEmails,
                 }}
                 emailAccountId={emailAccountId}

@@ -75,8 +75,8 @@ function renderClient(initial: { rows: DealListRow[]; total: number }): void {
 // Apply "Title contains zzz" through the real inline builder (default field=title, op=contains).
 function applyFilter(): void {
   fireEvent.click(screen.getByRole("button", { name: "Filtro" }));
-  fireEvent.click(screen.getByRole("button", { name: /add condition/i }));
-  fireEvent.change(screen.getByLabelText("Condition 1 value"), { target: { value: "zzz" } });
+  fireEvent.click(screen.getByRole("button", { name: /adicionar condição/i }));
+  fireEvent.change(screen.getByLabelText("Valor da condição 1"), { target: { value: "zzz" } });
   fireEvent.click(screen.getByRole("button", { name: "Aplicar" }));
 }
 

@@ -207,3 +207,34 @@ it("rejects softDeleteNote when the actor cannot see the note's parent (404-shap
     expect(listed).toHaveLength(1);
   });
 });
+
+it("only lets the author (or an admin) edit or delete a note on a shared deal", async () => {
+  await withTestDb(async (db) => {
+    const signal = new AbortController().signal;
+    const author = await seedUser(db);
+    const colleague = await seedUser(db);
+    const admin = await seedUser(db, { isAdmin: true });
+    const deal = await seedDeal(db, author.id, "all");
+    const created = await createNote(
+      db,
+      actorFor(author.id),
+      { entityType: "deal", entityId: deal.id, body: "minha nota", pinned: false },
+      signal,
+    );
+    if (!created.ok) throw new Error("seed failed");
+
+    const edit = await updateNote(db, actorFor(colleague.id), created.value.id, "trocada", signal);
+    expect(edit.ok).toBe(false);
+    const del = await softDeleteNote(db, actorFor(colleague.id), created.value.id, signal);
+    expect(del.ok).toBe(false);
+
+    const byAdmin = await updateNote(
+      db,
+      { ...actorFor(admin.id), type: "admin" },
+      created.value.id,
+      "revisada",
+      signal,
+    );
+    expect(byAdmin.ok).toBe(true);
+  });
+});

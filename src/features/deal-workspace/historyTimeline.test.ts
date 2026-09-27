@@ -100,7 +100,7 @@ describe("buildHistoryTimeline: parity block kinds", () => {
     const stage = items[0];
     expect(stage?.kind).toBe("event");
     if (stage?.kind === "event") {
-      expect(stage.label).toBe("Stage: Demo → Proposal");
+      expect(stage.label).toBe("Etapa: Demo → Proposal");
       expect(stage.actorName).toBe("Nick Sawinyh");
     }
   });

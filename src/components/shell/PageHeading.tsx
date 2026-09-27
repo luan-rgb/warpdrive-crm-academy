@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type React from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
+import type { HelpTopic } from "@/constants/helpTexts";
 
 export interface Crumb {
   label: string;
@@ -15,11 +17,14 @@ export function PageHeading({
   crumbs,
   description,
   actions,
+  help,
 }: {
   title: string;
   crumbs?: Crumb[];
   description?: React.ReactNode;
   actions?: React.ReactNode;
+  // The "?" beside the title explaining what the page is for (src/constants/helpTexts.ts).
+  help?: HelpTopic;
 }): React.ReactNode {
   return (
     <div className="mb-4">
@@ -55,7 +60,10 @@ export function PageHeading({
       ) : null}
       <div className="flex items-center justify-between gap-3">
         {/* Inter is a vendored variable font, so the 450 weight (lighter than semibold) resolves. */}
-        <h1 className="text-display font-[450] leading-tight tracking-tight">{title}</h1>
+        <div className="flex min-w-0 items-center gap-1.5">
+          <h1 className="text-display font-[450] leading-tight tracking-tight">{title}</h1>
+          {help !== undefined ? <HelpTooltip topic={help} /> : null}
+        </div>
         {actions}
       </div>
       {description !== undefined ? (

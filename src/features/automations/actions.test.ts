@@ -64,6 +64,7 @@ const validRule = {
   pipelineId: null,
   trigger: "deal_created" as const,
   triggerConfig: {},
+  conditions: [],
   actions: [{ actionType: "send_notification" as const, config: { messageTemplate: "hi" } }],
   isActive: true,
 };
@@ -161,6 +162,7 @@ describe("createAutomationRuleAction", () => {
         ...validRule,
         trigger: "deal_field_changed" as const,
         triggerConfig: { fieldKey: "title" },
+        conditions: [],
       },
       VALID_TOKEN,
     );

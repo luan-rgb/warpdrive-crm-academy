@@ -18,7 +18,7 @@ import {
 
 export type ContactPointKind = "Email" | "Phone";
 
-const NOUN: Record<ContactPointKind, string> = { Email: "email", Phone: "telefone" };
+const NOUN: Record<ContactPointKind, string> = { Email: "e-mail", Phone: "telefone" };
 const MAX_LEN: Record<ContactPointKind, number> = {
   Email: MAX_EMAIL_LEN,
   Phone: MAX_PHONE_LEN,
@@ -101,7 +101,7 @@ export function ContactPointsEditor({
             className="flex items-center gap-1"
           >
             <Input
-              aria-label={`${kind} ${index + 1}`}
+              aria-label={`${noun.charAt(0).toUpperCase()}${noun.slice(1)} ${index + 1}`}
               type={kind === "Email" ? "email" : "tel"}
               maxLength={MAX_LEN[kind]}
               value={row.value}

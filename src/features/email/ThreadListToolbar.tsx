@@ -55,7 +55,7 @@ export function ThreadListToolbar({
 
   return (
     <div className="flex flex-wrap items-center gap-2 border-b p-2">
-      <nav aria-label="inbox filters" className="flex gap-1">
+      <nav aria-label="filtros da caixa de entrada" className="flex gap-1">
         {FILTERS.map((f) => (
           <button
             key={f.key}

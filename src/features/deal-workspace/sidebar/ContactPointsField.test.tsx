@@ -59,33 +59,33 @@ const draftPoints = (): ContactPoint[] =>
 
 it("opens one input per stored address so a second address is editable", () => {
   render(<Harness initial={points} />);
-  expect(screen.getByLabelText("Email 1")).toHaveValue("pat@ottawa.ca");
-  expect(screen.getByLabelText("Email 2")).toHaveValue("pat.home@gmail.com");
+  expect(screen.getByLabelText("E-mail 1")).toHaveValue("pat@ottawa.ca");
+  expect(screen.getByLabelText("E-mail 2")).toHaveValue("pat.home@gmail.com");
 });
 
 it("edits the second address without touching the first", () => {
   render(<Harness initial={points} />);
-  fireEvent.change(screen.getByLabelText("Email 2"), { target: { value: "pat@work.ca" } });
+  fireEvent.change(screen.getByLabelText("E-mail 2"), { target: { value: "pat@work.ca" } });
   expect(draftPoints().map((p) => p.value)).toEqual(["pat@ottawa.ca", "pat@work.ca"]);
 });
 
 it("appends a blank row and removes a row", () => {
   render(<Harness initial={points} />);
-  fireEvent.click(screen.getByRole("button", { name: "+ Adicionar email" }));
-  expect(screen.getByLabelText("Email 3")).toHaveValue("");
-  fireEvent.click(screen.getByRole("button", { name: "Remover email 1" }));
+  fireEvent.click(screen.getByRole("button", { name: "+ Adicionar e-mail" }));
+  expect(screen.getByLabelText("E-mail 3")).toHaveValue("");
+  fireEvent.click(screen.getByRole("button", { name: "Remover e-mail 1" }));
   expect(draftPoints().map((p) => p.value)).toEqual(["pat.home@gmail.com", ""]);
 });
 
 it("promotes another address to primary", () => {
   render(<Harness initial={points} />);
-  fireEvent.click(screen.getByRole("radio", { name: "Tornar email 2 principal" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Tornar e-mail 2 principal" }));
   expect(draftPoints().map((p) => p.primary)).toEqual([false, true]);
 });
 
 it("offers a single blank row when the record holds nothing", () => {
   render(<Harness initial={[]} />);
-  expect(screen.getByLabelText("Email 1")).toHaveValue("");
+  expect(screen.getByLabelText("E-mail 1")).toHaveValue("");
   expect(screen.queryByRole("radio")).not.toBeInTheDocument();
 });
 
@@ -103,8 +103,8 @@ it("locks the rows while a save is in flight", () => {
   render(
     <div>{editor({ draft: serializePoints(points), setDraft: () => {}, disabled: true })}</div>,
   );
-  expect(screen.getByLabelText("Email 1")).toBeDisabled();
-  expect(screen.getByRole("button", { name: "Remover email 1" })).toBeDisabled();
-  expect(screen.getByRole("radio", { name: "Tornar email 2 principal" })).toBeDisabled();
-  expect(screen.getByRole("button", { name: "+ Adicionar email" })).toBeDisabled();
+  expect(screen.getByLabelText("E-mail 1")).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Remover e-mail 1" })).toBeDisabled();
+  expect(screen.getByRole("radio", { name: "Tornar e-mail 2 principal" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "+ Adicionar e-mail" })).toBeDisabled();
 });

@@ -85,6 +85,12 @@ export const dealMoveInput = z.object({
 
 // Bulk stage change: a set of deal ids moved to one target stage. Validated at the
 // router boundary; the bulk action then applies §6.5 two-stage visibility per row.
+// Bulk archive/unarchive from the list view; same batch ceiling as the stage change.
+export const bulkArchiveInput = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(500),
+  archived: z.boolean(),
+});
+
 export const bulkStageInput = z.object({
   dealIds: z.array(z.string().uuid()).min(1).max(500),
   toStageId: z.string().uuid(),

@@ -4,7 +4,7 @@ import type { ChangeLogEntry } from "@/features/collaboration/changeLog";
 // changeStage/moveDeal log stage transitions as `field: "stageId"` with stage-ID
 // values in old/new. The renderer wants NAMES, so the read layer (which holds the
 // pipeline's stages) rewrites old/new to names before building the timeline.
-export const REMOVED_STAGE_LABEL = "(removed stage)";
+export const REMOVED_STAGE_LABEL = "(etapa removida)";
 
 export function resolveStageChangeNames(
   changelog: ChangeLogEntry[],

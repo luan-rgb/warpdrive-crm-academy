@@ -54,3 +54,24 @@ test("create_deal returns the permission error for a regular actor", async () =>
     }
   });
 });
+
+test("create_person, create_organization and create_activity need the same permission as the UI", async () => {
+  await withTestDb(async (db) => {
+    const user = await seedUser(db);
+    const actor = await hydrateActor(db, user.id, AbortSignal.timeout(5_000));
+    if (actor === null) throw new Error("no actor");
+    const server = new McpServer({ name: "write-tools-perm-test", version: "1.0.0" });
+    const tools = registerWriteTools(server, () => buildAppContext(db, actor), db);
+
+    for (const [name, input] of [
+      ["create_person", { name: "Ana" }],
+      ["create_organization", { name: "Acme" }],
+      ["create_activity", { typeId: "00000000-0000-0000-0000-000000000000", subject: "Ligar" }],
+    ] as const) {
+      const result = await tools.invoke(name, input);
+      expect(result.isError, name).toBe(true);
+      const first = result.content[0];
+      expect(first?.type === "text" ? first.text : "", name).toContain(ERROR_IDS.PERM_DENIED);
+    }
+  });
+});

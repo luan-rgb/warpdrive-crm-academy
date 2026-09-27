@@ -52,23 +52,23 @@ export function LeadFilterBuilder({
 
   const fields = useMemo<ConditionFieldOption[]>(
     () => [
-      { field: "title", label: "Title", ops: OPS_BY_LEAD_FIELD.title, input: { kind: "text" } },
-      { field: "value", label: "Value", ops: OPS_BY_LEAD_FIELD.value, input: { kind: "number" } },
+      { field: "title", label: "Título", ops: OPS_BY_LEAD_FIELD.title, input: { kind: "text" } },
+      { field: "value", label: "Valor", ops: OPS_BY_LEAD_FIELD.value, input: { kind: "number" } },
       {
         field: "sourceOrigin",
-        label: "Source origin",
+        label: "Origem",
         ops: OPS_BY_LEAD_FIELD.sourceOrigin,
         input: { kind: "text" },
       },
       {
         field: "ownerId",
-        label: "Owner",
+        label: "Responsável",
         ops: OPS_BY_LEAD_FIELD.ownerId,
         input: { kind: "select", options: ownerOptions },
       },
       {
         field: "labels",
-        label: "Label",
+        label: "Etiqueta",
         ops: OPS_BY_LEAD_FIELD.labels,
         input: { kind: "multiselect", options: labelOptions },
       },

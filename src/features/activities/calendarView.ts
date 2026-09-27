@@ -7,18 +7,18 @@ import { weekDays } from "./weekGrid";
 export type CalendarViewName = "week" | "month";
 
 const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
 ] as const;
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -73,12 +73,12 @@ export function monthTitle(anchorIso: string): string {
   return `${MONTH_NAMES[d.getUTCMonth()] ?? ""} ${d.getUTCFullYear()}`;
 }
 
-// Week header title: abbreviated month, day, and year (e.g. "Jun 15, 2026") so paging across
-// a month or year boundary stays oriented (the old label dropped the month and year).
+// Week header title: day, abbreviated month and year (e.g. "15 de jun. de 2026") so paging
+// across a month or year boundary stays oriented (the old label dropped the month and year).
 export function weekTitle(dayIso: string): string {
   const d = anchorDate(dayIso);
-  const month = (MONTH_NAMES[d.getUTCMonth()] ?? "").slice(0, 3);
-  return `${month} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+  const month = (MONTH_NAMES[d.getUTCMonth()] ?? "").slice(0, 3).toLowerCase();
+  return `${d.getUTCDate()} de ${month}. de ${d.getUTCFullYear()}`;
 }
 
 // Single source of truth for the calendar route + its query contract (view, d). Producer of

@@ -123,7 +123,9 @@ it("surfaces a stale hint and refreshes when the CAS precondition fails", async 
   await user.click(openSummaryLabels());
   await user.click(await screen.findByRole("menuitemcheckbox", { name: /Hot/ }));
   await vi.waitFor(() =>
-    expect(screen.getByText("Labels changed elsewhere; reloaded.")).toBeInTheDocument(),
+    expect(
+      screen.getByText("As etiquetas foram alteradas em outro lugar; recarregadas."),
+    ).toBeInTheDocument(),
   );
   await vi.waitFor(() => expect(refresh).toHaveBeenCalled());
 });

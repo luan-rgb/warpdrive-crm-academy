@@ -116,7 +116,7 @@ describe("DealListClient footer count", () => {
     expect(screen.getByTestId("deal-list")).toHaveTextContent("total:500");
     expect(screen.getByTestId("deal-list")).toHaveTextContent("value:1000000.00");
     // No filtered indicator while unfiltered.
-    expect(screen.queryByLabelText("filtered count")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("contagem filtrada")).not.toBeInTheDocument();
   });
 
   it("shows the filtered count distinctly (with a filtered label) when an owner filter is active", () => {
@@ -125,7 +125,7 @@ describe("DealListClient footer count", () => {
     // Only User A's single deal survives the owner filter.
     expect(screen.getByTestId("deal-list")).toHaveTextContent("total:1");
     // A distinct, unambiguous "filtered" indicator makes clear this is not the whole pipeline.
-    const indicator = screen.getByLabelText("filtered count");
+    const indicator = screen.getByLabelText("contagem filtrada");
     expect(indicator).toHaveTextContent("1");
     expect(indicator.textContent?.toLowerCase()).toContain("filtrado");
     // The misleading whole-pipeline denominator (500) must NOT appear: the filtered subset count and

@@ -37,7 +37,7 @@ describe("InboxReaderSidebar", () => {
         onLinked={vi.fn()}
       />,
     );
-    expect(screen.getByText(/2 people in this conversation/i)).toBeInTheDocument();
+    expect(screen.getByText(/2 pessoas nesta conversa/i)).toBeInTheDocument();
     expect(screen.getByText("Jane Doe")).toBeInTheDocument();
     expect(screen.getByTestId("link-panel")).toBeInTheDocument();
   });

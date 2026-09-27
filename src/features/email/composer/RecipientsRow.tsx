@@ -30,7 +30,7 @@ export function RecipientsRow({
     <div className="flex flex-col">
       <div className="flex items-center">
         <div className="flex-1">
-          <RecipientField label="To" values={to} onChange={onToChange} />
+          <RecipientField label="Para" values={to} onChange={onToChange} />
         </div>
         {!hasAddresses && (
           <button

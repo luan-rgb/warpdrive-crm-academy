@@ -30,7 +30,7 @@ function allDay(id: string): CalendarActivity {
 function renderLane(items: CalendarActivity[], rows: number, onOpenActivity = vi.fn()) {
   render(
     <AllDayLane
-      dayLabel="Wednesday 15 July 2026"
+      dayLabel="Quarta-feira, 15 de julho de 2026"
       items={items}
       rows={rows}
       onOpenActivity={onOpenActivity}
@@ -43,7 +43,7 @@ describe("AllDayLane", () => {
   it("says which day it is the all-day lane for", () => {
     renderLane([], 1);
     expect(
-      screen.getByRole("group", { name: "All day, Wednesday 15 July 2026" }),
+      screen.getByRole("group", { name: "Dia inteiro, Quarta-feira, 15 de julho de 2026" }),
     ).toBeInTheDocument();
   });
 
@@ -63,7 +63,7 @@ describe("AllDayLane", () => {
 
   it("counts the all-day activities that outgrew the lane instead of clipping them", () => {
     renderLane(["a", "b", "c", "d"].map(allDay), 3);
-    expect(screen.getByRole("button", { name: "Show 2 more activities" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Mostrar mais 2 atividades" })).toBeInTheDocument();
   });
 
   it("opens an all-day activity through the same handler the hour grid uses", () => {

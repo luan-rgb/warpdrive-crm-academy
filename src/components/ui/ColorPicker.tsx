@@ -56,7 +56,7 @@ export function ColorPicker({
   function applyCustom(): void {
     const normalized = draft.trim().toLowerCase();
     if (!HEX_COLOR.test(normalized)) {
-      setError("Enter a 6-digit hex color, such as #1f2937.");
+      setError("Digite uma cor hexadecimal de 6 dígitos, como #1f2937.");
       return;
     }
     choose(normalized);
@@ -108,7 +108,7 @@ export function ColorPicker({
           }}
         >
           <label htmlFor={inputId} className="block text-xs font-medium">
-            Custom hex color
+            Cor hexadecimal personalizada
           </label>
           <Input
             id={inputId}
@@ -126,7 +126,7 @@ export function ColorPicker({
             </p>
           ) : null}
           <Button type="submit" size="sm" className="w-full">
-            Apply color
+            Aplicar cor
           </Button>
         </form>
       </PopoverContent>

@@ -22,6 +22,7 @@ export default async function ImportPage(): Promise<ReactNode> {
   return (
     <SettingsPage className="max-w-3xl">
       <SettingsHeading
+        help="import.csv"
         title={STRINGS.settings.importer.title}
         description={STRINGS.settings.importer.subtitle}
         actions={

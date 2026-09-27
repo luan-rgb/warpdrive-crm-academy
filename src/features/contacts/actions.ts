@@ -20,6 +20,7 @@ import { createPerson, updatePerson } from "./personsRepo";
 import {
   type OrgCreateInput,
   type OrgUpdateInput,
+  orgCreateInput,
   orgDeleteInput,
   orgUpdateInput,
   type PersonCreateInput,
@@ -137,7 +138,11 @@ export async function createOrgAction(
     return { ok: false, error: { id: ERROR_IDS.PERM_DENIED } };
   }
 
-  const result = await createOrg(db, await loadContactActor(db, actor, SIG()), input, SIG());
+  const parsed = orgCreateInput.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: { id: ERROR_IDS.CONTACT_CREATE_INPUT_INVALID } };
+  }
+  const result = await createOrg(db, await loadContactActor(db, actor, SIG()), parsed.data, SIG());
   if (!result.ok) return { ok: false, error: { id: result.error.id } };
   return { ok: true, value: { id: result.value.id } };
 }

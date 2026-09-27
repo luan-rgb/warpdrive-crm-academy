@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { useId, useState } from "react";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Input } from "@/components/ui/Input";
 import { readCsrfToken } from "@/utils/csrfCookie";
 import {
@@ -123,6 +124,7 @@ export function EditPipelineClient({
           <label htmlFor={nameId} className="mb-1 block font-medium">
             Nome do pipeline
           </label>
+          <HelpTooltip topic="pipeline.stages" className="mb-1" />
           <Input
             id={nameId}
             aria-label="Nome do pipeline"

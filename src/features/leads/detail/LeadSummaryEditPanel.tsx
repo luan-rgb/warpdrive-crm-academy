@@ -2,12 +2,14 @@
 import { useRouter } from "next/navigation";
 import type React from "react";
 import type { SelectOption } from "@/components/ui/Select";
+import { DEFAULT_BASE_CURRENCY } from "@/constants/currency";
 import { FieldRow } from "@/features/deal-workspace/sidebar/FieldRow";
 import { OwnerBadge } from "@/features/identity/OwnerBadge";
 import { InlineDateField } from "@/features/inline-edit/InlineDateField";
 import { InlineSelectField } from "@/features/inline-edit/InlineSelectField";
 import { InlineTextField } from "@/features/inline-edit/InlineTextField";
 import { updateLeadAction } from "@/features/leads/leadServerActions";
+import { formatCurrency } from "@/lib/formatCurrency";
 import { err, ok, type Result } from "@/types/result";
 import { readCsrfToken } from "@/utils/csrfCookie";
 
@@ -32,6 +34,8 @@ interface LeadOwner {
 interface LeadSummaryEditPanelProps {
   lead: PanelLead;
   owners: LeadOwner[];
+  // settings.base_currency; tenants run in BRL, the default.
+  currency?: string;
   // Test seam / alternate refresh strategy. Defaults to router.refresh().
   onSaved?: () => void;
 }
@@ -50,6 +54,7 @@ type LeadFieldChange = Partial<{
 export function LeadSummaryEditPanel({
   lead,
   owners,
+  currency = DEFAULT_BASE_CURRENCY,
   onSaved,
 }: LeadSummaryEditPanelProps): React.ReactNode {
   const router = useRouter();
@@ -93,6 +98,7 @@ export function LeadSummaryEditPanel({
         <InlineTextField
           label="Valor"
           value={value !== null ? String(value) : ""}
+          display={(v) => formatCurrency(v, currency)}
           onSave={(v) => save({ value: v.trim() === "" ? null : Number(v) })}
           placeholder="+ Adicionar valor"
         />

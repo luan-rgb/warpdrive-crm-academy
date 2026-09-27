@@ -2,6 +2,7 @@
 import type React from "react";
 import { Input } from "@/components/ui/Input";
 import { Select, type SelectOption } from "@/components/ui/Select";
+import { contactPointLabel } from "@/constants/contactPointLabels";
 import { MAX_EMAIL_LEN, MAX_PHONE_LEN } from "@/features/contacts/fieldBounds";
 
 export interface ContactPoint {
@@ -12,6 +13,7 @@ export interface ContactPoint {
 
 const PHONE_LABELS = ["Work", "Mobile", "Home", "Other"] as const;
 const EMAIL_LABELS = ["Work", "Home", "Other"] as const;
+const KIND_LABEL = { Phone: "Telefone", Email: "E-mail" } as const;
 
 interface AddDealPersonColumnProps {
   // Right column captures contact details for a NEW person only; disabled when an existing person
@@ -35,7 +37,7 @@ export function AddDealPersonColumn({
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        Person
+        Pessoa
       </h3>
 
       <ContactRows
@@ -74,30 +76,33 @@ function ContactRows({
   }
   return (
     <div className="text-sm">
-      <span className="mb-1 block font-medium">{kind}</span>
+      <span className="mb-1 block font-medium">{KIND_LABEL[kind]}</span>
       <div className="flex flex-col gap-2">
         {rows.map((row, idx) => (
           // Positional rows for an ephemeral create form.
           // biome-ignore lint/suspicious/noArrayIndexKey: positional contact rows
           <div key={idx} className="flex items-center gap-2">
             <Input
-              aria-label={`${kind} ${idx + 1}`}
+              aria-label={`${KIND_LABEL[kind]} ${idx + 1}`}
               type={kind === "Phone" ? "tel" : "email"}
               maxLength={kind === "Phone" ? MAX_PHONE_LEN : MAX_EMAIL_LEN}
               disabled={disabled}
               value={row.value}
               onChange={(e) => update(idx, { value: e.target.value })}
-              placeholder={kind === "Phone" ? "+1 555 0100" : "name@company.com"}
+              placeholder={kind === "Phone" ? "+55 11 91234-5678" : "nome@empresa.com.br"}
               className="min-w-0 flex-1 disabled:bg-muted disabled:opacity-60"
             />
             {/* Select has no disabled prop (primitive is not modified for this sweep); a
                 pointer-events-none wrapper reproduces the disabled input's read-only behavior. */}
             <div className={disabled ? "pointer-events-none opacity-60" : undefined}>
               <Select
-                ariaLabel={`${kind} ${idx + 1} type`}
+                ariaLabel={`Tipo do ${KIND_LABEL[kind].toLowerCase()} ${idx + 1}`}
                 value={row.label}
                 onChange={(v) => update(idx, { label: v })}
-                options={labels.map<SelectOption>((l) => ({ value: l, label: l }))}
+                options={labels.map<SelectOption>((l) => ({
+                  value: l,
+                  label: contactPointLabel(l),
+                }))}
               />
             </div>
           </div>
@@ -109,7 +114,7 @@ function ContactRows({
         onClick={() => onChange([...rows, { label: labels[0] ?? "Work", value: "" }])}
         className="mt-2 text-sm font-medium text-primary hover:underline disabled:opacity-40"
       >
-        + Add {kind.toLowerCase()}
+        + Adicionar {KIND_LABEL[kind].toLowerCase()}
       </button>
     </div>
   );

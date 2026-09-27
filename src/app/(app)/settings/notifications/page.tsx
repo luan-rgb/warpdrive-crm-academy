@@ -36,7 +36,11 @@ export default function NotificationSettingsPage() {
 
   return (
     <SettingsPage>
-      <SettingsHeading title={pageTitle} description={STRINGS.settings.notificationsDescription} />
+      <SettingsHeading
+        help="settings.notifications"
+        title={pageTitle}
+        description={STRINGS.settings.notificationsDescription}
+      />
       {error !== null && <p className="mb-4 text-sm text-destructive">{error}</p>}
       <SettingsCard>
         <SettingsCardHeader

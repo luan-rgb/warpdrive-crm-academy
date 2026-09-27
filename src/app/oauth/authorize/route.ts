@@ -5,6 +5,7 @@ import { OAUTH_CONSENT_CSRF_MAX_AGE_SECONDS, OAUTH_REQUEST_TIMEOUT_MS } from "@/
 import { db } from "@/db/client";
 import { CSRF_COOKIE, mintCsrfToken, validateCsrf } from "@/features/auth/csrf";
 import { loadLiveSessionByToken, SESSION_COOKIE } from "@/features/auth/session";
+import { recordSecurityEvent } from "@/features/identity/securityAudit";
 import {
   type AuthorizationRequest,
   authorizationPostQueryInput,
@@ -131,5 +132,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     },
     signal,
   );
+  await recordSecurityEvent(db, {
+    actorId: userId,
+    targetType: "oauth_client",
+    targetId: null,
+    action: "oauth.grant",
+    detail: { clientId: authorization.client_id },
+  });
   return clientRedirect(authorization.redirect_uri, { code, state: authorization.state });
 }

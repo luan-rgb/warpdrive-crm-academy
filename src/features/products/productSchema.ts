@@ -5,7 +5,7 @@ import { z } from "zod";
 const money = z
   .string()
   .regex(/^\d+(\.\d{1,2})?$/)
-  .refine((v) => Number(v) >= 0, { message: "must not be negative" });
+  .refine((v) => Number(v) >= 0, { message: "não pode ser negativo" });
 
 export const createProductInputSchema = z.object({
   name: z.string().trim().min(1).max(255),
@@ -38,7 +38,7 @@ export const addDealProductInputSchema = z.object({
   discountPercent: z
     .string()
     .regex(/^\d+(\.\d{1,2})?$/)
-    .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "must be between 0 and 100" })
+    .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "deve estar entre 0 e 100" })
     .default("0"),
 });
 export type AddDealProductInput = z.infer<typeof addDealProductInputSchema>;
@@ -50,7 +50,7 @@ export const updateDealProductInputSchema = z.object({
   discountPercent: z
     .string()
     .regex(/^\d+(\.\d{1,2})?$/)
-    .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "must be between 0 and 100" }),
+    .refine((v) => Number(v) >= 0 && Number(v) <= 100, { message: "deve estar entre 0 e 100" }),
 });
 export type UpdateDealProductInput = z.infer<typeof updateDealProductInputSchema>;
 

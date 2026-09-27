@@ -12,8 +12,18 @@
 # (see docker-compose.shared.yml). auto_https off: without it, Caddy would still try to obtain
 # its own certs for these domain-shaped addresses and would fail (it can't bind 80/443, and
 # doesn't need to).
+#
+# trusted_proxies: host nginx is the only client of this Caddy, so every request arrives from a
+# private address. Trusting private ranges (and taking the right-most untrusted hop, which is the
+# address nginx itself appended) lets {client_ip} be the real visitor; each tenant block then
+# forwards it as X-Forwarded-For so the app's per-IP rate limits apply per visitor, not per tenant.
+# Requires nginx to send: proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 {
 	auto_https off
+	servers {
+		trusted_proxies static private_ranges
+		trusted_proxies_strict
+	}
 }
 
 http://s3.{$BASE_DOMAIN} {
@@ -23,6 +33,9 @@ http://s3.{$BASE_DOMAIN} {
 		Content-Security-Policy "sandbox; default-src 'none'; frame-ancestors 'none'"
 		-Server
 	}
+
+	# MinIO's admin API shares this port and is guarded only by the root credentials.
+	respond /minio/admin* 403
 
 	reverse_proxy shared-minio:9000
 }

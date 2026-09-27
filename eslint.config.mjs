@@ -40,6 +40,7 @@ export default tseslint.config(
           allowDefaultProject: [
             "*.mjs",
             "scripts/*.mjs",
+            "mail-oauth-relay/*.mjs",
             ".env.example.test.ts",
             "src/features/demo/*.ts",
           ],
@@ -211,8 +212,10 @@ export default tseslint.config(
   // scripts/**/*.mjs: same standalone-tooling rationale, but plain JS (no types), so the
   // type-aware conditionals rule and console policy don't fit either. CLI programs whose
   // stdout IS the product (parity gate reports) may use console.log.
+  // mail-oauth-relay/*.mjs is a standalone plain-JS Node service (own Dockerfile, no build step)
+  // outside the app's env boundary, so it gets the same relaxations.
   {
-    files: ["scripts/**/*.mjs"],
+    files: ["scripts/**/*.mjs", "mail-oauth-relay/*.mjs"],
     rules: {
       "no-restricted-properties": "off",
       "no-restricted-syntax": "off",

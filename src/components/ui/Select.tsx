@@ -144,7 +144,7 @@ export function Select({
   onChange,
   options,
   ariaLabel,
-  placeholder = "Select",
+  placeholder = "Selecione",
   triggerClassName,
   triggerContent,
   triggerTitle,
